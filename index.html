@@ -7,7 +7,7 @@
   <meta name="keywords" content="manutenção empilhadeiras, peças empilhadeiras, NR12, atendimento 24h, Marlift">
   
   <!-- Favicon -->
-  <link rel="icon" href="https://iili.io/BcXKIPj.png" type="image/png">
+  <link rel="icon" href="https://iili.io/BYsF0ns.png" type="image/png">
   
   <!-- Open Graph -->
   <meta property="og:title" content="Marlift | Manutenção de Empilhadeiras 24h">
@@ -29,7 +29,7 @@
       line-height: 1.6;
     }
 
-    /* HEADER com layout flexível */
+    /* HEADER */
     header {
       background: #000;
       padding: 20px;
@@ -52,14 +52,14 @@
       transform: scale(1.02);
     }
 
-    /* BANNER ANUNCIE AQUI - CONFIGURAÇÃO BASE (DESKTOP) */
+    /* BANNER ANUNCIE AQUI - TROCA AUTOMÁTICA */
     .banner-anuncie {
       width: 600px;
       max-width: 100%;
-      height: 90px; /* Altura fixa para Desktop */
+      height: 90px;
       background: linear-gradient(135deg, #2c2c2c, #1a1a1a);
       border-radius: 8px;
-      display: block; /* Block para comportar a tag picture */
+      display: block;
       text-decoration: none;
       transition: all 0.2s ease;
       border: 1px solid #ff6a00;
@@ -72,7 +72,6 @@
       transform: scale(0.99);
     }
 
-    /* Estilos para a tag PICTURE e IMG */
     .banner-anuncie picture {
       width: 100%;
       height: 100%;
@@ -81,11 +80,11 @@
     .banner-anuncie img {
       width: 100%;
       height: 100%;
-      object-fit: cover; /* Cobre a área sem distorcer */
+      object-fit: cover;
       object-position: center;
     }
 
-    /* RESPONSIVIDADE MOBILE */
+    /* RESPONSIVIDADE MOBILE HEADER */
     @media (max-width: 800px) {
       header {
         flex-direction: column;
@@ -98,7 +97,6 @@
       .banner-anuncie {
         width: 100%;
         margin-top: 5px;
-        /* AJUSTE AUTOMÁTICO PARA 16:9 NO CELULAR */
         height: auto;
         aspect-ratio: 16 / 9;
       }
@@ -156,13 +154,14 @@
       box-shadow: 0 12px 25px rgba(255,106,0,0.2);
     }
 
+    /* AJUSTE: IMAGENS DOS CARDS ZERO CORTE (16:9) */
     .card img {
       width: 100%;
-      height: 190px;
-      object-fit: cover;
+      aspect-ratio: 16 / 9; /* Proporção Widescreen */
+      object-fit: contain;  /* Mostra a imagem inteira sem cortar */
+      background-color: #1a1a1a; /* Fundo igual ao card para disfarçar espaços */
       border-radius: 12px;
       margin-bottom: 15px;
-      background-color: #2a2a2a;
     }
 
     .card h3 {
@@ -206,6 +205,7 @@
       filter: grayscale(100%);
     }
 
+    /* AJUSTE: IMAGENS DOBRADAS ZERO CORTE (16:9) */
     .images-double {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -215,8 +215,9 @@
 
     .images-double img {
       width: 100%;
-      height: 220px;
-      object-fit: cover;
+      aspect-ratio: 16 / 9; /* Proporção Widescreen */
+      object-fit: contain;  /* Mostra a imagem inteira sem cortar */
+      background-color: #1a1a1a; /* Fundo para preencher se houver faixa */
       border-radius: 16px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.4);
     }
@@ -372,13 +373,13 @@
     <img src="https://iili.io/BYsF0ns.png" alt="Logo Marlift Empilhadeiras - manutenção especializada">
   </div>
   
-  <!-- BANNER ANUNCIE AQUI - TROCA AUTOMÁTICA DE IMAGEM -->
-  <a href="#" class="banner-anuncie" aria-label="Espaço para anúncio - contate-nos">
+  <!-- BANNER ANUNCIE AQUI - TROCA AUTOMÁTICA -->
+  <a href="https://wa.me/5598988248877?text=Olá! Gostaria de Anunciar no site Marlift Empilhadeiras." class="banner-anuncie" aria-label="Espaço para anúncio - contate-nos">
     <picture>
-      <!-- Imagem para MOBILE (Menor que 800px) - Formato 16:9 -->
-      <source media="(max-width: 800px)" srcset="https://iili.io/BcVv5Hg.png">
+      <!-- Imagem para MOBILE (Menor que 800px) -->
+      <source media="(max-width: 800px)" srcset="https://iili.io/Bcm2pql.png">
       
-      <!-- Imagem para DESKTOP (Padrão) - Formato 600x90 -->
+      <!-- Imagem para DESKTOP (Padrão) -->
       <img src="https://iili.io/Bcauo7t.png" alt="Anúncio Banner">
     </picture>
   </a>
@@ -401,37 +402,37 @@
     <div class="services">
       <!-- Card 1 -->
       <div class="card">
-        <img src="https://iili.io/BcFHYbf.png" alt="Manutenção preventiva em empilhadeira" loading="lazy">
+        <img src="https://iili.io/Bc6krnj.png" alt="Manutenção preventiva em empilhadeira" loading="lazy">
         <h3>🔧 Preventiva</h3>
         <p>Inspeções, lubrificações, calibrações e troca de fluidos para evitar falhas e paradas inesperadas.</p>
       </div>
       <!-- Card 2 -->
       <div class="card">
-        <img src="https://iili.io/BcFHlWl.png" alt="Reparo corretivo em motor hidráulico" loading="lazy">
+        <img src="https://iili.io/Bcm3TkF.png" alt="Reparo corretivo em motor hidráulico" loading="lazy">
         <h3>🛠️ Corretiva</h3>
         <p>Reparos em componentes danificados, vazamentos hidráulicos, motores e sistemas elétricos.</p>
       </div>
       <!-- Card 3 -->
       <div class="card">
-        <img src="https://iili.io/BcITgDP.png" alt="Inspeção NR12 em empilhadeira" loading="lazy">
+        <img src="https://iili.io/Bcm3Mpn.png" alt="Inspeção NR12 em empilhadeira" loading="lazy">
         <h3>📄 Contratos NR12</h3>
         <p>Atendimento em campo ou oficina, garantindo conformidade total com a norma regulamentadora NR12.</p>
       </div>
       <!-- Card 4 -->
       <div class="card">
-        <img src="https://iili.io/BcFHcx4.png" alt="Peças originais para empilhadeiras" loading="lazy">
+        <img src="https://iili.io/BcmK0OX.png" alt="Peças originais para empilhadeiras" loading="lazy">
         <h3>🔩 Peças Originais</h3>
         <p>Fornecimento de componentes genuínos para Toyota, Linde, Hyster, Yale e outras marcas.</p>
       </div>
       <!-- Card 5 -->
       <div class="card">
-        <img src="https://iili.io/BcFH7OG.png" alt="Lavagem técnica de empilhadeira" loading="lazy">
+        <img src="https://iili.io/Bcm2bs4.png" alt="Lavagem técnica de empilhadeira" loading="lazy">
         <h3>💧 Lavagem & Lubrificação</h3>
         <p>Higienização técnica e lubrificação específica para aumentar a vida útil com segurança.</p>
       </div>
       <!-- Card 6 -->
       <div class="card">
-        <img src="https://iili.io/BcIT6WF.png" alt="Atendimento emergencial 24 horas" loading="lazy">
+        <img src="https://iili.io/Bcm3mTg.png" alt="Atendimento emergencial 24 horas" loading="lazy">
         <h3>🚨 Emergência 24hs</h3>
         <p>Suporte técnico imediato para reduzir paradas inesperadas – dia e noite, incluindo finais de semana e feriados.</p>
       </div>
@@ -450,8 +451,8 @@
     <h2>🧼 Cuidados completos com sua frota</h2>
     <p>Além da manutenção preventiva e corretiva, realizamos lavagem de alta pressão, desengraxe e lubrificação especializada para modelos elétricos, GLP e diesel. Tudo para garantir performance e segurança.</p>
     <div class="images-double">
-      <img src="https://iili.io/BcTOpdG.png" alt="Lavagem de empilhadeira em serviço" loading="lazy">
-      <img src="https://iili.io/BcTOD1n.png" alt="Lubrificação de componentes" loading="lazy">
+      <img src="https://iili.io/Bc4aaWb.png" alt="Lavagem de empilhadeira em serviço" loading="lazy">
+      <img src="https://iili.io/BcPNVWv.png" alt="Lubrificação de componentes" loading="lazy">
     </div>
   </div>
 
@@ -473,7 +474,7 @@
   <!-- CTA -->
   <div class="cta">
     <p><strong>📲 Solicite um orçamento agora mesmo</strong><br>Atendimento rápido via WhatsApp</p>
-    <a href="https://wa.me/5511913268620" target="_blank" class="btn-whatsapp">
+    <a href="https://wa.me/5511913268620?text=Olá! Gostaria de mais informações sobre os serviços da MARLIFT." target="_blank" class="btn-whatsapp">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
         <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
       </svg>
@@ -491,7 +492,7 @@
 </footer>
 
 <!-- Botão flutuante WhatsApp -->
-<a class="whatsapp-float" href="https://wa.me/5511913268620" target="_blank" aria-label="WhatsApp 24hs - Chamado Emergencial">
+<a class="whatsapp-float" href="https://wa.me/5511913268620?text=🚨%20EMERGÊNCIA%20MARLIFT%20-%20Preciso%20de%20atendimento%20*URGENTE*%20para%20minha%20empilhadeira!%20(Chamado%2024hs)" target="_blank" aria-label="WhatsApp 24hs - Chamado Emergencial">
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
   </svg>
