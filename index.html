@@ -1,659 +1,358 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>MARLIFT | Elevando sua operação ao próximo nível</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800;14..32,900&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="description" content="Marlift Empilhadeiras - Manutenção especializada, lavagem técnica e lubrificação de empilhadeiras elétricas, GLP e diesel. Atendimento 24hs, NR-12, peças originais." />
+  <meta name="keywords" content="manutenção de empilhadeiras, lavagem técnica, lubrificação, peças para empilhadeiras, Marlift" />
+  
+  <link rel="canonical" href="https://www.marliftempilhadeiras.com.br/" />
+  <title>Marlift | Manutenção, Lavagem e Lubrificação de Empilhadeiras</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #080c14;
+      --bg-primary: #0c1220;
+      --bg-card: rgba(12, 20, 35, 0.9);
+      --bg-card-hover: rgba(18, 30, 50, 0.95);
+      --fg-primary: #f0f4f8;
+      --fg-muted: #8fa3bf;
+      --accent: #ff6b00;
+      --accent-secondary: #ff8c42;
+      --accent-glow: rgba(255, 107, 0, 0.4);
+      --accent-soft: rgba(255, 107, 0, 0.12);
+      --border-color: rgba(255, 255, 255, 0.06);
+      --card-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.7);
+      --transition-smooth: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+      --transition-bounce: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    }
 
-        body {
-            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
-            background-color: #010101;
-            color: #eceef2;
-            overflow-x: hidden;
-            scroll-behavior: smooth;
-        }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 100px; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg-dark); color: var(--fg-primary); overflow-x: hidden; line-height: 1.6; }
+    h1, h2, h3, h4, h5, h6 { font-family: 'Bebas Neue', sans-serif; letter-spacing: 0.04em; font-weight: 400; }
 
-        /* modern gradient & noise effect */
-        .bg-noise {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: radial-gradient(rgba(255,255,255,0.02) 1px, transparent 1px);
-            background-size: 24px 24px;
-            pointer-events: none;
-            z-index: 0;
-        }
+    /* Canvas Background */
+    #bgCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
 
-        .gradient-orb {
-            position: fixed;
-            width: 60vw;
-            height: 60vw;
-            background: radial-gradient(circle, rgba(255,102,0,0.2) 0%, rgba(255,102,0,0) 70%);
-            border-radius: 50%;
-            filter: blur(80px);
-            top: -20vh;
-            right: -10vw;
-            z-index: 0;
-            pointer-events: none;
-        }
+    /* Gradient Orbs */
+    .gradient-orbs { position: fixed; inset: 0; pointer-events: none; z-index: 1; overflow: hidden; }
+    .orb { position: absolute; border-radius: 50%; filter: blur(80px); animation: orbFloat 20s ease-in-out infinite; }
+    .orb-1 { width: 600px; height: 600px; background: radial-gradient(circle, rgba(255, 107, 0, 0.15) 0%, transparent 70%); top: -200px; right: -200px; animation-delay: 0s; }
+    .orb-2 { width: 400px; height: 400px; background: radial-gradient(circle, rgba(255, 140, 66, 0.1) 0%, transparent 70%); bottom: 10%; left: -100px; animation-delay: -5s; }
+    .orb-3 { width: 300px; height: 300px; background: radial-gradient(circle, rgba(255, 107, 0, 0.08) 0%, transparent 70%); top: 50%; left: 40%; animation-delay: -10s; }
 
-        .gradient-orb-2 {
-            position: fixed;
-            width: 50vw;
-            height: 50vw;
-            background: radial-gradient(circle, rgba(255,70,0,0.12) 0%, rgba(0,0,0,0) 70%);
-            border-radius: 50%;
-            filter: blur(100px);
-            bottom: -15vh;
-            left: -15vw;
-            z-index: 0;
-        }
+    @keyframes orbFloat { 0%, 100% { transform: translate(0, 0) scale(1); } 25% { transform: translate(30px, -40px) scale(1.05); } 50% { transform: translate(-20px, 20px) scale(0.95); } 75% { transform: translate(40px, 30px) scale(1.02); } }
 
-        .container {
-            max-width: 1300px;
-            margin: 0 auto;
-            padding: 1.5rem 2rem;
-            position: relative;
-            z-index: 2;
-        }
+    /* Grid Pattern */
+    .grid-pattern { position: fixed; inset: 0; pointer-events: none; z-index: 2; background-image: linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px); background-size: 80px 80px; mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 0%, transparent 70%); }
 
-        /* glassmorphism base */
-        .glass-card {
-            background: rgba(12, 12, 15, 0.7);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 2rem;
-        }
+    /* Noise Overlay */
+    .noise-overlay { position: fixed; inset: 0; pointer-events: none; z-index: 3; opacity: 0.03; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E"); }
 
-        /* header / hero */
-        .hero {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 3rem;
-            margin: 2rem 0 4rem 0;
-            flex-wrap: wrap;
-        }
+    /* Header */
+    .main-header { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; padding: 1.2rem 0; background: rgba(8, 12, 20, 0.7); backdrop-filter: blur(25px); border-bottom: 1px solid var(--border-color); transition: var(--transition-smooth); }
+    .main-header.scrolled { padding: 0.7rem 0; background: rgba(8, 12, 20, 0.95); box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.5); }
+    .logo-img { max-width: 150px; filter: drop-shadow(0 4px 20px rgba(255, 107, 0, 0.4)); transition: var(--transition-smooth); }
+    .logo-img:hover { transform: scale(1.05); filter: drop-shadow(0 6px 30px rgba(255, 107, 0, 0.6)); }
+    .navbar-toggler { border: 1px solid rgba(255, 255, 255, 0.15); padding: 0.5rem; border-radius: 10px; }
+    .navbar-toggler:focus { box-shadow: 0 0 0 3px var(--accent-soft); }
+    .navbar-toggler-icon { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='rgba(255, 107, 0, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E"); }
+    .nav-pills .nav-link { color: var(--fg-muted); font-weight: 600; font-size: 0.85rem; padding: 0.7rem 1.4rem; border-radius: 12px; transition: var(--transition-smooth); position: relative; }
+    .nav-pills .nav-link:hover, .nav-pills .nav-link.active { color: white; background: linear-gradient(135deg, var(--accent), var(--accent-secondary)); box-shadow: 0 8px 25px -8px var(--accent-glow); }
 
-        .hero-left {
-            flex: 1.2;
-        }
+    /* Hero Section */
+    .hero-section { position: relative; z-index: 10; min-height: 100vh; display: flex; align-items: center; padding: 9rem 0 5rem; }
+    .hero-title { font-size: clamp(3.2rem, 9vw, 7rem); line-height: 1.05; margin-bottom: 1.8rem; opacity: 0; transform: translateY(30px); animation: slideUp 0.8s 0.3s forwards; }
+    .hero-title .accent { color: var(--accent); position: relative; display: inline-block; }
+    .hero-title .accent::after { content: ''; position: absolute; bottom: 0.05em; left: 0; right: 0; height: 6px; background: linear-gradient(90deg, var(--accent), transparent); border-radius: 3px; }
+    .hero-description { font-size: 1.15rem; color: var(--fg-muted); max-width: 540px; margin-bottom: 2.8rem; line-height: 1.75; opacity: 0; transform: translateY(30px); animation: slideUp 0.8s 0.4s forwards; }
+    @keyframes slideUp { to { opacity: 1; transform: translateY(0); } }
+    .hero-buttons { display: flex; flex-wrap: wrap; gap: 1rem; opacity: 0; transform: translateY(30px); animation: slideUp 0.8s 0.5s forwards; }
+    .hero-stats { display: flex; gap: 3rem; margin-top: 4rem; padding-top: 2.5rem; border-top: 1px solid var(--border-color); opacity: 0; transform: translateY(30px); animation: slideUp 0.8s 0.6s forwards; }
+    .stat-item { text-align: left; }
+    .stat-number { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.8rem, 6vw, 4rem); color: var(--accent); line-height: 1; display: block; }
+    .stat-label { font-size: 0.8rem; color: var(--fg-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.15em; }
+    .hero-image-wrapper { position: relative; opacity: 0; transform: translateX(60px); animation: slideLeft 1s 0.4s forwards; }
+    @keyframes slideLeft { to { opacity: 1; transform: translateX(0); } }
+    .hero-image { border-radius: 28px; overflow: hidden; box-shadow: 0 40px 80px -20px rgba(0, 0, 0, 0.7), 0 0 80px -20px var(--accent-glow); position: relative; transition: var(--transition-smooth); }
+    .hero-image::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, transparent 50%, rgba(255, 107, 0, 0.15)); z-index: 1; pointer-events: none; }
+    .hero-image:hover { transform: translateY(-15px) scale(1.02); box-shadow: 0 50px 100px -25px rgba(0, 0, 0, 0.8), 0 0 100px -15px var(--accent-glow); }
+    .hero-image img { width: 100%; height: auto; display: block; }
 
-        .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: rgba(255, 102, 0, 0.12);
-            backdrop-filter: blur(4px);
-            padding: 0.5rem 1.2rem;
-            border-radius: 40px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            border: 1px solid rgba(255, 102, 0, 0.3);
-            color: #ff8c42;
-            margin-bottom: 1.8rem;
-        }
+    /* Buttons */
+    .btn-accent { background: linear-gradient(135deg, var(--accent), var(--accent-secondary)); color: white; font-weight: 700; font-size: 0.9rem; padding: 1.1rem 2.2rem; border-radius: 14px; border: none; transition: var(--transition-smooth); box-shadow: 0 10px 30px -10px var(--accent-glow), inset 0 1px 0 rgba(255, 255, 255, 0.2); text-decoration: none; display: inline-flex; align-items: center; gap: 0.7rem; position: relative; overflow: hidden; }
+    .btn-accent::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, var(--accent-secondary), var(--accent)); opacity: 0; transition: var(--transition-smooth); }
+    .btn-accent:hover { transform: translateY(-5px); box-shadow: 0 20px 50px -10px var(--accent-glow), inset 0 1px 0 rgba(255, 255, 255, 0.3); color: white; }
+    .btn-accent:hover::before { opacity: 1; }
+    .btn-accent span, .btn-accent svg { position: relative; z-index: 2; }
+    .btn-outline { background: transparent; color: var(--fg-primary); font-weight: 600; font-size: 0.9rem; padding: 1.1rem 2.2rem; border-radius: 14px; border: 2px solid rgba(255, 255, 255, 0.12); transition: var(--transition-smooth); text-decoration: none; display: inline-flex; align-items: center; gap: 0.7rem; position: relative; overflow: hidden; }
+    .btn-outline::before { content: ''; position: absolute; inset: 0; background: rgba(255, 255, 255, 0.05); transform: scaleX(0); transform-origin: left; transition: var(--transition-smooth); }
+    .btn-outline:hover { border-color: var(--accent); color: white; box-shadow: 0 10px 30px -10px var(--accent-glow); }
+    .btn-outline:hover::before { transform: scaleX(1); }
 
-        .hero-left h1 {
-            font-size: clamp(2.2rem, 5vw, 3.8rem);
-            font-weight: 800;
-            line-height: 1.2;
-            letter-spacing: -0.02em;
-            background: linear-gradient(135deg, #ffffff 0%, #ffb37c 100%);
-            background-clip: text;
-            -webkit-background-clip: text;
-            color: transparent;
-            margin-bottom: 1rem;
-        }
+    /* Sections */
+    .section-wrapper { position: relative; z-index: 10; padding: 7rem 0; }
+    .section-header { text-align: center; margin-bottom: 4.5rem; }
+    .section-label { font-size: 0.75rem; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 0.3em; margin-bottom: 1rem; display: inline-block; padding: 0.5rem 1.2rem; background: var(--accent-soft); border-radius: 50px; border: 1px solid rgba(255, 107, 0, 0.2); }
+    .section-title { font-size: clamp(2.8rem, 6vw, 4.5rem); margin-bottom: 1.2rem; line-height: 1.05; }
+    .section-description { font-size: 1.1rem; color: var(--fg-muted); max-width: 650px; margin: 0 auto; line-height: 1.7; }
 
-        .hero-highlight {
-            color: #ff6600;
-            background: none;
-            background-clip: unset;
-            -webkit-background-clip: unset;
-            display: inline-block;
-        }
+    /* Service Cards */
+    .service-card { background: var(--bg-card); backdrop-filter: blur(15px); border: 1px solid var(--border-color); border-radius: 28px; padding: 2.8rem 2.2rem; height: 100%; transition: var(--transition-smooth); position: relative; overflow: hidden; }
+    .service-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, var(--accent), var(--accent-secondary)); transform: scaleX(0); transform-origin: left; transition: var(--transition-smooth); }
+    .service-card:hover { transform: translateY(-15px); border-color: rgba(255, 107, 0, 0.25); box-shadow: var(--card-shadow); }
+    .service-card:hover::before { transform: scaleX(1); }
+    .service-icon { width: 75px; height: 75px; background: linear-gradient(135deg, var(--accent-soft), rgba(255, 107, 0, 0.03)); border: 1px solid rgba(255, 107, 0, 0.15); border-radius: 22px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.8rem; transition: var(--transition-smooth); }
+    .service-card:hover .service-icon { background: linear-gradient(135deg, var(--accent), var(--accent-secondary)); border-color: transparent; transform: scale(1.1) rotate(-5deg); box-shadow: 0 15px 35px -10px var(--accent-glow); }
+    .service-card:hover .service-icon svg { stroke: white; }
+    .service-title { font-size: 2.2rem; margin-bottom: 1.2rem; }
+    .service-text { color: var(--fg-muted); font-size: 0.95rem; line-height: 1.75; }
 
-        .hero-desc {
-            font-size: 1.1rem;
-            color: #b0b3bc;
-            max-width: 540px;
-            margin-bottom: 2rem;
-            line-height: 1.5;
-        }
+    /* Brands Section */
+    .brands-section { background: linear-gradient(180deg, transparent 0%, rgba(255, 107, 0, 0.03) 50%, transparent 100%); padding: 4rem 0; position: relative; z-index: 10; }
+    .brands-title { text-align: center; margin-bottom: 2.5rem; font-size: 1rem; font-family: 'Inter', sans-serif; color: var(--fg-muted); letter-spacing: 0.2em; text-transform: uppercase; font-weight: 600; }
+    .brands-image-wrapper { display: flex; justify-content: center; align-items: center; transition: var(--transition-smooth); }
+    .brands-composite { max-width: 100%; height: auto; filter: grayscale(100%); transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1); border-radius: 24px; cursor: pointer; box-shadow: 0 15px 40px -15px rgba(0, 0, 0, 0.4); }
+    .brands-composite:hover { filter: grayscale(0%); transform: scale(1.02); box-shadow: 0 25px 50px -18px var(--accent-glow); }
 
-        .feature-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1.2rem;
-            margin-bottom: 2.2rem;
-        }
+    /* Gallery Section */
+    .gallery-section { position: relative; z-index: 10; padding: 7rem 0; }
+    .gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(2, 280px); gap: 1.25rem; }
+    .gallery-item { position: relative; border-radius: 20px; overflow: hidden; cursor: pointer; transition: var(--transition-smooth); }
+    .gallery-item:nth-child(1) { grid-column: span 2; grid-row: span 1; }
+    .gallery-item:nth-child(4) { grid-column: span 2; grid-row: span 1; }
+    .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: var(--transition-smooth); }
+    .gallery-item::before { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 40%, rgba(8, 12, 20, 0.9) 100%); z-index: 1; opacity: 0.6; transition: var(--transition-smooth); }
+    .gallery-item:hover { transform: scale(1.02); z-index: 10; }
+    .gallery-item:hover img { transform: scale(1.1); }
+    .gallery-item:hover::before { opacity: 0.8; }
+    .gallery-item-content { position: absolute; bottom: 0; left: 0; right: 0; padding: 1.5rem; z-index: 2; transform: translateY(10px); opacity: 0; transition: var(--transition-smooth); }
+    .gallery-item:hover .gallery-item-content { transform: translateY(0); opacity: 1; }
+    .gallery-item-title { font-size: 1.4rem; margin-bottom: 0.3rem; }
+    .gallery-item-desc { font-size: 0.85rem; color: var(--fg-muted); }
+    .gallery-item-icon { position: absolute; top: 1rem; right: 1rem; width: 45px; height: 45px; background: rgba(255, 107, 0, 0.9); border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 4; opacity: 0; transform: scale(0.5); transition: var(--transition-bounce); }
+    .gallery-item:hover .gallery-item-icon { opacity: 1; transform: scale(1); }
 
-        .feature-chip {
-            display: flex;
-            align-items: center;
-            gap: 0.6rem;
-            background: rgba(255,255,255,0.03);
-            padding: 0.5rem 1rem;
-            border-radius: 60px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            border: 1px solid rgba(255,255,255,0.05);
-        }
+    /* Washing Card */
+    .washing-card { background: linear-gradient(145deg, rgba(12, 20, 35, 0.98), rgba(8, 14, 25, 0.98)); border: 1px solid rgba(255, 107, 0, 0.25); border-radius: 32px; padding: 3.5rem; position: relative; overflow: hidden; box-shadow: 0 40px 80px -25px rgba(0, 0, 0, 0.6), 0 0 60px -30px var(--accent-glow); }
+    .washing-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--accent), transparent); }
+    .washing-title { font-size: 2.5rem; display: flex; align-items: center; gap: 1.2rem; margin-bottom: 1.8rem; }
+    .washing-title svg { stroke: var(--accent); width: 50px; height: 50px; flex-shrink: 0; }
+    .washing-description { color: var(--fg-muted); font-size: 1.1rem; line-height: 1.85; margin-bottom: 2.5rem; }
+    .benefits-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-bottom: 2.8rem; }
+    .benefit-item { display: flex; align-items: center; gap: 0.85rem; background: rgba(255, 255, 255, 0.02); padding: 1.1rem 1.4rem; border-radius: 14px; border: 1px solid rgba(255, 255, 255, 0.04); transition: var(--transition-smooth); font-weight: 500; font-size: 0.95rem; }
+    .benefit-item:hover { background: rgba(255, 107, 0, 0.08); border-color: rgba(255, 107, 0, 0.25); transform: translateX(10px); }
+    .benefit-item svg { stroke: var(--accent); width: 22px; height: 22px; flex-shrink: 0; }
 
-        .feature-chip i {
-            color: #ff6600;
-            font-size: 0.9rem;
-        }
+    /* Contact Section */
+    .contact-card { background: linear-gradient(145deg, rgba(12, 20, 35, 0.98), rgba(8, 14, 25, 0.95)); backdrop-filter: blur(20px); border: 1px solid var(--border-color); border-radius: 36px; padding: 3.5rem; position: relative; overflow: hidden; }
+    .contact-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--accent), transparent); }
+    .badge-24h-moved { display: inline-flex; align-items: center; gap: 0.6rem; padding: 0.6rem 1.8rem; background: linear-gradient(135deg, var(--accent-soft), rgba(255, 107, 0, 0.05)); border: 1px solid rgba(255, 107, 0, 0.45); border-radius: 100px; font-weight: 700; font-size: 0.85rem; color: var(--accent-secondary); margin-bottom: 2rem; backdrop-filter: blur(4px); }
+    .badge-24h-moved .pulse-dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; animation: pulseDot 2s ease-in-out infinite; box-shadow: 0 0 10px var(--accent); }
+    @keyframes pulseDot { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.8); opacity: 0.4; } }
+    .contact-item { display: flex; align-items: center; gap: 1.4rem; padding: 1.4rem; border-radius: 20px; transition: var(--transition-smooth); margin-bottom: 0.5rem; }
+    .contact-item:hover { background: rgba(255, 255, 255, 0.02); transform: translateX(10px); }
+    .contact-icon { width: 60px; height: 60px; background: linear-gradient(135deg, var(--accent-soft), rgba(255, 107, 0, 0.03)); border: 1px solid rgba(255, 107, 0, 0.15); border-radius: 18px; display: flex; align-items: center; justify-content: center; transition: var(--transition-smooth); flex-shrink: 0; }
+    .contact-item:hover .contact-icon { background: linear-gradient(135deg, var(--accent), var(--accent-secondary)); border-color: transparent; box-shadow: 0 10px 25px -8px var(--accent-glow); }
+    .contact-item:hover .contact-icon svg { stroke: white; }
+    .contact-label { font-size: 0.7rem; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 0.3rem; }
+    .contact-value { font-size: 1.05rem; font-weight: 500; }
+    .contact-value a { color: white; text-decoration: none; transition: var(--transition-smooth); }
+    .contact-value a:hover { color: var(--accent-secondary); }
 
-        .btn-primary {
-            background: #ff6600;
-            color: #0a0a0a;
-            border: none;
-            padding: 1rem 2rem;
-            font-weight: 700;
-            font-size: 1rem;
-            border-radius: 40px;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.7rem;
-            transition: all 0.25s ease;
-            cursor: pointer;
-            text-decoration: none;
-            box-shadow: 0 8px 20px rgba(255, 102, 0, 0.25);
-        }
+    /* Form */
+    .form-control { background: rgba(0, 0, 0, 0.5); border: 1px solid var(--border-color); color: white; border-radius: 16px; padding: 1.1rem 1.4rem; font-size: 0.95rem; transition: var(--transition-smooth); }
+    .form-control:focus { background: rgba(0, 0, 0, 0.7); border-color: var(--accent); box-shadow: 0 0 0 4px var(--accent-soft); color: white; }
 
-        .btn-primary:hover {
-            background: #ff5500;
-            transform: translateY(-3px);
-            box-shadow: 0 15px 30px rgba(255, 102, 0, 0.35);
-        }
+    /* Emergency Banner */
+    .emergency-banner { background: linear-gradient(135deg, rgba(255, 107, 0, 0.15), rgba(255, 107, 0, 0.05)); border: 1px solid rgba(255, 107, 0, 0.4); border-radius: 28px; padding: 1.8rem 2.5rem; margin-top: 3rem; display: flex; flex-wrap: wrap; align-items: center; gap: 1.8rem; position: relative; z-index: 20; }
+    .emergency-icon { width: 65px; height: 65px; background: linear-gradient(135deg, var(--accent), var(--accent-secondary)); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; animation: pulseRing 2s ease-out infinite; box-shadow: 0 0 30px var(--accent-glow); }
+    @keyframes pulseRing { 0% { box-shadow: 0 0 0 0 rgba(255, 107, 0, 0.5); } 70% { box-shadow: 0 0 0 25px rgba(255, 107, 0, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 107, 0, 0); } }
+    .emergency-text strong { display: block; font-size: 1.3rem; margin-bottom: 0.3rem; font-family: 'Bebas Neue', sans-serif; letter-spacing: 0.05em; }
 
-        .hero-right {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            position: relative;
-        }
+    /* Footer */
+    .main-footer { position: relative; z-index: 10; padding: 2.5rem 0; border-top: 1px solid var(--border-color); background: rgba(8, 12, 20, 0.9); }
 
-        .floating-image {
-            width: 100%;
-            max-width: 520px;
-            filter: drop-shadow(0 20px 35px rgba(0,0,0,0.6)) drop-shadow(0 0 12px rgba(255,102,0,0.3));
-            transition: transform 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-            animation: float 5s ease-in-out infinite;
-        }
+    /* Floating WhatsApp Button */
+    .whatsapp-float { position: fixed; bottom: 2rem; left: 2rem; width: 64px; height: 64px; background: linear-gradient(135deg, #25D366, #128C7E); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 1000; box-shadow: 0 10px 30px -5px rgba(37, 211, 102, 0.5); transition: var(--transition-smooth); border: none; text-decoration: none; }
+    .whatsapp-float:hover { transform: scale(1.12) translateY(-5px); box-shadow: 0 20px 40px -8px rgba(37, 211, 102, 0.7); }
+    .whatsapp-float svg { width: 34px; height: 34px; stroke: white; stroke-width: 1.5; fill: none; }
 
-        @keyframes float {
-            0% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-12px) rotate(0.5deg); }
-            100% { transform: translateY(0px) rotate(0deg); }
-        }
+    /* Scroll to Top */
+    .scroll-top { position: fixed; bottom: 2rem; right: 2rem; width: 56px; height: 56px; background: linear-gradient(135deg, var(--accent), var(--accent-secondary)); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; opacity: 0; visibility: hidden; transform: translateY(20px); transition: var(--transition-smooth); z-index: 999; border: none; box-shadow: 0 10px 30px -10px var(--accent-glow); }
+    .scroll-top.visible { opacity: 1; visibility: visible; transform: translateY(0); }
 
-        /* services grid modern */
-        .section-title {
-            font-size: 2.2rem;
-            font-weight: 700;
-            margin: 3rem 0 1.5rem 0;
-            letter-spacing: -0.01em;
-            background: linear-gradient(120deg, #ffffff, #c0c4d0);
-            background-clip: text;
-            -webkit-background-clip: text;
-            color: transparent;
-        }
+    /* Lightbox */
+    .lightbox { position: fixed; inset: 0; background: rgba(8, 12, 20, 0.98); z-index: 2000; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: var(--transition-smooth); backdrop-filter: blur(20px); }
+    .lightbox.active { opacity: 1; visibility: visible; }
+    .lightbox-content { position: relative; max-width: 90vw; max-height: 85vh; }
+    .lightbox-content img { max-width: 100%; max-height: 85vh; border-radius: 20px; box-shadow: 0 50px 100px -30px rgba(0, 0, 0, 0.8); }
+    .lightbox-close { position: absolute; top: -60px; right: 0; width: 50px; height: 50px; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+    .lightbox-nav { position: absolute; top: 50%; transform: translateY(-50%); width: 56px; height: 56px; background: rgba(0, 0, 0, 0.6); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+    .lightbox-prev { left: -80px; }
+    .lightbox-next { right: -80px; }
 
-        .services-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.8rem;
-            margin: 2rem 0 3rem;
-        }
+    /* Reveal animations */
+    .reveal { opacity: 0; transform: translateY(50px); transition: all 0.9s cubic-bezier(0.23, 1, 0.32, 1); }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
 
-        .service-item {
-            background: rgba(10, 10, 14, 0.65);
-            backdrop-filter: blur(12px);
-            border-radius: 1.8rem;
-            padding: 2rem 1.8rem;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: all 0.3s ease;
-        }
-
-        .service-item:hover {
-            transform: translateY(-8px);
-            border-color: rgba(255, 102, 0, 0.5);
-            background: rgba(20, 20, 26, 0.8);
-            box-shadow: 0 20px 30px -15px rgba(0,0,0,0.5);
-        }
-
-        .service-icon {
-            font-size: 2.6rem;
-            color: #ff6600;
-            margin-bottom: 1.4rem;
-            display: inline-block;
-        }
-
-        .service-item h3 {
-            font-size: 1.6rem;
-            font-weight: 700;
-            margin-bottom: 0.75rem;
-        }
-
-        .service-item p {
-            color: #b9beca;
-            line-height: 1.5;
-        }
-
-        /* differential banner */
-        .stats-banner {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            gap: 1rem;
-            background: linear-gradient(125deg, #0f0f13, #030305);
-            border-radius: 2rem;
-            padding: 2rem 2.5rem;
-            margin: 3rem 0;
-            border: 1px solid rgba(255, 102, 0, 0.2);
-        }
-
-        .stat {
-            text-align: center;
-            flex: 1;
-        }
-
-        .stat-number {
-            font-size: 2.4rem;
-            font-weight: 800;
-            color: #ff6600;
-        }
-
-        .stat-label {
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #9095a3;
-        }
-
-        /* contact section premium */
-        .contact-premium {
-            display: grid;
-            grid-template-columns: 1fr 1.2fr;
-            gap: 2rem;
-            margin: 2rem 0 3rem;
-            border-radius: 2rem;
-            overflow: hidden;
-        }
-
-        .contact-details {
-            background: rgba(8, 8, 12, 0.8);
-            backdrop-filter: blur(8px);
-            padding: 2.5rem;
-            border-radius: 2rem;
-            border: 1px solid rgba(255,255,255,0.05);
-        }
-
-        .contact-method {
-            display: flex;
-            align-items: center;
-            gap: 1.2rem;
-            margin-bottom: 2rem;
-            transition: 0.2s;
-        }
-
-        .contact-icon {
-            width: 56px;
-            height: 56px;
-            background: rgba(255, 102, 0, 0.15);
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.6rem;
-            color: #ff6600;
-            border: 1px solid rgba(255, 102, 0, 0.3);
-        }
-
-        .contact-method h4 {
-            font-size: 1.2rem;
-            font-weight: 700;
-            margin-bottom: 0.2rem;
-        }
-
-        .contact-method p {
-            color: #bcbfc9;
-            font-weight: 500;
-        }
-
-        .map-modern {
-            border-radius: 2rem;
-            overflow: hidden;
-            border: 1px solid rgba(255,255,255,0.08);
-            background: #101012;
-            min-height: 380px;
-        }
-
-        iframe {
-            width: 100%;
-            height: 100%;
-            min-height: 380px;
-            filter: grayscale(0.2) contrast(1.05) brightness(0.9);
-            border: 0;
-        }
-
-        /* footer modern */
-        .footer {
-            margin-top: 4rem;
-            padding: 2rem 0 1rem;
-            border-top: 1px solid rgba(255,255,255,0.05);
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 1.5rem;
-            align-items: center;
-        }
-
-        .footer-links {
-            display: flex;
-            gap: 2rem;
-        }
-
-        .footer-links a {
-            color: #9ca3af;
-            text-decoration: none;
-            transition: color 0.2s;
-            font-size: 0.85rem;
-        }
-
-        .footer-links a:hover {
-            color: #ff6600;
-        }
-
-        /* button flutuante whatsapp */
-        .whatsapp-float {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            background: #25D366;
-            width: 64px;
-            height: 64px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 2rem;
-            box-shadow: 0 12px 25px rgba(37, 211, 102, 0.4);
-            transition: all 0.3s ease;
-            z-index: 1000;
-            text-decoration: none;
-            backdrop-filter: blur(2px);
-            border: 1px solid rgba(255,255,255,0.2);
-        }
-
-        .whatsapp-float:hover {
-            transform: scale(1.1);
-            background: #20b859;
-            box-shadow: 0 20px 35px rgba(37, 211, 102, 0.5);
-        }
-
-        @media (max-width: 860px) {
-            .container {
-                padding: 1rem 1.2rem;
-            }
-            .hero {
-                flex-direction: column;
-                text-align: center;
-            }
-            .hero-desc {
-                margin-left: auto;
-                margin-right: auto;
-            }
-            .feature-list {
-                justify-content: center;
-            }
-            .contact-premium {
-                grid-template-columns: 1fr;
-            }
-            .stats-banner {
-                flex-direction: column;
-                text-align: center;
-                gap: 1.5rem;
-            }
-            .footer {
-                flex-direction: column;
-                text-align: center;
-            }
-        }
-
-        @keyframes fadeSlideUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .animate-onload {
-            animation: fadeSlideUp 0.6s ease-out forwards;
-        }
-
-        .delay-1 { animation-delay: 0.1s; opacity: 0; }
-        .delay-2 { animation-delay: 0.2s; opacity: 0; }
-        .delay-3 { animation-delay: 0.3s; opacity: 0; }
-    </style>
+    @media (max-width: 992px) {
+      .lightbox-prev { left: 10px; }
+      .lightbox-next { right: 10px; }
+      .whatsapp-float { width: 54px; height: 54px; bottom: 1.5rem; left: 1.5rem; }
+      .scroll-top { bottom: 1.5rem; right: 1.5rem; }
+    }
+    @media (max-width: 768px) {
+      .washing-card, .contact-card { padding: 2rem; }
+      .gallery-grid { grid-template-columns: 1fr; grid-template-rows: repeat(6, 220px); }
+      .gallery-item:nth-child(1), .gallery-item:nth-child(4) { grid-column: span 1; }
+      .badge-24h-moved { font-size: 0.75rem; }
+    }
+  </style>
 </head>
 <body>
+  <canvas id="bgCanvas"></canvas>
+  <div class="gradient-orbs"><div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div></div>
+  <div class="grid-pattern"></div>
+  <div class="noise-overlay"></div>
 
-<div class="bg-noise"></div>
-<div class="gradient-orb"></div>
-<div class="gradient-orb-2"></div>
-
-<a href="https://wa.me/5511913268620?text=Olá%20MARLIFT,%20gostaria%20de%20um%20orçamento!" class="whatsapp-float" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
-    <i class="fab fa-whatsapp"></i>
-</a>
-
-<div class="container">
-    <!-- Hero Section -->
-    <div class="hero">
-        <div class="hero-left animate-onload">
-            <div class="hero-badge">
-                <i class="fas fa-bolt"></i> ESPECIALISTAS EM MOVIMENTAÇÃO
-            </div>
-            <h1>
-                Potência que <span class="hero-highlight">move</span><br>
-                sua operação
-            </h1>
-            <p class="hero-desc">
-                Manutenção multimarcas, peças genuínas e suporte 24h. 
-                Tecnologia e agilidade para manter sua frota sempre produtiva.
-            </p>
-            <div class="feature-list">
-                <div class="feature-chip"><i class="fas fa-clock"></i> Atendimento 24/7</div>
-                <div class="feature-chip"><i class="fas fa-truck-fast"></i> Frota própria</div>
-                <div class="feature-chip"><i class="fas fa-microchip"></i> Diagnóstico avançado</div>
-            </div>
-            <a href="#contact" class="btn-primary" style="display: inline-flex;">
-                Fale com um especialista <i class="fas fa-arrow-right"></i>
-            </a>
+  <header class="main-header" id="mainHeader">
+    <div class="container">
+      <nav class="navbar navbar-expand-lg p-0">
+        <a href="#" class="navbar-brand p-0"><img src="https://iili.io/BTyh3yN.png" alt="Marlift Logo" class="logo-img"></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-label="Menu"><span class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+          <ul class="navbar-nav nav-pills gap-2">
+            <li class="nav-item"><a class="nav-link active" href="#servicos">Servicos</a></li>
+            <li class="nav-item"><a class="nav-link" href="#lavagem">Lavagem Tecnica</a></li>
+            <li class="nav-item"><a class="nav-link" href="#galeria">Galeria</a></li>
+            <li class="nav-item"><a class="nav-link" href="#contato">Contato</a></li>
+          </ul>
         </div>
-        <div class="hero-right">
-            <img class="floating-image" src="https://iili.io/qNBzZOB.jpg" alt="Empilhadeira MARLIFT em operação">
-        </div>
+      </nav>
     </div>
+  </header>
 
-    <!-- Serviços premium -->
-    <div>
-        <h2 class="section-title animate-onload delay-1">Soluções de alta performance</h2>
-        <div class="services-grid">
-            <div class="service-item animate-onload delay-1">
-                <div class="service-icon"><i class="fas fa-chart-line"></i></div>
-                <h3>Manutenção Preditiva</h3>
-                <p>Evite paradas inesperadas com checkpoints inteligentes e planejamento personalizado. Aumente a vida útil do seu equipamento.</p>
+  <section class="hero-section" id="inicio">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-6">
+          <h1 class="hero-title">Manutencao de <span class="accent">Empilhadeiras</span> com excelencia</h1>
+          <p class="hero-description">Oferecemos servicos especializados em manutencao, lavagem tecnica e lubrificacao para empilhadeiras eletricas, GLP e diesel. Atendimento emergencial, NR-12 e pecas originais.</p>
+          <div class="hero-buttons">
+            <a href="https://wa.me/5511913268620?text=Olá! Gostaria de mais informações sobre os serviços da MARLIFT." target="_blank" class="btn-accent"><svg width="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg><span>Fale Conosco</span></a>
+            <a href="#galeria" class="btn-outline"><span>Ver Portfolio</span></a>
+          </div>
+          <div class="hero-stats"><div class="stat-item"><span class="stat-number">24h</span><span class="stat-label">Emergencia</span></div><div class="stat-item"><span class="stat-number">NR-12</span><span class="stat-label">Conformidade</span></div><div class="stat-item"><span class="stat-number">+500</span><span class="stat-label">Equipamentos</span></div></div>
+        </div>
+        <div class="col-lg-6">
+          <div class="hero-image-wrapper">
+            <div class="hero-image">
+              <img src="https://iili.io/BYk5SdN.gif" alt="Empilhadeira em manutencao">
             </div>
-            <div class="service-item animate-onload delay-2">
-                <div class="service-icon"><i class="fas fa-cogs"></i></div>
-                <h3>Peças 100% Originais</h3>
-                <p>Estoque permanente para as principais marcas: Toyota, Hyster, Yale, Still, Linde, Crown e Hyundai. Entrega rápida.</p>
-            </div>
-            <div class="service-item animate-onload delay-3">
-                <div class="service-icon"><i class="fas fa-battery-full"></i></div>
-                <h3>Baterias & Rodagens</h3>
-                <p>Reforma de baterias tracionárias, rodas de poliuretano, correias e sistemas hidráulicos com garantia de fábrica.</p>
-            </div>
+          </div>
         </div>
+      </div>
     </div>
+  </section>
 
-    <!-- Diferenciais com dados reais -->
-    <div class="stats-banner animate-onload delay-1">
-        <div class="stat">
-            <div class="stat-number">+1.200</div>
-            <div class="stat-label">Frotas atendidas</div>
-        </div>
-        <div class="stat">
-            <div class="stat-number">24h</div>
-            <div class="stat-label">Resposta emergencial</div>
-        </div>
-        <div class="stat">
-            <div class="stat-number">98%</div>
-            <div class="stat-label">Satisfação de clientes</div>
-        </div>
-        <div class="stat">
-            <div class="stat-number">12</div>
-            <div class="stat-label">Marcas especializadas</div>
-        </div>
+  <section class="brands-section">
+    <div class="container">
+      <p class="brands-title">Trabalhamos com as principais marcas do mercado</p>
+      <div class="brands-image-wrapper">
+        <img src="https://iili.io/BYv2YAB.webp" alt="Marcas Toyota, Linde, Hyster, Yale" class="brands-composite" loading="lazy">
+      </div>
     </div>
+  </section>
 
-    <!-- Sobre / call to action extra -->
-    <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; background: rgba(255, 102, 0, 0.05); border-radius: 1.5rem; padding: 2rem; margin: 2rem 0; border-left: 4px solid #ff6600;">
-        <div>
-            <h3 style="font-size: 1.4rem; font-weight: 700;">Precisa de atendimento de urgência?</h3>
-            <p style="color: #b9beca;">Equipe técnica disponível 24 horas para garantir sua operação sem interrupções.</p>
-        </div>
-        <a href="https://wa.me/5511913268620" target="_blank" style="background: #ff6600; color: #0a0a0a; text-decoration: none; padding: 0.8rem 1.8rem; border-radius: 40px; font-weight: 700; display: inline-flex; gap: 0.5rem; align-items: center;">Atendimento rápido <i class="fas fa-headset"></i></a>
+  <section class="section-wrapper" id="servicos">
+    <div class="container">
+      <div class="section-header reveal"><span class="section-label">Solucoes Completas</span><h2 class="section-title">Manutencao especializada</h2><p class="section-description">Garanta alto desempenho e seguranca para sua operacao com nossos servicos especializados em todas as principais marcas.</p></div>
+      <div class="row g-4">
+        <div class="col-lg-4 col-md-6"><div class="service-card reveal reveal-delay-1"><div class="service-icon"><svg width="34" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></div><h3 class="service-title">Preventiva</h3><p class="service-text">Inspecoes completas, lubrificacao, troca de fluidos e calibracao. Evite falhas inesperadas e mantenha sua frota operando com maxima eficiencia.</p></div></div>
+        <div class="col-lg-4 col-md-6"><div class="service-card reveal reveal-delay-2"><div class="service-icon"><svg width="34" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div><h3 class="service-title">Corretiva</h3><p class="service-text">Reparos em motores, sistema hidraulico e eletrica com pecas originais e garantia. Diagnostico preciso e solucoes definitivas.</p></div></div>
+        <div class="col-lg-4 col-md-6"><div class="service-card reveal reveal-delay-3"><div class="service-icon"><svg width="34" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div><h3 class="service-title">Contratos NR-12</h3><p class="service-text">Manutencao programada com laudos tecnicos e total conformidade com a NR-12. Documentacao completa para auditorias.</p></div></div>
+      </div>
     </div>
+  </section>
 
-    <!-- Contato e Mapa (seção moderna) -->
-    <div id="contact" style="scroll-margin-top: 2rem;">
-        <h2 class="section-title">Canais diretos & localização</h2>
-        <div class="contact-premium">
-            <div class="contact-details">
-                <div class="contact-method">
-                    <div class="contact-icon"><i class="fab fa-whatsapp"></i></div>
-                    <div>
-                        <h4>WhatsApp Comercial</h4>
-                        <p>(11) 9 1326-8620</p>
-                        <small style="color:#ff6600;">Tempo médio de resposta: 3 minutos</small>
-                    </div>
-                </div>
-                <div class="contact-method">
-                    <div class="contact-icon"><i class="far fa-envelope"></i></div>
-                    <div>
-                        <h4>E-mail profissional</h4>
-                        <p>marlift.service@gmail.com</p>
-                        <small style="color:#8f94a2;">Atendemos também propostas e licitações</small>
-                    </div>
-                </div>
-                <div class="contact-method">
-                    <div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div>
-                    <div>
-                        <h4>Centro técnico</h4>
-                        <p>Rua Maria Fernanda, 291 - Santana de Parnaíba/SP</p>
-                        <small style="color:#8f94a2;">Entrada para caminhões e frota própria</small>
-                    </div>
-                </div>
-                <div style="margin-top: 1rem;">
-                    <a href="https://wa.me/5511913268620" target="_blank" style="color: #ff6600; text-decoration: none; font-weight: 600; display: inline-flex; gap: 0.5rem; align-items: center;">Solicitar orçamento agora <i class="fas fa-chevron-right"></i></a>
-                </div>
-            </div>
-            <div class="map-modern">
-                <iframe 
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3659.835742998489!2d-46.885029!3d-23.465568!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94cf1f9d4a8f4b67%3A0x2b5d3a5f0e2c1d0!2sR.%20Maria%20Fernanda%2C%20291%20-%20Santana%20de%20Parna%C3%ADba%2C%20SP%2C%2006543-110!5e0!3m2!1spt-BR!2sbr!4v1711300000000!5m2!1spt-BR!2sbr" 
-                    loading="lazy" 
-                    referrerpolicy="no-referrer-when-downgrade"
-                    title="Mapa MARLIFT Empilhadeiras"
-                    allowfullscreen>
-                </iframe>
-            </div>
-        </div>
+  <section class="section-wrapper" id="lavagem">
+    <div class="container">
+      <div class="section-header reveal"><span class="section-label">Cuidado Completo</span><h2 class="section-title">Lavagem Tecnica e Lubrificacao</h2><p class="section-description">Mais vida util para seu equipamento e seguranca para sua operacao.</p></div>
+      <div class="washing-card reveal"><div class="washing-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M6 3v3m12-3v3M5 21h14a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2z"/><circle cx="8.5" cy="13.5" r="1.5"/><circle cx="15.5" cy="13.5" r="1.5"/></svg><span>Lavagem e Lubrificacao de precisao</span></div><p class="washing-description">Oferecemos um servico especializado que remove sujeira agressiva e aplica lubrificacao nos pontos criticos, aumentando significativamente a vida util da sua frota e reduzindo custos com manutencao corretiva.</p><div class="benefits-grid"><div class="benefit-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Limpeza Profunda: remocao de residuos, graxa e poeira</div><div class="benefit-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Lubrificacao Completa: pontos criticos (rodas, correntes, garfos)</div><div class="benefit-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Equipe Qualificada: profissionais treinados para todos os modelos</div><div class="benefit-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Agilidade: servico rapido para sua frota nao parar</div></div><div class="d-flex flex-wrap justify-content-between align-items-center gap-3"><strong style="color: var(--accent);">Invista na durabilidade do seu maquinario.</strong><a href="https://wa.me/5511913268620" target="_blank" class="btn-accent" style="padding: 0.9rem 2rem;"><svg width="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg><span>Agende uma avaliacao</span></a></div></div>
     </div>
+  </section>
 
-    <!-- Marcas parceiras / carrossel minimal -->
-    <div style="margin: 3rem 0 1rem;">
-        <p style="text-align: center; text-transform: uppercase; letter-spacing: 3px; font-size: 0.75rem; color: #ff8c42;">Multimarcas com excelência</p>
-        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 2rem; margin-top: 1.5rem; opacity: 0.8;">
-            <span style="font-weight: 600;">Toyota</span>
-            <span style="font-weight: 600;">Hyster</span>
-            <span style="font-weight: 600;">Yale</span>
-            <span style="font-weight: 600;">Still</span>
-            <span style="font-weight: 600;">Linde</span>
-            <span style="font-weight: 600;">Crown</span>
-            <span style="font-weight: 600;">Hyundai</span>
-        </div>
-    </div>
+  <section class="gallery-section" id="galeria">
+    <div class="container"><div class="section-header reveal"><span class="section-label">Portfolio</span><h2 class="section-title">Equipamentos Atendidos</h2><p class="section-description">Conheca alguns dos equipamentos que ja passaram por nossas maos.</p></div><div class="gallery-grid"><div class="gallery-item reveal reveal-delay-1" data-index="0"><img src="https://iili.io/BYvJfff.png" alt="Empilhadeira Toyota"><div class="gallery-item-icon"><svg width="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></div><div class="gallery-item-content"><h4 class="gallery-item-title">Toyota</h4><p class="gallery-item-desc">Manutencao preventiva</p></div></div><div class="gallery-item reveal reveal-delay-2" data-index="1"><img src="https://iili.io/BYvJ9RI.png" alt="Linde"><div class="gallery-item-icon"><svg width="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></div><div class="gallery-item-content"><h4 class="gallery-item-title">Linde</h4><p class="gallery-item-desc">Revisao hidraulica</p></div></div><div class="gallery-item reveal reveal-delay-3" data-index="2"><img src="https://iili.io/BYkpUcN.png" alt="Hyster"><div class="gallery-item-icon"><svg width="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></div><div class="gallery-item-content"><h4 class="gallery-item-title">Hyster</h4><p class="gallery-item-desc">Lavagem tecnica</p></div></div><div class="gallery-item reveal reveal-delay-4" data-index="3"><img src="https://iili.io/BYkp799.jpg" alt="Yale"><div class="gallery-item-icon"><svg width="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></div><div class="gallery-item-content"><h4 class="gallery-item-title">Yale</h4><p class="gallery-item-desc">Substituicao de bateria</p></div></div><div class="gallery-item reveal reveal-delay-5" data-index="4"><img src="https://iili.io/BYkmMpn.jpg" alt="Crown"><div class="gallery-item-icon"><svg width="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></div><div class="gallery-item-content"><h4 class="gallery-item-title">Crown</h4><p class="gallery-item-desc">Manutencao eletrica</p></div></div><div class="gallery-item reveal reveal-delay-6" data-index="5"><img src="https://iili.io/B5qTycQ.png" alt="Clark"><div class="gallery-item-icon"><svg width="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></div><div class="gallery-item-content"><h4 class="gallery-item-title">Clark</h4><p class="gallery-item-desc">Reparo do motor</p></div></div></div></div>
+  </section>
 
-    <footer class="footer">
-        <div style="display: flex; align-items: center; gap: 0.6rem;">
-            <i class="fas fa-cube" style="color: #ff6600;"></i>
-            <span style="font-weight: 700; letter-spacing: 1px;">MARLIFT EMPILHADEIRAS</span>
-        </div>
-        <div class="footer-links">
-            <a href="#">Política de qualidade</a>
-            <a href="#">Privacidade</a>
-            <a href="https://wa.me/5511913268620" target="_blank">Suporte 24h</a>
-        </div>
-        <div style="font-size: 0.75rem; color: #6b7280;">
-            © 2026 MARLIFT — Elevando sua produtividade.
-        </div>
-    </footer>
-</div>
+  <section class="section-wrapper" id="contato">
+    <div class="container"><div class="section-header reveal"><span class="section-label">Fale com Especialistas</span><h2 class="section-title">Solicite um Orcamento</h2></div>
+    <div class="contact-card reveal"><div class="badge-24h-moved"><span class="pulse-dot"></span> Atendimento 24 horas · Emergência imediata</div>
+      <div class="row g-4"><div class="col-lg-5"><div class="contact-item"><div class="contact-icon"><svg width="28" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div><div><div class="contact-label">WhatsApp</div><div class="contact-value"><a href="https://wa.me/5511913268620?text=Olá! Gostaria de mais informações sobre os serviços da MARLIFT.">(11) 91326-8620</a></div></div></div><div class="contact-item"><div class="contact-icon"><svg width="28" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div><div><div class="contact-label">E-mail</div><div class="contact-value"><a href="mailto:contato@marlift.com.br">contato@marlift.com.br</a></div></div></div><div class="contact-item"><div class="contact-icon"><svg width="28" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div><div><div class="contact-label">Site</div><div class="contact-value"><a href="https://www.marlift.com.br" target="_blank">www.marlift.com.br</a></div></div></div><div class="contact-item"><div class="contact-icon"><svg width="28" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div><div><div class="contact-label">Localização</div><div class="contact-value">Santana de Parnaíba - SP</div></div></div></div><div class="col-lg-7"><form id="contactForm"><div class="row g-3"><div class="col-md-6"><input type="text" class="form-control" placeholder="Seu nome" required></div><div class="col-md-6"><input type="email" class="form-control" placeholder="E-mail" required></div><div class="col-12"><input type="tel" class="form-control" placeholder="Telefone"></div><div class="col-12"><textarea class="form-control" rows="4" placeholder="Descreva a necessidade ou modelo da empilhadeira"></textarea></div><div class="col-12"><button type="submit" class="btn-accent w-100 justify-content-center"><span>Enviar mensagem</span><svg width="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button></div></div></form></div></div>
+      <div class="emergency-banner"><div class="emergency-icon"><svg width="30" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div><div class="emergency-text"><strong>Emergência 24 horas</strong><span>Atendimento imediato para reparos urgentes.</span></div><a href="https://wa.me/5511913268620?text=🚨%20EMERGÊNCIA%20MARLIFT%20-%20Preciso%20de%20atendimento%20*URGENTE*%20para%20minha%20empilhadeira!%20(Chamado%2024hs)" target="_blank" class="btn-accent ms-lg-auto" style="padding: 0.9rem 2rem;"><svg width="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg><span>Chamar Agora</span></a></div>
+    </div></div>
+  </section>
 
-<script>
-    // Intersection Observer para animações suaves ao rolar
-    const animatedElements = document.querySelectorAll('.service-item, .stats-banner, .contact-premium, .section-title');
-    
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if(entry.isIntersecting) {
-                entry.target.style.opacity = '1';
-                entry.target.style.transform = 'translateY(0)';
-                observer.unobserve(entry.target);
-            }
-        });
-    }, { threshold: 0.1, rootMargin: "0px 0px -40px 0px" });
-    
-    animatedElements.forEach(el => {
-        el.style.opacity = '0';
-        el.style.transform = 'translateY(20px)';
-        el.style.transition = 'opacity 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1), transform 0.6s ease';
-        observer.observe(el);
-    });
-    
-    // Forçar os primeiros itens que já estão visíveis
-    setTimeout(() => {
-        animatedElements.forEach(el => {
-            const rect = el.getBoundingClientRect();
-            if(rect.top < window.innerHeight - 100) {
-                el.style.opacity = '1';
-                el.style.transform = 'translateY(0)';
-                observer.unobserve(el);
-            }
-        });
-    }, 200);
-</script>
+  <footer class="main-footer"><div class="container"><div class="d-flex flex-wrap justify-content-between align-items-center gap-3"><span class="small" style="color: var(--fg-muted);">2025 Marlift Empilhadeiras - Pecas e Serviços Especializados. CNPJ: 65.707.636/0001-13</span><div class="d-flex gap-3"><a href="#" class="text-decoration-none small" style="color: var(--fg-muted);">Privacidade</a><a href="#" class="text-decoration-none small" style="color: var(--fg-muted);">Termos</a></div></div></div></footer>
+
+  <a href="https://wa.me/5511913268620?text=Olá! Gostaria de mais informações sobre os serviços da MARLIFT." target="_blank" class="whatsapp-float" aria-label="WhatsApp"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></a>
+  <button class="scroll-top" id="scrollTopBtn" aria-label="Voltar ao topo"><svg width="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><polyline points="18 15 12 9 6 15"/></svg></button>
+
+  <div class="lightbox" id="lightbox"><div class="lightbox-content"><button class="lightbox-close"><svg width="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button><button class="lightbox-nav lightbox-prev"><svg width="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></button><img src="" alt="Ampliada" id="lightboxImg"><button class="lightbox-nav lightbox-next"><svg width="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></button></div></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    (function(){ 
+      const canvas=document.getElementById('bgCanvas'), ctx=canvas.getContext('2d'); 
+      let particles=[], mouseX=0, mouseY=0, animId=null; 
+      function resizeCanvas(){ canvas.width=window.innerWidth; canvas.height=window.innerHeight; } 
+      class Particle{ constructor(){ this.reset(); } reset(){ this.x=Math.random()*canvas.width; this.y=Math.random()*canvas.height; this.size=Math.max(0.5,Math.random()*2.5); this.speedX=(Math.random()-0.5)*0.4; this.speedY=(Math.random()-0.5)*0.4; this.opacity=Math.max(0.1,Math.min(0.6,Math.random()*0.5+0.1)); this.hue=Math.random()>0.7?25:210; } update(){ this.x+=this.speedX; this.y+=this.speedY; let dx=mouseX-this.x, dy=mouseY-this.y, dist=Math.hypot(dx,dy); if(dist<120&&dist>0){ this.x-=(dx/dist)*0.8; this.y-=(dy/dist)*0.8; } if(this.x<0||this.x>canvas.width||this.y<0||this.y>canvas.height) this.reset(); } draw(){ ctx.beginPath(); ctx.arc(this.x,this.y,Math.max(0.1,this.size),0,Math.PI*2); ctx.fillStyle=`hsla(${this.hue},85%,55%,${this.opacity})`; ctx.fill(); } } 
+      function initParticles(){ particles=Array.from({length: window.matchMedia('(prefers-reduced-motion: reduce)').matches?40:100},()=>new Particle()); } 
+      function drawConnections(){ for(let i=0;i<particles.length;i++) for(let j=i+1;j<particles.length;j++){ let d=Math.hypot(particles[i].x-particles[j].x,particles[i].y-particles[j].y); if(d<100){ ctx.beginPath(); ctx.moveTo(particles[i].x,particles[i].y); ctx.lineTo(particles[j].x,particles[j].y); ctx.strokeStyle=`rgba(255,107,0,${Math.max(0,(1-d/100)*0.12)})`; ctx.lineWidth=0.5; ctx.stroke(); } } } 
+      function animate(){ ctx.clearRect(0,0,canvas.width,canvas.height); particles.forEach(p=>{ if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches) p.update(); p.draw(); }); if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches) drawConnections(); animId=requestAnimationFrame(animate); } 
+      resizeCanvas(); initParticles(); animate(); 
+      window.addEventListener('resize',()=>{ resizeCanvas(); initParticles(); }); 
+      document.addEventListener('mousemove',(e)=>{ mouseX=e.clientX; mouseY=e.clientY; }); 
+      
+      const header=document.getElementById('mainHeader'), scrollBtn=document.getElementById('scrollTopBtn'); 
+      window.addEventListener('scroll',()=>{ header.classList.toggle('scrolled',window.scrollY>50); scrollBtn.classList.toggle('visible',window.scrollY>500); }); 
+      scrollBtn.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'})); 
+      
+      const revealObserver=new IntersectionObserver(e=>e.forEach(entry=>entry.isIntersecting&&entry.target.classList.add('visible')),{threshold:0.1}); 
+      document.querySelectorAll('.reveal').forEach(el=>revealObserver.observe(el)); 
+      
+      document.querySelectorAll('a[href^="#"]').forEach(anchor=>{ anchor.addEventListener('click',function(e){ let targetId=this.getAttribute('href'); if(targetId==='#') return; let target=document.querySelector(targetId); if(target){ e.preventDefault(); window.scrollTo({top:target.getBoundingClientRect().top+window.scrollY-header.offsetHeight,behavior:'smooth'}); let navCollapse=document.getElementById('navbarNav'); if(navCollapse&&navCollapse.classList.contains('show')){ let bs=bootstrap.Collapse.getInstance(navCollapse); if(bs) bs.hide(); } } }); }); 
+      
+      function updateActiveNav(){ let scrollPos=window.scrollY+header.offsetHeight+150; document.querySelectorAll('section[id]').forEach(section=>{ let top=section.offsetTop,height=section.offsetHeight,id=section.id; if(scrollPos>=top&&scrollPos<top+height){ document.querySelectorAll('.nav-pills .nav-link').forEach(link=>link.classList.toggle('active',link.getAttribute('href')===`#${id}`)); } }); } 
+      window.addEventListener('scroll',updateActiveNav); updateActiveNav(); 
+      
+      const form=document.getElementById('contactForm'); 
+      if(form) form.addEventListener('submit',e=>{ e.preventDefault(); let btn=form.querySelector('button[type="submit"]'), orig=btn.innerHTML; btn.innerHTML='<span>Enviando...</span>'; btn.disabled=true; setTimeout(()=>{ alert('Solicitacao enviada com sucesso! Em breve um especialista Marlift entrara em contato.'); form.reset(); btn.innerHTML=orig; btn.disabled=false; },1800); }); 
+      
+      const lightbox=document.getElementById('lightbox'),lightboxImg=document.getElementById('lightboxImg'),galleryItems=document.querySelectorAll('.gallery-item'); 
+      let currentIndex=0; 
+      
+      /* CORREÇÃO: Array de imagens atualizado com as URLs corretas da galeria */
+      const galleryImages=['https://iili.io/BYvJfff.png','https://iili.io/BYvJ9RI.png','https://iili.io/BYkpUcN.png','https://iili.io/BYkp799.jpg','https://iili.io/BYkmMpn.jpg','https://iili.io/B5qTycQ.png']; 
+      
+      function openLightbox(idx){ currentIndex=idx; lightboxImg.src=galleryImages[idx]; lightbox.classList.add('active'); document.body.style.overflow='hidden'; } 
+      function closeLightbox(){ lightbox.classList.remove('active'); document.body.style.overflow=''; } 
+      function nextImage(){ currentIndex=(currentIndex+1)%galleryImages.length; lightboxImg.src=galleryImages[currentIndex]; } 
+      function prevImage(){ currentIndex=(currentIndex-1+galleryImages.length)%galleryImages.length; lightboxImg.src=galleryImages[currentIndex]; } 
+      galleryItems.forEach((item,idx)=>item.addEventListener('click',()=>openLightbox(idx))); 
+      lightbox.querySelector('.lightbox-close').addEventListener('click',closeLightbox); 
+      lightbox.querySelector('.lightbox-next').addEventListener('click',nextImage); 
+      lightbox.querySelector('.lightbox-prev').addEventListener('click',prevImage); 
+      lightbox.addEventListener('click',e=>{if(e.target===lightbox)closeLightbox();}); 
+      document.addEventListener('keydown',e=>{if(!lightbox.classList.contains('active'))return; if(e.key==='Escape')closeLightbox(); if(e.key==='ArrowRight')nextImage(); if(e.key==='ArrowLeft')prevImage();}); 
+    })();
+  </script>
 </body>
 </html>
