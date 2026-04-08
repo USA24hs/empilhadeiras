@@ -4,10 +4,23 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <meta name="description" content="A Marlift Empilhadeiras oferece serviços especializados de peças e manutenção para empilhadeiras, com atendimento 24hs emergência e suporte técnico imediato e orçamentos via WhatsApp comercial (11) 9 1326-8620. A empresa foca em soluções técnicas para operação contínua, incluindo manutenção preventiva e corretiva para modelos elétricos, GLP e diesel, visando a disponibilidade da frota.">
-    <meta name="keywords" content="empilhadeira, manutenção, peças, Lavagem, Toyota, Hyster, Yale, Still, Linde, Crown">
-    <link rel="canonical" href="https://www.marliftempilhadeiras.com.br/" />
-    <title>MARLIFT EMPILHADEIRAS | Manutenção preventiva, corretiva e chamados emergenciais 24hs</title>
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <meta name="keywords" content="empilhadeira, manutenção, peças, Lavagem, Toyota, Hyster, Yale, Still, Linde, Crown, Santana de Parnaíba, Barueri, Osasco">
+  <link rel="canonical" href="https://www.marliftempilhadeiras.com.br/" />
+  <title>MARLIFT EMPILHADEIRAS | Manutenção preventiva, corretiva e chamados emergenciais 24hs</title>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  
+  <!-- Open Graph / Social Media -->
+  <meta property="og:title" content="Marlift Empilhadeiras | Manutenção 24h e Peças">
+  <meta property="og:description" content="Manutenção preventiva, corretiva e lavagem técnica em empilhadeiras. Atendimento emergencial 24h na Grande SP. Orçamento rápido via WhatsApp.">
+  <meta property="og:image" content="https://iili.io/BYvJfff.png">
+  <meta property="og:url" content="https://www.marliftempilhadeiras.com.br/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Marlift Empilhadeiras">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Marlift Empilhadeiras | Manutenção 24h">
+  <meta name="twitter:description" content="Especialistas em manutenção de empilhadeiras com atendimento emergencial 24 horas.">
+  <meta name="twitter:image" content="https://iili.io/BYvJfff.png">
+
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
@@ -17,6 +30,7 @@
       --accent-secondary: #ff8c42;
       --accent-glow: rgba(255, 107, 0, 0.4);
       --fg-muted: #a1b1c7;
+      --fg-light: #e0e8f0;
       --border-color: rgba(255, 255, 255, 0.08);
       --transition-smooth: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
     }
@@ -25,8 +39,11 @@
     body { font-family: 'Inter', sans-serif; background: var(--bg-dark); color: #fff; overflow-x: hidden; line-height: 1.6; }
     h1, h2, h3 { font-family: 'Bebas Neue', sans-serif; letter-spacing: 0.05em; font-weight: 400; }
 
-    /* Background Neon e Grade */
-    #bgCanvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.3; }
+    /* Scroll suave */
+    html { scroll-behavior: smooth; }
+
+    /* Background Neon simplificado (CSS puro + canvas leve) */
+    #bgCanvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.25; }
     .grid-bg { position: fixed; inset: 0; z-index: 1; background-image: linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px); background-size: 50px 50px; pointer-events: none; mask-image: radial-gradient(circle, black, transparent 80%); }
 
     /* Header Mobile Otimizado */
@@ -44,36 +61,40 @@
     .nav-link { color: rgba(255,255,255,0.8) !important; font-weight: 600; font-size: 0.9rem; padding: 12px !important; border-radius: 8px; transition: var(--transition-smooth); }
     .nav-link:hover, .nav-link.active { background: rgba(255, 107, 0, 0.1); color: var(--accent) !important; }
 
-    /* Hero Section - Ajustada para 16:9 Vertical */
+    /* Hero Section - Espaço reduzido no desktop */
     .hero-section { position: relative; z-index: 10; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 90px 20px 30px; }
     .hero-content { text-align: center; width: 100%; max-width: 500px; }
     .hero-title { font-size: clamp(2.8rem, 13vw, 4.2rem); line-height: 0.95; margin-bottom: 1rem; text-transform: uppercase; }
     .hero-title span { color: var(--accent); text-shadow: 0 0 15px rgba(255, 107, 0, 0.3); }
-    .hero-description { color: var(--fg-muted); font-size: 1.05rem; margin-bottom: 2.5rem; max-width: 90%; margin-inline: auto; font-weight: 400; }
+    .hero-description { color: var(--fg-light); font-size: 1.05rem; margin-bottom: 2.5rem; max-width: 90%; margin-inline: auto; font-weight: 500; text-shadow: 0 1px 2px rgba(0,0,0,0.3); }
     
-    /* Imagem GIF Otimizada */
-    .hero-image-mobile { margin-bottom: 2rem; border-radius: 15px; overflow: hidden; box-shadow: 0 15px 40px rgba(0,0,0,0.6); border: 1px solid var(--border-color); position: relative; }
-    .hero-image-mobile::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom, transparent 70%, var(--bg-dark)); }
+    /* Imagem GIF Otimizada - sem margens extras */
+    .hero-image-mobile { margin-bottom: 1.5rem; border-radius: 15px; overflow: hidden; box-shadow: 0 15px 40px rgba(0,0,0,0.6); border: 1px solid var(--border-color); position: relative; }
+    .hero-image-mobile::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom, transparent 70%, var(--bg-dark)); pointer-events: none; }
     .hero-image-mobile img { width: 100%; display: block; object-fit: cover; }
 
-    /* Botões Mobile - Touch Friendly (Grandes) */
+    /* Botões Mobile - Touch Friendly */
     .btn-container { padding: 0 10px; }
     .btn-main { background: linear-gradient(135deg, var(--accent), var(--accent-secondary)); color: white; padding: 18px 30px; border-radius: 12px; font-weight: 700; text-decoration: none; display: block; margin-bottom: 12px; font-size: 1.1rem; transition: var(--transition-smooth); border: none; text-align: center; box-shadow: 0 5px 15px rgba(255, 107, 0, 0.2); text-transform: uppercase; letter-spacing: 1px; }
     .btn-main:active { transform: scale(0.97); opacity: 0.9; }
     .btn-outline { background: rgba(255,255,255,0.03); border: 2px solid var(--border-color); color: white; padding: 16px 30px; border-radius: 12px; text-decoration: none; display: block; font-weight: 600; text-align: center; transition: var(--transition-smooth); text-transform: uppercase; letter-spacing: 1px; font-size: 1rem; }
     .btn-outline:active { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.2); }
 
-    /* =========================================
-       SEÇÃO BRANDS (MARCAS) - ORIGINAL MANTIDA
-       ========================================= */
+    /* Ajuste para desktop: remover espaço extra do topo */
+    @media (min-width: 768px) {
+      .hero-section { padding-top: 70px; }
+      .hero-image-mobile { margin-bottom: 1.2rem; }
+      .logo-img { max-width: 120px; }
+    }
+    @media (min-width: 1024px) {
+      .hero-section { padding-top: 65px; }
+    }
+
+    /* Brands Section */
     .brands-section { background: linear-gradient(180deg, transparent 0%, rgba(255, 107, 0, 0.03) 50%, transparent 100%); padding: 40px 0; position: relative; z-index: 10; border-top: 1px solid rgba(255,255,255,0.03); border-bottom: 1px solid rgba(255,255,255,0.03); }
     .brands-title { text-align: center; margin-bottom: 25px; font-size: 0.9rem; font-family: 'Inter', sans-serif; color: var(--fg-muted); letter-spacing: 0.15em; text-transform: uppercase; font-weight: 600; padding: 0 20px; }
     .brands-image-wrapper { display: flex; justify-content: center; align-items: center; transition: var(--transition-smooth); padding: 0 20px; }
-    
-    /* Imagem composta original com efeito grayscale -> color */
     .brands-composite { max-width: 100%; height: auto; filter: grayscale(100%); transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1); border-radius: 15px; cursor: pointer; box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5); border: 1px solid rgba(255,255,255,0.03); }
-    
-    /* Efeito de hover (mantido do original, funciona no toque também) */
     .brands-composite:hover, .brands-composite:active { filter: grayscale(0%); transform: scale(1.02); box-shadow: 0 20px 40px -15px var(--accent-glow); border-color: rgba(255,107,0,0.2); }
 
     /* Seções Gerais Mobile */
@@ -81,30 +102,31 @@
     .section-title-main { font-size: 2.8rem; text-align: center; margin-bottom: 30px; line-height: 1; text-transform: uppercase; }
     .section-title-main span { color: var(--accent); }
 
-    /* Cards de Serviço Mobile */
+    /* Cards de Serviço - texto expandido para SEO */
     .service-card { background: rgba(12, 20, 35, 0.6); border: 1px solid var(--border-color); padding: 25px; border-radius: 20px; margin-bottom: 15px; backdrop-filter: blur(5px); transition: var(--transition-smooth); position: relative; overflow: hidden; }
     .service-card::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 2px; background: linear-gradient(90deg, transparent, var(--accent), transparent); opacity: 0.5; }
-    .service-card h3 { color: var(--accent); font-size: 1.8rem; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
-    .service-card p { color: var(--fg-muted); font-size: 0.95rem; line-height: 1.5; margin: 0; }
+    .service-card h3 { color: var(--accent); font-size: 1.8rem; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px; }
+    .service-card p { color: var(--fg-muted); font-size: 0.95rem; line-height: 1.5; margin-bottom: 8px; }
+    .service-card .service-detail { color: var(--fg-light); font-size: 0.85rem; opacity: 0.9; margin-top: 8px; }
 
     /* Galeria Grid Mobile 16:9 */
     .gallery-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 0 5px; }
     .gallery-item { border-radius: 12px; overflow: hidden; aspect-ratio: 1; border: 1px solid var(--border-color); box-shadow: 0 5px 15px rgba(0,0,0,0.3); transition: var(--transition-smooth); position: relative; }
-    .gallery-item::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.5), transparent 50%); }
+    .gallery-item::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.5), transparent 50%); pointer-events: none; }
     .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s ease; }
     .gallery-item:active img { transform: scale(1.05); }
 
-    /* WhatsApp Float Mobile Otimizado */
+    /* WhatsApp Float */
     .wa-float { position: fixed; bottom: 20px; right: 20px; background: linear-gradient(135deg, #25D366, #128C7E); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 1000; box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4); transition: var(--transition-smooth); border: 2px solid rgba(255,255,255,0.1); }
     .wa-float:active { transform: scale(0.9) translateY(3px); }
     .wa-float img { width: 32px; height: 32px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
 
-    /* Efeito de Reveal (Aparecer) */
+    /* Reveal Effect */
     .reveal { opacity: 0; transform: translateY(20px); transition: 0.6s cubic-bezier(0.23, 1, 0.32, 1); pointer-events: none; }
     .reveal.active { opacity: 1; transform: translateY(0); pointer-events: auto; }
 
     /* Footer */
-    .main-footer { text-center: center; py: 30px; background: rgba(6, 10, 18, 0.8); border-top: 1px solid var(--border-color); padding: 25px 20px; position: relative; z-index: 10; margin-top: 20px; }
+    .main-footer { text-align: center; background: rgba(6, 10, 18, 0.8); border-top: 1px solid var(--border-color); padding: 25px 20px; position: relative; z-index: 10; margin-top: 20px; }
     .footer-text { color: var(--fg-muted); font-size: 0.8rem; opacity: 0.7; margin: 0; letter-spacing: 0.5px; }
   </style>
 </head>
@@ -138,7 +160,7 @@
         <img src="https://iili.io/BYk5SdN.gif" alt="Marlift Manutenção em Empilhadeira">
       </div>
       <h1 class="hero-title reveal active">Marlift<br><span>Empilhadeiras</span></h1>
-      <p class="hero-description reveal active">Alta performance em manutenção, lavagem técnica e peças. Santana de Parnaíba e Grande SP.</p>
+      <p class="hero-description reveal active">Alta performance em manutenção, lavagem técnica e peças. Santana de Parnaíba, Barueri, Osasco e toda Grande SP.</p>
       <div class="btn-container reveal active">
         <a href="https://wa.me/5511913268620?text=Olá! Gostaria de mais informações sobre os serviços da MARLIFT." class="btn-main">Agendar Orçamento</a>
         <a href="#servicos" class="btn-outline">Ver Serviços</a>
@@ -160,17 +182,20 @@
     
     <div class="service-card reveal">
       <h3>Manutenção</h3>
-      <p>Preventiva e corretiva para frotas Elétricas, GLP e Diesel. Diagnóstico preciso e peças originais.</p>
+      <p>Preventiva e corretiva para frotas Elétricas, GLP e Diesel. Diagnóstico preciso com scanner e peças originais.</p>
+      <div class="service-detail">Atendemos emergências 24h para minimizar paradas. Revisões programadas que aumentam a vida útil do equipamento em até 40%.</div>
     </div>
     
     <div class="service-card reveal">
-      <h3>Lavagem</h3>
-      <p>Lavagem técnica detalhada e lubrificação de precisão que aumentam a vida útil do equipamento.</p>
+      <h3>Lavagem Técnica</h3>
+      <p>Lavagem detalhada com produtos específicos e lubrificação de precisão, prevenindo superaquecimento e desgaste prematuro.</p>
+      <div class="service-detail">Higienização completa do chassi, motor e componentes hidráulicos. Ideal para frotas que operam em ambientes com alta exigência de limpeza.</div>
     </div>
     
     <div class="service-card reveal">
-      <h3>Peças</h3>
-      <p>Venda e instalação de peças multimarcas com agilidade para não parar sua operação.</p>
+      <h3>Peças Multimarcas</h3>
+      <p>Venda e instalação de componentes originais e equivalentes com agilidade para não parar sua operação.</p>
+      <div class="service-detail">Estoque rotativo para marcas como Toyota, Hyster, Yale, Still, Linde e Crown. Entrega rápida na Grande São Paulo.</div>
     </div>
   </section>
 
@@ -187,13 +212,13 @@
   <section class="section-padding text-center" id="contato">
     <div class="service-card reveal" style="background: linear-gradient(145deg, rgba(15, 25, 45, 0.9), rgba(10, 15, 30, 0.9)); border-color: rgba(255,107,0,0.2);">
       <h2 class="display-6 mb-3" style="font-family:'Bebas Neue'; color:white; text-transform:uppercase;">Atendimento 24Hs</h2>
-      <p class="mb-4" style="color: var(--fg-muted); font-size:1rem;">Orçamentos rápidos e socorro corretivo emergencial para sua empresa.</p>
+      <p class="mb-4" style="color: var(--fg-light); font-size:1rem;">Orçamentos rápidos e socorro corretivo emergencial para sua empresa. Atuação em toda a região metropolitana de São Paulo.</p>
       <a href="https://wa.me/5511913268620?text=🚨%20EMERGÊNCIA%20MARLIFT%20-%20Preciso%20de%20atendimento%20*URGENTE*%20para%20minha%20empilhadeira!%20(Chamado%2024hs)" class="btn-main" style="margin-bottom:0;">Falar com Especialista</a>
     </div>
   </section>
 
   <footer class="main-footer text-center">
-    <p class="footer-text">&copy; 2026 Marlift Empilhadeiras.<br>Todos os direitos reservados.</p>
+    <p class="footer-text">&copy; 2026 Marlift Empilhadeiras. Todos os direitos reservados.<br>Rua Maria Fernanda, 279 - Santana de Parnaíba/SP | contato@marliftempilhadeiras.com.br</p>
   </footer>
 
   <a href="https://wa.me/5511913268620?text=Olá! Gostaria de mais informações sobre os serviços da MARLIFT." class="wa-float" aria-label="Contato via WhatsApp" target="_blank">
@@ -202,64 +227,72 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-    // 1. Partículas de Fundo (Otimizado para Mobile)
+    // 1. Partículas de Fundo (otimizado: menos partículas e menor consumo)
     const canvas = document.getElementById('bgCanvas'), ctx = canvas.getContext('2d');
     let pts = [];
-    function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-    window.addEventListener('resize', resize); resize();
+    function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+    window.addEventListener('resize', resizeCanvas); resizeCanvas();
 
-    // Criação de pontos neon laranja
-    for(let i=0; i<25; i++) pts.push({
-      x: Math.random()*canvas.width, 
-      y: Math.random()*canvas.height, 
-      s: Math.random()*1.5 + 0.5, 
-      v: Math.random()*0.3 + 0.1
+    // Reduzido para 15 partículas (antes 25) - melhor performance mobile
+    for(let i = 0; i < 15; i++) pts.push({
+      x: Math.random() * canvas.width, 
+      y: Math.random() * canvas.height, 
+      s: Math.random() * 1.5 + 0.5, 
+      v: Math.random() * 0.2 + 0.08  // movimento mais lento
     });
 
-    function draw() {
-      ctx.clearRect(0,0,canvas.width,canvas.height);
-      ctx.fillStyle = 'rgba(255, 107, 0, 0.5)'; // Laranja Neon translúcido
-      pts.forEach(p => {
-        ctx.beginPath(); ctx.arc(p.x, p.y, p.s, 0, Math.PI*2); ctx.fill();
-        p.y -= p.v; 
-        if(p.y < -10) p.y = canvas.height + 10; // Renova ponto no topo
-      });
-      requestAnimationFrame(draw);
+    function drawParticles() {
+      if (!ctx) return;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = 'rgba(255, 107, 0, 0.6)';
+      for(let p of pts) {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.s, 0, Math.PI * 2);
+        ctx.fill();
+        p.y -= p.v;
+        if(p.y < -10) {
+          p.y = canvas.height + 10;
+          p.x = Math.random() * canvas.width;
+        }
+      }
+      requestAnimationFrame(drawParticles);
     }
-    draw();
+    drawParticles();
 
-    // 2. Scroll Reveal Effect (Aparecer ao rolar)
+    // 2. Scroll Reveal Effect
     const revealElements = document.querySelectorAll('.reveal');
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if(entry.isIntersecting) {
           entry.target.classList.add('active');
-          // observer.unobserve(entry.target); // Opcional: anima apenas uma vez
         }
       });
-    }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" }); // Ativa um pouco antes
+    }, { threshold: 0.1, rootMargin: "0px 0px -30px 0px" });
 
     revealElements.forEach(el => observer.observe(el));
 
-    // 3. Header Scroll Effect (Diminuir header ao rolar)
+    // 3. Header Scroll Effect
     const header = document.getElementById('mainHeader');
     window.addEventListener('scroll', () => {
       header.classList.toggle('scrolled', window.scrollY > 20);
     });
 
-    // 4. Fechar Menu Mobile Automaticamente ao clicar em um link
+    // 4. Fechar Menu Mobile automaticamente ao clicar em link
     const navLinks = document.querySelectorAll('.nav-link');
-    const menuConfig = document.getElementById('navMarlift');
-    const bsCollapse = new bootstrap.Collapse(menuConfig, {toggle:false}); // Instância do Bootstrap
-
-    navLinks.forEach(link => {
-      link.addEventListener('click', (e) => {
-        // Apenas fecha se o menu estiver visível (mobile)
-        if (window.getComputedStyle(document.querySelector('.navbar-toggler')).display !== 'none') {
-          bsCollapse.hide();
-        }
+    const menuCollapse = document.getElementById('navMarlift');
+    if (menuCollapse) {
+      const bsCollapse = bootstrap.Collapse.getInstance(menuCollapse) || new bootstrap.Collapse(menuCollapse, { toggle: false });
+      navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+          if (window.innerWidth < 768) { // apenas em mobile
+            bsCollapse.hide();
+          }
+        });
       });
-    });
+    }
+
+    // 5. Pequeno ajuste: garantir que o canvas redimensione quando a orientação mudar
+    window.addEventListener('orientationchange', () => { setTimeout(resizeCanvas, 50); });
   </script>
 </body>
 </html>
