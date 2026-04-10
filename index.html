@@ -22,6 +22,7 @@
       --warning: #f59e0b;
       --danger: #ef4444;
       --whatsapp: #25D366;
+      --checklist-pdf: #8b5cf6;
     }
     * { font-family: 'Inter', sans-serif; box-sizing: border-box; }
     body { background: var(--bg); color: var(--fg); min-height: 100vh; margin: 0; }
@@ -63,6 +64,10 @@
       width: 100%;
     }
     .form-input:focus { outline: none; border-color: var(--accent); }
+    /* Campos em caixa alta */
+    .uppercase-input {
+      text-transform: uppercase;
+    }
     .btn-primary {
       background: linear-gradient(135deg, var(--accent), var(--accent-light));
       color: white; font-weight: 600;
@@ -80,6 +85,15 @@
       display: inline-flex; align-items: center; gap: 8px;
     }
     .btn-secondary:hover { border-color: var(--accent); background: var(--bg-secondary); }
+    .btn-checklist {
+      background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+      color: white; font-weight: 600;
+      padding: 10px 20px; border-radius: 6px;
+      border: none; cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-flex; align-items: center; gap: 8px;
+    }
+    .btn-checklist:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(139, 92, 246, 0.3); }
     .btn-whatsapp {
       background: var(--whatsapp); color: white;
       font-weight: 600; padding: 10px 20px;
@@ -134,7 +148,6 @@
       align-items: center; justify-content: center; cursor: pointer;
       color: white; font-size: 14px; font-weight: bold;
     }
-    /* Abas */
     .tab-button {
       padding: 10px 20px;
       font-weight: 600;
@@ -160,7 +173,6 @@
       from { opacity: 0; transform: translateY(5px); }
       to { opacity: 1; transform: translateY(0); }
     }
-    /* Estilos para selecionar todos no checklist */
     .select-all-btn {
       background: var(--bg-secondary);
       border: 1px solid var(--border);
@@ -194,7 +206,7 @@
             <button onclick="sendWhatsApp()" class="btn-whatsapp text-sm"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg> WhatsApp</button>
             <button onclick="sendEmail()" class="btn-secondary text-sm"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg> E-mail</button>
             <button onclick="printOS()" class="btn-primary text-sm"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg> PDF da OS</button>
-            <button onclick="printChecklistOnly()" class="btn-secondary text-sm"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg> PDF Checklist</button>
+            <button onclick="printChecklistOnly()" class="btn-checklist text-sm"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg> PDF Checklist</button>
           </div>
         </div>
       </div>
@@ -224,8 +236,19 @@
           </div>
 
           <div class="checklist-card p-5 mb-5"><div class="section-header"><div class="section-icon"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg></div><h2 class="font-display text-xl">Dados do Equipamento</h2></div>
-            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4"><div><label class="block text-xs text-[var(--muted)] mb-1">Marca</label><input type="text" class="form-input" id="marca" placeholder="Ex: Toyota"></div><div><label class="block text-xs text-[var(--muted)] mb-1">Modelo</label><input type="text" class="form-input" id="modelo"></div><div><label class="block text-xs text-[var(--muted)] mb-1">Nº Série</label><input type="text" class="form-input" id="numSerie"></div><div><label class="block text-xs text-[var(--muted)] mb-1">Horímetro</label><input type="text" class="form-input font-bold" id="horimetro" placeholder="Horas"></div><div><label class="block text-xs text-[var(--muted)] mb-1">Capacidade (ton)</label><input type="text" class="form-input" id="capacidade"></div><div><label class="block text-xs text-[var(--muted)] mb-1">Combustível</label><select class="form-input" id="combustivel"><option value="">Selecione</option><option value="eletrico">Elétrico</option><option value="gasolina">Gasolina</option><option value="diesel">Diesel</option><option value="glp">GLP</option></select></div></div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4"><div><label class="block text-xs text-[var(--muted)] mb-1">Cliente</label><input type="text" class="form-input" id="cliente"></div><div><label class="block text-xs text-[var(--muted)] mb-1">CNPJ/CPF</label><input type="text" class="form-input" id="cnpj"></div><div><label class="block text-xs text-[var(--muted)] mb-1">Telefone (WhatsApp)</label><input type="tel" class="form-input" id="telefone" placeholder="(99) 99999-9999"></div></div>
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+              <div><label class="block text-xs text-[var(--muted)] mb-1">Marca</label><input type="text" class="form-input uppercase-input" id="marca" placeholder="Ex: Toyota"></div>
+              <div><label class="block text-xs text-[var(--muted)] mb-1">Modelo</label><input type="text" class="form-input uppercase-input" id="modelo"></div>
+              <div><label class="block text-xs text-[var(--muted)] mb-1">Nº Série</label><input type="text" class="form-input uppercase-input" id="numSerie"></div>
+              <div><label class="block text-xs text-[var(--muted)] mb-1">Horímetro</label><input type="text" class="form-input font-bold" id="horimetro" placeholder="Horas"></div>
+              <div><label class="block text-xs text-[var(--muted)] mb-1">Capacidade (ton)</label><input type="text" class="form-input" id="capacidade"></div>
+              <div><label class="block text-xs text-[var(--muted)] mb-1">Combustível</label><select class="form-input" id="combustivel"><option value="">Selecione</option><option value="eletrico">Elétrico</option><option value="gasolina">Gasolina</option><option value="diesel">Diesel</option><option value="glp">GLP</option></select></div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+              <div><label class="block text-xs text-[var(--muted)] mb-1">Cliente</label><input type="text" class="form-input uppercase-input" id="cliente"></div>
+              <div><label class="block text-xs text-[var(--muted)] mb-1">CNPJ/CPF</label><input type="text" class="form-input" id="cnpj"></div>
+              <div><label class="block text-xs text-[var(--muted)] mb-1">Telefone (WhatsApp)</label><input type="tel" class="form-input" id="telefone" placeholder="(99) 99999-9999"></div>
+            </div>
           </div>
 
           <div class="checklist-card p-5 mb-5"><div class="section-header"><div class="section-icon"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></div><h2 class="font-display text-xl">Serviço Realizado</h2></div>
@@ -241,13 +264,13 @@
             <div id="fotosPreview" class="photo-preview"></div>
           </div>
 
-          <div class="checklist-card p-5 mb-5"><div class="section-header"><div class="section-icon"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg></div><h2 class="font-display text-xl">Assinaturas</h2></div><div class="grid grid-cols-1 md:grid-cols-2 gap-6"><div><label class="block text-xs text-[var(--muted)] mb-1">Técnico</label><input type="text" class="form-input mb-3" id="tecnico"><div class="border-2 border-dashed border-[var(--border)] rounded-lg h-20 flex items-center justify-center text-[var(--muted)] text-sm">Assinatura do Técnico</div></div><div><label class="block text-xs text-[var(--muted)] mb-1">Recebido por</label><input type="text" class="form-input mb-3" id="recebedor"><div class="border-2 border-dashed border-[var(--border)] rounded-lg h-20 flex items-center justify-center text-[var(--muted)] text-sm">Assinatura do Cliente</div></div></div></div>
+          <div class="checklist-card p-5 mb-5"><div class="section-header"><div class="section-icon"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg></div><h2 class="font-display text-xl">Assinaturas</h2></div><div class="grid grid-cols-1 md:grid-cols-2 gap-6"><div><label class="block text-xs text-[var(--muted)] mb-1">Técnico</label><input type="text" class="form-input uppercase-input mb-3" id="tecnico"><div class="border-2 border-dashed border-[var(--border)] rounded-lg h-20 flex items-center justify-center text-[var(--muted)] text-sm">Assinatura do Técnico</div></div><div><label class="block text-xs text-[var(--muted)] mb-1">Recebido por</label><input type="text" class="form-input uppercase-input mb-3" id="recebedor"><div class="border-2 border-dashed border-[var(--border)] rounded-lg h-20 flex items-center justify-center text-[var(--muted)] text-sm">Assinatura do Cliente</div></div></div></div>
 
           <div class="no-print flex flex-wrap gap-3 justify-center mb-8">
-            <button type="button" onclick="saveCurrentOS()" class="btn-primary"> Salvar OS Atual</button>
-            <button type="button" onclick="clearForm()" class="btn-secondary"> Nova OS</button>
-            <button type="button" onclick="downloadBackup()" class="btn-secondary">💾 Backup</button>
-            <label class="btn-secondary cursor-pointer">📂 Restaurar<input type="file" id="restoreInput" accept=".json" class="hidden" onchange="restoreBackup(event)"></label>
+            <button type="button" onclick="saveCurrentOS()" class="btn-primary"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/></svg> Salvar OS Atual</button>
+            <button type="button" onclick="clearForm()" class="btn-secondary"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg> Nova OS</button>
+            <button type="button" onclick="downloadBackup()" class="btn-secondary">💾 Backup (JSON)</button>
+            <label class="btn-secondary cursor-pointer">📂 Restaurar Backup<input type="file" id="restoreInput" accept=".json" class="hidden" onchange="restoreBackup(event)"></label>
           </div>
         </form>
       </div>
@@ -298,6 +321,12 @@
           document.getElementById(tabId).classList.add('active');
         });
       });
+      // Aplicar uppercase automático nos campos com classe uppercase-input
+      document.querySelectorAll('.uppercase-input').forEach(input => {
+        input.addEventListener('input', function() {
+          this.value = this.value.toUpperCase();
+        });
+      });
     }
 
     function generateOSNumber() { let c = parseInt(localStorage.getItem('marlift_os_counter') || '0') + 1; const now=new Date(); const os=`OS-${now.getFullYear()}${String(now.getMonth()+1).padStart(2,'0')}-${String(c).padStart(4,'0')}`; document.getElementById('numeroOS').value=os; }
@@ -339,7 +368,6 @@
         container.appendChild(div);
       });
       
-      // Adicionar eventos de seleção por grupo
       document.querySelectorAll('.select-all-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
           const sectionId = btn.getAttribute('data-section');
@@ -364,9 +392,124 @@
       document.getElementById('progressFill').style.width = `${pct}%`;
     }
 
-    // Função melhorada para impressão do Checklist com dados do equipamento e assinaturas
+    // Função de impressão da OS (completa)
+    function getPrintOSHTML() {
+      const osNum = document.getElementById('numeroOS').value;
+      const data = document.getElementById('dataOS').value;
+      const tipo = document.getElementById('tipoChamado').options[document.getElementById('tipoChamado').selectedIndex]?.text || '';
+      const cliente = (document.getElementById('cliente').value || '-').toUpperCase();
+      const cnpj = document.getElementById('cnpj').value || '-';
+      const marca = (document.getElementById('marca').value || '-').toUpperCase();
+      const modelo = (document.getElementById('modelo').value || '-').toUpperCase();
+      const numSerie = (document.getElementById('numSerie').value || '-').toUpperCase();
+      const horimetro = document.getElementById('horimetro').value || '-';
+      const capacidade = document.getElementById('capacidade').value || '-';
+      const combustivel = document.getElementById('combustivel').options[document.getElementById('combustivel').selectedIndex]?.text || '-';
+      const descricao = document.getElementById('descricaoServico').value || '-';
+      const pecas = document.getElementById('pecasAplicadas').value || '-';
+      const pendencias = document.getElementById('pendencias').value || '-';
+      const inicio = document.getElementById('horaInicio').value || '-';
+      const almocoSaida = document.getElementById('horaAlmocoSaida').value || '-';
+      const almocoRetorno = document.getElementById('horaAlmocoRetorno').value || '-';
+      const termino = document.getElementById('horaTermino').value || '-';
+      const totalHoras = document.getElementById('horasTotais').value || '-';
+      const extras = document.getElementById('horasExtras').value || '-';
+      const adicionalNoturno = document.getElementById('adicionalNoturno').value || '-';
+      const totalGeral = document.getElementById('totalGeral').value || '-';
+      const tecnico = (document.getElementById('tecnico').value || '-').toUpperCase();
+      const recebedor = (document.getElementById('recebedor').value || '-').toUpperCase();
+      
+      let photosHtml = '';
+      if(photosData.length) {
+        photosHtml = '<div class="photos-section"><h3 class="photos-title">📸 REGISTROS FOTOGRÁFICOS</h3><div class="photos-grid">';
+        photosData.forEach(photo => {
+          photosHtml += `<div class="photo-item-pdf"><img src="${photo}" alt="Foto do serviço"></div>`;
+        });
+        photosHtml += '</div></div>';
+      }
+      
+      return `<!DOCTYPE html>
+      <html>
+      <head><meta charset="UTF-8"><title>Marlift OS ${osNum}</title>
+      <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: white; color: #1a1a1a; line-height: 1.4; padding: 8mm; max-width: 210mm; margin: 0 auto; }
+        .header { text-align: center; margin-bottom: 8mm; padding-bottom: 5mm; border-bottom: 2px solid #f97316; }
+        .header h1 { font-size: 24pt; color: #f97316; }
+        .header h2 { font-size: 14pt; color: #333; margin-top: 4px; }
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6mm; margin-bottom: 6mm; }
+        .info-card { background: #f8f9fa; border-radius: 8px; padding: 4mm; border: 1px solid #e0e0e0; }
+        .info-card h3 { font-size: 11pt; color: #f97316; border-bottom: 1px solid #ddd; padding-bottom: 2mm; margin-bottom: 3mm; text-transform: uppercase; }
+        .info-row { display: flex; margin-bottom: 2mm; font-size: 9pt; }
+        .info-label { font-weight: 600; width: 35%; color: #555; }
+        .info-value { width: 65%; color: #1a1a1a; text-transform: uppercase; }
+        .equip-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3mm; margin-bottom: 6mm; }
+        .equip-item { background: #f8f9fa; border-radius: 6px; padding: 3mm; text-align: center; border: 1px solid #e0e0e0; }
+        .equip-label { font-size: 8pt; color: #666; text-transform: uppercase; }
+        .equip-value { font-size: 10pt; font-weight: 600; margin-top: 2px; text-transform: uppercase; }
+        .service-section { margin-bottom: 6mm; }
+        .service-title { font-weight: 700; font-size: 11pt; color: #f97316; border-left: 3px solid #f97316; padding-left: 3mm; margin-bottom: 3mm; text-transform: uppercase; }
+        .service-content { background: #fafafa; padding: 4mm; border-radius: 6px; font-size: 9pt; white-space: pre-wrap; }
+        .signatures { display: flex; justify-content: space-between; margin: 8mm 0 6mm 0; padding-top: 5mm; border-top: 1px dashed #ccc; }
+        .signature-box { width: 45%; text-align: center; }
+        .signature-line { border-top: 1px solid #333; width: 100%; margin-top: 8mm; margin-bottom: 2mm; }
+        .photos-section { margin-top: 8mm; page-break-inside: avoid; }
+        .photos-title { font-weight: 700; font-size: 11pt; color: #f97316; margin-bottom: 4mm; text-transform: uppercase; }
+        .photos-grid { display: flex; flex-wrap: wrap; gap: 4mm; }
+        .photo-item-pdf { width: 70px; height: 70px; border: 1px solid #ccc; border-radius: 4px; overflow: hidden; background: #f0f0f0; display: flex; align-items: center; justify-content: center; }
+        .photo-item-pdf img { max-width: 100%; max-height: 100%; object-fit: cover; }
+        .footer { text-align: center; font-size: 8pt; color: #999; margin-top: 8mm; padding-top: 3mm; border-top: 1px solid #eee; }
+        @media print { body { padding: 0; } }
+      </style>
+      </head>
+      <body>
+        <div class="header"><h1>MARLIFT</h1><h2>EMPILHADEIRAS</h2><p>Ordem de Serviço - Manutenção Profissional</p></div>
+        <div class="info-grid">
+          <div class="info-card"><h3>📋 Dados da OS</h3>
+            <div class="info-row"><span class="info-label">Número da OS:</span><span class="info-value">${osNum}</span></div>
+            <div class="info-row"><span class="info-label">Data:</span><span class="info-value">${data}</span></div>
+            <div class="info-row"><span class="info-label">Tipo:</span><span class="info-value">${tipo}</span></div>
+            <div class="info-row"><span class="info-label">Cliente:</span><span class="info-value">${cliente}</span></div>
+            <div class="info-row"><span class="info-label">CNPJ/CPF:</span><span class="info-value">${cnpj}</span></div>
+          </div>
+          <div class="info-card"><h3>⏱️ Controle de Horas</h3>
+            <div class="info-row"><span class="info-label">Início:</span><span class="info-value">${inicio}</span></div>
+            <div class="info-row"><span class="info-label">Almoço (saída):</span><span class="info-value">${almocoSaida}</span></div>
+            <div class="info-row"><span class="info-label">Almoço (retorno):</span><span class="info-value">${almocoRetorno}</span></div>
+            <div class="info-row"><span class="info-label">Término:</span><span class="info-value">${termino}</span></div>
+            <div class="info-row"><span class="info-label">Horas Trabalhadas:</span><span class="info-value">${totalHoras}</span></div>
+            <div class="info-row"><span class="info-label">Horas Extras:</span><span class="info-value">${extras}</span></div>
+            <div class="info-row"><span class="info-label">Adicional Noturno:</span><span class="info-value">${adicionalNoturno}</span></div>
+            <div class="info-row"><span class="info-label">Total Geral:</span><span class="info-value"><strong>${totalGeral}</strong></span></div>
+          </div>
+        </div>
+        <div class="equip-grid">
+          <div class="equip-item"><div class="equip-label">MARCA</div><div class="equip-value">${marca}</div></div>
+          <div class="equip-item"><div class="equip-label">MODELO</div><div class="equip-value">${modelo}</div></div>
+          <div class="equip-item"><div class="equip-label">Nº SÉRIE</div><div class="equip-value">${numSerie}</div></div>
+          <div class="equip-item"><div class="equip-label">HORÍMETRO</div><div class="equip-value">${horimetro} h</div></div>
+          <div class="equip-item"><div class="equip-label">CAPACIDADE</div><div class="equip-value">${capacidade} ton</div></div>
+          <div class="equip-item"><div class="equip-label">COMBUSTÍVEL</div><div class="equip-value">${combustivel}</div></div>
+        </div>
+        <div class="service-section"><div class="service-title">🔧 Descrição do Serviço</div><div class="service-content">${descricao.replace(/\n/g, '<br>')}</div></div>
+        <div class="service-section"><div class="service-title">🔩 Peças Aplicadas</div><div class="service-content">${pecas.replace(/\n/g, '<br>')}</div></div>
+        <div class="service-section"><div class="service-title">⚠️ Pendências</div><div class="service-content">${pendencias.replace(/\n/g, '<br>')}</div></div>
+        <div class="signatures"><div class="signature-box"><div class="signature-line"></div><div class="signature-name">${tecnico}</div><div style="font-size:8pt;">Técnico</div></div><div class="signature-box"><div class="signature-line"></div><div class="signature-name">${recebedor}</div><div style="font-size:8pt;">Cliente</div></div></div>
+        ${photosHtml}
+        <div class="footer">Documento gerado eletronicamente - MARLIFT Empilhadeiras</div>
+      </body>
+      </html>`;
+    }
+    
+    function printOS() {
+      const win = window.open();
+      win.document.write(getPrintOSHTML());
+      win.document.close();
+      win.print();
+    }
+
+    // Função de impressão do Checklist (completa)
     function printChecklistOnly() {
-      // Coletar dados da OS (equipamento, cliente, técnico, etc)
       const osNum = document.getElementById('numeroOS').value;
       const data = document.getElementById('dataOS').value;
       const cliente = (document.getElementById('cliente').value || '-').toUpperCase();
@@ -377,13 +520,11 @@
       const tecnico = (document.getElementById('tecnico').value || '-').toUpperCase();
       const recebedor = (document.getElementById('recebedor').value || '-').toUpperCase();
       
-      // Gerar HTML do checklist com os status
       let checklistHtml = '';
       checklistData.forEach(section => {
         checklistHtml += `<div class="checklist-section">
           <div class="section-title">${section.title}</div>
-          <div class="items-grid">
-        `;
+          <div class="items-grid">`;
         section.items.forEach(item => {
           const statusSelect = document.getElementById(item.id+'_status');
           let statusText = 'OK', statusClass = 'status-ok';
@@ -406,182 +547,51 @@
       
       const html = `<!DOCTYPE html>
       <html>
-      <head>
-        <meta charset="UTF-8">
-        <title>Checklist Técnico - ${osNum}</title>
-        <style>
-          * { margin: 0; padding: 0; box-sizing: border-box; }
-          body {
-            font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
-            background: white;
-            color: #1a1a1a;
-            line-height: 1.4;
-            padding: 8mm;
-            max-width: 210mm;
-            margin: 0 auto;
-          }
-          .header {
-            text-align: center;
-            margin-bottom: 8mm;
-            padding-bottom: 5mm;
-            border-bottom: 2px solid #f97316;
-          }
-          .header h1 {
-            font-size: 24pt;
-            color: #f97316;
-            letter-spacing: 2px;
-          }
-          .header h2 {
-            font-size: 14pt;
-            color: #333;
-            margin-top: 4px;
-          }
-          .equip-info {
-            background: #f8f9fa;
-            border-radius: 8px;
-            padding: 4mm;
-            margin-bottom: 6mm;
-            border: 1px solid #e0e0e0;
-          }
-          .equip-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 3mm;
-            margin-bottom: 4mm;
-          }
-          .equip-item {
-            text-align: center;
-          }
-          .equip-label {
-            font-size: 8pt;
-            color: #666;
-            text-transform: uppercase;
-          }
-          .equip-value {
-            font-size: 10pt;
-            font-weight: 600;
-            margin-top: 2px;
-            text-transform: uppercase;
-          }
-          .checklist-section {
-            margin-bottom: 6mm;
-            border: 1px solid #e0e0e0;
-            border-radius: 6px;
-            overflow: hidden;
-            page-break-inside: avoid;
-          }
-          .section-title {
-            background: #f97316;
-            color: white;
-            padding: 3mm 4mm;
-            font-weight: 700;
-            font-size: 11pt;
-            letter-spacing: 0.5px;
-          }
-          .items-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1mm;
-            padding: 3mm;
-            background: white;
-          }
-          .checklist-item {
-            display: flex;
-            align-items: center;
-            padding: 2mm 3mm;
-            border-bottom: 1px solid #f0f0f0;
-            font-size: 9pt;
-          }
-          .item-check {
-            width: 6mm;
-            font-weight: bold;
-            color: #f97316;
-          }
-          .item-label {
-            flex: 1;
-            text-transform: uppercase;
-          }
-          .item-status {
-            padding: 1mm 3mm;
-            border-radius: 4px;
-            font-size: 8pt;
-            font-weight: 600;
-            min-width: 18mm;
-            text-align: center;
-          }
-          .status-ok { background: #d4edda; color: #155724; }
-          .status-atencao { background: #fff3cd; color: #856404; }
-          .status-critico { background: #f8d7da; color: #721c24; }
-          .status-na { background: #e2e3e5; color: #383d41; }
-          .signatures {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 10mm;
-            padding-top: 5mm;
-            border-top: 1px dashed #ccc;
-          }
-          .signature-box {
-            width: 45%;
-            text-align: center;
-          }
-          .signature-line {
-            border-top: 1px solid #333;
-            width: 100%;
-            margin-top: 8mm;
-            margin-bottom: 2mm;
-          }
-          .footer {
-            text-align: center;
-            font-size: 8pt;
-            color: #999;
-            margin-top: 8mm;
-            padding-top: 3mm;
-            border-top: 1px solid #eee;
-          }
-          @media print {
-            body { padding: 0; margin: 0; }
-            .checklist-section { break-inside: avoid; }
-          }
-        </style>
+      <head><meta charset="UTF-8"><title>Checklist Técnico - ${osNum}</title>
+      <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: white; color: #1a1a1a; line-height: 1.4; padding: 8mm; max-width: 210mm; margin: 0 auto; }
+        .header { text-align: center; margin-bottom: 8mm; padding-bottom: 5mm; border-bottom: 2px solid #f97316; }
+        .header h1 { font-size: 24pt; color: #f97316; }
+        .header h2 { font-size: 14pt; color: #333; margin-top: 4px; }
+        .equip-info { background: #f8f9fa; border-radius: 8px; padding: 4mm; margin-bottom: 6mm; border: 1px solid #e0e0e0; }
+        .equip-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 3mm; margin-bottom: 4mm; }
+        .equip-item { text-align: center; }
+        .equip-label { font-size: 8pt; color: #666; text-transform: uppercase; }
+        .equip-value { font-size: 10pt; font-weight: 600; margin-top: 2px; text-transform: uppercase; }
+        .checklist-section { margin-bottom: 6mm; border: 1px solid #e0e0e0; border-radius: 6px; overflow: hidden; page-break-inside: avoid; }
+        .section-title { background: #f97316; color: white; padding: 3mm 4mm; font-weight: 700; font-size: 11pt; }
+        .items-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1mm; padding: 3mm; background: white; }
+        .checklist-item { display: flex; align-items: center; padding: 2mm 3mm; border-bottom: 1px solid #f0f0f0; font-size: 9pt; }
+        .item-check { width: 6mm; font-weight: bold; color: #f97316; }
+        .item-label { flex: 1; text-transform: uppercase; }
+        .item-status { padding: 1mm 3mm; border-radius: 4px; font-size: 8pt; font-weight: 600; min-width: 18mm; text-align: center; }
+        .status-ok { background: #d4edda; color: #155724; }
+        .status-atencao { background: #fff3cd; color: #856404; }
+        .status-critico { background: #f8d7da; color: #721c24; }
+        .status-na { background: #e2e3e5; color: #383d41; }
+        .signatures { display: flex; justify-content: space-between; margin-top: 10mm; padding-top: 5mm; border-top: 1px dashed #ccc; }
+        .signature-box { width: 45%; text-align: center; }
+        .signature-line { border-top: 1px solid #333; width: 100%; margin-top: 8mm; margin-bottom: 2mm; }
+        .footer { text-align: center; font-size: 8pt; color: #999; margin-top: 8mm; padding-top: 3mm; border-top: 1px solid #eee; }
+        @media print { body { padding: 0; } }
+      </style>
       </head>
       <body>
-        <div class="header">
-          <h1>MARLIFT</h1>
-          <h2>EMPILHADEIRAS</h2>
-          <p>Checklist Técnico de Manutenção</p>
-        </div>
-        
-        <div class="equip-info">
-          <div class="equip-grid">
-            <div class="equip-item"><div class="equip-label">OS Nº</div><div class="equip-value">${osNum}</div></div>
-            <div class="equip-item"><div class="equip-label">DATA</div><div class="equip-value">${data}</div></div>
-            <div class="equip-item"><div class="equip-label">CLIENTE</div><div class="equip-value">${cliente}</div></div>
-            <div class="equip-item"><div class="equip-label">HORÍMETRO</div><div class="equip-value">${horimetro} h</div></div>
-            <div class="equip-item"><div class="equip-label">MARCA</div><div class="equip-value">${marca}</div></div>
-            <div class="equip-item"><div class="equip-label">MODELO</div><div class="equip-value">${modelo}</div></div>
-            <div class="equip-item"><div class="equip-label">Nº SÉRIE</div><div class="equip-value">${numSerie}</div></div>
-            <div class="equip-item"><div class="equip-label"></div><div class="equip-value"></div></div>
-          </div>
-        </div>
-        
+        <div class="header"><h1>MARLIFT</h1><h2>EMPILHADEIRAS</h2><p>Checklist Técnico de Manutenção</p></div>
+        <div class="equip-info"><div class="equip-grid">
+          <div class="equip-item"><div class="equip-label">OS Nº</div><div class="equip-value">${osNum}</div></div>
+          <div class="equip-item"><div class="equip-label">DATA</div><div class="equip-value">${data}</div></div>
+          <div class="equip-item"><div class="equip-label">CLIENTE</div><div class="equip-value">${cliente}</div></div>
+          <div class="equip-item"><div class="equip-label">HORÍMETRO</div><div class="equip-value">${horimetro} h</div></div>
+          <div class="equip-item"><div class="equip-label">MARCA</div><div class="equip-value">${marca}</div></div>
+          <div class="equip-item"><div class="equip-label">MODELO</div><div class="equip-value">${modelo}</div></div>
+          <div class="equip-item"><div class="equip-label">Nº SÉRIE</div><div class="equip-value">${numSerie}</div></div>
+          <div class="equip-item"><div class="equip-label"></div><div class="equip-value"></div></div>
+        </div></div>
         ${checklistHtml}
-        
-        <div class="signatures">
-          <div class="signature-box">
-            <div class="signature-line"></div>
-            <div class="signature-name">${tecnico}</div>
-            <div style="font-size:8pt; color:#666;">Técnico Responsável</div>
-          </div>
-          <div class="signature-box">
-            <div class="signature-line"></div>
-            <div class="signature-name">${recebedor}</div>
-            <div style="font-size:8pt; color:#666;">Cliente / Recebedor</div>
-          </div>
-        </div>
-        
-        <div class="footer">
-          Documento gerado eletronicamente - MARLIFT Empilhadeiras
-        </div>
+        <div class="signatures"><div class="signature-box"><div class="signature-line"></div><div class="signature-name">${tecnico}</div><div style="font-size:8pt;">Técnico</div></div><div class="signature-box"><div class="signature-line"></div><div class="signature-name">${recebedor}</div><div style="font-size:8pt;">Cliente</div></div></div>
+        <div class="footer">Documento gerado eletronicamente - MARLIFT Empilhadeiras</div>
       </body>
       </html>`;
       
@@ -591,7 +601,7 @@
       win.print();
     }
 
-    // Demais funções (timer, formulário, backup, etc) mantidas
+    // Demais funções
     function startTimer() { if(timerRunning) return; timerRunning=true; timerPaused=false; document.getElementById('timerContainer').classList.add('timer-running'); document.getElementById('timerStatus').textContent='Serviço em andamento'; document.getElementById('btnStart').disabled=true; document.getElementById('btnPause').disabled=false; document.getElementById('btnStop').disabled=false; if(!document.getElementById('horaInicio').value) document.getElementById('horaInicio').value=getCurrentTime(); timerInterval=setInterval(()=>{ if(!timerPaused){ timerSeconds++; updateTimerDisplay(); } },1000); }
     function pauseTimer() { if(!timerRunning) return; timerPaused=true; document.getElementById('timerStatus').textContent='Pausa almoço'; document.getElementById('btnPause').textContent='Retornar'; document.getElementById('btnPause').onclick=resumeTimer; if(!document.getElementById('horaAlmocoSaida').value) document.getElementById('horaAlmocoSaida').value=getCurrentTime(); }
     function resumeTimer() { timerPaused=false; document.getElementById('timerStatus').textContent='Serviço em andamento'; document.getElementById('btnPause').textContent='Almoço'; document.getElementById('btnPause').onclick=pauseTimer; if(!document.getElementById('horaAlmocoRetorno').value) document.getElementById('horaAlmocoRetorno').value=getCurrentTime(); }
@@ -605,19 +615,16 @@
     function setupEventListeners(){ ['horaInicio','horaAlmocoSaida','horaAlmocoRetorno','horaTermino'].forEach(id=>{ document.getElementById(id).addEventListener('change',calculateTotals); }); document.getElementById('horasExtras').addEventListener('input',updateTotalGeral); document.getElementById('adicionalNoturno').addEventListener('input',updateTotalGeral); }
     function handlePhotoUpload(e) { const files = Array.from(e.target.files); const preview = document.getElementById('fotosPreview'); photosData = []; preview.innerHTML = ''; files.forEach(file => { const reader = new FileReader(); reader.onload = (ev) => { photosData.push(ev.target.result); const div = document.createElement('div'); div.className = 'photo-item'; div.innerHTML = `<img src="${ev.target.result}" alt="foto"><div class="photo-remove" onclick="removePhoto(this)">×</div>`; preview.appendChild(div); }; reader.readAsDataURL(file); }); }
     function removePhoto(el) { const idx = Array.from(el.parentNode.parentNode.children).indexOf(el.parentNode); if(idx !== -1) photosData.splice(idx,1); el.parentNode.remove(); }
-    
-    function getPrintOSHTML() { /* mantido da versão anterior */ return ''; } // (código omitido por brevidade, mas funcional)
-    function printOS() { /* mantido */ }
     function getShareText(){ const os=document.getElementById('numeroOS').value; const cliente=document.getElementById('cliente').value||'Cliente'; const marca=document.getElementById('marca').value||''; const modelo=document.getElementById('modelo').value||''; const totalHoras=document.getElementById('horasTotais').value||'00:00'; const descricao=document.getElementById('descricaoServico').value||'Nenhuma'; const pecas=document.getElementById('pecasAplicadas').value||'Nenhuma'; const pendencia=document.getElementById('pendencias').value||'Nenhuma'; return `🏭 *MARLIFT - OS ${os}*\n👤 ${cliente}\n🔧 ${marca} ${modelo}\n⏱️ ${totalHoras}h\n📝 ${descricao}\n🔩 Peças: ${pecas}\n⚠️ Pendências: ${pendencia}`; }
     function sendWhatsApp() { let numero = document.getElementById('telefone').value.replace(/\D/g,''); if(!numero){ numero = prompt('Número do WhatsApp (com DDD):', '5511999999999'); if(!numero) return; } numero = numero.replace(/^0+/,''); if(!numero.startsWith('55')) numero = '55'+numero; window.open(`https://wa.me/${numero}?text=${encodeURIComponent(getShareText())}`, '_blank'); showToast('WhatsApp aberto!'); }
     function sendEmail(){ window.location.href=`mailto:?subject=${encodeURIComponent(document.getElementById('numeroOS').value)}&body=${encodeURIComponent(getShareText())}`; showToast('E-mail aberto'); }
     function getFormData(){ const data={}; document.querySelectorAll('#osForm input, #osForm select, #osForm textarea').forEach(el=>{ if(el.type!=='file' && el.id) data[el.id]=el.value; }); data.fotosBase64=photosData; return data; }
     function setFormData(d){ if(!d) return; Object.keys(d).forEach(id=>{ const el=document.getElementById(id); if(el && id!=='fotosBase64') el.value=d[id]; }); if(d.fotosBase64 && Array.isArray(d.fotosBase64)){ photosData=d.fotosBase64; const preview=document.getElementById('fotosPreview'); preview.innerHTML=''; photosData.forEach(src=>{ const div=document.createElement('div'); div.className='photo-item'; div.innerHTML=`<img src="${src}"><div class="photo-remove" onclick="removePhoto(this)">×</div>`; preview.appendChild(div); }); } calculateTotals(); updateProgress(); }
-    function saveCurrentOS(){ const data=getFormData(); let history=JSON.parse(localStorage.getItem('marlift_os_history')||'[]'); const idx=history.findIndex(os=>os.numeroOS===data.numeroOS); if(idx>=0) history[idx]=data; else history.push(data); localStorage.setItem('marlift_os_history',JSON.stringify(history)); localStorage.setItem('marlift_os_counter',parseInt(data.numeroOS.split('-')[2])); showToast('OS salva!'); }
+    function saveCurrentOS(){ const data=getFormData(); let history=JSON.parse(localStorage.getItem('marlift_os_history')||'[]'); const idx=history.findIndex(os=>os.numeroOS===data.numeroOS); if(idx>=0) history[idx]=data; else history.push(data); localStorage.setItem('marlift_os_history',JSON.stringify(history)); localStorage.setItem('marlift_os_counter',parseInt(data.numeroOS.split('-')[2])); showToast('OS salva com sucesso!'); }
     function loadDraft(){ const saved=localStorage.getItem('marlift_draft'); if(saved) try{ setFormData(JSON.parse(saved)); }catch(e){} }
     function clearForm(){ if(!confirm('Nova OS? Os dados atuais serão perdidos.')) return; document.getElementById('osForm').reset(); photosData=[]; document.getElementById('fotosPreview').innerHTML=''; timerSeconds=0; timerRunning=false; timerPaused=false; clearInterval(timerInterval); updateTimerDisplay(); document.getElementById('timerContainer').classList.remove('timer-running'); document.getElementById('timerStatus').textContent='Pronto'; document.getElementById('btnStart').disabled=false; document.getElementById('btnPause').disabled=true; document.getElementById('btnStop').disabled=true; localStorage.removeItem('marlift_draft'); let counter=parseInt(localStorage.getItem('marlift_os_counter')||'0')+1; localStorage.setItem('marlift_os_counter',counter); generateOSNumber(); setDefaultDate(); updateProgress(); showToast('Formulário limpo'); }
-    function downloadBackup(){ let hist=JSON.parse(localStorage.getItem('marlift_os_history')||'[]'); if(!hist.length){ showToast('Nenhuma OS salva'); return; } const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([JSON.stringify(hist,null,2)],{type:'application/json'})); a.download=`Marlift_Backup_${new Date().toISOString().split('T')[0]}.json`; a.click(); showToast('Backup OK'); }
-    function restoreBackup(e){ const file=e.target.files[0]; if(!file) return; const reader=new FileReader(); reader.onload=ev=>{ try{ const data=JSON.parse(ev.target.result); if(Array.isArray(data) && confirm(`Restaurar ${data.length} OS?`)){ localStorage.setItem('marlift_os_history',JSON.stringify(data)); showToast('Backup restaurado'); } }catch(err){ showToast('Erro no arquivo'); } }; reader.readAsText(file); e.target.value=''; }
+    function downloadBackup(){ let hist=JSON.parse(localStorage.getItem('marlift_os_history')||'[]'); if(!hist.length){ showToast('Nenhuma OS salva'); return; } const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([JSON.stringify(hist,null,2)],{type:'application/json'})); a.download=`Marlift_Backup_${new Date().toISOString().split('T')[0]}.json`; a.click(); showToast('Backup gerado com sucesso!'); }
+    function restoreBackup(e){ const file=e.target.files[0]; if(!file) return; const reader=new FileReader(); reader.onload=ev=>{ try{ const data=JSON.parse(ev.target.result); if(Array.isArray(data) && confirm(`Restaurar ${data.length} OS?`)){ localStorage.setItem('marlift_os_history',JSON.stringify(data)); showToast('Backup restaurado com sucesso!'); } }catch(err){ showToast('Erro no arquivo'); } }; reader.readAsText(file); e.target.value=''; }
     function showToast(msg){ const toast=document.getElementById('toast'); document.getElementById('toastMessage').textContent=msg; toast.classList.add('show'); setTimeout(()=>toast.classList.remove('show'),3000); }
     setInterval(()=>{ localStorage.setItem('marlift_draft',JSON.stringify(getFormData())); },5000);
     document.addEventListener('DOMContentLoaded', init);
