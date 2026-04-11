@@ -223,41 +223,25 @@
     </header>
 
     <main class="max-w-7xl mx-auto px-4 py-6">
-      <!-- Abas -->
       <div class="flex border-b border-[var(--border)] mb-6 no-print">
         <button class="tab-button active" data-tab="tab-os">📋 Ordem de Serviço</button>
         <button class="tab-button" data-tab="tab-checklist">✅ Checklist Técnico</button>
       </div>
 
-      <!-- Conteúdo da OS (nova ordem) -->
       <div id="tab-os" class="tab-content active">
         <form id="osForm">
-          <!-- BLOCO SUPERIOR: Cronômetro + informações resumidas (para o técnico) -->
           <div class="checklist-card p-5 mb-5">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <div>
-                <div class="section-header mb-4">
-                  <div class="section-icon"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg></div>
-                  <h2 class="font-display text-xl">Ordem de Serviço</h2>
-                </div>
-                <div class="grid grid-cols-2 gap-4">
-                  <div><label class="block text-xs text-[var(--muted)] mb-1">Nº da OS</label><input type="text" id="numeroOS" class="form-input font-mono font-semibold text-lg" readonly></div>
-                  <div><label class="block text-xs text-[var(--muted)] mb-1">Data</label><input type="date" id="dataOS" class="form-input"></div>
-                  <div class="col-span-2"><label class="block text-xs text-[var(--muted)] mb-1">Tipo de Chamado</label><select id="tipoChamado" class="form-input"><option value="normal">Normal</option><option value="emergencial">Emergencial</option><option value="garantia">Garantia</option><option value="preventiva">Preventiva</option><option value="corretiva">Corretiva</option><option value="retorno_pendencia">Retorno Pendência</option><option value="orcamento">Orçamento</option><option value="contrato">Contrato</option><option value="locacao">Locação</option></select></div>
-                </div>
+              <div><div class="section-header mb-4"><div class="section-icon"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg></div><h2 class="font-display text-xl">Ordem de Serviço</h2></div>
+                <div class="grid grid-cols-2 gap-4"><div><label class="block text-xs text-[var(--muted)] mb-1">Nº da OS</label><input type="text" id="numeroOS" class="form-input font-mono font-semibold text-lg" readonly></div><div><label class="block text-xs text-[var(--muted)] mb-1">Data</label><input type="date" id="dataOS" class="form-input"></div><div class="col-span-2"><label class="block text-xs text-[var(--muted)] mb-1">Tipo de Chamado</label><select id="tipoChamado" class="form-input"><option value="normal">Normal</option><option value="emergencial">Emergencial</option><option value="garantia">Garantia</option><option value="preventiva">Preventiva</option><option value="corretiva">Corretiva</option><option value="retorno_pendencia">Retorno Pendência</option><option value="orcamento">Orçamento</option><option value="contrato">Contrato</option><option value="locacao">Locação</option></select></div></div>
               </div>
-              <div>
-                <div class="section-header mb-4">
-                  <div class="section-icon"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
-                  <h2 class="font-display text-xl">Cronômetro</h2>
-                </div>
+              <div><div class="section-header mb-4"><div class="section-icon"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div><h2 class="font-display text-xl">Cronômetro</h2></div>
                 <div id="timerContainer" class="text-center mb-4"><div class="timer-display font-mono" id="timerDisplay">00:00:00</div><p class="text-xs text-[var(--muted)] mt-1" id="timerStatus">Pronto</p></div>
                 <div class="flex justify-center gap-2 mb-4 flex-wrap"><button type="button" onclick="startTimer()" class="btn-timer btn-start" id="btnStart">Iniciar</button><button type="button" onclick="pauseTimer()" class="btn-timer btn-pause" id="btnPause" disabled>Almoço</button><button type="button" onclick="stopTimer()" class="btn-timer btn-stop" id="btnStop" disabled>Finalizar</button></div>
               </div>
             </div>
           </div>
 
-          <!-- Dados do Equipamento (sem capacidade) -->
           <div class="checklist-card p-5 mb-5"><div class="section-header"><div class="section-icon"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg></div><h2 class="font-display text-xl">Dados do Equipamento</h2></div>
             <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
               <div><label class="block text-xs text-[var(--muted)] mb-1">Marca</label><input type="text" class="form-input uppercase-input" id="marca" placeholder="Ex: Toyota"></div>
@@ -283,7 +267,6 @@
             </div>
           </div>
 
-          <!-- Serviço Realizado (Descrição, Peças, Pendências) -->
           <div class="checklist-card p-5 mb-5"><div class="section-header"><div class="section-icon"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></div><h2 class="font-display text-xl">Serviço Realizado</h2></div>
             <div class="grid grid-cols-1 gap-5">
               <div><label class="block text-sm font-semibold mb-2">Descrição do Serviço / Diagnóstico</label><textarea id="descricaoServico" class="form-input min-h-24" placeholder="Detalhe o serviço executado..."></textarea></div>
@@ -292,30 +275,23 @@
             </div>
           </div>
 
-          <!-- Fotos do Serviço -->
           <div class="checklist-card p-5 mb-5"><div class="section-header"><div class="section-icon"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg></div><h2 class="font-display text-xl">Fotos do Serviço</h2></div>
             <input type="file" id="fotosServico" multiple accept="image/*" class="form-input mb-3">
             <div id="fotosPreview" class="photo-preview"></div>
           </div>
 
-          <!-- BLOCO PARA CONFERÊNCIA DO CLIENTE: Dados da OS (resumo) + Controle de Horas detalhado -->
           <div class="checklist-card p-5 mb-5">
-            <div class="section-header">
-              <div class="section-icon"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg></div>
-              <h2 class="font-display text-xl">Informações da OS e Horas Trabalhadas</h2>
-            </div>
+            <div class="section-header"><div class="section-icon"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg></div><h2 class="font-display text-xl">Informações da OS e Horas Trabalhadas</h2></div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <h3 class="text-sm font-semibold mb-3 text-[var(--accent)]">Dados da OS</h3>
+              <div><h3 class="text-sm font-semibold mb-3 text-[var(--accent)]">Dados da OS</h3>
                 <div class="grid grid-cols-2 gap-3">
-                  <div><label class="block text-xs text-[var(--muted)] mb-1">Nº da OS</label><input type="text" id="clienteNumeroOS" class="form-input font-mono" readonly value=""></div>
-                  <div><label class="block text-xs text-[var(--muted)] mb-1">Data</label><input type="text" id="clienteDataOS" class="form-input" readonly value=""></div>
+                  <div><label class="block text-xs text-[var(--muted)] mb-1">Nº da OS</label><input type="text" id="clienteNumeroOS" class="form-input font-mono" readonly></div>
+                  <div><label class="block text-xs text-[var(--muted)] mb-1">Data</label><input type="text" id="clienteDataOS" class="form-input" readonly></div>
                   <div class="col-span-2"><label class="block text-xs text-[var(--muted)] mb-1">Cliente</label><input type="text" id="clienteNome" class="form-input uppercase-input" readonly></div>
                   <div class="col-span-2"><label class="block text-xs text-[var(--muted)] mb-1">Endereço</label><input type="text" id="clienteEndereco" class="form-input uppercase-input" readonly></div>
                 </div>
               </div>
-              <div>
-                <h3 class="text-sm font-semibold mb-3 text-[var(--accent)]">Controle de Horas</h3>
+              <div><h3 class="text-sm font-semibold mb-3 text-[var(--accent)]">Controle de Horas</h3>
                 <div class="grid grid-cols-2 gap-3">
                   <div><label class="block text-xs text-[var(--muted)] mb-1">Início</label><input type="time" id="horaInicio" class="form-input text-center font-mono" step="1"></div>
                   <div><label class="block text-xs text-[var(--muted)] mb-1">Almoço Saída</label><input type="time" id="horaAlmocoSaida" class="form-input text-center font-mono"></div>
@@ -326,12 +302,11 @@
                   <div><label class="block text-xs text-[var(--muted)] mb-1">Adic. Noturno</label><input type="text" id="adicionalNoturno" class="form-input text-center font-mono" placeholder="00:00"></div>
                   <div><label class="block text-xs text-[var(--muted)] mb-1">Total Geral</label><input type="text" id="totalGeral" class="form-input text-center font-mono font-semibold" readonly></div>
                 </div>
-                <p class="text-xs text-[var(--muted)] mt-3">✔️ Mínimo de 1 hora cobrada. Frações são arredondadas para cima (ex: 1h01 = 2h).</p>
+                <p class="text-xs text-[var(--muted)] mt-3">✔️ Mínimo de 1 hora cobrada. Frações arredondadas para cima (ex: 1h01 = 2h).</p>
               </div>
             </div>
           </div>
 
-          <!-- Assinaturas -->
           <div class="checklist-card p-5 mb-5"><div class="section-header"><div class="section-icon"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg></div><h2 class="font-display text-xl">Assinaturas</h2></div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div><label class="block text-xs text-[var(--muted)] mb-1">Técnico</label><input type="text" class="form-input uppercase-input mb-3" id="tecnico"><div class="border-2 border-dashed border-[var(--border)] rounded-lg h-20 flex items-center justify-center text-[var(--muted)] text-sm">Assinatura do Técnico</div></div>
@@ -339,23 +314,18 @@
             </div>
           </div>
 
-          <!-- Botões de ação -->
           <div class="no-print flex flex-wrap gap-3 justify-center mb-8">
-            <button type="button" onclick="saveCurrentOS()" class="btn-primary"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/></svg> Salvar OS Atual</button>
-            <button type="button" onclick="clearForm()" class="btn-secondary"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg> Nova OS</button>
+            <button type="button" onclick="saveCurrentOS()" class="btn-primary"> Salvar OS Atual</button>
+            <button type="button" onclick="clearForm()" class="btn-secondary"> Nova OS</button>
             <button type="button" onclick="downloadBackup()" class="btn-secondary">💾 Backup (JSON)</button>
             <label class="btn-secondary cursor-pointer">📂 Restaurar Backup<input type="file" id="restoreInput" accept=".json" class="hidden" onchange="restoreBackup(event)"></label>
           </div>
         </form>
       </div>
 
-      <!-- Conteúdo do Checklist com seleção por grupo -->
       <div id="tab-checklist" class="tab-content">
         <div class="checklist-card p-4 mb-5">
-          <div class="flex items-center justify-between mb-2">
-            <span class="text-sm text-[var(--muted)]">Progresso do Checklist</span>
-            <span id="progressText" class="text-[var(--accent)] font-semibold">0%</span>
-          </div>
+          <div class="flex items-center justify-between mb-2"><span class="text-sm text-[var(--muted)]">Progresso do Checklist</span><span id="progressText" class="text-[var(--accent)] font-semibold">0%</span></div>
           <div class="progress-bar"><div id="progressFill" class="progress-fill" style="width:0%"></div></div>
         </div>
         <div id="checklistSections" class="space-y-4"></div>
@@ -366,6 +336,7 @@
   <div id="toast" class="toast"><svg class="w-5 h-5 text-[var(--success)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><span id="toastMessage">Operação realizada!</span></div>
 
   <script>
+    // ==================== CHECKLIST DATA ====================
     const checklistData = [
       { id:'motor', title:'Motor e Componentes', items:[{id:'motor_oleo',label:'Nível de óleo do motor'},{id:'motor_filtro_oleo',label:'Filtro de óleo'},{id:'motor_filtro_ar',label:'Filtro de ar'},{id:'motor_filtro_comb',label:'Filtro de combustível'},{id:'motor_correias',label:'Correias'},{id:'motor_radiador',label:'Radiador e arrefecimento'},{id:'motor_velas',label:'Velas de ignição'},{id:'motor_mangueiras',label:'Mangueiras e conexões'}] },
       { id:'eletrico', title:'Sistema Elétrico', items:[{id:'eletr_bateria',label:'Bateria'},{id:'eletr_terminais',label:'Terminais e cabos'},{id:'eletr_alternador',label:'Alternador'},{id:'eletr_partida',label:'Motor de partida'},{id:'eletr_farois',label:'Faróis e lanternas'},{id:'eletr_buzina',label:'Buzina'},{id:'eletr_painel',label:'Painel'},{id:'eletr_fusiveis',label:'Fusíveis'}] },
@@ -379,10 +350,12 @@
       { id:'lubrificacao', title:'Lubrificação', items:[{id:'lub_mastros',label:'Mastros/correntes'},{id:'lub_pivos',label:'Pivôs'},{id:'lub_rolamentos',label:'Rolamentos'},{id:'lub_pedais',label:'Pedais'},{id:'lub_geral',label:'Pontos gerais'}] }
     ];
 
+    // ==================== VARIÁVEIS GLOBAIS ====================
     let timerInterval = null, timerSeconds = 0, timerRunning = false, timerPaused = false;
     let totalCheckItems = 0, checkedItems = 0;
     let photosData = [];
 
+    // ==================== FUNÇÕES DE INICIALIZAÇÃO ====================
     function init() {
       generateOSNumber(); setDefaultDate(); renderChecklist(); loadDraft(); updateProgress(); setupEventListeners(); updateTotalGeral();
       document.getElementById('fotosServico').addEventListener('change', handlePhotoUpload);
@@ -448,6 +421,7 @@
     function generateOSNumber() { let c = parseInt(localStorage.getItem('marlift_os_counter') || '0') + 1; const now=new Date(); const os=`OS-${now.getFullYear()}${String(now.getMonth()+1).padStart(2,'0')}-${String(c).padStart(4,'0')}`; document.getElementById('numeroOS').value=os; document.getElementById('clienteNumeroOS').value=os; }
     function setDefaultDate() { const hoje = new Date().toISOString().split('T')[0]; document.getElementById('dataOS').value=hoje; document.getElementById('clienteDataOS').value=hoje; }
 
+    // ==================== RENDER CHECKLIST ====================
     function renderChecklist() {
       const container = document.getElementById('checklistSections');
       totalCheckItems = 0;
@@ -506,6 +480,7 @@
       document.getElementById('progressFill').style.width = `${pct}%`;
     }
 
+    // ==================== CRONÔMETRO E CÁLCULO ====================
     function startTimer() { if(timerRunning) return; timerRunning=true; timerPaused=false; document.getElementById('timerContainer').classList.add('timer-running'); document.getElementById('timerStatus').textContent='Serviço em andamento'; document.getElementById('btnStart').disabled=true; document.getElementById('btnPause').disabled=false; document.getElementById('btnStop').disabled=false; if(!document.getElementById('horaInicio').value) document.getElementById('horaInicio').value=getCurrentTime(); timerInterval=setInterval(()=>{ if(!timerPaused){ timerSeconds++; updateTimerDisplay(); } },1000); }
     function pauseTimer() { if(!timerRunning) return; timerPaused=true; document.getElementById('timerStatus').textContent='Pausa almoço'; document.getElementById('btnPause').textContent='Retornar'; document.getElementById('btnPause').onclick=resumeTimer; if(!document.getElementById('horaAlmocoSaida').value) document.getElementById('horaAlmocoSaida').value=getCurrentTime(); }
     function resumeTimer() { timerPaused=false; document.getElementById('timerStatus').textContent='Serviço em andamento'; document.getElementById('btnPause').textContent='Almoço'; document.getElementById('btnPause').onclick=pauseTimer; if(!document.getElementById('horaAlmocoRetorno').value) document.getElementById('horaAlmocoRetorno').value=getCurrentTime(); }
@@ -565,10 +540,11 @@
       document.getElementById('adicionalNoturno').addEventListener('input', updateTotalGeral);
     }
 
+    // ==================== FOTOS ====================
     function handlePhotoUpload(e) { const files = Array.from(e.target.files); const preview = document.getElementById('fotosPreview'); photosData = []; preview.innerHTML = ''; files.forEach(file => { const reader = new FileReader(); reader.onload = (ev) => { photosData.push(ev.target.result); const div = document.createElement('div'); div.className = 'photo-item'; div.innerHTML = `<img src="${ev.target.result}" alt="foto"><div class="photo-remove" onclick="removePhoto(this)">×</div>`; preview.appendChild(div); }; reader.readAsDataURL(file); }); }
     function removePhoto(el) { const idx = Array.from(el.parentNode.parentNode.children).indexOf(el.parentNode); if(idx !== -1) photosData.splice(idx,1); el.parentNode.remove(); }
 
-    // Função de impressão da OS otimizada para uma página
+    // ==================== PDF DA OS (COM NOME CORRETO) ====================
     function getPrintOSHTML() {
       const osNum = document.getElementById('numeroOS').value;
       const data = document.getElementById('dataOS').value;
@@ -603,10 +579,16 @@
         photosHtml += '</div></div>';
       }
       
-      return `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Marlift OS ${osNum}</title><style>
+      const numeroSequencial = osNum.split('-').pop();
+      const clienteNome = (document.getElementById('cliente').value || 'cliente').toUpperCase().replace(/[^a-zA-Z0-9]/g, '_');
+      const fileName = `OS_${numeroSequencial}_${clienteNome}`;
+      
+      return `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${fileName}</title><style>
         *{margin:0;padding:0;box-sizing:border-box;} body{font-family:'Inter',sans-serif;background:white;color:#1a1a1a;line-height:1.3;padding:4mm;max-width:210mm;margin:0 auto;font-size:9pt;}
         @page{size:A4;margin:5mm;} .header{text-align:center;margin-bottom:4mm;padding-bottom:2mm;border-bottom:2px solid #f97316;}
         .header h1{font-size:18pt;color:#f97316;margin:0;} .header h2{font-size:11pt;color:#333;margin:2px 0;} .header p{font-size:8pt;color:#666;}
+        .cliente-info{background:#f8f9fa;border-radius:6px;padding:3mm;margin-bottom:4mm;border:1px solid #e0e0e0;}
+        .cliente-row{display:flex;margin-bottom:1.5mm;font-size:9pt;} .cliente-label{font-weight:600;width:30%;color:#555;} .cliente-value{width:70%;text-transform:uppercase;}
         .equip-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:3mm;margin-bottom:4mm;background:#f8f9fa;border-radius:6px;padding:3mm;border:1px solid #e0e0e0;}
         .equip-item{text-align:center;} .equip-label{font-size:7pt;color:#666;text-transform:uppercase;} .equip-value{font-size:9pt;font-weight:600;margin-top:1px;text-transform:uppercase;}
         .service-section{margin-bottom:4mm;} .service-title{font-weight:700;font-size:10pt;color:#f97316;border-left:3px solid #f97316;padding-left:2mm;margin-bottom:2mm;text-transform:uppercase;}
@@ -622,15 +604,18 @@
         @media print{body{padding:0;margin:0;} .info-card,.equip-grid,.service-content,.signatures{break-inside:avoid;}}
       </style></head><body>
         <div class="header"><h1>MARLIFT</h1><h2>EMPILHADEIRAS</h2><p>Ordem de Serviço - Manutenção Profissional</p></div>
+        <div class="cliente-info">
+          <div class="cliente-row"><span class="cliente-label">CLIENTE:</span><span class="cliente-value">${cliente}</span></div>
+          <div class="cliente-row"><span class="cliente-label">ENDEREÇO:</span><span class="cliente-value">${endereco}</span></div>
+          <div class="cliente-row"><span class="cliente-label">GOOGLE MAPS:</span><span class="cliente-value"><a href="${mapUrl}" target="_blank" class="map-link-text">Clique para abrir no mapa</a></span></div>
+        </div>
         <div class="equip-grid">
           <div class="equip-item"><div class="equip-label">MARCA</div><div class="equip-value">${marca}</div></div>
           <div class="equip-item"><div class="equip-label">MODELO</div><div class="equip-value">${modelo}</div></div>
           <div class="equip-item"><div class="equip-label">Nº SÉRIE</div><div class="equip-value">${numSerie}</div></div>
           <div class="equip-item"><div class="equip-label">HORÍMETRO</div><div class="equip-value">${horimetro} h</div></div>
           <div class="equip-item"><div class="equip-label">COMBUSTÍVEL</div><div class="equip-value">${combustivel}</div></div>
-          <div class="equip-item"><div class="equip-label">CLIENTE</div><div class="equip-value">${cliente}</div></div>
           <div class="equip-item"><div class="equip-label">CNPJ/CPF</div><div class="equip-value">${cnpj}</div></div>
-          <div class="equip-item"><div class="equip-label">ENDEREÇO</div><div class="equip-value">${endereco}</div></div>
         </div>
         <div class="service-section"><div class="service-title">🔧 DESCRIÇÃO DO SERVIÇO</div><div class="service-content">${descricao.replace(/\n/g,'<br>')}</div></div>
         <div class="service-section"><div class="service-title">🔩 PEÇAS APLICADAS</div><div class="service-content">${pecas.replace(/\n/g,'<br>')}</div></div>
@@ -640,7 +625,6 @@
             <div class="info-row"><span class="info-label">Número:</span><span class="info-value">${osNum}</span></div>
             <div class="info-row"><span class="info-label">Data:</span><span class="info-value">${data}</span></div>
             <div class="info-row"><span class="info-label">Tipo:</span><span class="info-value">${tipo}</span></div>
-            <div class="info-row"><span class="info-label">Google Maps:</span><span class="info-value"><a href="${mapUrl}" target="_blank" class="map-link-text">Clique para abrir</a></span></div>
           </div>
           <div class="info-card"><h3>⏱️ CONTROLE DE HORAS</h3>
             <div class="info-row"><span class="info-label">Início:</span><span class="info-value">${inicio}</span></div>
@@ -653,14 +637,23 @@
             <div class="info-row"><span class="info-label">Total Geral:</span><span class="info-value"><strong>${totalGeral}</strong></span></div>
           </div>
         </div>
-        <div class="signatures"><div class="signature-box"><div class="signature-line"></div><div class="signature-name">${tecnico}</div><div style="font-size:7pt;">Técnico</div></div><div class="signature-box"><div class="signature-line"></div><div class="signature-name">${recebedor}</div><div style="font-size:7pt;">Cliente</div></div></div>
         ${photosHtml}
+        <div class="signatures">
+          <div class="signature-box"><div class="signature-line"></div><div class="signature-name">${tecnico}</div><div style="font-size:7pt;">Técnico</div></div>
+          <div class="signature-box"><div class="signature-line"></div><div class="signature-name">${recebedor}</div><div style="font-size:7pt;">Cliente</div></div>
+        </div>
         <div class="footer">Documento gerado eletronicamente - MARLIFT Empilhadeiras</div>
       </body></html>`;
     }
     
-    function printOS() { const win = window.open(); win.document.write(getPrintOSHTML()); win.document.close(); win.print(); }
+    function printOS() {
+      const win = window.open();
+      win.document.write(getPrintOSHTML());
+      win.document.close();
+      win.print();
+    }
     
+    // ==================== CHECKLIST PDF ====================
     function printChecklistOnly() {
       const osNum = document.getElementById('numeroOS').value;
       const data = document.getElementById('dataOS').value;
@@ -691,7 +684,7 @@
         checklistHtml += `</div></div>`;
       });
       
-      const html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Checklist - ${osNum}</title><style>
+      const html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Checklist_${osNum}</title><style>
         *{margin:0;padding:0;box-sizing:border-box;} body{font-family:'Inter',sans-serif;background:white;padding:8mm;max-width:210mm;margin:0 auto;}
         .header{text-align:center;margin-bottom:8mm;border-bottom:2px solid #f97316;padding-bottom:5mm;} .header h1{color:#f97316;font-size:24pt;}
         .equip-info{background:#f8f9fa;border-radius:8px;padding:4mm;margin-bottom:6mm;border:1px solid #e0e0e0;}
@@ -726,6 +719,7 @@
       const win = window.open(); win.document.write(html); win.document.close(); win.print();
     }
 
+    // ==================== DEMAIS FUNÇÕES ====================
     function getShareText(){ const os=document.getElementById('numeroOS').value; const cliente=document.getElementById('cliente').value||'Cliente'; const marca=document.getElementById('marca').value||''; const modelo=document.getElementById('modelo').value||''; const totalHoras=document.getElementById('horasTotais').value||'0h'; const descricao=document.getElementById('descricaoServico').value||'Nenhuma'; const pecas=document.getElementById('pecasAplicadas').value||'Nenhuma'; const pendencia=document.getElementById('pendencias').value||'Nenhuma'; return `🏭 *MARLIFT - OS ${os}*\n👤 ${cliente}\n🔧 ${marca} ${modelo}\n⏱️ ${totalHoras} (mínimo 1h)\n📝 ${descricao}\n🔩 Peças: ${pecas}\n⚠️ Pendências: ${pendencia}`; }
     function sendWhatsApp() { let numero = document.getElementById('telefone').value.replace(/\D/g,''); if(!numero){ numero = prompt('Número do WhatsApp (com DDD):', '5511999999999'); if(!numero) return; } numero = numero.replace(/^0+/,''); if(!numero.startsWith('55')) numero = '55'+numero; window.open(`https://wa.me/${numero}?text=${encodeURIComponent(getShareText())}`, '_blank'); showToast('WhatsApp aberto!'); }
     function sendEmail(){ window.location.href=`mailto:?subject=${encodeURIComponent(document.getElementById('numeroOS').value)}&body=${encodeURIComponent(getShareText())}`; showToast('E-mail aberto'); }
@@ -747,6 +741,7 @@
     function downloadBackup(){ let hist=JSON.parse(localStorage.getItem('marlift_os_history')||'[]'); if(!hist.length){ showToast('Nenhuma OS salva'); return; } const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([JSON.stringify(hist,null,2)],{type:'application/json'})); a.download=`Marlift_Backup_${new Date().toISOString().split('T')[0]}.json`; a.click(); showToast('Backup gerado!'); }
     function restoreBackup(e){ const file=e.target.files[0]; if(!file) return; const reader=new FileReader(); reader.onload=ev=>{ try{ const data=JSON.parse(ev.target.result); if(Array.isArray(data) && confirm(`Restaurar ${data.length} OS?`)){ localStorage.setItem('marlift_os_history',JSON.stringify(data)); showToast('Backup restaurado!'); } }catch(err){ showToast('Erro no arquivo'); } }; reader.readAsText(file); e.target.value=''; }
     function showToast(msg){ const toast=document.getElementById('toast'); document.getElementById('toastMessage').textContent=msg; toast.classList.add('show'); setTimeout(()=>toast.classList.remove('show'),3000); }
+    
     setInterval(()=>{ localStorage.setItem('marlift_draft',JSON.stringify(getFormData())); },5000);
     document.addEventListener('DOMContentLoaded', init);
   </script>
