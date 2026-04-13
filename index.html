@@ -129,7 +129,7 @@
     .cliente-form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
     .cliente-input-group { display: flex; flex-direction: column; gap: 6px; }
     .cliente-input-group label { font-size: 0.75rem; font-weight: 600; color: var(--muted); text-transform: uppercase; }
-    .cliente-input-group input { background: var(--bg); border: 1px solid var(--border); padding: 8px 12px; border-radius: 8px; color: var(--fg); }
+    .cliente-input-group input, .cliente-input-group select { background: var(--bg); border: 1px solid var(--border); padding: 8px 12px; border-radius: 8px; color: var(--fg); }
     .cliente-table-wrapper { overflow-x: auto; border-radius: 12px; border: 1px solid var(--border); }
     .cliente-table { width: 100%; border-collapse: collapse; font-size: 0.75rem; }
     .cliente-table th { background: var(--bg-secondary); color: var(--accent); padding: 10px 6px; text-align: center; cursor: pointer; }
@@ -141,6 +141,8 @@
     .delete-icon { color: #ef4444; }
     .edit-icon { color: #3b82f6; }
     .cliente-search { background: var(--bg); border: 1px solid var(--border); padding: 8px 16px; border-radius: 40px; color: var(--fg); width: 250px; }
+    .marca-outra-container { display: flex; gap: 8px; align-items: center; margin-top: 4px; }
+    .marca-outra-container input { flex: 1; }
   </style>
 </head>
 <body class="bg-pattern">
@@ -188,7 +190,35 @@
 
         <div class="checklist-card p-5 mb-5"><div class="section-header"><div class="section-icon"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg></div><h2 class="font-display text-xl">Dados do Equipamento</h2></div>
           <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-            <div><label class="block text-xs text-[var(--muted)] mb-1">Marca</label><input type="text" class="form-input uppercase-input" id="marca"></div>
+            <div>
+              <label class="block text-xs text-[var(--muted)] mb-1">Marca</label>
+              <select id="marcaSelect" class="form-input">
+                <option value="">Selecione</option>
+                <option value="TOYOTA">TOYOTA</option>
+                <option value="LINDE">LINDE</option>
+                <option value="HYSTER">HYSTER</option>
+                <option value="YALE">YALE</option>
+                <option value="CATERPILLAR">CATERPILLAR</option>
+                <option value="KOMATSU">KOMATSU</option>
+                <option value="MITSUBISHI">MITSUBISHI</option>
+                <option value="NISSAN">NISSAN</option>
+                <option value="STILL">STILL</option>
+                <option value="CROWN">CROWN</option>
+                <option value="JUNGHEINRICH">JUNGHEINRICH</option>
+                <option value="CLARK">CLARK</option>
+                <option value="TCM">TCM</option>
+                <option value="HYUNDAI">HYUNDAI</option>
+                <option value="DOOSAN">DOOSAN</option>
+                <option value="HELI">HELI</option>
+                <option value="HANGCHA">HANGCHA</option>
+                <option value="LONKING">LONKING</option>
+                <option value="OUTRA">Outra</option>
+              </select>
+              <div id="marcaOutraContainer" style="display: none; margin-top: 5px;">
+                <input type="text" id="marcaOutra" class="form-input uppercase-input" placeholder="Digite a marca">
+              </div>
+              <input type="hidden" id="marca" value="">
+            </div>
             <div><label class="block text-xs text-[var(--muted)] mb-1">Modelo</label><input type="text" class="form-input uppercase-input" id="modelo"></div>
             <div><label class="block text-xs text-[var(--muted)] mb-1">Nº Série</label><input type="text" class="form-input uppercase-input" id="numSerie"></div>
             <div><label class="block text-xs text-[var(--muted)] mb-1">Horímetro</label><input type="text" class="form-input" id="horimetro"></div>
@@ -282,7 +312,35 @@
           <div class="cliente-input-group"><label>CNPJ*</label><input type="text" id="cad_cnpj"></div>
           <div class="cliente-input-group"><label>Endereço</label><input type="text" id="cad_endereco"></div>
           <div class="cliente-input-group"><label>Cidade</label><input type="text" id="cad_cidade"></div>
-          <div class="cliente-input-group"><label>Marca</label><input type="text" id="cad_marca"></div>
+          <div class="cliente-input-group">
+            <label>Marca</label>
+            <select id="cad_marcaSelect" class="form-input">
+              <option value="">Selecione</option>
+              <option value="TOYOTA">TOYOTA</option>
+              <option value="LINDE">LINDE</option>
+              <option value="HYSTER">HYSTER</option>
+              <option value="YALE">YALE</option>
+              <option value="CATERPILLAR">CATERPILLAR</option>
+              <option value="KOMATSU">KOMATSU</option>
+              <option value="MITSUBISHI">MITSUBISHI</option>
+              <option value="NISSAN">NISSAN</option>
+              <option value="STILL">STILL</option>
+              <option value="CROWN">CROWN</option>
+              <option value="JUNGHEINRICH">JUNGHEINRICH</option>
+              <option value="CLARK">CLARK</option>
+              <option value="TCM">TCM</option>
+              <option value="HYUNDAI">HYUNDAI</option>
+              <option value="DOOSAN">DOOSAN</option>
+              <option value="HELI">HELI</option>
+              <option value="HANGCHA">HANGCHA</option>
+              <option value="LONKING">LONKING</option>
+              <option value="OUTRA">Outra</option>
+            </select>
+            <div id="cadMarcaOutraContainer" style="display: none; margin-top: 5px;">
+              <input type="text" id="cad_marcaOutra" class="form-input uppercase-input" placeholder="Digite a marca">
+            </div>
+            <input type="hidden" id="cad_marca" value="">
+          </div>
           <div class="cliente-input-group"><label>Modelo</label><input type="text" id="cad_modelo"></div>
           <div class="cliente-input-group"><label>Série</label><input type="text" id="cad_serie"></div>
           <div class="cliente-input-group"><label>Quantidade</label><input type="number" id="cad_quantidade" value="1"></div>
@@ -305,6 +363,13 @@
 <div id="toast" class="toast"><svg class="w-5 h-5 text-[var(--success)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><span id="toastMessage"></span></div>
 
 <script>
+  // ==================== LISTA DE MARCAS ====================
+  const marcasList = [
+    "TOYOTA", "LINDE", "HYSTER", "YALE", "CATERPILLAR", "KOMATSU", "MITSUBISHI", 
+    "NISSAN", "STILL", "CROWN", "JUNGHEINRICH", "CLARK", "TCM", "HYUNDAI", 
+    "DOOSAN", "HELI", "HANGCHA", "LONKING"
+  ];
+
   // ==================== CHECKLIST COMPLETO ====================
   const checklistData = [
     { id:'motor', title:'Motor e Componentes', items:[{id:'motor_oleo',label:'Nível de óleo do motor'},{id:'motor_filtro_oleo',label:'Filtro de óleo'},{id:'motor_filtro_ar',label:'Filtro de ar'},{id:'motor_filtro_comb',label:'Filtro de combustível'},{id:'motor_correias',label:'Correias'},{id:'motor_radiador',label:'Radiador e arrefecimento'},{id:'motor_velas',label:'Velas de ignição'},{id:'motor_mangueiras',label:'Mangueiras e conexões'}] },
@@ -362,13 +427,95 @@
       document.getElementById('cidadeCliente').value = (cliente.cidade||'').toUpperCase();
       document.getElementById('endereco').value = (cliente.endereco||'').toUpperCase();
       document.getElementById('whatsappCliente').value = cliente.whatsapp||'';
-      document.getElementById('marca').value = (cliente.marca || '').toUpperCase();
+      // Preencher marca no select ou campo "outra"
+      const marca = (cliente.marca || '').toUpperCase();
+      const marcaSelect = document.getElementById('marcaSelect');
+      const marcaOutraContainer = document.getElementById('marcaOutraContainer');
+      const marcaOutraInput = document.getElementById('marcaOutra');
+      const optionExists = Array.from(marcaSelect.options).some(opt => opt.value === marca);
+      if (optionExists) {
+        marcaSelect.value = marca;
+        marcaOutraContainer.style.display = 'none';
+        marcaOutraInput.value = '';
+      } else if (marca) {
+        marcaSelect.value = 'OUTRA';
+        marcaOutraContainer.style.display = 'block';
+        marcaOutraInput.value = marca;
+      } else {
+        marcaSelect.value = '';
+        marcaOutraContainer.style.display = 'none';
+        marcaOutraInput.value = '';
+      }
       document.getElementById('modelo').value = (cliente.modelo || '').toUpperCase();
       document.getElementById('numSerie').value = (cliente.serie || '').toUpperCase();
       syncClienteFields();
       atualizarLinkMapa();
       showToast(`Cliente ${cliente.nome} carregado`);
     }
+  }
+
+  // Função para atualizar o campo hidden "marca" com o valor real (select ou "outra")
+  function updateMarcaHidden() {
+    const select = document.getElementById('marcaSelect');
+    const outraContainer = document.getElementById('marcaOutraContainer');
+    const outraInput = document.getElementById('marcaOutra');
+    let valor = '';
+    if (select.value === 'OUTRA') {
+      valor = outraInput.value.trim().toUpperCase();
+    } else {
+      valor = select.value;
+    }
+    document.getElementById('marca').value = valor;
+  }
+
+  function updateCadMarcaHidden() {
+    const select = document.getElementById('cad_marcaSelect');
+    const outraContainer = document.getElementById('cadMarcaOutraContainer');
+    const outraInput = document.getElementById('cad_marcaOutra');
+    let valor = '';
+    if (select.value === 'OUTRA') {
+      valor = outraInput.value.trim().toUpperCase();
+    } else {
+      valor = select.value;
+    }
+    document.getElementById('cad_marca').value = valor;
+  }
+
+  // Configurar eventos dos selects de marca
+  function setupMarcaSelects() {
+    const marcaSelect = document.getElementById('marcaSelect');
+    const outraContainer = document.getElementById('marcaOutraContainer');
+    const outraInput = document.getElementById('marcaOutra');
+    marcaSelect.addEventListener('change', () => {
+      if (marcaSelect.value === 'OUTRA') {
+        outraContainer.style.display = 'block';
+        outraInput.focus();
+      } else {
+        outraContainer.style.display = 'none';
+        outraInput.value = '';
+        updateMarcaHidden();
+      }
+    });
+    outraInput.addEventListener('input', () => {
+      updateMarcaHidden();
+    });
+    
+    const cadMarcaSelect = document.getElementById('cad_marcaSelect');
+    const cadOutraContainer = document.getElementById('cadMarcaOutraContainer');
+    const cadOutraInput = document.getElementById('cad_marcaOutra');
+    cadMarcaSelect.addEventListener('change', () => {
+      if (cadMarcaSelect.value === 'OUTRA') {
+        cadOutraContainer.style.display = 'block';
+        cadOutraInput.focus();
+      } else {
+        cadOutraContainer.style.display = 'none';
+        cadOutraInput.value = '';
+        updateCadMarcaHidden();
+      }
+    });
+    cadOutraInput.addEventListener('input', () => {
+      updateCadMarcaHidden();
+    });
   }
 
   // ==================== CRONÔMETRO ====================
@@ -415,15 +562,19 @@
   }
   function updateProgress(){ const checkboxes=document.querySelectorAll('input[data-check="true"]'); checkedItems=Array.from(checkboxes).filter(cb=>cb.checked).length; const pct=totalCheckItems>0?Math.round((checkedItems/totalCheckItems)*100):0; document.getElementById('progressText').textContent=`${pct}%`; document.getElementById('progressFill').style.width=`${pct}%`; }
 
-  // ==================== PDF OS (layout compacto com dados do cliente em linha) ====================
+  // ==================== PDF OS (com link do Google Maps) ====================
   function printOS() { const win=window.open(); win.document.write(getPrintOSHTML()); win.document.close(); win.print(); }
   function getPrintOSHTML() {
     const osNum=document.getElementById('numeroOS').value, data=document.getElementById('dataOS').value, tipo=document.getElementById('tipoChamado').options[document.getElementById('tipoChamado').selectedIndex]?.text||'';
     const cliente=(document.getElementById('cliente').value||'-').toUpperCase(), cnpj=document.getElementById('cnpj').value||'-', endereco=(document.getElementById('endereco').value||'-').toUpperCase(), cidade=document.getElementById('cidadeCliente').value||'-', whatsapp=document.getElementById('whatsappCliente').value||'-';
-    const marca=(document.getElementById('marca').value||'-').toUpperCase(), modelo=(document.getElementById('modelo').value||'-').toUpperCase(), numSerie=(document.getElementById('numSerie').value||'-').toUpperCase(), horimetro=document.getElementById('horimetro').value||'-', combustivel=document.getElementById('combustivel').options[document.getElementById('combustivel').selectedIndex]?.text||'-';
+    const marca = (document.getElementById('marca').value || '-').toUpperCase();
+    const modelo=(document.getElementById('modelo').value||'-').toUpperCase(), numSerie=(document.getElementById('numSerie').value||'-').toUpperCase(), horimetro=document.getElementById('horimetro').value||'-', combustivel=document.getElementById('combustivel').options[document.getElementById('combustivel').selectedIndex]?.text||'-';
     const descricao=document.getElementById('descricaoServico').value||'-', pecas=document.getElementById('pecasAplicadas').value||'-', pendencias=document.getElementById('pendencias').value||'-';
     const inicio=document.getElementById('horaInicio').value||'-', almocoSaida=document.getElementById('horaAlmocoSaida').value||'-', almocoRetorno=document.getElementById('horaAlmocoRetorno').value||'-', termino=document.getElementById('horaTermino').value||'-', horasTotais=document.getElementById('horasTotais').value||'-', extras=document.getElementById('horasExtras').value||'-', adicionalNoturno=document.getElementById('adicionalNoturno').value||'-', totalGeral=document.getElementById('totalGeral').value||'-';
     const tecnico=(document.getElementById('tecnico').value||'-').toUpperCase(), recebedor=(document.getElementById('recebedor').value||'-').toUpperCase();
+    // Link do Google Maps
+    const mapLink = endereco !== '-' ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(endereco)}` : '#';
+    const mapLinkHtml = endereco !== '-' ? `<div style="margin-top: 4px;"><a href="${mapLink}" style="color: #4285f4; text-decoration: none; font-size: 8pt;">📍 Ver localização no Google Maps</a></div>` : '';
     let photosHtml=''; if(photosData.length){ photosHtml='<div style="margin-top:15px;"><h3>📸 Fotos do Serviço</h3><div style="display:flex;flex-wrap:wrap;gap:8px;">'; photosData.forEach(photo=>{ photosHtml+=`<div style="width:70px;height:70px;border:1px solid #ccc;border-radius:4px;overflow:hidden;"><img src="${photo}" style="width:100%;height:100%;object-fit:cover;"></div>`; }); photosHtml+='</div></div>'; }
     return `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>OS_${osNum}</title><style>
       body{font-family:Inter,sans-serif;padding:6mm;max-width:210mm;margin:0 auto;font-size:9pt; line-height:1.2;}
@@ -445,6 +596,7 @@
       <h3>Dados do Cliente</h3>
       <div class="inline-row"><strong>Cliente:</strong> ${cliente} &nbsp;&nbsp;|&nbsp;&nbsp; <strong>CNPJ:</strong> ${cnpj}</div>
       <div><strong>Endereço:</strong> ${endereco}</div>
+      ${mapLinkHtml}
       <div class="inline-row"><strong>Cidade:</strong> ${cidade} &nbsp;&nbsp;|&nbsp;&nbsp; <strong>WhatsApp:</strong> ${whatsapp}</div>
     </div>
     <div class="section"><h3>Dados do Equipamento</h3><div class="grid"><div><span class="label">Marca:</span> ${marca}</div><div><span class="label">Modelo:</span> ${modelo}</div><div><span class="label">Nº Série:</span> ${numSerie}</div><div><span class="label">Horímetro:</span> ${horimetro}h</div><div><span class="label">Combustível:</span> ${combustivel}</div></div></div>
@@ -461,7 +613,7 @@
     const osNum=document.getElementById('numeroOS').value;
     const data=document.getElementById('dataOS').value;
     const cliente=(document.getElementById('cliente').value||'-').toUpperCase();
-    const marca=(document.getElementById('marca').value||'-').toUpperCase();
+    const marca = (document.getElementById('marca').value || '-').toUpperCase();
     const modelo=(document.getElementById('modelo').value||'-').toUpperCase();
     const numSerie=(document.getElementById('numSerie').value||'-').toUpperCase();
     const horimetro=document.getElementById('horimetro').value||'-';
@@ -497,6 +649,8 @@
   // ==================== OS PERSISTÊNCIA ====================
   function getFormData(){ 
     const data={};
+    // Atualiza o hidden antes de salvar
+    updateMarcaHidden();
     document.querySelectorAll('#osForm input, #osForm select, #osForm textarea').forEach(el=>{ 
       if(el.type === 'checkbox') {
         data[el.id] = el.checked;
@@ -538,6 +692,25 @@
         preview.appendChild(div); 
       }); 
     } 
+    // Restaurar marca a partir do hidden
+    const marcaSalva = d.marca || '';
+    const marcaSelect = document.getElementById('marcaSelect');
+    const outraContainer = document.getElementById('marcaOutraContainer');
+    const outraInput = document.getElementById('marcaOutra');
+    if (marcasList.includes(marcaSalva)) {
+      marcaSelect.value = marcaSalva;
+      outraContainer.style.display = 'none';
+      outraInput.value = '';
+    } else if (marcaSalva) {
+      marcaSelect.value = 'OUTRA';
+      outraContainer.style.display = 'block';
+      outraInput.value = marcaSalva;
+    } else {
+      marcaSelect.value = '';
+      outraContainer.style.display = 'none';
+      outraInput.value = '';
+    }
+    updateMarcaHidden();
     calculateTotals(); 
     updateProgress(); 
     atualizarLinkMapa(); 
@@ -545,6 +718,7 @@
   }
   
   function saveCurrentOS(){ 
+    updateMarcaHidden();
     const data=getFormData(); 
     let history=JSON.parse(localStorage.getItem('marlift_os_history')||'[]'); 
     const idx=history.findIndex(os=>os.numeroOS===data.numeroOS); 
@@ -576,6 +750,11 @@
     atualizarLinkMapa(); 
     syncClienteFields(); 
     document.getElementById('tecnico').value = 'LEONARDO MARTINS';
+    // Reset marca
+    document.getElementById('marcaSelect').value = '';
+    document.getElementById('marcaOutraContainer').style.display = 'none';
+    document.getElementById('marcaOutra').value = '';
+    updateMarcaHidden();
     showToast('Formulário limpo'); 
   }
 
@@ -639,6 +818,9 @@
     document.getElementById('cad_cnpj').value = '';
     document.getElementById('cad_endereco').value = '';
     document.getElementById('cad_cidade').value = '';
+    document.getElementById('cad_marcaSelect').value = '';
+    document.getElementById('cadMarcaOutraContainer').style.display = 'none';
+    document.getElementById('cad_marcaOutra').value = '';
     document.getElementById('cad_marca').value = '';
     document.getElementById('cad_modelo').value = '';
     document.getElementById('cad_serie').value = '';
@@ -660,7 +842,24 @@
     document.getElementById('cad_cnpj').value = cliente.cnpj || '';
     document.getElementById('cad_endereco').value = cliente.endereco || '';
     document.getElementById('cad_cidade').value = cliente.cidade || '';
-    document.getElementById('cad_marca').value = cliente.marca || '';
+    const marca = (cliente.marca || '').toUpperCase();
+    const marcaSelect = document.getElementById('cad_marcaSelect');
+    const outraContainer = document.getElementById('cadMarcaOutraContainer');
+    const outraInput = document.getElementById('cad_marcaOutra');
+    if (marcasList.includes(marca)) {
+      marcaSelect.value = marca;
+      outraContainer.style.display = 'none';
+      outraInput.value = '';
+    } else if (marca) {
+      marcaSelect.value = 'OUTRA';
+      outraContainer.style.display = 'block';
+      outraInput.value = marca;
+    } else {
+      marcaSelect.value = '';
+      outraContainer.style.display = 'none';
+      outraInput.value = '';
+    }
+    updateCadMarcaHidden();
     document.getElementById('cad_modelo').value = cliente.modelo || '';
     document.getElementById('cad_serie').value = cliente.serie || '';
     document.getElementById('cad_quantidade').value = cliente.quantidade || 1;
@@ -675,6 +874,7 @@
   
   function cadUpdateClient() {
     if(!editingClientId) return;
+    updateCadMarcaHidden();
     const index = cadClients.findIndex(c => c.id === editingClientId);
     if(index === -1) return;
     cadClients[index] = {
@@ -683,7 +883,7 @@
       cnpj: document.getElementById('cad_cnpj').value.trim(),
       endereco: document.getElementById('cad_endereco').value.trim(),
       cidade: document.getElementById('cad_cidade').value.trim(),
-      marca: document.getElementById('cad_marca').value.trim(),
+      marca: document.getElementById('cad_marca').value,
       modelo: document.getElementById('cad_modelo').value.trim(),
       serie: document.getElementById('cad_serie').value.trim(),
       quantidade: parseInt(document.getElementById('cad_quantidade').value) || 1,
@@ -700,15 +900,16 @@
     const nome=document.getElementById('cad_nome').value.trim(); 
     const cnpj=document.getElementById('cad_cnpj').value.trim(); 
     if(!nome){ showToast('Nome obrigatório',true); return; } 
+    updateCadMarcaHidden();
     const newClient={ 
       id:Date.now(), 
       nome, 
       cnpj, 
       endereco:document.getElementById('cad_endereco').value.trim(), 
       cidade:document.getElementById('cad_cidade').value.trim(), 
-      marca:document.getElementById('cad_marca').value.trim(), 
-      modelo:document.getElementById('cad_modelo').value.trim(), 
-      serie:document.getElementById('cad_serie').value.trim(), 
+      marca: document.getElementById('cad_marca').value,
+      modelo: document.getElementById('cad_modelo').value.trim(), 
+      serie: document.getElementById('cad_serie').value.trim(), 
       quantidade:parseInt(document.getElementById('cad_quantidade').value)||1, 
       telefone:document.getElementById('cad_telefone').value.trim(), 
       whatsapp:document.getElementById('cad_whatsapp').value.trim() 
@@ -737,7 +938,25 @@
       document.getElementById('cidadeCliente').value=(cliente.cidade||'').toUpperCase(); 
       document.getElementById('endereco').value=(cliente.endereco||'').toUpperCase(); 
       document.getElementById('whatsappCliente').value=cliente.whatsapp||''; 
-      document.getElementById('marca').value = (cliente.marca || '').toUpperCase();
+      // Marca
+      const marca = (cliente.marca || '').toUpperCase();
+      const marcaSelect = document.getElementById('marcaSelect');
+      const outraContainer = document.getElementById('marcaOutraContainer');
+      const outraInput = document.getElementById('marcaOutra');
+      if (marcasList.includes(marca)) {
+        marcaSelect.value = marca;
+        outraContainer.style.display = 'none';
+        outraInput.value = '';
+      } else if (marca) {
+        marcaSelect.value = 'OUTRA';
+        outraContainer.style.display = 'block';
+        outraInput.value = marca;
+      } else {
+        marcaSelect.value = '';
+        outraContainer.style.display = 'none';
+        outraInput.value = '';
+      }
+      updateMarcaHidden();
       document.getElementById('modelo').value = (cliente.modelo || '').toUpperCase();
       document.getElementById('numSerie').value = (cliente.serie || '').toUpperCase();
       syncClienteFields(); 
@@ -753,6 +972,7 @@
     setDefaultDate(); 
     renderChecklist(); 
     setupEventListeners();
+    setupMarcaSelects();
     document.getElementById('fotosServico').addEventListener('change',handlePhotoUpload);
     document.querySelectorAll('.tab-button').forEach(btn=>btn.addEventListener('click',()=>{ const tabId=btn.getAttribute('data-tab'); document.querySelectorAll('.tab-button').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); document.querySelectorAll('.tab-content').forEach(tab=>tab.classList.remove('active')); document.getElementById(tabId).classList.add('active'); }));
     document.querySelectorAll('.uppercase-input').forEach(inp=>inp.addEventListener('input',function(){ this.value=this.value.toUpperCase(); }));
@@ -783,6 +1003,21 @@
       cadResetForm();
     });
     document.getElementById('cad_searchInput').addEventListener('input',cadRenderFilteredTable);
+    // Configurar eventos do select de marca do cliente
+    const cadMarcaSelect = document.getElementById('cad_marcaSelect');
+    const cadOutraContainer = document.getElementById('cadMarcaOutraContainer');
+    const cadOutraInput = document.getElementById('cad_marcaOutra');
+    cadMarcaSelect.addEventListener('change', () => {
+      if (cadMarcaSelect.value === 'OUTRA') {
+        cadOutraContainer.style.display = 'block';
+        cadOutraInput.focus();
+      } else {
+        cadOutraContainer.style.display = 'none';
+        cadOutraInput.value = '';
+        updateCadMarcaHidden();
+      }
+    });
+    cadOutraInput.addEventListener('input', updateCadMarcaHidden);
   }
   
   document.addEventListener('DOMContentLoaded',()=>{ initOS(); initClientes(); });
