@@ -3,11 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Marlift Empilhadeiras - OS Profissional</title>
+  <title>Marlift Empilhadeiras - OS Profissional + Clientes</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
     :root {
       --bg: #0c0f12;
@@ -33,15 +34,8 @@
         radial-gradient(ellipse at 0% 0%, rgba(249, 115, 22, 0.08) 0%, transparent 50%),
         radial-gradient(ellipse at 100% 100%, rgba(59, 130, 246, 0.05) 0%, transparent 50%);
     }
-    
-    /* Animação do Header */
-    header {
-      transition: transform 0.3s ease-in-out;
-    }
-    header.header-hidden {
-      transform: translateY(-100%);
-    }
-
+    header { transition: transform 0.3s ease-in-out; }
+    header.header-hidden { transform: translateY(-100%); }
     .check-item { position: relative; cursor: pointer; }
     .check-item input { position: absolute; opacity: 0; cursor: pointer; }
     .checkmark {
@@ -79,15 +73,14 @@
       color: white; font-weight: 600;
       padding: 10px 20px; border-radius: 6px;
       border: none; cursor: pointer;
-      transition: all 0.3s ease;
       display: inline-flex; align-items: center; gap: 8px;
     }
-    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(249, 115, 22, 0.3); }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(249,115,22,0.3); }
     .btn-secondary {
       background: var(--card); color: var(--fg);
       font-weight: 500; padding: 10px 20px;
       border-radius: 6px; border: 1px solid var(--border);
-      cursor: pointer; transition: all 0.3s ease;
+      cursor: pointer;
       display: inline-flex; align-items: center; gap: 8px;
     }
     .btn-secondary:hover { border-color: var(--accent); background: var(--bg-secondary); }
@@ -96,720 +89,703 @@
       color: white; font-weight: 600;
       padding: 10px 20px; border-radius: 6px;
       border: none; cursor: pointer;
-      transition: all 0.3s ease;
       display: inline-flex; align-items: center; gap: 8px;
     }
-    .btn-checklist:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(139, 92, 246, 0.3); }
+    .btn-checklist:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(139,92,246,0.3); }
     .btn-whatsapp {
-      background: var(--whatsapp); color: white;
+      background: #25D366; color: white;
       font-weight: 600; padding: 10px 20px;
       border-radius: 6px; border: none;
-      cursor: pointer; transition: all 0.3s ease;
+      cursor: pointer;
       display: inline-flex; align-items: center; gap: 8px;
     }
     .btn-whatsapp:hover { filter: brightness(1.1); transform: translateY(-2px); }
-    .btn-timer {
-      padding: 12px 24px; border-radius: 8px; font-weight: 600;
-      cursor: pointer; transition: all 0.2s ease; border: none; color: white;
-    }
-    .btn-start { background: var(--success); }
-    .btn-pause { background: var(--warning); color: black; }
-    .btn-stop { background: var(--danger); }
-    .animate-slide-up { animation: slideUp 0.5s ease forwards; }
-    @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .btn-timer { padding: 12px 24px; border-radius: 8px; font-weight: 600; cursor: pointer; border: none; color: white; }
+    .btn-start { background: #10b981; }
+    .btn-pause { background: #f59e0b; color: black; }
+    .btn-stop { background: #ef4444; }
     .progress-bar { height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
     .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-light)); transition: width 0.5s ease; }
-    .section-header {
-      display: flex; align-items: center; gap: 12px;
-      margin-bottom: 16px; padding-bottom: 12px;
-      border-bottom: 1px solid var(--border);
-    }
-    .section-icon {
-      width: 36px; height: 36px;
-      background: rgba(249, 115, 22, 0.1);
-      border-radius: 8px;
-      display: flex; align-items: center; justify-content: center;
-      color: var(--accent);
-    }
-    .timer-display {
-      font-size: 3rem; font-weight: 700; letter-spacing: 2px;
-      background: linear-gradient(135deg, var(--fg), var(--muted));
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-    }
-    .timer-running .timer-display {
-      background: linear-gradient(135deg, var(--accent), var(--accent-light));
-      -webkit-background-clip: text; background-clip: text;
-    }
-    .photo-preview {
-      display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px;
-    }
-    .photo-item {
-      position: relative; width: 100px; height: 100px; border-radius: 8px;
-      border: 1px solid var(--border); overflow: hidden; background: var(--bg);
-    }
+    .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    .section-icon { width: 36px; height: 36px; background: rgba(249,115,22,0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--accent); }
+    .timer-display { font-size: 3rem; font-weight: 700; letter-spacing: 2px; background: linear-gradient(135deg, var(--fg), var(--muted)); -webkit-background-clip: text; background-clip: text; }
+    .timer-running .timer-display { background: linear-gradient(135deg, var(--accent), var(--accent-light)); -webkit-background-clip: text; background-clip: text; }
+    .photo-preview { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px; }
+    .photo-item { position: relative; width: 100px; height: 100px; border-radius: 8px; border: 1px solid var(--border); overflow: hidden; background: var(--bg); }
     .photo-item img { width: 100%; height: 100%; object-fit: cover; }
-    .photo-remove {
-      position: absolute; top: 2px; right: 2px; background: rgba(0,0,0,0.6);
-      border-radius: 50%; width: 20px; height: 20px; display: flex;
-      align-items: center; justify-content: center; cursor: pointer;
-      color: white; font-size: 14px; font-weight: bold;
-    }
-    .tab-button {
-      padding: 10px 20px;
-      font-weight: 600;
-      background: transparent;
-      border: none;
-      color: var(--muted);
-      cursor: pointer;
-      transition: all 0.2s;
-      border-bottom: 2px solid transparent;
-    }
-    .tab-button.active {
-      color: var(--accent);
-      border-bottom-color: var(--accent);
-    }
-    .tab-content {
-      display: none;
-      animation: fadeIn 0.3s ease;
-    }
-    .tab-content.active {
-      display: block;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(5px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .select-all-btn {
-      background: var(--bg-secondary);
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      padding: 4px 12px;
-      font-size: 12px;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    .select-all-btn:hover {
-      background: var(--accent);
-      color: white;
-      border-color: var(--accent);
-    }
+    .photo-remove { position: absolute; top: 2px; right: 2px; background: rgba(0,0,0,0.6); border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: white; font-size: 14px; font-weight: bold; }
+    .tab-button { padding: 10px 20px; font-weight: 600; background: transparent; border: none; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; }
+    .tab-button.active { color: var(--accent); border-bottom-color: var(--accent); }
+    .tab-content { display: none; animation: fadeIn 0.3s ease; }
+    .tab-content.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+    .select-all-btn { background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 4px; padding: 4px 12px; font-size: 12px; cursor: pointer; }
+    .select-all-btn:hover { background: var(--accent); color: white; border-color: var(--accent); }
     .toast { position: fixed; bottom: 24px; right: 24px; background: var(--card); border: 1px solid var(--success); padding: 16px 24px; border-radius: 8px; display: flex; align-items: center; gap: 12px; transform: translateY(100px); opacity: 0; transition: all 0.3s ease; z-index: 1000; }
     .toast.show { transform: translateY(0); opacity: 1; }
-    .map-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      background: rgba(66, 133, 244, 0.1);
-      padding: 4px 8px;
-      border-radius: 6px;
-      font-size: 12px;
-      color: #4285f4;
-      text-decoration: none;
-      transition: all 0.2s;
-    }
-    .map-link:hover { background: rgba(66, 133, 244, 0.2); }
+    .map-link { display: inline-flex; align-items: center; gap: 4px; background: rgba(66,133,244,0.1); padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #4285f4; text-decoration: none; }
+    .map-link:hover { background: rgba(66,133,244,0.2); }
+    .cliente-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 24px; }
+    .cliente-form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+    .cliente-input-group { display: flex; flex-direction: column; gap: 6px; }
+    .cliente-input-group label { font-size: 0.75rem; font-weight: 600; color: var(--muted); text-transform: uppercase; }
+    .cliente-input-group input { background: var(--bg); border: 1px solid var(--border); padding: 8px 12px; border-radius: 8px; color: var(--fg); }
+    .cliente-table-wrapper { overflow-x: auto; border-radius: 12px; border: 1px solid var(--border); }
+    .cliente-table { width: 100%; border-collapse: collapse; font-size: 0.75rem; }
+    .cliente-table th { background: var(--bg-secondary); color: var(--accent); padding: 10px 6px; text-align: center; cursor: pointer; }
+    .cliente-table td { padding: 8px 4px; border-bottom: 1px solid var(--border); text-align: center; }
+    .cliente-table tr:hover { background: rgba(249,115,22,0.1); }
+    .btn-selecionar { background: var(--accent); border: none; color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.7rem; cursor: pointer; }
+    .btn-selecionar:hover { background: var(--accent-light); }
+    .delete-icon, .edit-icon { cursor: pointer; margin: 0 5px; font-size: 1.1rem; }
+    .delete-icon { color: #ef4444; }
+    .edit-icon { color: #3b82f6; }
+    .cliente-search { background: var(--bg); border: 1px solid var(--border); padding: 8px 16px; border-radius: 40px; color: var(--fg); width: 250px; }
   </style>
 </head>
 <body class="bg-pattern">
-  <div class="min-h-screen">
-    <!-- HEADER com classe 'header-hidden' controlada via JS -->
-    <header class="no-print border-b border-[var(--border)] bg-[var(--bg)]/90 backdrop-blur-sm sticky top-0 z-50">
-      <div class="max-w-7xl mx-auto px-4 py-3">
-        <div class="flex items-center justify-between flex-wrap gap-4">
-          <div class="flex items-center gap-4">
-            <div class="w-11 h-11 bg-gradient-to-br from-[var(--accent)] to-[var(--accent-light)] rounded-lg flex items-center justify-center">
-              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
-            </div>
-            <div><h1 class="font-display text-2xl tracking-wide text-[var(--accent)]">MARLIFT</h1><p class="text-xs text-[var(--muted)] tracking-widest uppercase">Ordem de Serviço Profissional</p></div>
+<div class="min-h-screen">
+  <header class="no-print border-b border-[var(--border)] bg-[var(--bg)]/90 backdrop-blur-sm sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 py-3">
+      <div class="flex items-center justify-between flex-wrap gap-4">
+        <div class="flex items-center gap-4">
+          <div class="w-11 h-11 bg-gradient-to-br from-[var(--accent)] to-[var(--accent-light)] rounded-lg flex items-center justify-center">
+            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
           </div>
-          <div class="flex items-center gap-2 flex-wrap">
-            <button onclick="toggleFullscreen()" class="btn-secondary text-sm" id="btnFullscreen">
-              <svg id="fullscreenIcon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg>
-              <span id="fullscreenText">Tela Cheia</span>
-            </button>
-            <button onclick="sendWhatsApp()" class="btn-whatsapp text-sm"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg> WhatsApp</button>
-            <button onclick="sendEmail()" class="btn-secondary text-sm"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg> E-mail</button>
-            <button onclick="printOS()" class="btn-primary text-sm"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg> PDF da OS</button>
-            <button onclick="printChecklistOnly()" class="btn-checklist text-sm"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg> PDF Checklist</button>
-          </div>
+          <div><h1 class="font-display text-2xl tracking-wide text-[var(--accent)]">MARLIFT</h1><p class="text-xs text-[var(--muted)] tracking-widest uppercase">Ordem de Serviço Profissional</p></div>
+        </div>
+        <div class="flex items-center gap-2 flex-wrap">
+          <button onclick="toggleFullscreen()" class="btn-secondary text-sm" id="btnFullscreen"><svg id="fullscreenIcon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg><span id="fullscreenText">Tela Cheia</span></button>
+          <button onclick="sendWhatsApp()" class="btn-whatsapp text-sm"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg> WhatsApp</button>
+          <button onclick="printOS()" class="btn-primary text-sm"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg> PDF da OS</button>
+          <button onclick="printChecklistOnly()" class="btn-checklist text-sm"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg> PDF Checklist</button>
         </div>
       </div>
-    </header>
+    </div>
+  </header>
 
-    <main class="max-w-7xl mx-auto px-4 py-6">
-      <div class="flex border-b border-[var(--border)] mb-6 no-print">
-        <button class="tab-button active" data-tab="tab-os">📋 Ordem de Serviço</button>
-        <button class="tab-button" data-tab="tab-checklist">✅ Checklist Técnico</button>
-      </div>
+  <main class="max-w-7xl mx-auto px-4 py-6">
+    <div class="flex border-b border-[var(--border)] mb-6 no-print">
+      <button class="tab-button active" data-tab="tab-os">📋 Ordem de Serviço</button>
+      <button class="tab-button" data-tab="tab-checklist">✅ Checklist Técnico</button>
+      <button class="tab-button" data-tab="tab-clientes">🏢 Clientes</button>
+    </div>
 
-      <div id="tab-os" class="tab-content active">
-        <form id="osForm">
-          <div class="checklist-card p-5 mb-5">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <div><div class="section-header mb-4"><div class="section-icon"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg></div><h2 class="font-display text-xl">Ordem de Serviço</h2></div>
-                <div class="grid grid-cols-2 gap-4"><div><label class="block text-xs text-[var(--muted)] mb-1">Nº da OS</label><input type="text" id="numeroOS" class="form-input font-mono font-semibold text-lg" readonly></div><div><label class="block text-xs text-[var(--muted)] mb-1">Data</label><input type="date" id="dataOS" class="form-input"></div><div class="col-span-2"><label class="block text-xs text-[var(--muted)] mb-1">Tipo de Chamado</label><select id="tipoChamado" class="form-input"><option value="normal">Normal</option><option value="emergencial">Emergencial</option><option value="garantia">Garantia</option><option value="preventiva">Preventiva</option><option value="corretiva">Corretiva</option><option value="retorno_pendencia">Retorno Pendência</option><option value="orcamento">Orçamento</option><option value="contrato">Contrato</option><option value="locacao">Locação</option></select></div></div>
-              </div>
-              <div><div class="section-header mb-4"><div class="section-icon"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div><h2 class="font-display text-xl">Cronômetro</h2></div>
-                <div id="timerContainer" class="text-center mb-4"><div class="timer-display font-mono" id="timerDisplay">00:00:00</div><p class="text-xs text-[var(--muted)] mt-1" id="timerStatus">Pronto</p></div>
-                <div class="flex justify-center gap-2 mb-4 flex-wrap"><button type="button" onclick="startTimer()" class="btn-timer btn-start" id="btnStart">Iniciar</button><button type="button" onclick="pauseTimer()" class="btn-timer btn-pause" id="btnPause" disabled>Almoço</button><button type="button" onclick="stopTimer()" class="btn-timer btn-stop" id="btnStop" disabled>Finalizar</button></div>
-              </div>
+    <!-- ABA OS -->
+    <div id="tab-os" class="tab-content active">
+      <form id="osForm">
+        <div class="checklist-card p-5 mb-5">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div><div class="section-header mb-4"><div class="section-icon"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg></div><h2 class="font-display text-xl">Ordem de Serviço</h2></div>
+              <div class="grid grid-cols-2 gap-4"><div><label class="block text-xs text-[var(--muted)] mb-1">Nº da OS</label><input type="text" id="numeroOS" class="form-input font-mono font-semibold text-lg" readonly></div><div><label class="block text-xs text-[var(--muted)] mb-1">Data</label><input type="date" id="dataOS" class="form-input"></div><div class="col-span-2"><label class="block text-xs text-[var(--muted)] mb-1">Tipo de Chamado</label><select id="tipoChamado" class="form-input"><option value="normal">Normal</option><option value="emergencial">Emergencial</option><option value="garantia">Garantia</option><option value="preventiva">Preventiva</option><option value="corretiva">Corretiva</option><option value="retorno_pendencia">Retorno Pendência</option><option value="orcamento">Orçamento</option><option value="contrato">Contrato</option><option value="locacao">Locação</option></select></div></div>
+            </div>
+            <div><div class="section-header mb-4"><div class="section-icon"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div><h2 class="font-display text-xl">Cronômetro</h2></div>
+              <div id="timerContainer" class="text-center mb-4"><div class="timer-display font-mono" id="timerDisplay">00:00:00</div><p class="text-xs text-[var(--muted)] mt-1" id="timerStatus">Pronto</p></div>
+              <div class="flex justify-center gap-2 mb-4 flex-wrap"><button type="button" onclick="startTimer()" class="btn-timer btn-start" id="btnStart">Iniciar</button><button type="button" onclick="pauseTimer()" class="btn-timer btn-pause" id="btnPause" disabled>Almoço</button><button type="button" onclick="stopTimer()" class="btn-timer btn-stop" id="btnStop" disabled>Finalizar</button></div>
             </div>
           </div>
-
-          <div class="checklist-card p-5 mb-5"><div class="section-header"><div class="section-icon"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg></div><h2 class="font-display text-xl">Dados do Equipamento</h2></div>
-            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
-              <div><label class="block text-xs text-[var(--muted)] mb-1">Marca</label><input type="text" class="form-input uppercase-input" id="marca" placeholder="Ex: Toyota"></div>
-              <div><label class="block text-xs text-[var(--muted)] mb-1">Modelo</label><input type="text" class="form-input uppercase-input" id="modelo"></div>
-              <div><label class="block text-xs text-[var(--muted)] mb-1">Nº Série</label><input type="text" class="form-input uppercase-input" id="numSerie"></div>
-              <div><label class="block text-xs text-[var(--muted)] mb-1">Horímetro</label><input type="text" class="form-input font-bold" id="horimetro" placeholder="Horas"></div>
-              <div><label class="block text-xs text-[var(--muted)] mb-1">Combustível</label><select class="form-input" id="combustivel"><option value="">Selecione</option><option value="eletrico">Elétrico</option><option value="gasolina">Gasolina</option><option value="diesel">Diesel</option><option value="glp">GLP</option></select></div>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-              <div><label class="block text-xs text-[var(--muted)] mb-1">Cliente</label><input type="text" class="form-input uppercase-input" id="cliente"></div>
-              <div><label class="block text-xs text-[var(--muted)] mb-1">CNPJ/CPF</label><input type="text" class="form-input" id="cnpj"></div>
-            </div>
-            <div class="mt-4">
-              <label class="block text-xs text-[var(--muted)] mb-1">Endereço do Cliente</label>
-              <div class="flex gap-2 items-start">
-                <input type="text" class="form-input flex-1 uppercase-input" id="endereco" placeholder="Rua, número, bairro, cidade - CEP">
-                <button type="button" onclick="abrirMapa()" class="btn-secondary text-sm whitespace-nowrap" style="padding: 8px 12px;">
-                  <svg class="w-4 h-4 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg>
-                  Ver no Mapa
-                </button>
-              </div>
-              <div class="text-right mt-1"><a href="#" id="mapLink" target="_blank" class="map-link text-xs">Abrir Google Maps →</a></div>
-            </div>
-          </div>
-
-          <div class="checklist-card p-5 mb-5"><div class="section-header"><div class="section-icon"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></div><h2 class="font-display text-xl">Serviço Realizado</h2></div>
-            <div class="grid grid-cols-1 gap-5">
-              <div><label class="block text-sm font-semibold mb-2">Descrição do Serviço / Diagnóstico</label><textarea id="descricaoServico" class="form-input min-h-24" placeholder="Detalhe o serviço executado..."></textarea></div>
-              <div><label class="block text-sm font-semibold mb-2">Peças e Materiais Aplicados</label><textarea id="pecasAplicadas" class="form-input min-h-20" placeholder="Código, descrição, quantidade..."></textarea></div>
-              <div><label class="block text-sm font-semibold mb-2">Pendências / Itens Críticos</label><textarea id="pendencias" class="form-input min-h-20" placeholder="Itens que necessitam atenção futura..."></textarea></div>
-            </div>
-          </div>
-
-          <div class="checklist-card p-5 mb-5"><div class="section-header"><div class="section-icon"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg></div><h2 class="font-display text-xl">Fotos do Serviço</h2></div>
-            <input type="file" id="fotosServico" multiple accept="image/*" class="form-input mb-3">
-            <div id="fotosPreview" class="photo-preview"></div>
-          </div>
-
-          <div class="checklist-card p-5 mb-5">
-            <div class="section-header"><div class="section-icon"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg></div><h2 class="font-display text-xl">Informações da OS e Horas Trabalhadas</h2></div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div><h3 class="text-sm font-semibold mb-3 text-[var(--accent)]">Dados da OS</h3>
-                <div class="grid grid-cols-2 gap-3">
-                  <div><label class="block text-xs text-[var(--muted)] mb-1">Nº da OS</label><input type="text" id="clienteNumeroOS" class="form-input font-mono" readonly></div>
-                  <div><label class="block text-xs text-[var(--muted)] mb-1">Data</label><input type="text" id="clienteDataOS" class="form-input" readonly></div>
-                  <div class="col-span-2"><label class="block text-xs text-[var(--muted)] mb-1">Cliente</label><input type="text" id="clienteNome" class="form-input uppercase-input" readonly></div>
-                  <div class="col-span-2"><label class="block text-xs text-[var(--muted)] mb-1">Endereço</label><input type="text" id="clienteEndereco" class="form-input uppercase-input" readonly></div>
-                </div>
-              </div>
-              <div><h3 class="text-sm font-semibold mb-3 text-[var(--accent)]">Controle de Horas</h3>
-                <div class="grid grid-cols-2 gap-3">
-                  <div><label class="block text-xs text-[var(--muted)] mb-1">Início</label><input type="time" id="horaInicio" class="form-input text-center font-mono" step="1"></div>
-                  <div><label class="block text-xs text-[var(--muted)] mb-1">Almoço Saída</label><input type="time" id="horaAlmocoSaida" class="form-input text-center font-mono"></div>
-                  <div><label class="block text-xs text-[var(--muted)] mb-1">Almoço Retorno</label><input type="time" id="horaAlmocoRetorno" class="form-input text-center font-mono"></div>
-                  <div><label class="block text-xs text-[var(--muted)] mb-1">Término</label><input type="time" id="horaTermino" class="form-input text-center font-mono"></div>
-                  <div><label class="block text-xs text-[var(--muted)] mb-1">Horas Cobradas</label><input type="text" id="horasTotais" class="form-input text-center font-mono font-semibold" readonly></div>
-                  <div><label class="block text-xs text-[var(--muted)] mb-1">Horas Extras</label><input type="text" id="horasExtras" class="form-input text-center font-mono" placeholder="00:00"></div>
-                  <div><label class="block text-xs text-[var(--muted)] mb-1">Adic. Noturno</label><input type="text" id="adicionalNoturno" class="form-input text-center font-mono" placeholder="00:00"></div>
-                  <div><label class="block text-xs text-[var(--muted)] mb-1">Total Geral</label><input type="text" id="totalGeral" class="form-input text-center font-mono font-semibold" readonly></div>
-                </div>
-                <p class="text-xs text-[var(--muted)] mt-3">✔️ Mínimo de 1 hora cobrada. Frações arredondadas para cima (ex: 1h01 = 2h).</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="checklist-card p-5 mb-5"><div class="section-header"><div class="section-icon"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg></div><h2 class="font-display text-xl">Assinaturas</h2></div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div><label class="block text-xs text-[var(--muted)] mb-1">Técnico</label><input type="text" class="form-input uppercase-input mb-3" id="tecnico"><div class="border-2 border-dashed border-[var(--border)] rounded-lg h-20 flex items-center justify-center text-[var(--muted)] text-sm">Assinatura do Técnico</div></div>
-              <div><label class="block text-xs text-[var(--muted)] mb-1">Recebido por (Cliente)</label><input type="text" class="form-input uppercase-input mb-3" id="recebedor"><div class="border-2 border-dashed border-[var(--border)] rounded-lg h-20 flex items-center justify-center text-[var(--muted)] text-sm">Assinatura do Cliente</div></div>
-            </div>
-          </div>
-
-          <div class="no-print flex flex-wrap gap-3 justify-center mb-8">
-            <button type="button" onclick="saveCurrentOS()" class="btn-primary"> Salvar OS Atual</button>
-            <button type="button" onclick="clearForm()" class="btn-secondary"> Nova OS</button>
-            <button type="button" onclick="downloadBackup()" class="btn-secondary">💾 Backup (JSON)</button>
-            <label class="btn-secondary cursor-pointer">📂 Restaurar Backup<input type="file" id="restoreInput" accept=".json" class="hidden" onchange="restoreBackup(event)"></label>
-          </div>
-        </form>
-      </div>
-
-      <div id="tab-checklist" class="tab-content">
-        <div class="checklist-card p-4 mb-5">
-          <div class="flex items-center justify-between mb-2"><span class="text-sm text-[var(--muted)]">Progresso do Checklist</span><span id="progressText" class="text-[var(--accent)] font-semibold">0%</span></div>
-          <div class="progress-bar"><div id="progressFill" class="progress-fill" style="width:0%"></div></div>
         </div>
-        <div id="checklistSections" class="space-y-4"></div>
+
+        <div class="checklist-card p-5 mb-5"><div class="section-header"><div class="section-icon"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg></div><h2 class="font-display text-xl">Dados do Equipamento</h2></div>
+          <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+            <div><label class="block text-xs text-[var(--muted)] mb-1">Marca</label><input type="text" class="form-input uppercase-input" id="marca"></div>
+            <div><label class="block text-xs text-[var(--muted)] mb-1">Modelo</label><input type="text" class="form-input uppercase-input" id="modelo"></div>
+            <div><label class="block text-xs text-[var(--muted)] mb-1">Nº Série</label><input type="text" class="form-input uppercase-input" id="numSerie"></div>
+            <div><label class="block text-xs text-[var(--muted)] mb-1">Horímetro</label><input type="text" class="form-input" id="horimetro"></div>
+            <div><label class="block text-xs text-[var(--muted)] mb-1">Combustível</label><select class="form-input" id="combustivel"><option value="">Selecione</option><option value="eletrico">Elétrico</option><option value="gasolina">Gasolina</option><option value="diesel">Diesel</option><option value="glp">GLP</option></select></div>
+            <div><label class="block text-xs text-[var(--muted)] mb-1">📱 WhatsApp</label><input type="text" class="form-input" id="whatsappCliente"></div>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+            <div><label class="block text-xs text-[var(--muted)] mb-1">Cliente</label><input type="text" class="form-input uppercase-input" id="cliente"></div>
+            <div><label class="block text-xs text-[var(--muted)] mb-1">CNPJ/CPF</label><input type="text" class="form-input" id="cnpj" placeholder="Digite o CNPJ para buscar cliente"></div>
+            <div><label class="block text-xs text-[var(--muted)] mb-1">Cidade</label><input type="text" class="form-input uppercase-input" id="cidadeCliente" placeholder="Cidade - UF"></div>
+          </div>
+          <div class="mt-4">
+            <label class="block text-xs text-[var(--muted)] mb-1">Endereço do Cliente</label>
+            <div class="flex gap-2 items-start">
+              <input type="text" class="form-input flex-1 uppercase-input" id="endereco">
+              <button type="button" onclick="abrirMapa()" class="btn-secondary text-sm whitespace-nowrap" style="padding:8px 12px;"><svg class="w-4 h-4 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg> Ver no Mapa</button>
+            </div>
+            <div class="text-right mt-1"><a href="#" id="mapLink" target="_blank" class="map-link text-xs">Abrir Google Maps →</a></div>
+          </div>
+        </div>
+
+        <div class="checklist-card p-5 mb-5"><div class="section-header"><div class="section-icon"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></div><h2 class="font-display text-xl">Serviço Realizado</h2></div>
+          <div class="grid grid-cols-1 gap-5">
+            <div><label class="block text-sm font-semibold mb-2">Descrição do Serviço / Diagnóstico</label><textarea id="descricaoServico" class="form-input min-h-24"></textarea></div>
+            <div><label class="block text-sm font-semibold mb-2">Peças e Materiais Aplicados</label><textarea id="pecasAplicadas" class="form-input min-h-20"></textarea></div>
+            <div><label class="block text-sm font-semibold mb-2">Pendências / Itens Críticos</label><textarea id="pendencias" class="form-input min-h-20"></textarea></div>
+          </div>
+        </div>
+
+        <div class="checklist-card p-5 mb-5"><div class="section-header"><div class="section-icon"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg></div><h2 class="font-display text-xl">Fotos do Serviço</h2></div>
+          <input type="file" id="fotosServico" multiple accept="image/*" class="form-input mb-3">
+          <div id="fotosPreview" class="photo-preview"></div>
+        </div>
+
+        <div class="checklist-card p-5 mb-5">
+          <div class="section-header"><div class="section-icon"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg></div><h2 class="font-display text-xl">Informações da OS e Horas Trabalhadas</h2></div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div><h3 class="text-sm font-semibold mb-3 text-[var(--accent)]">Dados da OS</h3>
+              <div class="grid grid-cols-2 gap-3">
+                <div><label class="block text-xs text-[var(--muted)] mb-1">Nº da OS</label><input type="text" id="clienteNumeroOS" class="form-input font-mono" readonly></div>
+                <div><label class="block text-xs text-[var(--muted)] mb-1">Data</label><input type="text" id="clienteDataOS" class="form-input" readonly></div>
+                <div class="col-span-2"><label class="block text-xs text-[var(--muted)] mb-1">Cliente</label><input type="text" id="clienteNome" class="form-input uppercase-input" readonly></div>
+                <div class="col-span-2"><label class="block text-xs text-[var(--muted)] mb-1">Cidade</label><input type="text" id="clienteCidade" class="form-input uppercase-input" readonly></div>
+                <div class="col-span-2"><label class="block text-xs text-[var(--muted)] mb-1">Endereço</label><input type="text" id="clienteEndereco" class="form-input uppercase-input" readonly></div>
+              </div>
+            </div>
+            <div><h3 class="text-sm font-semibold mb-3 text-[var(--accent)]">Controle de Horas</h3>
+              <div class="grid grid-cols-2 gap-3">
+                <div><label class="block text-xs text-[var(--muted)] mb-1">Início</label><input type="time" id="horaInicio" class="form-input text-center font-mono" step="1"></div>
+                <div><label class="block text-xs text-[var(--muted)] mb-1">Almoço Saída</label><input type="time" id="horaAlmocoSaida" class="form-input text-center font-mono"></div>
+                <div><label class="block text-xs text-[var(--muted)] mb-1">Almoço Retorno</label><input type="time" id="horaAlmocoRetorno" class="form-input text-center font-mono"></div>
+                <div><label class="block text-xs text-[var(--muted)] mb-1">Término</label><input type="time" id="horaTermino" class="form-input text-center font-mono"></div>
+                <div><label class="block text-xs text-[var(--muted)] mb-1">Horas Cobradas</label><input type="text" id="horasTotais" class="form-input text-center font-mono font-semibold" readonly></div>
+                <div><label class="block text-xs text-[var(--muted)] mb-1">Horas Extras</label><input type="text" id="horasExtras" class="form-input text-center font-mono" placeholder="00:00"></div>
+                <div><label class="block text-xs text-[var(--muted)] mb-1">Adic. Noturno</label><input type="text" id="adicionalNoturno" class="form-input text-center font-mono" placeholder="00:00"></div>
+                <div><label class="block text-xs text-[var(--muted)] mb-1">Total Geral</label><input type="text" id="totalGeral" class="form-input text-center font-mono font-semibold" readonly></div>
+              </div>
+              <p class="text-xs text-[var(--muted)] mt-3">✔️ Mínimo de 1 hora cobrada. Frações arredondadas para cima.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="checklist-card p-5 mb-5"><div class="section-header"><div class="section-icon"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg></div><h2 class="font-display text-xl">Assinaturas</h2></div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div><label class="block text-xs text-[var(--muted)] mb-1">Técnico</label><input type="text" class="form-input uppercase-input mb-3" id="tecnico" value="LEONARDO MARTINS"><div class="border-2 border-dashed border-[var(--border)] rounded-lg h-20 flex items-center justify-center text-[var(--muted)] text-sm">Assinatura do Técnico</div></div>
+            <div><label class="block text-xs text-[var(--muted)] mb-1">Recebido por (Cliente)</label><input type="text" class="form-input uppercase-input mb-3" id="recebedor"><div class="border-2 border-dashed border-[var(--border)] rounded-lg h-20 flex items-center justify-center text-[var(--muted)] text-sm">Assinatura do Cliente</div></div>
+          </div>
+        </div>
+
+        <div class="no-print flex flex-wrap gap-3 justify-center mb-8">
+          <button type="button" onclick="saveCurrentOS()" class="btn-primary"> Salvar OS Atual</button>
+          <button type="button" onclick="clearForm()" class="btn-secondary"> Nova OS</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- ABA CHECKLIST -->
+    <div id="tab-checklist" class="tab-content">
+      <div class="checklist-card p-4 mb-5">
+        <div class="flex items-center justify-between mb-2"><span class="text-sm text-[var(--muted)]">Progresso do Checklist</span><span id="progressText" class="text-[var(--accent)] font-semibold">0%</span></div>
+        <div class="progress-bar"><div id="progressFill" class="progress-fill" style="width:0%"></div></div>
       </div>
-    </main>
-    <footer class="no-print border-t border-[var(--border)] py-4 mt-8 text-center text-xs text-[var(--muted)]">MARLIFT EMPILHADEIRAS - Sistema Profissional</footer>
-  </div>
-  <div id="toast" class="toast"><svg class="w-5 h-5 text-[var(--success)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><span id="toastMessage">Operação realizada!</span></div>
+      <div id="checklistSections" class="space-y-4"></div>
+    </div>
 
-  <script>
-    // ==================== CHECKLIST DATA ====================
-    const checklistData = [
-      { id:'motor', title:'Motor e Componentes', items:[{id:'motor_oleo',label:'Nível de óleo do motor'},{id:'motor_filtro_oleo',label:'Filtro de óleo'},{id:'motor_filtro_ar',label:'Filtro de ar'},{id:'motor_filtro_comb',label:'Filtro de combustível'},{id:'motor_correias',label:'Correias'},{id:'motor_radiador',label:'Radiador e arrefecimento'},{id:'motor_velas',label:'Velas de ignição'},{id:'motor_mangueiras',label:'Mangueiras e conexões'}] },
-      { id:'eletrico', title:'Sistema Elétrico', items:[{id:'eletr_bateria',label:'Bateria'},{id:'eletr_terminais',label:'Terminais e cabos'},{id:'eletr_alternador',label:'Alternador'},{id:'eletr_partida',label:'Motor de partida'},{id:'eletr_farois',label:'Faróis e lanternas'},{id:'eletr_buzina',label:'Buzina'},{id:'eletr_painel',label:'Painel'},{id:'eletr_fusiveis',label:'Fusíveis'}] },
-      { id:'hidraulico', title:'Sistema Hidráulico', items:[{id:'hidr_oleo',label:'Nível óleo hidráulico'},{id:'hidr_bomba',label:'Bomba hidráulica'},{id:'hidr_cilindros',label:'Cilindros elevação'},{id:'hidr_inclinacao',label:'Cilindros inclinação'},{id:'hidr_valvulas',label:'Válvulas'},{id:'hidr_vazamentos',label:'Vazamentos'},{id:'hidr_mangueiras',label:'Mangueiras'}] },
-      { id:'transmissao', title:'Transmissão e Freios', items:[{id:'trans_oleo',label:'Óleo transmissão'},{id:'trans_eixo',label:'Eixo traseiro'},{id:'trans_juntas',label:'Juntas homocinéticas'},{id:'freio_servico',label:'Freio serviço'},{id:'freio_estac',label:'Freio estacionamento'},{id:'freio_pastilhas',label:'Pastilhas/lonas'},{id:'freio_fluido',label:'Fluido freio'}] },
-      { id:'direcao', title:'Direção', items:[{id:'dir_volante',label:'Volante'},{id:'dir_caixa',label:'Caixa direção'},{id:'dir_hidraulica',label:'Direção hidráulica'},{id:'dir_fluido',label:'Fluido direção'},{id:'dir_terminais',label:'Terminais'}] },
-      { id:'estrutura', title:'Estrutura e Garfos', items:[{id:'est_chassi',label:'Chassi'},{id:'est_mastros',label:'Mastros'},{id:'est_correntes',label:'Correntes'},{id:'est_roletes',label:'Roletes'},{id:'est_garfos',label:'Garfos'},{id:'est_travas',label:'Travas'}] },
-      { id:'rodas', title:'Rodas e Pneus', items:[{id:'rod_pneus_diant',label:'Pneus dianteiros'},{id:'rod_pneus_tras',label:'Pneus traseiros'},{id:'rod_pressao',label:'Pressão'},{id:'rod_desgaste',label:'Desgaste'},{id:'rod_rolamentos',label:'Rolamentos'},{id:'rod_porcas',label:'Porcas'}] },
-      { id:'seguranca', title:'Segurança', items:[{id:'seg_cinto',label:'Cinto segurança'},{id:'seg_extintor',label:'Extintor'},{id:'seg_espelhos',label:'Espelhos'},{id:'seg_alarme',label:'Alarme ré'},{id:'seg_luzes',label:'Luzes'},{id:'seg_giroflex',label:'Giroflex'},{id:'seg_plataforma',label:'Plataforma'},{id:'seg_assento',label:'Assento'}] },
-      { id:'bateria', title:'Bateria (Elétricos)', items:[{id:'bat_estado',label:'Estado geral'},{id:'bat_carga',label:'Carga'},{id:'bat_eletrolito',label:'Eletrólito'},{id:'bat_terminais',label:'Terminais'},{id:'bat_carregador',label:'Carregador'}] },
-      { id:'lubrificacao', title:'Lubrificação', items:[{id:'lub_mastros',label:'Mastros/correntes'},{id:'lub_pivos',label:'Pivôs'},{id:'lub_rolamentos',label:'Rolamentos'},{id:'lub_pedais',label:'Pedais'},{id:'lub_geral',label:'Pontos gerais'}] }
-    ];
+    <!-- ABA CLIENTES -->
+    <div id="tab-clientes" class="tab-content">
+      <div class="cliente-card"><div class="section-header"><div class="section-icon"><i class="fas fa-users text-[var(--accent)] text-xl"></i></div><h2 class="font-display text-xl">Cadastro de Clientes</h2></div>
+        <div class="cliente-form-grid">
+          <div class="cliente-input-group"><label>Nome*</label><input type="text" id="cad_nome"></div>
+          <div class="cliente-input-group"><label>CNPJ*</label><input type="text" id="cad_cnpj"></div>
+          <div class="cliente-input-group"><label>Endereço</label><input type="text" id="cad_endereco"></div>
+          <div class="cliente-input-group"><label>Cidade</label><input type="text" id="cad_cidade"></div>
+          <div class="cliente-input-group"><label>Marca</label><input type="text" id="cad_marca"></div>
+          <div class="cliente-input-group"><label>Modelo</label><input type="text" id="cad_modelo"></div>
+          <div class="cliente-input-group"><label>Série</label><input type="text" id="cad_serie"></div>
+          <div class="cliente-input-group"><label>Quantidade</label><input type="number" id="cad_quantidade" value="1"></div>
+          <div class="cliente-input-group"><label>Telefone</label><input type="text" id="cad_telefone"></div>
+          <div class="cliente-input-group"><label>WhatsApp</label><input type="text" id="cad_whatsapp"></div>
+        </div>
+        <div class="flex gap-3 mt-5">
+          <button id="cad_btnSalvar" class="btn-primary">Adicionar Cliente</button>
+          <button id="cad_btnCancelar" class="btn-secondary" style="display: none;">Cancelar</button>
+        </div>
+      </div>
+      <div class="flex justify-between items-center my-4 flex-wrap gap-3">
+        <input type="text" id="cad_searchInput" class="cliente-search" placeholder="Buscar cliente...">
+      </div>
+      <div class="cliente-table-wrapper"><table class="cliente-table"><thead><tr><th>Nome</th><th>Endereço</th><th>Cidade</th><th>Marca</th><th>Modelo</th><th>Série</th><th>Qtd</th><th>Telefone</th><th>WhatsApp</th><th>CNPJ</th><th>Ações</th></tr></thead><tbody id="cad_tableBody"></tbody></table></div>
+    </div>
+  </main>
+  <footer class="no-print border-t border-[var(--border)] py-4 mt-8 text-center text-xs text-[var(--muted)]">MARLIFT EMPILHADEIRAS - Sistema Profissional</footer>
+</div>
+<div id="toast" class="toast"><svg class="w-5 h-5 text-[var(--success)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><span id="toastMessage"></span></div>
 
-    // ==================== VARIÁVEIS GLOBAIS ====================
-    let timerInterval = null, timerSeconds = 0, timerRunning = false, timerPaused = false;
-    let totalCheckItems = 0, checkedItems = 0;
-    let photosData = [];
+<script>
+  // ==================== CHECKLIST COMPLETO ====================
+  const checklistData = [
+    { id:'motor', title:'Motor e Componentes', items:[{id:'motor_oleo',label:'Nível de óleo do motor'},{id:'motor_filtro_oleo',label:'Filtro de óleo'},{id:'motor_filtro_ar',label:'Filtro de ar'},{id:'motor_filtro_comb',label:'Filtro de combustível'},{id:'motor_correias',label:'Correias'},{id:'motor_radiador',label:'Radiador e arrefecimento'},{id:'motor_velas',label:'Velas de ignição'},{id:'motor_mangueiras',label:'Mangueiras e conexões'}] },
+    { id:'eletrico', title:'Sistema Elétrico', items:[{id:'eletr_bateria',label:'Bateria'},{id:'eletr_terminais',label:'Terminais e cabos'},{id:'eletr_alternador',label:'Alternador'},{id:'eletr_partida',label:'Motor de partida'},{id:'eletr_farois',label:'Faróis e lanternas'},{id:'eletr_buzina',label:'Buzina'},{id:'eletr_painel',label:'Painel'},{id:'eletr_fusiveis',label:'Fusíveis'}] },
+    { id:'hidraulico', title:'Sistema Hidráulico', items:[{id:'hidr_oleo',label:'Nível óleo hidráulico'},{id:'hidr_bomba',label:'Bomba hidráulica'},{id:'hidr_cilindros',label:'Cilindros elevação'},{id:'hidr_inclinacao',label:'Cilindros inclinação'},{id:'hidr_valvulas',label:'Válvulas'},{id:'hidr_vazamentos',label:'Vazamentos'},{id:'hidr_mangueiras',label:'Mangueiras'}] },
+    { id:'transmissao', title:'Transmissão e Freios', items:[{id:'trans_oleo',label:'Óleo transmissão'},{id:'trans_eixo',label:'Eixo traseiro'},{id:'trans_juntas',label:'Juntas homocinéticas'},{id:'freio_servico',label:'Freio serviço'},{id:'freio_estac',label:'Freio estacionamento'},{id:'freio_pastilhas',label:'Pastilhas/lonas'},{id:'freio_fluido',label:'Fluido freio'}] },
+    { id:'direcao', title:'Direção', items:[{id:'dir_volante',label:'Volante'},{id:'dir_caixa',label:'Caixa direção'},{id:'dir_hidraulica',label:'Direção hidráulica'},{id:'dir_fluido',label:'Fluido direção'},{id:'dir_terminais',label:'Terminais'}] },
+    { id:'estrutura', title:'Estrutura e Garfos', items:[{id:'est_chassi',label:'Chassi'},{id:'est_mastros',label:'Mastros'},{id:'est_correntes',label:'Correntes'},{id:'est_roletes',label:'Roletes'},{id:'est_garfos',label:'Garfos'},{id:'est_travas',label:'Travas'}] },
+    { id:'rodas', title:'Rodas e Pneus', items:[{id:'rod_pneus_diant',label:'Pneus dianteiros'},{id:'rod_pneus_tras',label:'Pneus traseiros'},{id:'rod_pressao',label:'Pressão'},{id:'rod_desgaste',label:'Desgaste'},{id:'rod_rolamentos',label:'Rolamentos'},{id:'rod_porcas',label:'Porcas'}] },
+    { id:'seguranca', title:'Segurança', items:[{id:'seg_cinto',label:'Cinto segurança'},{id:'seg_extintor',label:'Extintor'},{id:'seg_espelhos',label:'Espelhos'},{id:'seg_alarme',label:'Alarme ré'},{id:'seg_luzes',label:'Luzes'},{id:'seg_giroflex',label:'Giroflex'},{id:'seg_plataforma',label:'Plataforma'},{id:'seg_assento',label:'Assento'}] },
+    { id:'bateria', title:'Bateria (Elétricos)', items:[{id:'bat_estado',label:'Estado geral'},{id:'bat_carga',label:'Carga'},{id:'bat_eletrolito',label:'Eletrólito'},{id:'bat_terminais',label:'Terminais'},{id:'bat_carregador',label:'Carregador'}] },
+    { id:'lubrificacao', title:'Lubrificação', items:[{id:'lub_mastros',label:'Mastros/correntes'},{id:'lub_pivos',label:'Pivôs'},{id:'lub_rolamentos',label:'Rolamentos'},{id:'lub_pedais',label:'Pedais'},{id:'lub_geral',label:'Pontos gerais'}] }
+  ];
 
-    // ==================== FULLSCREEN FUNCTION ====================
-    function toggleFullscreen() {
-      if (!document.fullscreenElement) {
-        document.documentElement.requestFullscreen().catch(err => {
-          alert(`Erro ao tentar abrir em tela cheia: ${err.message}`);
-        });
-      } else {
-        if (document.exitFullscreen) {
-          document.exitFullscreen();
-        }
-      }
-    }
+  let timerInterval = null, timerSeconds = 0, timerRunning = false, timerPaused = false;
+  let totalCheckItems = 0, checkedItems = 0;
+  let photosData = [];
+  let cadClients = [];
+  let editingClientId = null;
 
-    document.addEventListener('fullscreenchange', () => {
-      const btn = document.getElementById('btnFullscreen');
-      const icon = document.getElementById('fullscreenIcon');
-      const text = document.getElementById('fullscreenText');
-      
-      if (document.fullscreenElement) {
-        text.textContent = 'Sair';
-        icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 9V4.5M9 9H4.5M9 9L3.75 3.75M9 15v4.5M9 15H4.5M9 15l-5.25 5.25M15 9h4.5M15 9V4.5M15 9l5.25-5.25M15 15h4.5M15 15v4.5m0-4.5l5.25 5.25"/>';
-      } else {
-        text.textContent = 'Tela Cheia';
-        icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/>';
-      }
-    });
-
-    // ==================== AUTO-HIDE HEADER ON SCROLL ====================
-    let lastScrollTop = 0;
-    const delta = 5; // Sensibilidade do scroll
-    const navbarHeight = 80; // Altura aproximada do header
-    const headerElement = document.querySelector('header');
-
-    window.addEventListener('scroll', () => {
-      const st = window.scrollY;
-
-      // Verifica se o scroll foi significativo o suficiente para ignorar "vibrações"
-      if (Math.abs(lastScrollTop - st) <= delta) return;
-
-      if (st > lastScrollTop && st > navbarHeight) {
-        // Scroll para BAIXO -> Esconde Header
-        headerElement.classList.add('header-hidden');
-      } else {
-        // Scroll para CIMA -> Mostra Header
-        // Verificação extra para garantir que não estamos no "bounce" do final da página
-        if (st + window.innerHeight < document.body.scrollHeight) {
-          headerElement.classList.remove('header-hidden');
-        }
-      }
-      lastScrollTop = st;
-    });
-
-    // ==================== FUNÇÕES DE INICIALIZAÇÃO ====================
-    function init() {
-      generateOSNumber(); setDefaultDate(); renderChecklist(); loadDraft(); updateProgress(); setupEventListeners(); updateTotalGeral();
-      document.getElementById('fotosServico').addEventListener('change', handlePhotoUpload);
-      document.querySelectorAll('.tab-button').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const tabId = btn.getAttribute('data-tab');
-          document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-          document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-          document.getElementById(tabId).classList.add('active');
-        });
-      });
-      document.querySelectorAll('.uppercase-input').forEach(input => {
-        input.addEventListener('input', function() { this.value = this.value.toUpperCase(); });
-      });
-      const enderecoInput = document.getElementById('endereco');
-      enderecoInput.addEventListener('input', atualizarLinkMapa);
-      atualizarLinkMapa();
-      
-      const numeroOS = document.getElementById('numeroOS');
-      const dataOS = document.getElementById('dataOS');
-      const cliente = document.getElementById('cliente');
-      const endereco = document.getElementById('endereco');
-      const clienteNumeroOS = document.getElementById('clienteNumeroOS');
-      const clienteDataOS = document.getElementById('clienteDataOS');
-      const clienteNome = document.getElementById('clienteNome');
-      const clienteEndereco = document.getElementById('clienteEndereco');
-      
-      function syncClienteFields() {
-        clienteNumeroOS.value = numeroOS.value;
-        clienteDataOS.value = dataOS.value;
-        clienteNome.value = cliente.value;
-        clienteEndereco.value = endereco.value;
-      }
-      numeroOS.addEventListener('change', syncClienteFields);
-      dataOS.addEventListener('change', syncClienteFields);
-      cliente.addEventListener('input', syncClienteFields);
-      endereco.addEventListener('input', syncClienteFields);
+  // ==================== FUNÇÕES AUXILIARES ====================
+  function showToast(msg, isError=false) { const toast=document.getElementById('toast'); document.getElementById('toastMessage').textContent=msg; toast.classList.add('show'); setTimeout(()=>toast.classList.remove('show'),3000); }
+  function toggleFullscreen() { if (!document.fullscreenElement) document.documentElement.requestFullscreen(); else document.exitFullscreen(); }
+  document.addEventListener('fullscreenchange', () => { const btn=document.getElementById('btnFullscreen'), icon=document.getElementById('fullscreenIcon'), text=document.getElementById('fullscreenText'); if (document.fullscreenElement) { text.textContent='Sair'; icon.innerHTML='<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 9V4.5M9 9H4.5M9 9L3.75 3.75M9 15v4.5M9 15H4.5M9 15l-5.25 5.25M15 9h4.5M15 9V4.5M15 9l5.25-5.25M15 15h4.5M15 15v4.5m0-4.5l5.25 5.25"/>'; } else { text.textContent='Tela Cheia'; icon.innerHTML='<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/>'; } });
+  let lastScrollTop=0; window.addEventListener('scroll',()=>{ const st=window.scrollY; if(Math.abs(lastScrollTop-st)<=5) return; const header=document.querySelector('header'); if(st>lastScrollTop && st>80) header.classList.add('header-hidden'); else if(st+window.innerHeight<document.body.scrollHeight) header.classList.remove('header-hidden'); lastScrollTop=st; });
+  
+  function generateOSNumber() { 
+    let c=parseInt(localStorage.getItem('marlift_os_counter')||'0')+1; 
+    const now=new Date(); 
+    const os=`OS-${now.getFullYear()}${String(now.getMonth()+1).padStart(2,'0')}-${String(c).padStart(4,'0')}`; 
+    document.getElementById('numeroOS').value=os; 
+    document.getElementById('clienteNumeroOS').value=os; 
+    localStorage.setItem('marlift_os_counter', c);
+  }
+  
+  function setDefaultDate() { const hoje=new Date().toISOString().split('T')[0]; document.getElementById('dataOS').value=hoje; document.getElementById('clienteDataOS').value=hoje; }
+  function atualizarLinkMapa() { const end=document.getElementById('endereco').value; const link=document.getElementById('mapLink'); if(end){ link.href=`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(end)}`; link.style.display='inline-flex'; } else link.style.display='none'; }
+  function abrirMapa(){ const end=document.getElementById('endereco').value; if(end) window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(end)}`,'_blank'); else showToast('Digite o endereço primeiro'); }
+  
+  function syncClienteFields() {
+    document.getElementById('clienteNumeroOS').value = document.getElementById('numeroOS').value;
+    document.getElementById('clienteDataOS').value = document.getElementById('dataOS').value;
+    document.getElementById('clienteNome').value = document.getElementById('cliente').value;
+    document.getElementById('clienteCidade').value = document.getElementById('cidadeCliente').value;
+    document.getElementById('clienteEndereco').value = document.getElementById('endereco').value;
+  }
+  
+  function buscarClientePorCNPJ() {
+    const cnpj = document.getElementById('cnpj').value.trim();
+    if(!cnpj) return;
+    const numeros = cnpj.replace(/\D/g,'');
+    const cliente = cadClients.find(c => (c.cnpj||'').replace(/\D/g,'') === numeros);
+    if(cliente){
+      document.getElementById('cliente').value = cliente.nome.toUpperCase();
+      document.getElementById('cidadeCliente').value = (cliente.cidade||'').toUpperCase();
+      document.getElementById('endereco').value = (cliente.endereco||'').toUpperCase();
+      document.getElementById('whatsappCliente').value = cliente.whatsapp||'';
+      document.getElementById('marca').value = (cliente.marca || '').toUpperCase();
+      document.getElementById('modelo').value = (cliente.modelo || '').toUpperCase();
+      document.getElementById('numSerie').value = (cliente.serie || '').toUpperCase();
       syncClienteFields();
+      atualizarLinkMapa();
+      showToast(`Cliente ${cliente.nome} carregado`);
     }
+  }
 
-    function atualizarLinkMapa() {
-      const endereco = document.getElementById('endereco').value;
-      const link = document.getElementById('mapLink');
-      if (endereco) {
-        const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(endereco)}`;
-        link.href = url;
-        link.style.display = 'inline-flex';
-      } else {
-        link.style.display = 'none';
-      }
-    }
+  // ==================== CRONÔMETRO ====================
+  function startTimer() { if(timerRunning) return; timerRunning=true; timerPaused=false; document.getElementById('timerContainer').classList.add('timer-running'); document.getElementById('timerStatus').textContent='Serviço em andamento'; document.getElementById('btnStart').disabled=true; document.getElementById('btnPause').disabled=false; document.getElementById('btnStop').disabled=false; if(!document.getElementById('horaInicio').value) document.getElementById('horaInicio').value=new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}); timerInterval=setInterval(()=>{ if(!timerPaused){ timerSeconds++; const h=Math.floor(timerSeconds/3600),m=Math.floor((timerSeconds%3600)/60),s=timerSeconds%60; document.getElementById('timerDisplay').textContent=`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`; } },1000); }
+  function pauseTimer() { if(!timerRunning) return; timerPaused=true; document.getElementById('timerStatus').textContent='Pausa almoço'; document.getElementById('btnPause').textContent='Retornar'; document.getElementById('btnPause').onclick=resumeTimer; if(!document.getElementById('horaAlmocoSaida').value) document.getElementById('horaAlmocoSaida').value=new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}); }
+  function resumeTimer() { timerPaused=false; document.getElementById('timerStatus').textContent='Serviço em andamento'; document.getElementById('btnPause').textContent='Almoço'; document.getElementById('btnPause').onclick=pauseTimer; if(!document.getElementById('horaAlmocoRetorno').value) document.getElementById('horaAlmocoRetorno').value=new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}); }
+  function stopTimer() { if(!timerRunning) return; clearInterval(timerInterval); timerRunning=false; document.getElementById('timerContainer').classList.remove('timer-running'); document.getElementById('timerStatus').textContent='Finalizado'; document.getElementById('btnStart').disabled=false; document.getElementById('btnPause').disabled=true; document.getElementById('btnStop').disabled=true; if(!document.getElementById('horaTermino').value) document.getElementById('horaTermino').value=new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}); calculateTotals(); }
+  function timeDiff(start,end) { if(!start||!end) return 0; let [sh,sm]=start.split(':').map(Number),[eh,em]=end.split(':').map(Number); let diff=(eh*60+em)-(sh*60+sm); if(diff<0) diff+=1440; return diff; }
+  function calculateTotals(){ const inicio=document.getElementById('horaInicio').value,termino=document.getElementById('horaTermino').value,saida=document.getElementById('horaAlmocoSaida').value,retorno=document.getElementById('horaAlmocoRetorno').value; if(!inicio||!termino) return; let total=timeDiff(inicio,termino); if(saida&&retorno) total-=timeDiff(saida,retorno); let horas=Math.ceil(total/60); if(horas<1) horas=1; document.getElementById('horasTotais').value=`${horas}h`; updateTotalGeral(); }
+  function timeToMinutes(t){ if(!t) return 0; if(t.includes('h')) return parseInt(t)*60; let p=t.split(':'); return parseInt(p[0])*60+parseInt(p[1]); }
+  function updateTotalGeral(){ const horasStr=document.getElementById('horasTotais').value; let horasMin=0; if(horasStr){ const m=horasStr.match(/(\d+)h/); if(m) horasMin=parseInt(m[1])*60; } const extra=timeToMinutes(document.getElementById('horasExtras').value); const noturno=timeToMinutes(document.getElementById('adicionalNoturno').value); let total=horasMin+extra+noturno; const h=Math.floor(total/60),m=total%60; document.getElementById('totalGeral').value=`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`; }
+  function setupEventListeners(){ ['horaInicio','horaAlmocoSaida','horaAlmocoRetorno','horaTermino'].forEach(id=>document.getElementById(id).addEventListener('change',calculateTotals)); document.getElementById('horasExtras').addEventListener('input',updateTotalGeral); document.getElementById('adicionalNoturno').addEventListener('input',updateTotalGeral); }
 
-    function abrirMapa() {
-      const endereco = document.getElementById('endereco').value;
-      if (endereco) {
-        window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(endereco)}`, '_blank');
-      } else {
-        showToast('Digite o endereço primeiro');
-      }
-    }
+  // ==================== FOTOS ====================
+  function handlePhotoUpload(e){ const files=Array.from(e.target.files); const preview=document.getElementById('fotosPreview'); photosData=[]; preview.innerHTML=''; files.forEach(file=>{ const reader=new FileReader(); reader.onload=(ev)=>{ photosData.push(ev.target.result); const div=document.createElement('div'); div.className='photo-item'; div.innerHTML=`<img src="${ev.target.result}"><div class="photo-remove" onclick="removePhoto(this)">×</div>`; preview.appendChild(div); }; reader.readAsDataURL(file); }); }
+  function removePhoto(el){ const idx=Array.from(el.parentNode.parentNode.children).indexOf(el.parentNode); if(idx!==-1) photosData.splice(idx,1); el.parentNode.remove(); }
 
-    function generateOSNumber() { let c = parseInt(localStorage.getItem('marlift_os_counter') || '0') + 1; const now=new Date(); const os=`OS-${now.getFullYear()}${String(now.getMonth()+1).padStart(2,'0')}-${String(c).padStart(4,'0')}`; document.getElementById('numeroOS').value=os; document.getElementById('clienteNumeroOS').value=os; }
-    function setDefaultDate() { const hoje = new Date().toISOString().split('T')[0]; document.getElementById('dataOS').value=hoje; document.getElementById('clienteDataOS').value=hoje; }
-
-    // ==================== RENDER CHECKLIST ====================
-    function renderChecklist() {
-      const container = document.getElementById('checklistSections');
-      totalCheckItems = 0;
-      container.innerHTML = '';
-      checklistData.forEach(section => {
-        totalCheckItems += section.items.length;
-        const div = document.createElement('div');
-        div.className = 'checklist-card p-5 mb-4';
-        div.id = `section-${section.id}`;
-        div.innerHTML = `
-          <div class="section-header">
-            <div class="section-icon"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg></div>
-            <h2 class="font-display text-xl">${section.title}</h2>
-            <button type="button" class="select-all-btn ml-auto" data-section="${section.id}">Selecionar Todos</button>
-          </div>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-2" id="items-${section.id}">
-            ${section.items.map(item => `
-              <div class="flex items-center justify-between p-2 rounded bg-[var(--bg)]">
-                <label class="check-item flex items-center gap-2 flex-1 cursor-pointer">
-                  <input type="checkbox" data-check="true" id="${item.id}">
-                  <span class="checkmark"><svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg></span>
-                  <span class="text-sm">${item.label}</span>
-                </label>
-                <select class="form-input w-20 text-xs ml-2" id="${item.id}_status">
-                  <option value="ok">OK</option>
-                  <option value="atencao">Aten.</option>
-                  <option value="critico">Crit.</option>
-                  <option value="na">N/A</option>
-                </select>
-              </div>
-            `).join('')}
-          </div>
-        `;
-        container.appendChild(div);
+  // ==================== CHECKLIST RENDER ====================
+  function renderChecklist() {
+    const container=document.getElementById('checklistSections');
+    totalCheckItems=0;
+    container.innerHTML='';
+    checklistData.forEach(section=>{
+      totalCheckItems+=section.items.length;
+      const div=document.createElement('div');
+      div.className='checklist-card p-5 mb-4';
+      div.innerHTML=`<div class="section-header"><div class="section-icon"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg></div><h2 class="font-display text-xl">${section.title}</h2><button type="button" class="select-all-btn ml-auto" data-section="${section.id}">Selecionar Todos</button></div><div class="grid grid-cols-1 md:grid-cols-2 gap-2" id="items-${section.id}">${section.items.map(item=>`<div class="flex items-center justify-between p-2 rounded bg-[var(--bg)]"><label class="check-item flex items-center gap-2 flex-1 cursor-pointer"><input type="checkbox" data-check="true" id="${item.id}"><span class="checkmark"><svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg></span><span class="text-sm">${item.label}</span></label><select class="form-input w-20 text-xs ml-2" id="${item.id}_status"><option value="ok">OK</option><option value="atencao">Aten.</option><option value="critico">Crit.</option><option value="na">N/A</option></select></div>`).join('')}</div>`;
+      container.appendChild(div);
+    });
+    document.querySelectorAll('.select-all-btn').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        const sectionId=btn.getAttribute('data-section');
+        const section=checklistData.find(s=>s.id===sectionId);
+        if(section){
+          const checkboxes=section.items.map(item=>document.getElementById(item.id));
+          const allChecked=checkboxes.every(cb=>cb.checked);
+          checkboxes.forEach(cb=>cb.checked=!allChecked);
+          updateProgress();
+        }
       });
-      document.querySelectorAll('.select-all-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          const sectionId = btn.getAttribute('data-section');
-          const section = checklistData.find(s => s.id === sectionId);
-          if (section) {
-            const checkboxes = section.items.map(item => document.getElementById(item.id));
-            const allChecked = checkboxes.every(cb => cb.checked);
-            checkboxes.forEach(cb => cb.checked = !allChecked);
-            updateProgress();
+    });
+    document.querySelectorAll('input[data-check="true"]').forEach(cb=>cb.addEventListener('change',updateProgress));
+    updateProgress();
+  }
+  function updateProgress(){ const checkboxes=document.querySelectorAll('input[data-check="true"]'); checkedItems=Array.from(checkboxes).filter(cb=>cb.checked).length; const pct=totalCheckItems>0?Math.round((checkedItems/totalCheckItems)*100):0; document.getElementById('progressText').textContent=`${pct}%`; document.getElementById('progressFill').style.width=`${pct}%`; }
+
+  // ==================== PDF OS (layout compacto com dados do cliente em linha) ====================
+  function printOS() { const win=window.open(); win.document.write(getPrintOSHTML()); win.document.close(); win.print(); }
+  function getPrintOSHTML() {
+    const osNum=document.getElementById('numeroOS').value, data=document.getElementById('dataOS').value, tipo=document.getElementById('tipoChamado').options[document.getElementById('tipoChamado').selectedIndex]?.text||'';
+    const cliente=(document.getElementById('cliente').value||'-').toUpperCase(), cnpj=document.getElementById('cnpj').value||'-', endereco=(document.getElementById('endereco').value||'-').toUpperCase(), cidade=document.getElementById('cidadeCliente').value||'-', whatsapp=document.getElementById('whatsappCliente').value||'-';
+    const marca=(document.getElementById('marca').value||'-').toUpperCase(), modelo=(document.getElementById('modelo').value||'-').toUpperCase(), numSerie=(document.getElementById('numSerie').value||'-').toUpperCase(), horimetro=document.getElementById('horimetro').value||'-', combustivel=document.getElementById('combustivel').options[document.getElementById('combustivel').selectedIndex]?.text||'-';
+    const descricao=document.getElementById('descricaoServico').value||'-', pecas=document.getElementById('pecasAplicadas').value||'-', pendencias=document.getElementById('pendencias').value||'-';
+    const inicio=document.getElementById('horaInicio').value||'-', almocoSaida=document.getElementById('horaAlmocoSaida').value||'-', almocoRetorno=document.getElementById('horaAlmocoRetorno').value||'-', termino=document.getElementById('horaTermino').value||'-', horasTotais=document.getElementById('horasTotais').value||'-', extras=document.getElementById('horasExtras').value||'-', adicionalNoturno=document.getElementById('adicionalNoturno').value||'-', totalGeral=document.getElementById('totalGeral').value||'-';
+    const tecnico=(document.getElementById('tecnico').value||'-').toUpperCase(), recebedor=(document.getElementById('recebedor').value||'-').toUpperCase();
+    let photosHtml=''; if(photosData.length){ photosHtml='<div style="margin-top:15px;"><h3>📸 Fotos do Serviço</h3><div style="display:flex;flex-wrap:wrap;gap:8px;">'; photosData.forEach(photo=>{ photosHtml+=`<div style="width:70px;height:70px;border:1px solid #ccc;border-radius:4px;overflow:hidden;"><img src="${photo}" style="width:100%;height:100%;object-fit:cover;"></div>`; }); photosHtml+='</div></div>'; }
+    return `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>OS_${osNum}</title><style>
+      body{font-family:Inter,sans-serif;padding:6mm;max-width:210mm;margin:0 auto;font-size:9pt; line-height:1.2;}
+      h1{color:#f97316; margin:0 0 4px 0;}
+      h2{margin:6px 0 4px 0;}
+      h3{margin:6px 0 3px 0; font-size:10pt;}
+      .section{margin-bottom:10px; border-bottom:1px solid #ddd; padding-bottom:4px;}
+      .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;}
+      .label{font-weight:600; color:#555;}
+      .total-bold{font-weight:bold; font-size:10pt;}
+      .inline-row{display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; margin-bottom:4px;}
+      hr{margin:6px 0;}
+      p{margin:4px 0;}
+    </style></head><body>
+    <h1>MARLIFT EMPILHADEIRAS</h1>
+    <h2>Ordem de Serviço - ${osNum}</h2>
+    <p>Data: ${data} | Tipo: ${tipo}</p>
+    <div class="section">
+      <h3>Dados do Cliente</h3>
+      <div class="inline-row"><strong>Cliente:</strong> ${cliente} &nbsp;&nbsp;|&nbsp;&nbsp; <strong>CNPJ:</strong> ${cnpj}</div>
+      <div><strong>Endereço:</strong> ${endereco}</div>
+      <div class="inline-row"><strong>Cidade:</strong> ${cidade} &nbsp;&nbsp;|&nbsp;&nbsp; <strong>WhatsApp:</strong> ${whatsapp}</div>
+    </div>
+    <div class="section"><h3>Dados do Equipamento</h3><div class="grid"><div><span class="label">Marca:</span> ${marca}</div><div><span class="label">Modelo:</span> ${modelo}</div><div><span class="label">Nº Série:</span> ${numSerie}</div><div><span class="label">Horímetro:</span> ${horimetro}h</div><div><span class="label">Combustível:</span> ${combustivel}</div></div></div>
+    <div class="section"><h3>Serviço Realizado</h3><p><strong>Descrição:</strong><br>${descricao.replace(/\n/g,'<br>')}</p><p><strong>Peças Aplicadas:</strong><br>${pecas.replace(/\n/g,'<br>')}</p><p><strong>Pendências:</strong><br>${pendencias.replace(/\n/g,'<br>')}</p></div>
+    <div class="section"><h3>Controle de Horas</h3><div class="grid"><div>Início: ${inicio}</div><div>Almoço Saída: ${almocoSaida}</div><div>Almoço Retorno: ${almocoRetorno}</div><div>Término: ${termino}</div><div>Horas Cobradas: ${horasTotais}</div><div>Horas Extras: ${extras}</div><div>Adicional Noturno: ${adicionalNoturno}</div><div><span class="total-bold">Total Geral: ${totalGeral}</span></div></div></div>
+    ${photosHtml}
+    <div class="section"><h3>Assinaturas</h3><div style="display:flex;justify-content:space-between;margin-top:20px;"><div style="text-align:center;width:45%;border-top:1px solid #333;padding-top:4px;">${tecnico}<br>Técnico</div><div style="text-align:center;width:45%;border-top:1px solid #333;padding-top:4px;">${recebedor}<br>Cliente</div></div></div>
+    <footer style="text-align:center;margin-top:20px;font-size:8pt;">Documento gerado eletronicamente - MARLIFT Empilhadeiras</footer>
+    </body></html>`;
+  }
+
+  // ==================== PDF CHECKLIST ====================
+  function printChecklistOnly() {
+    const osNum=document.getElementById('numeroOS').value;
+    const data=document.getElementById('dataOS').value;
+    const cliente=(document.getElementById('cliente').value||'-').toUpperCase();
+    const marca=(document.getElementById('marca').value||'-').toUpperCase();
+    const modelo=(document.getElementById('modelo').value||'-').toUpperCase();
+    const numSerie=(document.getElementById('numSerie').value||'-').toUpperCase();
+    const horimetro=document.getElementById('horimetro').value||'-';
+    const tecnico=(document.getElementById('tecnico').value||'-').toUpperCase();
+    const recebedor=(document.getElementById('recebedor').value||'-').toUpperCase();
+
+    let checklistHtml='';
+    checklistData.forEach(section=>{
+      checklistHtml+=`<div style="margin-bottom:20px;border:1px solid #ddd;border-radius:8px;overflow:hidden;"><div style="background:#f97316;color:white;padding:6px;font-weight:bold;">${section.title}</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:6px;">`;
+      section.items.forEach(item=>{
+        const cb=document.getElementById(item.id);
+        const statusSelect=document.getElementById(`${item.id}_status`);
+        let statusText='OK', statusClass='background:#d4edda;color:#155724;';
+        if(statusSelect){
+          const val=statusSelect.value;
+          if(val==='ok'){ statusText='OK'; statusClass='background:#d4edda;color:#155724;'; }
+          else if(val==='atencao'){ statusText='ATENÇÃO'; statusClass='background:#fff3cd;color:#856404;'; }
+          else if(val==='critico'){ statusText='CRÍTICO'; statusClass='background:#f8d7da;color:#721c24;'; }
+          else if(val==='na'){ statusText='N/A'; statusClass='background:#e2e3e5;color:#383d41;'; }
+        }
+        const checked=cb && cb.checked ? '✓' : '□';
+        checklistHtml+=`<div style="display:flex;align-items:center;gap:6px;padding:3px;"><span style="width:20px;">${checked}</span><span style="flex:1;">${item.label}</span><span style="padding:2px 8px;border-radius:12px;font-size:9px;font-weight:bold;${statusClass}">${statusText}</span></div>`;
+      });
+      checklistHtml+=`</div></div>`;
+    });
+
+    const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Checklist_${osNum}</title><style>body{font-family:Inter,sans-serif;padding:6mm;max-width:210mm;margin:0 auto;font-size:9pt;} h1{color:#f97316;} .header{text-align:center;margin-bottom:15px;} .info-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;background:#f8f9fa;padding:8px;border-radius:8px;margin-bottom:15px;} .signatures{display:flex;justify-content:space-between;margin-top:20px;} .signature-box{text-align:center;width:45%;border-top:1px solid #333;padding-top:4px;}</style></head><body><div class="header"><h1>MARLIFT EMPILHADEIRAS</h1><h2>Checklist Técnico</h2><p>OS: ${osNum} | Data: ${data}</p></div><div class="info-grid"><div><strong>Cliente:</strong> ${cliente}</div><div><strong>Marca:</strong> ${marca}</div><div><strong>Modelo:</strong> ${modelo}</div><div><strong>Nº Série:</strong> ${numSerie}</div><div><strong>Horímetro:</strong> ${horimetro}h</div></div>${checklistHtml}<div class="signatures"><div class="signature-box">${tecnico}<br>Técnico</div><div class="signature-box">${recebedor}<br>Cliente</div></div><footer style="text-align:center;margin-top:20px;font-size:8pt;">Documento gerado eletronicamente - MARLIFT Empilhadeiras</footer></body></html>`;
+    const win=window.open(); win.document.write(html); win.document.close(); win.print();
+  }
+
+  function sendWhatsApp(){ let numero = prompt('Número do WhatsApp (com DDD):', '5511999999999'); if(!numero) return; numero=numero.replace(/\D/g,''); if(!numero.startsWith('55')) numero='55'+numero; window.open(`https://wa.me/${numero}?text=${encodeURIComponent(`OS ${document.getElementById('numeroOS').value} - ${document.getElementById('cliente').value}`)}`,'_blank'); showToast('WhatsApp aberto!'); }
+
+  // ==================== OS PERSISTÊNCIA ====================
+  function getFormData(){ 
+    const data={};
+    document.querySelectorAll('#osForm input, #osForm select, #osForm textarea').forEach(el=>{ 
+      if(el.type === 'checkbox') {
+        data[el.id] = el.checked;
+      } else if(el.type!=='file' && el.id) {
+        data[el.id] = el.value; 
+      }
+    });
+    document.querySelectorAll('#checklistSections input[type="checkbox"], #checklistSections select').forEach(el => {
+        if(el.id) {
+            if(el.type === 'checkbox') data[el.id] = el.checked;
+            else data[el.id] = el.value;
+        }
+    });
+    data.fotosBase64=photosData; 
+    return data; 
+  }
+  
+  function setFormData(d){ 
+    if(!d) return; 
+    Object.keys(d).forEach(id=>{ 
+      if(id === 'fotosBase64') return;
+      const el=document.getElementById(id); 
+      if(el){
+        if(el.type === 'checkbox') {
+            el.checked = d[id];
+        } else {
+            el.value = d[id];
+        }
+      }
+    }); 
+    if(d.fotosBase64 && Array.isArray(d.fotosBase64)){ 
+      photosData=d.fotosBase64; 
+      const preview=document.getElementById('fotosPreview'); 
+      preview.innerHTML=''; 
+      photosData.forEach(src=>{ 
+        const div=document.createElement('div'); 
+        div.className='photo-item'; 
+        div.innerHTML=`<img src="${src}"><div class="photo-remove" onclick="removePhoto(this)">×</div>`; 
+        preview.appendChild(div); 
+      }); 
+    } 
+    calculateTotals(); 
+    updateProgress(); 
+    atualizarLinkMapa(); 
+    syncClienteFields(); 
+  }
+  
+  function saveCurrentOS(){ 
+    const data=getFormData(); 
+    let history=JSON.parse(localStorage.getItem('marlift_os_history')||'[]'); 
+    const idx=history.findIndex(os=>os.numeroOS===data.numeroOS); 
+    if(idx>=0) history[idx]=data; 
+    else history.push(data); 
+    localStorage.setItem('marlift_os_history',JSON.stringify(history)); 
+    showToast('OS e Checklist salvos localmente!'); 
+  }
+  
+  function clearForm(){ 
+    if(!confirm('Nova OS? Dados atuais serão perdidos.')) return; 
+    document.getElementById('osForm').reset(); 
+    document.querySelectorAll('#checklistSections input[type="checkbox"]').forEach(cb => cb.checked = false);
+    document.querySelectorAll('#checklistSections select').forEach(sel => sel.value = 'ok');
+    
+    photosData=[]; 
+    document.getElementById('fotosPreview').innerHTML=''; 
+    timerSeconds=0; timerRunning=false; timerPaused=false; 
+    clearInterval(timerInterval); 
+    document.getElementById('timerDisplay').textContent='00:00:00'; 
+    document.getElementById('timerContainer').classList.remove('timer-running'); 
+    document.getElementById('timerStatus').textContent='Pronto'; 
+    document.getElementById('btnStart').disabled=false; 
+    document.getElementById('btnPause').disabled=true; 
+    document.getElementById('btnStop').disabled=true; 
+    generateOSNumber(); 
+    setDefaultDate(); 
+    updateProgress(); 
+    atualizarLinkMapa(); 
+    syncClienteFields(); 
+    document.getElementById('tecnico').value = 'LEONARDO MARTINS';
+    showToast('Formulário limpo'); 
+  }
+
+  // ==================== CLIENTES ====================
+  function cadLoadFromLocalStorage(){ 
+    const stored = localStorage.getItem('marlift_clientes'); 
+    if(stored) { 
+      try{ 
+        cadClients = JSON.parse(stored); 
+        if(!Array.isArray(cadClients)) cadClients=[]; 
+        cadClients = cadClients.map(c => {
+          if(c.equipamento && !c.marca) {
+            c.marca = c.equipamento;
+            c.modelo = c.modelo || '';
+            c.serie = c.serie || '';
           }
+          if(c.marca === undefined) c.marca = '';
+          if(c.modelo === undefined) c.modelo = '';
+          if(c.serie === undefined) c.serie = '';
+          return c;
         });
-      });
-      document.querySelectorAll('input[data-check="true"]').forEach(cb => cb.addEventListener('change', updateProgress));
-    }
+      }catch(e){ cadClients=[]; } 
+    } 
+    cadRenderFilteredTable(); 
+  }
+  
+  function cadRenderFilteredTable(){ 
+    const term = document.getElementById('cad_searchInput').value.trim().toLowerCase(); 
+    const filtered = term ? cadClients.filter(c=>c.nome.toLowerCase().includes(term)||(c.cnpj||'').includes(term)) : cadClients; 
+    const tbody=document.getElementById('cad_tableBody'); 
+    tbody.innerHTML=''; 
+    if(filtered.length===0){ 
+      tbody.innerHTML='<tr><td colspan="11" class="text-center py-8">Nenhum cliente</td></tr>'; 
+    } else { 
+      filtered.forEach(c=>{ 
+        const row=tbody.insertRow(); 
+        row.innerHTML=`<td>${c.nome||'-'}</td>
+                        <td>${c.endereco||'-'}</td>
+                        <td>${c.cidade||'-'}</td>
+                        <td>${c.marca||'-'}</td>
+                        <td>${c.modelo||'-'}</td>
+                        <td>${c.serie||'-'}</td>
+                        <td>${c.quantidade||0}</td>
+                        <td>${c.telefone||'-'}</td>
+                        <td>${c.whatsapp||'-'}</td>
+                        <td>${c.cnpj||'-'}</td>
+                        <td>
+                         <button class="btn-selecionar" data-id="${c.id}">Selecionar</button>
+                         <i class="fas fa-edit edit-icon" data-id="${c.id}" style="cursor:pointer;"></i>
+                         <i class="fas fa-trash-alt delete-icon" data-id="${c.id}"></i>
+                        </td>`; 
+      }); 
+    } 
+    document.querySelectorAll('.btn-selecionar').forEach(btn=>btn.addEventListener('click',()=>cadSelecionarCliente(parseInt(btn.getAttribute('data-id'))))); 
+    document.querySelectorAll('.delete-icon').forEach(icon=>icon.addEventListener('click',()=>cadDeleteClient(parseInt(icon.getAttribute('data-id'))))); 
+    document.querySelectorAll('.edit-icon').forEach(icon=>icon.addEventListener('click',()=>cadEditClient(parseInt(icon.getAttribute('data-id'))))); 
+  }
+  
+  function cadResetForm() {
+    document.getElementById('cad_nome').value = '';
+    document.getElementById('cad_cnpj').value = '';
+    document.getElementById('cad_endereco').value = '';
+    document.getElementById('cad_cidade').value = '';
+    document.getElementById('cad_marca').value = '';
+    document.getElementById('cad_modelo').value = '';
+    document.getElementById('cad_serie').value = '';
+    document.getElementById('cad_quantidade').value = '1';
+    document.getElementById('cad_telefone').value = '';
+    document.getElementById('cad_whatsapp').value = '';
+    editingClientId = null;
+    const btnSalvar = document.getElementById('cad_btnSalvar');
+    const btnCancelar = document.getElementById('cad_btnCancelar');
+    btnSalvar.textContent = 'Adicionar Cliente';
+    btnCancelar.style.display = 'none';
+  }
+  
+  function cadEditClient(id) {
+    const cliente = cadClients.find(c => c.id === id);
+    if(!cliente) return;
+    editingClientId = id;
+    document.getElementById('cad_nome').value = cliente.nome || '';
+    document.getElementById('cad_cnpj').value = cliente.cnpj || '';
+    document.getElementById('cad_endereco').value = cliente.endereco || '';
+    document.getElementById('cad_cidade').value = cliente.cidade || '';
+    document.getElementById('cad_marca').value = cliente.marca || '';
+    document.getElementById('cad_modelo').value = cliente.modelo || '';
+    document.getElementById('cad_serie').value = cliente.serie || '';
+    document.getElementById('cad_quantidade').value = cliente.quantidade || 1;
+    document.getElementById('cad_telefone').value = cliente.telefone || '';
+    document.getElementById('cad_whatsapp').value = cliente.whatsapp || '';
+    const btnSalvar = document.getElementById('cad_btnSalvar');
+    const btnCancelar = document.getElementById('cad_btnCancelar');
+    btnSalvar.textContent = 'Atualizar Cliente';
+    btnCancelar.style.display = 'inline-flex';
+    showToast('Editando cliente - clique em Atualizar para salvar');
+  }
+  
+  function cadUpdateClient() {
+    if(!editingClientId) return;
+    const index = cadClients.findIndex(c => c.id === editingClientId);
+    if(index === -1) return;
+    cadClients[index] = {
+      id: editingClientId,
+      nome: document.getElementById('cad_nome').value.trim(),
+      cnpj: document.getElementById('cad_cnpj').value.trim(),
+      endereco: document.getElementById('cad_endereco').value.trim(),
+      cidade: document.getElementById('cad_cidade').value.trim(),
+      marca: document.getElementById('cad_marca').value.trim(),
+      modelo: document.getElementById('cad_modelo').value.trim(),
+      serie: document.getElementById('cad_serie').value.trim(),
+      quantidade: parseInt(document.getElementById('cad_quantidade').value) || 1,
+      telefone: document.getElementById('cad_telefone').value.trim(),
+      whatsapp: document.getElementById('cad_whatsapp').value.trim()
+    };
+    localStorage.setItem('marlift_clientes', JSON.stringify(cadClients));
+    cadResetForm();
+    cadRenderFilteredTable();
+    showToast('Cliente atualizado com sucesso');
+  }
+  
+  function cadAddClient(){ 
+    const nome=document.getElementById('cad_nome').value.trim(); 
+    const cnpj=document.getElementById('cad_cnpj').value.trim(); 
+    if(!nome){ showToast('Nome obrigatório',true); return; } 
+    const newClient={ 
+      id:Date.now(), 
+      nome, 
+      cnpj, 
+      endereco:document.getElementById('cad_endereco').value.trim(), 
+      cidade:document.getElementById('cad_cidade').value.trim(), 
+      marca:document.getElementById('cad_marca').value.trim(), 
+      modelo:document.getElementById('cad_modelo').value.trim(), 
+      serie:document.getElementById('cad_serie').value.trim(), 
+      quantidade:parseInt(document.getElementById('cad_quantidade').value)||1, 
+      telefone:document.getElementById('cad_telefone').value.trim(), 
+      whatsapp:document.getElementById('cad_whatsapp').value.trim() 
+    }; 
+    cadClients.push(newClient); 
+    localStorage.setItem('marlift_clientes',JSON.stringify(cadClients)); 
+    cadResetForm();
+    cadRenderFilteredTable(); 
+    showToast('Cliente adicionado'); 
+  }
+  
+  function cadDeleteClient(id){ 
+    if(confirm('Excluir cliente?')){ 
+      cadClients=cadClients.filter(c=>c.id!==id); 
+      localStorage.setItem('marlift_clientes',JSON.stringify(cadClients)); 
+      cadRenderFilteredTable(); 
+      showToast('Cliente removido'); 
+    } 
+  }
+  
+  function cadSelecionarCliente(id){ 
+    const cliente=cadClients.find(c=>c.id===id); 
+    if(cliente){ 
+      document.getElementById('cliente').value=cliente.nome.toUpperCase(); 
+      document.getElementById('cnpj').value=cliente.cnpj; 
+      document.getElementById('cidadeCliente').value=(cliente.cidade||'').toUpperCase(); 
+      document.getElementById('endereco').value=(cliente.endereco||'').toUpperCase(); 
+      document.getElementById('whatsappCliente').value=cliente.whatsapp||''; 
+      document.getElementById('marca').value = (cliente.marca || '').toUpperCase();
+      document.getElementById('modelo').value = (cliente.modelo || '').toUpperCase();
+      document.getElementById('numSerie').value = (cliente.serie || '').toUpperCase();
+      syncClienteFields(); 
+      atualizarLinkMapa(); 
+      document.querySelector('.tab-button[data-tab="tab-os"]').click(); 
+      showToast(`Cliente ${cliente.nome} selecionado`); 
+    } 
+  }
 
-    function updateProgress() {
-      const checkboxes = document.querySelectorAll('input[data-check="true"]');
-      checkedItems = Array.from(checkboxes).filter(cb => cb.checked).length;
-      const pct = totalCheckItems > 0 ? Math.round((checkedItems / totalCheckItems) * 100) : 0;
-      document.getElementById('progressText').textContent = `${pct}%`;
-      document.getElementById('progressFill').style.width = `${pct}%`;
-    }
-
-    // ==================== CRONÔMETRO E CÁLCULO ====================
-    function startTimer() { if(timerRunning) return; timerRunning=true; timerPaused=false; document.getElementById('timerContainer').classList.add('timer-running'); document.getElementById('timerStatus').textContent='Serviço em andamento'; document.getElementById('btnStart').disabled=true; document.getElementById('btnPause').disabled=false; document.getElementById('btnStop').disabled=false; if(!document.getElementById('horaInicio').value) document.getElementById('horaInicio').value=getCurrentTime(); timerInterval=setInterval(()=>{ if(!timerPaused){ timerSeconds++; updateTimerDisplay(); } },1000); }
-    function pauseTimer() { if(!timerRunning) return; timerPaused=true; document.getElementById('timerStatus').textContent='Pausa almoço'; document.getElementById('btnPause').textContent='Retornar'; document.getElementById('btnPause').onclick=resumeTimer; if(!document.getElementById('horaAlmocoSaida').value) document.getElementById('horaAlmocoSaida').value=getCurrentTime(); }
-    function resumeTimer() { timerPaused=false; document.getElementById('timerStatus').textContent='Serviço em andamento'; document.getElementById('btnPause').textContent='Almoço'; document.getElementById('btnPause').onclick=pauseTimer; if(!document.getElementById('horaAlmocoRetorno').value) document.getElementById('horaAlmocoRetorno').value=getCurrentTime(); }
-    function stopTimer() { if(!timerRunning) return; clearInterval(timerInterval); timerRunning=false; document.getElementById('timerContainer').classList.remove('timer-running'); document.getElementById('timerStatus').textContent='Finalizado'; document.getElementById('btnStart').disabled=false; document.getElementById('btnPause').disabled=true; document.getElementById('btnStop').disabled=true; if(!document.getElementById('horaTermino').value) document.getElementById('horaTermino').value=getCurrentTime(); calculateTotals(); }
-    function getCurrentTime() { return new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}); }
-    function updateTimerDisplay() { const h=Math.floor(timerSeconds/3600),m=Math.floor((timerSeconds%3600)/60),s=timerSeconds%60; document.getElementById('timerDisplay').textContent=`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`; }
-    function timeDiff(start,end) { if(!start||!end) return 0; let [sh,sm]=start.split(':').map(Number),[eh,em]=end.split(':').map(Number); let diff=(eh*60+em)-(sh*60+sm); if(diff<0) diff+=1440; return diff; }
-    
-    function calculateTotals() {
-      const inicio = document.getElementById('horaInicio').value;
-      const termino = document.getElementById('horaTermino').value;
-      const almocoSaida = document.getElementById('horaAlmocoSaida').value;
-      const almocoRetorno = document.getElementById('horaAlmocoRetorno').value;
-      if (!inicio || !termino) return;
-      
-      let totalMinutos = timeDiff(inicio, termino);
-      if (almocoSaida && almocoRetorno) {
-        totalMinutos -= timeDiff(almocoSaida, almocoRetorno);
+  // ==================== INICIALIZAÇÃO ====================
+  function initOS(){
+    generateOSNumber(); 
+    setDefaultDate(); 
+    renderChecklist(); 
+    setupEventListeners();
+    document.getElementById('fotosServico').addEventListener('change',handlePhotoUpload);
+    document.querySelectorAll('.tab-button').forEach(btn=>btn.addEventListener('click',()=>{ const tabId=btn.getAttribute('data-tab'); document.querySelectorAll('.tab-button').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); document.querySelectorAll('.tab-content').forEach(tab=>tab.classList.remove('active')); document.getElementById(tabId).classList.add('active'); }));
+    document.querySelectorAll('.uppercase-input').forEach(inp=>inp.addEventListener('input',function(){ this.value=this.value.toUpperCase(); }));
+    document.getElementById('endereco').addEventListener('input',atualizarLinkMapa);
+    document.getElementById('numeroOS').addEventListener('change',syncClienteFields);
+    document.getElementById('dataOS').addEventListener('change',syncClienteFields);
+    document.getElementById('cliente').addEventListener('input',syncClienteFields);
+    document.getElementById('cidadeCliente').addEventListener('input',syncClienteFields);
+    document.getElementById('endereco').addEventListener('input',syncClienteFields);
+    document.getElementById('cnpj').addEventListener('blur',buscarClientePorCNPJ);
+    syncClienteFields(); atualizarLinkMapa();
+    setInterval(()=>{ localStorage.setItem('marlift_draft',JSON.stringify(getFormData())); },15000);
+    if(!document.getElementById('tecnico').value) document.getElementById('tecnico').value = 'LEONARDO MARTINS';
+  }
+  
+  function initClientes(){
+    cadLoadFromLocalStorage();
+    const btnSalvar = document.getElementById('cad_btnSalvar');
+    const btnCancelar = document.getElementById('cad_btnCancelar');
+    btnSalvar.addEventListener('click', () => {
+      if(editingClientId) {
+        cadUpdateClient();
+      } else {
+        cadAddClient();
       }
-      let horasCobradas = Math.ceil(totalMinutos / 60);
-      if (horasCobradas < 1) horasCobradas = 1;
-      
-      document.getElementById('horasTotais').value = `${horasCobradas}h`;
-      updateTotalGeral();
-    }
-    
-    function timeToMinutes(t) {
-      if (!t) return 0;
-      if (t.includes('h')) {
-        const horas = parseInt(t);
-        return horas * 60;
-      }
-      let p = t.split(':');
-      return parseInt(p[0]) * 60 + parseInt(p[1]);
-    }
-    
-    function updateTotalGeral() {
-      const horasTotaisStr = document.getElementById('horasTotais').value;
-      let horasTotaisMin = 0;
-      if (horasTotaisStr) {
-        const match = horasTotaisStr.match(/(\d+)h/);
-        if (match) horasTotaisMin = parseInt(match[1]) * 60;
-      }
-      const extraMin = timeToMinutes(document.getElementById('horasExtras').value);
-      const noturnoMin = timeToMinutes(document.getElementById('adicionalNoturno').value);
-      let totalMin = horasTotaisMin + extraMin + noturnoMin;
-      const horas = Math.floor(totalMin / 60);
-      const minutos = totalMin % 60;
-      document.getElementById('totalGeral').value = `${String(horas).padStart(2,'0')}:${String(minutos).padStart(2,'0')}`;
-    }
-
-    function setupEventListeners() {
-      ['horaInicio','horaAlmocoSaida','horaAlmocoRetorno','horaTermino'].forEach(id => {
-        document.getElementById(id).addEventListener('change', calculateTotals);
-      });
-      document.getElementById('horasExtras').addEventListener('input', updateTotalGeral);
-      document.getElementById('adicionalNoturno').addEventListener('input', updateTotalGeral);
-    }
-
-    // ==================== FOTOS ====================
-    function handlePhotoUpload(e) { const files = Array.from(e.target.files); const preview = document.getElementById('fotosPreview'); photosData = []; preview.innerHTML = ''; files.forEach(file => { const reader = new FileReader(); reader.onload = (ev) => { photosData.push(ev.target.result); const div = document.createElement('div'); div.className = 'photo-item'; div.innerHTML = `<img src="${ev.target.result}" alt="foto"><div class="photo-remove" onclick="removePhoto(this)">×</div>`; preview.appendChild(div); }; reader.readAsDataURL(file); }); }
-    function removePhoto(el) { const idx = Array.from(el.parentNode.parentNode.children).indexOf(el.parentNode); if(idx !== -1) photosData.splice(idx,1); el.parentNode.remove(); }
-
-    // ==================== PDF DA OS (COM NOME CORRETO) ====================
-    function getPrintOSHTML() {
-      const osNum = document.getElementById('numeroOS').value;
-      const data = document.getElementById('dataOS').value;
-      const tipo = document.getElementById('tipoChamado').options[document.getElementById('tipoChamado').selectedIndex]?.text || '';
-      const cliente = (document.getElementById('cliente').value || '-').toUpperCase();
-      const cnpj = document.getElementById('cnpj').value || '-';
-      const endereco = (document.getElementById('endereco').value || '-').toUpperCase();
-      const mapUrl = endereco !== '-' ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(endereco)}` : '#';
-      const marca = (document.getElementById('marca').value || '-').toUpperCase();
-      const modelo = (document.getElementById('modelo').value || '-').toUpperCase();
-      const numSerie = (document.getElementById('numSerie').value || '-').toUpperCase();
-      const horimetro = document.getElementById('horimetro').value || '-';
-      const combustivel = document.getElementById('combustivel').options[document.getElementById('combustivel').selectedIndex]?.text || '-';
-      const descricao = document.getElementById('descricaoServico').value || '-';
-      const pecas = document.getElementById('pecasAplicadas').value || '-';
-      const pendencias = document.getElementById('pendencias').value || '-';
-      const inicio = document.getElementById('horaInicio').value || '-';
-      const almocoSaida = document.getElementById('horaAlmocoSaida').value || '-';
-      const almocoRetorno = document.getElementById('horaAlmocoRetorno').value || '-';
-      const termino = document.getElementById('horaTermino').value || '-';
-      const horasTotais = document.getElementById('horasTotais').value || '-';
-      const extras = document.getElementById('horasExtras').value || '-';
-      const adicionalNoturno = document.getElementById('adicionalNoturno').value || '-';
-      const totalGeral = document.getElementById('totalGeral').value || '-';
-      const tecnico = (document.getElementById('tecnico').value || '-').toUpperCase();
-      const recebedor = (document.getElementById('recebedor').value || '-').toUpperCase();
-      
-      let photosHtml = '';
-      if(photosData.length) {
-        photosHtml = '<div class="photos-section"><div class="photos-title">📸 REGISTROS FOTOGRÁFICOS</div><div class="photos-grid">';
-        photosData.forEach(photo => { photosHtml += `<div class="photo-item-pdf"><img src="${photo}" alt="Foto"></div>`; });
-        photosHtml += '</div></div>';
-      }
-      
-      const numeroSequencial = osNum.split('-').pop();
-      const clienteNome = (document.getElementById('cliente').value || 'cliente').toUpperCase().replace(/[^a-zA-Z0-9]/g, '_');
-      const fileName = `OS_${numeroSequencial}_${clienteNome}`;
-      
-      return `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${fileName}</title><style>
-        *{margin:0;padding:0;box-sizing:border-box;} body{font-family:'Inter',sans-serif;background:white;color:#1a1a1a;line-height:1.3;padding:4mm;max-width:210mm;margin:0 auto;font-size:9pt;}
-        @page{size:A4;margin:5mm;} .header{text-align:center;margin-bottom:4mm;padding-bottom:2mm;border-bottom:2px solid #f97316;}
-        .header h1{font-size:18pt;color:#f97316;margin:0;} .header h2{font-size:11pt;color:#333;margin:2px 0;} .header p{font-size:8pt;color:#666;}
-        .cliente-info{background:#f8f9fa;border-radius:6px;padding:3mm;margin-bottom:4mm;border:1px solid #e0e0e0;}
-        .cliente-row{display:flex;margin-bottom:1.5mm;font-size:9pt;} .cliente-label{font-weight:600;width:30%;color:#555;} .cliente-value{width:70%;text-transform:uppercase;}
-        .equip-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:3mm;margin-bottom:4mm;background:#f8f9fa;border-radius:6px;padding:3mm;border:1px solid #e0e0e0;}
-        .equip-item{text-align:center;} .equip-label{font-size:7pt;color:#666;text-transform:uppercase;} .equip-value{font-size:9pt;font-weight:600;margin-top:1px;text-transform:uppercase;}
-        .service-section{margin-bottom:4mm;} .service-title{font-weight:700;font-size:10pt;color:#f97316;border-left:3px solid #f97316;padding-left:2mm;margin-bottom:2mm;text-transform:uppercase;}
-        .service-content{background:#fafafa;padding:2mm 3mm;border-radius:4px;font-size:8pt;white-space:pre-wrap;border:1px solid #eee;}
-        .double-block{display:grid;grid-template-columns:1fr 1fr;gap:4mm;margin-bottom:4mm;} .info-card{background:#f8f9fa;border-radius:6px;padding:3mm;border:1px solid #e0e0e0;break-inside:avoid;}
-        .info-card h3{font-size:9pt;color:#f97316;border-bottom:1px solid #ddd;padding-bottom:1mm;margin-bottom:2mm;text-transform:uppercase;}
-        .info-row{display:flex;margin-bottom:1.5mm;font-size:8pt;} .info-label{font-weight:600;width:35%;color:#555;} .info-value{width:65%;color:#1a1a1a;text-transform:uppercase;}
-        .map-link-text{color:#4285f4;text-decoration:underline;word-break:break-all;} .signatures{display:flex;justify-content:space-between;margin:4mm 0 4mm 0;padding-top:3mm;border-top:1px dashed #ccc;}
-        .signature-box{width:45%;text-align:center;} .signature-line{border-top:1px solid #333;width:100%;margin-top:6mm;margin-bottom:1mm;} .signature-name{font-weight:600;font-size:8pt;}
-        .photos-section{margin-top:4mm;break-inside:avoid;} .photos-title{font-weight:700;font-size:9pt;color:#f97316;margin-bottom:2mm;text-transform:uppercase;}
-        .photos-grid{display:flex;flex-wrap:wrap;gap:2mm;} .photo-item-pdf{width:50px;height:50px;border:1px solid #ccc;border-radius:4px;overflow:hidden;background:#f0f0f0;display:flex;align-items:center;justify-content:center;}
-        .photo-item-pdf img{max-width:100%;max-height:100%;object-fit:cover;} .footer{text-align:center;font-size:7pt;color:#999;margin-top:4mm;padding-top:2mm;border-top:1px solid #eee;}
-        @media print{body{padding:0;margin:0;} .info-card,.equip-grid,.service-content,.signatures{break-inside:avoid;}}
-      </style></head><body>
-        <div class="header"><h1>MARLIFT</h1><h2>EMPILHADEIRAS</h2><p>Ordem de Serviço - Manutenção Profissional</p></div>
-        <div class="cliente-info">
-          <div class="cliente-row"><span class="cliente-label">CLIENTE:</span><span class="cliente-value">${cliente}</span></div>
-          <div class="cliente-row"><span class="cliente-label">ENDEREÇO:</span><span class="cliente-value">${endereco}</span></div>
-          <div class="cliente-row"><span class="cliente-label">GOOGLE MAPS:</span><span class="cliente-value"><a href="${mapUrl}" target="_blank" class="map-link-text">Clique para abrir no mapa</a></span></div>
-        </div>
-        <div class="equip-grid">
-          <div class="equip-item"><div class="equip-label">MARCA</div><div class="equip-value">${marca}</div></div>
-          <div class="equip-item"><div class="equip-label">MODELO</div><div class="equip-value">${modelo}</div></div>
-          <div class="equip-item"><div class="equip-label">Nº SÉRIE</div><div class="equip-value">${numSerie}</div></div>
-          <div class="equip-item"><div class="equip-label">HORÍMETRO</div><div class="equip-value">${horimetro} h</div></div>
-          <div class="equip-item"><div class="equip-label">COMBUSTÍVEL</div><div class="equip-value">${combustivel}</div></div>
-          <div class="equip-item"><div class="equip-label">CNPJ/CPF</div><div class="equip-value">${cnpj}</div></div>
-        </div>
-        <div class="service-section"><div class="service-title">🔧 DESCRIÇÃO DO SERVIÇO</div><div class="service-content">${descricao.replace(/\n/g,'<br>')}</div></div>
-        <div class="service-section"><div class="service-title">🔩 PEÇAS APLICADAS</div><div class="service-content">${pecas.replace(/\n/g,'<br>')}</div></div>
-        <div class="service-section"><div class="service-title">⚠️ PENDÊNCIAS</div><div class="service-content">${pendencias.replace(/\n/g,'<br>')}</div></div>
-        <div class="double-block">
-          <div class="info-card"><h3>📋 DADOS DA OS</h3>
-            <div class="info-row"><span class="info-label">Número:</span><span class="info-value">${osNum}</span></div>
-            <div class="info-row"><span class="info-label">Data:</span><span class="info-value">${data}</span></div>
-            <div class="info-row"><span class="info-label">Tipo:</span><span class="info-value">${tipo}</span></div>
-          </div>
-          <div class="info-card"><h3>⏱️ CONTROLE DE HORAS</h3>
-            <div class="info-row"><span class="info-label">Início:</span><span class="info-value">${inicio}</span></div>
-            <div class="info-row"><span class="info-label">Almoço Saída:</span><span class="info-value">${almocoSaida}</span></div>
-            <div class="info-row"><span class="info-label":"Almoço Retorno:</span><span class="info-value">${almocoRetorno}</span></div>
-            <div class="info-row"><span class="info-label">Término:</span><span class="info-value">${termino}</span></div>
-            <div class="info-row"><span class="info-label">Horas Cobradas:</span><span class="info-value"><strong>${horasTotais}</strong></span></div>
-            <div class="info-row"><span class="info-label">Horas Extras:</span><span class="info-value">${extras}</span></div>
-            <div class="info-row"><span class="info-label">Adicional Noturno:</span><span class="info-value">${adicionalNoturno}</span></div>
-            <div class="info-row"><span class="info-label">Total Geral:</span><span class="info-value"><strong>${totalGeral}</strong></span></div>
-          </div>
-        </div>
-        ${photosHtml}
-        <div class="signatures">
-          <div class="signature-box"><div class="signature-line"></div><div class="signature-name">${tecnico}</div><div style="font-size:7pt;">Técnico</div></div>
-          <div class="signature-box"><div class="signature-line"></div><div class="signature-name">${recebedor}</div><div style="font-size:7pt;">Cliente</div></div>
-        </div>
-        <div class="footer">Documento gerado eletronicamente - MARLIFT Empilhadeiras</div>
-      </body></html>`;
-    }
-    
-    function printOS() {
-      const win = window.open();
-      win.document.write(getPrintOSHTML());
-      win.document.close();
-      win.print();
-    }
-    
-    // ==================== CHECKLIST PDF ====================
-    function printChecklistOnly() {
-      const osNum = document.getElementById('numeroOS').value;
-      const data = document.getElementById('dataOS').value;
-      const cliente = (document.getElementById('cliente').value || '-').toUpperCase();
-      const marca = (document.getElementById('marca').value || '-').toUpperCase();
-      const modelo = (document.getElementById('modelo').value || '-').toUpperCase();
-      const numSerie = (document.getElementById('numSerie').value || '-').toUpperCase();
-      const horimetro = document.getElementById('horimetro').value || '-';
-      const tecnico = (document.getElementById('tecnico').value || '-').toUpperCase();
-      const recebedor = (document.getElementById('recebedor').value || '-').toUpperCase();
-      
-      let checklistHtml = '';
-      checklistData.forEach(section => {
-        checklistHtml += `<div class="checklist-section"><div class="section-title">${section.title}</div><div class="items-grid">`;
-        section.items.forEach(item => {
-          const statusSelect = document.getElementById(item.id+'_status');
-          let statusText = 'OK', statusClass = 'status-ok';
-          if (statusSelect) {
-            const val = statusSelect.value;
-            if (val === 'ok') { statusText = 'OK'; statusClass = 'status-ok'; }
-            else if (val === 'atencao') { statusText = 'ATENÇÃO'; statusClass = 'status-atencao'; }
-            else if (val === 'critico') { statusText = 'CRÍTICO'; statusClass = 'status-critico'; }
-            else if (val === 'na') { statusText = 'N/A'; statusClass = 'status-na'; }
-          }
-          const isChecked = document.getElementById(item.id)?.checked ? '✓' : '□';
-          checklistHtml += `<div class="checklist-item"><span class="item-check">${isChecked}</span><span class="item-label">${item.label}</span><span class="item-status ${statusClass}">${statusText}</span></div>`;
-        });
-        checklistHtml += `</div></div>`;
-      });
-      
-      const html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Checklist_${osNum}</title><style>
-        *{margin:0;padding:0;box-sizing:border-box;} body{font-family:'Inter',sans-serif;background:white;padding:8mm;max-width:210mm;margin:0 auto;}
-        .header{text-align:center;margin-bottom:8mm;border-bottom:2px solid #f97316;padding-bottom:5mm;} .header h1{color:#f97316;font-size:24pt;}
-        .equip-info{background:#f8f9fa;border-radius:8px;padding:4mm;margin-bottom:6mm;border:1px solid #e0e0e0;}
-        .equip-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:3mm;} .equip-item{text-align:center;}
-        .equip-label{font-size:8pt;color:#666;} .equip-value{font-size:10pt;font-weight:600;text-transform:uppercase;}
-        .checklist-section{margin-bottom:6mm;border:1px solid #e0e0e0;border-radius:6px;overflow:hidden;}
-        .section-title{background:#f97316;color:white;padding:3mm;font-weight:700;}
-        .items-grid{display:grid;grid-template-columns:1fr 1fr;gap:1mm;padding:3mm;}
-        .checklist-item{display:flex;align-items:center;padding:2mm;border-bottom:1px solid #f0f0f0;font-size:9pt;}
-        .item-check{width:6mm;color:#f97316;} .item-label{flex:1;text-transform:uppercase;}
-        .item-status{padding:1mm 3mm;border-radius:4px;font-size:8pt;font-weight:600;min-width:18mm;text-align:center;}
-        .status-ok{background:#d4edda;color:#155724;} .status-atencao{background:#fff3cd;color:#856404;}
-        .status-critico{background:#f8d7da;color:#721c24;} .status-na{background:#e2e3e5;color:#383d41;}
-        .signatures{display:flex;justify-content:space-between;margin-top:10mm;padding-top:5mm;border-top:1px dashed #ccc;}
-        .signature-box{width:45%;text-align:center;} .signature-line{border-top:1px solid #333;margin-top:8mm;margin-bottom:2mm;}
-        .footer{text-align:center;font-size:8pt;color:#999;margin-top:8mm;padding-top:3mm;border-top:1px solid #eee;}
-      </style></head><body>
-        <div class="header"><h1>MARLIFT</h1><h2>EMPILHADEIRAS</h2><p>Checklist Técnico de Manutenção</p></div>
-        <div class="equip-info"><div class="equip-grid">
-          <div class="equip-item"><div class="equip-label">OS</div><div class="equip-value">${osNum}</div></div>
-          <div class="equip-item"><div class="equip-label">DATA</div><div class="equip-value">${data}</div></div>
-          <div class="equip-item"><div class="equip-label">CLIENTE</div><div class="equip-value">${cliente}</div></div>
-          <div class="equip-item"><div class="equip-label">HORÍMETRO</div><div class="equip-value">${horimetro}h</div></div>
-          <div class="equip-item"><div class="equip-label">MARCA</div><div class="equip-value">${marca}</div></div>
-          <div class="equip-item"><div class="equip-label">MODELO</div><div class="equip-value">${modelo}</div></div>
-          <div class="equip-item"><div class="equip-label">Nº SÉRIE</div><div class="equip-value">${numSerie}</div></div>
-        </div></div>
-        ${checklistHtml}
-        <div class="signatures"><div class="signature-box"><div class="signature-line"></div><div class="signature-name">${tecnico}</div><div>Técnico</div></div><div class="signature-box"><div class="signature-line"></div><div class="signature-name">${recebedor}</div><div>Cliente</div></div></div>
-        <div class="footer">Documento gerado eletronicamente - MARLIFT Empilhadeiras</div>
-      </body></html>`;
-      const win = window.open(); win.document.write(html); win.document.close(); win.print();
-    }
-
-    // ==================== DEMAIS FUNÇÕES ====================
-    function getShareText(){ const os=document.getElementById('numeroOS').value; const cliente=document.getElementById('cliente').value||'Cliente'; const marca=document.getElementById('marca').value||''; const modelo=document.getElementById('modelo').value||''; const totalHoras=document.getElementById('horasTotais').value||'0h'; const descricao=document.getElementById('descricaoServico').value||'Nenhuma'; const pecas=document.getElementById('pecasAplicadas').value||'Nenhuma'; const pendencia=document.getElementById('pendencias').value||'Nenhuma'; return `🏭 *MARLIFT - OS ${os}*\n👤 ${cliente}\n🔧 ${marca} ${modelo}\n⏱️ ${totalHoras} (mínimo 1h)\n📝 ${descricao}\n🔩 Peças: ${pecas}\n⚠️ Pendências: ${pendencia}`; }
-    function sendWhatsApp() { let numero = document.getElementById('telefone').value.replace(/\D/g,''); if(!numero){ numero = prompt('Número do WhatsApp (com DDD):', '5511999999999'); if(!numero) return; } numero = numero.replace(/^0+/,''); if(!numero.startsWith('55')) numero = '55'+numero; window.open(`https://wa.me/${numero}?text=${encodeURIComponent(getShareText())}`, '_blank'); showToast('WhatsApp aberto!'); }
-    function sendEmail(){ window.location.href=`mailto:?subject=${encodeURIComponent(document.getElementById('numeroOS').value)}&body=${encodeURIComponent(getShareText())}`; showToast('E-mail aberto'); }
-    function getFormData(){ const data={}; document.querySelectorAll('#osForm input, #osForm select, #osForm textarea').forEach(el=>{ if(el.type!=='file' && el.id) data[el.id]=el.value; }); data.fotosBase64=photosData; return data; }
-    function setFormData(d){ if(!d) return; Object.keys(d).forEach(id=>{ const el=document.getElementById(id); if(el && id!=='fotosBase64') el.value=d[id]; }); if(d.fotosBase64 && Array.isArray(d.fotosBase64)){ photosData=d.fotosBase64; const preview=document.getElementById('fotosPreview'); preview.innerHTML=''; photosData.forEach(src=>{ const div=document.createElement('div'); div.className='photo-item'; div.innerHTML=`<img src="${src}"><div class="photo-remove" onclick="removePhoto(this)">×</div>`; preview.appendChild(div); }); } calculateTotals(); updateProgress(); atualizarLinkMapa(); 
-      document.getElementById('clienteNumeroOS').value = document.getElementById('numeroOS').value;
-      document.getElementById('clienteDataOS').value = document.getElementById('dataOS').value;
-      document.getElementById('clienteNome').value = document.getElementById('cliente').value;
-      document.getElementById('clienteEndereco').value = document.getElementById('endereco').value;
-    }
-    function saveCurrentOS(){ const data=getFormData(); let history=JSON.parse(localStorage.getItem('marlift_os_history')||'[]'); const idx=history.findIndex(os=>os.numeroOS===data.numeroOS); if(idx>=0) history[idx]=data; else history.push(data); localStorage.setItem('marlift_os_history',JSON.stringify(history)); localStorage.setItem('marlift_os_counter',parseInt(data.numeroOS.split('-')[2])); showToast('OS salva com sucesso!'); }
-    function loadDraft(){ const saved=localStorage.getItem('marlift_draft'); if(saved) try{ setFormData(JSON.parse(saved)); }catch(e){} }
-    function clearForm(){ if(!confirm('Nova OS? Os dados atuais serão perdidos.')) return; document.getElementById('osForm').reset(); photosData=[]; document.getElementById('fotosPreview').innerHTML=''; timerSeconds=0; timerRunning=false; timerPaused=false; clearInterval(timerInterval); updateTimerDisplay(); document.getElementById('timerContainer').classList.remove('timer-running'); document.getElementById('timerStatus').textContent='Pronto'; document.getElementById('btnStart').disabled=false; document.getElementById('btnPause').disabled=true; document.getElementById('btnStop').disabled=true; localStorage.removeItem('marlift_draft'); let counter=parseInt(localStorage.getItem('marlift_os_counter')||'0')+1; localStorage.setItem('marlift_os_counter',counter); generateOSNumber(); setDefaultDate(); updateProgress(); atualizarLinkMapa(); 
-      document.getElementById('clienteNumeroOS').value = document.getElementById('numeroOS').value;
-      document.getElementById('clienteDataOS').value = document.getElementById('dataOS').value;
-      document.getElementById('clienteNome').value = '';
-      document.getElementById('clienteEndereco').value = '';
-      showToast('Formulário limpo'); }
-    function downloadBackup(){ let hist=JSON.parse(localStorage.getItem('marlift_os_history')||'[]'); if(!hist.length){ showToast('Nenhuma OS salva'); return; } const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([JSON.stringify(hist,null,2)],{type:'application/json'})); a.download=`Marlift_Backup_${new Date().toISOString().split('T')[0]}.json`; a.click(); showToast('Backup gerado!'); }
-    function restoreBackup(e){ const file=e.target.files[0]; if(!file) return; const reader=new FileReader(); reader.onload=ev=>{ try{ const data=JSON.parse(ev.target.result); if(Array.isArray(data) && confirm(`Restaurar ${data.length} OS?`)){ localStorage.setItem('marlift_os_history',JSON.stringify(data)); showToast('Backup restaurado!'); } }catch(err){ showToast('Erro no arquivo'); } }; reader.readAsText(file); e.target.value=''; }
-    function showToast(msg){ const toast=document.getElementById('toast'); document.getElementById('toastMessage').textContent=msg; toast.classList.add('show'); setTimeout(()=>toast.classList.remove('show'),3000); }
-    
-    setInterval(()=>{ localStorage.setItem('marlift_draft',JSON.stringify(getFormData())); },5000);
-    document.addEventListener('DOMContentLoaded', init);
-  </script>
+    });
+    btnCancelar.addEventListener('click', () => {
+      cadResetForm();
+    });
+    document.getElementById('cad_searchInput').addEventListener('input',cadRenderFilteredTable);
+  }
+  
+  document.addEventListener('DOMContentLoaded',()=>{ initOS(); initClientes(); });
+</script>
 </body>
 </html>
