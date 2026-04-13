@@ -33,6 +33,15 @@
         radial-gradient(ellipse at 0% 0%, rgba(249, 115, 22, 0.08) 0%, transparent 50%),
         radial-gradient(ellipse at 100% 100%, rgba(59, 130, 246, 0.05) 0%, transparent 50%);
     }
+    
+    /* Animação do Header */
+    header {
+      transition: transform 0.3s ease-in-out;
+    }
+    header.header-hidden {
+      transform: translateY(-100%);
+    }
+
     .check-item { position: relative; cursor: pointer; }
     .check-item input { position: absolute; opacity: 0; cursor: pointer; }
     .checkmark {
@@ -203,6 +212,7 @@
 </head>
 <body class="bg-pattern">
   <div class="min-h-screen">
+    <!-- HEADER com classe 'header-hidden' controlada via JS -->
     <header class="no-print border-b border-[var(--border)] bg-[var(--bg)]/90 backdrop-blur-sm sticky top-0 z-50">
       <div class="max-w-7xl mx-auto px-4 py-3">
         <div class="flex items-center justify-between flex-wrap gap-4">
@@ -213,6 +223,10 @@
             <div><h1 class="font-display text-2xl tracking-wide text-[var(--accent)]">MARLIFT</h1><p class="text-xs text-[var(--muted)] tracking-widest uppercase">Ordem de Serviço Profissional</p></div>
           </div>
           <div class="flex items-center gap-2 flex-wrap">
+            <button onclick="toggleFullscreen()" class="btn-secondary text-sm" id="btnFullscreen">
+              <svg id="fullscreenIcon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg>
+              <span id="fullscreenText">Tela Cheia</span>
+            </button>
             <button onclick="sendWhatsApp()" class="btn-whatsapp text-sm"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg> WhatsApp</button>
             <button onclick="sendEmail()" class="btn-secondary text-sm"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg> E-mail</button>
             <button onclick="printOS()" class="btn-primary text-sm"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg> PDF da OS</button>
@@ -354,6 +368,58 @@
     let timerInterval = null, timerSeconds = 0, timerRunning = false, timerPaused = false;
     let totalCheckItems = 0, checkedItems = 0;
     let photosData = [];
+
+    // ==================== FULLSCREEN FUNCTION ====================
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => {
+          alert(`Erro ao tentar abrir em tela cheia: ${err.message}`);
+        });
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+      }
+    }
+
+    document.addEventListener('fullscreenchange', () => {
+      const btn = document.getElementById('btnFullscreen');
+      const icon = document.getElementById('fullscreenIcon');
+      const text = document.getElementById('fullscreenText');
+      
+      if (document.fullscreenElement) {
+        text.textContent = 'Sair';
+        icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 9V4.5M9 9H4.5M9 9L3.75 3.75M9 15v4.5M9 15H4.5M9 15l-5.25 5.25M15 9h4.5M15 9V4.5M15 9l5.25-5.25M15 15h4.5M15 15v4.5m0-4.5l5.25 5.25"/>';
+      } else {
+        text.textContent = 'Tela Cheia';
+        icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/>';
+      }
+    });
+
+    // ==================== AUTO-HIDE HEADER ON SCROLL ====================
+    let lastScrollTop = 0;
+    const delta = 5; // Sensibilidade do scroll
+    const navbarHeight = 80; // Altura aproximada do header
+    const headerElement = document.querySelector('header');
+
+    window.addEventListener('scroll', () => {
+      const st = window.scrollY;
+
+      // Verifica se o scroll foi significativo o suficiente para ignorar "vibrações"
+      if (Math.abs(lastScrollTop - st) <= delta) return;
+
+      if (st > lastScrollTop && st > navbarHeight) {
+        // Scroll para BAIXO -> Esconde Header
+        headerElement.classList.add('header-hidden');
+      } else {
+        // Scroll para CIMA -> Mostra Header
+        // Verificação extra para garantir que não estamos no "bounce" do final da página
+        if (st + window.innerHeight < document.body.scrollHeight) {
+          headerElement.classList.remove('header-hidden');
+        }
+      }
+      lastScrollTop = st;
+    });
 
     // ==================== FUNÇÕES DE INICIALIZAÇÃO ====================
     function init() {
@@ -629,7 +695,7 @@
           <div class="info-card"><h3>⏱️ CONTROLE DE HORAS</h3>
             <div class="info-row"><span class="info-label">Início:</span><span class="info-value">${inicio}</span></div>
             <div class="info-row"><span class="info-label">Almoço Saída:</span><span class="info-value">${almocoSaida}</span></div>
-            <div class="info-row"><span class="info-label">Almoço Retorno:</span><span class="info-value">${almocoRetorno}</span></div>
+            <div class="info-row"><span class="info-label":"Almoço Retorno:</span><span class="info-value">${almocoRetorno}</span></div>
             <div class="info-row"><span class="info-label">Término:</span><span class="info-value">${termino}</span></div>
             <div class="info-row"><span class="info-label">Horas Cobradas:</span><span class="info-value"><strong>${horasTotais}</strong></span></div>
             <div class="info-row"><span class="info-label">Horas Extras:</span><span class="info-value">${extras}</span></div>
