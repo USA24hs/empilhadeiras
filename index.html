@@ -143,6 +143,20 @@
     .cliente-search { background: var(--bg); border: 1px solid var(--border); padding: 8px 16px; border-radius: 40px; color: var(--fg); width: 250px; }
     .marca-outra-container { display: flex; gap: 8px; align-items: center; margin-top: 4px; }
     .marca-outra-container input { flex: 1; }
+    .tipo-chamado-destaque {
+      font-weight: bold;
+      text-transform: uppercase;
+      display: inline-block;
+    }
+    .tipo-chamado-destaque.emergencial {
+      color: #ef4444;
+    }
+    .backup-buttons {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 16px;
+      justify-content: flex-end;
+    }
   </style>
 </head>
 <body class="bg-pattern">
@@ -179,7 +193,20 @@
         <div class="checklist-card p-5 mb-5">
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div><div class="section-header mb-4"><div class="section-icon"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg></div><h2 class="font-display text-xl">Ordem de Serviço</h2></div>
-              <div class="grid grid-cols-2 gap-4"><div><label class="block text-xs text-[var(--muted)] mb-1">Nº da OS</label><input type="text" id="numeroOS" class="form-input font-mono font-semibold text-lg" readonly></div><div><label class="block text-xs text-[var(--muted)] mb-1">Data</label><input type="date" id="dataOS" class="form-input"></div><div class="col-span-2"><label class="block text-xs text-[var(--muted)] mb-1">Tipo de Chamado</label><select id="tipoChamado" class="form-input"><option value="normal">Normal</option><option value="emergencial">Emergencial</option><option value="garantia">Garantia</option><option value="preventiva">Preventiva</option><option value="corretiva">Corretiva</option><option value="retorno_pendencia">Retorno Pendência</option><option value="orcamento">Orçamento</option><option value="contrato">Contrato</option><option value="locacao">Locação</option></select></div></div>
+              <div class="grid grid-cols-2 gap-4"><div><label class="block text-xs text-[var(--muted)] mb-1">Nº da OS</label><input type="text" id="numeroOS" class="form-input font-mono font-semibold text-lg" readonly></div><div><label class="block text-xs text-[var(--muted)] mb-1">Data</label><input type="date" id="dataOS" class="form-input"></div><div class="col-span-2"><label class="block text-xs text-[var(--muted)] mb-1">Tipo de Chamado</label>
+                <select id="tipoChamado" class="form-input">
+                  <option value="normal">Normal</option>
+                  <option value="emergencial">Emergencial</option>
+                  <option value="garantia">Garantia</option>
+                  <option value="preventiva">Preventiva</option>
+                  <option value="corretiva">Corretiva</option>
+                  <option value="retorno_pendencia">Retorno Pendência</option>
+                  <option value="orcamento">Orçamento</option>
+                  <option value="contrato">Contrato</option>
+                  <option value="locacao">Locação</option>
+                </select>
+                <div id="tipoChamadoDisplay" class="text-sm mt-1"></div>
+              </div></div>
             </div>
             <div><div class="section-header mb-4"><div class="section-icon"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div><h2 class="font-display text-xl">Cronômetro</h2></div>
               <div id="timerContainer" class="text-center mb-4"><div class="timer-display font-mono" id="timerDisplay">00:00:00</div><p class="text-xs text-[var(--muted)] mt-1" id="timerStatus">Pronto</p></div>
@@ -195,6 +222,9 @@
               <select id="marcaSelect" class="form-input">
                 <option value="">Selecione</option>
                 <option value="TOYOTA">TOYOTA</option>
+                <option value="CLARK">CLARK</option>
+                <option value="BYD">BYD</option>
+                <option value="PALETRANS">PALETRANS</option>
                 <option value="LINDE">LINDE</option>
                 <option value="HYSTER">HYSTER</option>
                 <option value="YALE">YALE</option>
@@ -205,7 +235,6 @@
                 <option value="STILL">STILL</option>
                 <option value="CROWN">CROWN</option>
                 <option value="JUNGHEINRICH">JUNGHEINRICH</option>
-                <option value="CLARK">CLARK</option>
                 <option value="TCM">TCM</option>
                 <option value="HYUNDAI">HYUNDAI</option>
                 <option value="DOOSAN">DOOSAN</option>
@@ -306,6 +335,11 @@
 
     <!-- ABA CLIENTES -->
     <div id="tab-clientes" class="tab-content">
+      <div class="backup-buttons">
+        <button onclick="backupClientes()" class="btn-primary text-sm"><i class="fas fa-download"></i> 💾 Backup (Exportar)</button>
+        <button onclick="restaurarClientes()" class="btn-secondary text-sm"><i class="fas fa-upload"></i> 🔄 Restaurar (Importar)</button>
+        <input type="file" id="restoreFileInput" accept=".json" style="display: none;">
+      </div>
       <div class="cliente-card"><div class="section-header"><div class="section-icon"><i class="fas fa-users text-[var(--accent)] text-xl"></i></div><h2 class="font-display text-xl">Cadastro de Clientes</h2></div>
         <div class="cliente-form-grid">
           <div class="cliente-input-group"><label>Nome*</label><input type="text" id="cad_nome"></div>
@@ -317,6 +351,9 @@
             <select id="cad_marcaSelect" class="form-input">
               <option value="">Selecione</option>
               <option value="TOYOTA">TOYOTA</option>
+              <option value="CLARK">CLARK</option>
+              <option value="BYD">BYD</option>
+              <option value="PALETRANS">PALETRANS</option>
               <option value="LINDE">LINDE</option>
               <option value="HYSTER">HYSTER</option>
               <option value="YALE">YALE</option>
@@ -327,7 +364,6 @@
               <option value="STILL">STILL</option>
               <option value="CROWN">CROWN</option>
               <option value="JUNGHEINRICH">JUNGHEINRICH</option>
-              <option value="CLARK">CLARK</option>
               <option value="TCM">TCM</option>
               <option value="HYUNDAI">HYUNDAI</option>
               <option value="DOOSAN">DOOSAN</option>
@@ -363,11 +399,11 @@
 <div id="toast" class="toast"><svg class="w-5 h-5 text-[var(--success)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><span id="toastMessage"></span></div>
 
 <script>
-  // ==================== LISTA DE MARCAS ====================
+  // ==================== LISTA DE MARCAS ATUALIZADA ====================
   const marcasList = [
-    "TOYOTA", "LINDE", "HYSTER", "YALE", "CATERPILLAR", "KOMATSU", "MITSUBISHI", 
-    "NISSAN", "STILL", "CROWN", "JUNGHEINRICH", "CLARK", "TCM", "HYUNDAI", 
-    "DOOSAN", "HELI", "HANGCHA", "LONKING"
+    "TOYOTA", "CLARK", "BYD", "PALETRANS", "LINDE", "HYSTER", "YALE", "CATERPILLAR", 
+    "KOMATSU", "MITSUBISHI", "NISSAN", "STILL", "CROWN", "JUNGHEINRICH", "TCM", 
+    "HYUNDAI", "DOOSAN", "HELI", "HANGCHA", "LONKING"
   ];
 
   // ==================== CHECKLIST COMPLETO ====================
@@ -417,6 +453,16 @@
     document.getElementById('clienteEndereco').value = document.getElementById('endereco').value;
   }
   
+  function updateTipoChamadoDisplay() {
+    const select = document.getElementById('tipoChamado');
+    const selectedOption = select.options[select.selectedIndex];
+    let valor = selectedOption ? selectedOption.text : '';
+    valor = valor.toUpperCase();
+    const displayDiv = document.getElementById('tipoChamadoDisplay');
+    const isEmergencial = (valor === 'EMERGENCIAL');
+    displayDiv.innerHTML = `<span style="font-weight: bold;">TIPO DE CHAMADO:</span> <span class="tipo-chamado-destaque ${isEmergencial ? 'emergencial' : ''}" style="font-weight: bold;">${valor}</span>`;
+  }
+  
   function buscarClientePorCNPJ() {
     const cnpj = document.getElementById('cnpj').value.trim();
     if(!cnpj) return;
@@ -427,24 +473,22 @@
       document.getElementById('cidadeCliente').value = (cliente.cidade||'').toUpperCase();
       document.getElementById('endereco').value = (cliente.endereco||'').toUpperCase();
       document.getElementById('whatsappCliente').value = cliente.whatsapp||'';
-      // Preencher marca no select ou campo "outra"
       const marca = (cliente.marca || '').toUpperCase();
       const marcaSelect = document.getElementById('marcaSelect');
-      const marcaOutraContainer = document.getElementById('marcaOutraContainer');
-      const marcaOutraInput = document.getElementById('marcaOutra');
-      const optionExists = Array.from(marcaSelect.options).some(opt => opt.value === marca);
-      if (optionExists) {
+      const outraContainer = document.getElementById('marcaOutraContainer');
+      const outraInput = document.getElementById('marcaOutra');
+      if (marcasList.includes(marca)) {
         marcaSelect.value = marca;
-        marcaOutraContainer.style.display = 'none';
-        marcaOutraInput.value = '';
+        outraContainer.style.display = 'none';
+        outraInput.value = '';
       } else if (marca) {
         marcaSelect.value = 'OUTRA';
-        marcaOutraContainer.style.display = 'block';
-        marcaOutraInput.value = marca;
+        outraContainer.style.display = 'block';
+        outraInput.value = marca;
       } else {
         marcaSelect.value = '';
-        marcaOutraContainer.style.display = 'none';
-        marcaOutraInput.value = '';
+        outraContainer.style.display = 'none';
+        outraInput.value = '';
       }
       document.getElementById('modelo').value = (cliente.modelo || '').toUpperCase();
       document.getElementById('numSerie').value = (cliente.serie || '').toUpperCase();
@@ -454,7 +498,6 @@
     }
   }
 
-  // Função para atualizar o campo hidden "marca" com o valor real (select ou "outra")
   function updateMarcaHidden() {
     const select = document.getElementById('marcaSelect');
     const outraContainer = document.getElementById('marcaOutraContainer');
@@ -481,7 +524,6 @@
     document.getElementById('cad_marca').value = valor;
   }
 
-  // Configurar eventos dos selects de marca
   function setupMarcaSelects() {
     const marcaSelect = document.getElementById('marcaSelect');
     const outraContainer = document.getElementById('marcaOutraContainer');
@@ -562,36 +604,104 @@
   }
   function updateProgress(){ const checkboxes=document.querySelectorAll('input[data-check="true"]'); checkedItems=Array.from(checkboxes).filter(cb=>cb.checked).length; const pct=totalCheckItems>0?Math.round((checkedItems/totalCheckItems)*100):0; document.getElementById('progressText').textContent=`${pct}%`; document.getElementById('progressFill').style.width=`${pct}%`; }
 
-  // ==================== PDF OS (com link do Google Maps) ====================
+  // ==================== BACKUP E RESTAURAÇÃO ====================
+  function backupClientes() {
+    if (cadClients.length === 0) {
+      showToast('Nenhum cliente para fazer backup', true);
+      return;
+    }
+    const dataStr = JSON.stringify(cadClients, null, 2);
+    const blob = new Blob([dataStr], {type: 'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `marlift_clientes_backup_${new Date().toISOString().slice(0,19)}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showToast('Backup exportado com sucesso!');
+  }
+
+  function restaurarClientes() {
+    const input = document.getElementById('restoreFileInput');
+    input.onchange = (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        try {
+          const dados = JSON.parse(ev.target.result);
+          if (Array.isArray(dados)) {
+            const clientesImportados = dados.map(c => ({
+              id: c.id || Date.now() + Math.random(),
+              nome: c.nome || '',
+              cnpj: c.cnpj || '',
+              endereco: c.endereco || '',
+              cidade: c.cidade || '',
+              marca: c.marca || '',
+              modelo: c.modelo || '',
+              serie: c.serie || '',
+              quantidade: c.quantidade || 1,
+              telefone: c.telefone || '',
+              whatsapp: c.whatsapp || ''
+            }));
+            cadClients = clientesImportados;
+            localStorage.setItem('marlift_clientes', JSON.stringify(cadClients));
+            cadRenderFilteredTable();
+            showToast(`Restaurados ${cadClients.length} clientes com sucesso!`);
+          } else {
+            showToast('Arquivo inválido: não é uma lista de clientes', true);
+          }
+        } catch (err) {
+          showToast('Erro ao ler o arquivo de backup', true);
+        }
+        input.value = '';
+      };
+      reader.readAsText(file);
+    };
+    input.click();
+  }
+
+  // ==================== PDF OS (com ajustes de tamanho e compactação) ====================
   function printOS() { const win=window.open(); win.document.write(getPrintOSHTML()); win.document.close(); win.print(); }
   function getPrintOSHTML() {
-    const osNum=document.getElementById('numeroOS').value, data=document.getElementById('dataOS').value, tipo=document.getElementById('tipoChamado').options[document.getElementById('tipoChamado').selectedIndex]?.text||'';
+    const osNum=document.getElementById('numeroOS').value, data=document.getElementById('dataOS').value;
+    const tipoSelect = document.getElementById('tipoChamado');
+    const tipoTexto = tipoSelect.options[tipoSelect.selectedIndex]?.text || '';
+    const tipoUpper = tipoTexto.toUpperCase();
+    const isEmergencial = (tipoUpper === 'EMERGENCIAL');
     const cliente=(document.getElementById('cliente').value||'-').toUpperCase(), cnpj=document.getElementById('cnpj').value||'-', endereco=(document.getElementById('endereco').value||'-').toUpperCase(), cidade=document.getElementById('cidadeCliente').value||'-', whatsapp=document.getElementById('whatsappCliente').value||'-';
     const marca = (document.getElementById('marca').value || '-').toUpperCase();
     const modelo=(document.getElementById('modelo').value||'-').toUpperCase(), numSerie=(document.getElementById('numSerie').value||'-').toUpperCase(), horimetro=document.getElementById('horimetro').value||'-', combustivel=document.getElementById('combustivel').options[document.getElementById('combustivel').selectedIndex]?.text||'-';
     const descricao=document.getElementById('descricaoServico').value||'-', pecas=document.getElementById('pecasAplicadas').value||'-', pendencias=document.getElementById('pendencias').value||'-';
     const inicio=document.getElementById('horaInicio').value||'-', almocoSaida=document.getElementById('horaAlmocoSaida').value||'-', almocoRetorno=document.getElementById('horaAlmocoRetorno').value||'-', termino=document.getElementById('horaTermino').value||'-', horasTotais=document.getElementById('horasTotais').value||'-', extras=document.getElementById('horasExtras').value||'-', adicionalNoturno=document.getElementById('adicionalNoturno').value||'-', totalGeral=document.getElementById('totalGeral').value||'-';
     const tecnico=(document.getElementById('tecnico').value||'-').toUpperCase(), recebedor=(document.getElementById('recebedor').value||'-').toUpperCase();
-    // Link do Google Maps
     const mapLink = endereco !== '-' ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(endereco)}` : '#';
-    const mapLinkHtml = endereco !== '-' ? `<div style="margin-top: 4px;"><a href="${mapLink}" style="color: #4285f4; text-decoration: none; font-size: 8pt;">📍 Ver localização no Google Maps</a></div>` : '';
+    const mapLinkHtml = endereco !== '-' ? `<div style="margin-top: 2px;"><a href="${mapLink}" style="color: #4285f4; text-decoration: none; font-size: 8pt;">📍 Ver localização no Google Maps</a></div>` : '';
     let photosHtml=''; if(photosData.length){ photosHtml='<div style="margin-top:15px;"><h3>📸 Fotos do Serviço</h3><div style="display:flex;flex-wrap:wrap;gap:8px;">'; photosData.forEach(photo=>{ photosHtml+=`<div style="width:70px;height:70px;border:1px solid #ccc;border-radius:4px;overflow:hidden;"><img src="${photo}" style="width:100%;height:100%;object-fit:cover;"></div>`; }); photosHtml+='</div></div>'; }
-    return `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>MARLIFT_${osNum}</title><style>
+    return `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>OS_${osNum}</title><style>
       body{font-family:Inter,sans-serif;padding:6mm;max-width:210mm;margin:0 auto;font-size:9pt; line-height:1.2;}
-      h1{color:#f97316; margin:0 0 4px 0;}
-      h2{margin:6px 0 4px 0;}
-      h3{margin:6px 0 3px 0; font-size:10pt;}
-      .section{margin-bottom:10px; border-bottom:1px solid #ddd; padding-bottom:4px;}
-      .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;}
+      h1{color:#f97316; margin:0 0 2px 0; font-size:1.4rem;}
+      h2{margin:2px 0 2px 0; font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 1px;}
+      .tipo-container { margin: 2px 0 6px 0; font-size: 1.2rem; font-weight: bold; }
+      .tipo-valor { font-weight: bold; }
+      .tipo-valor.emergencial { color: #ef4444; }
+      .section{margin-bottom:6px; border-bottom:1px solid #ddd; padding-bottom:2px;}
+      .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:4px;}
       .label{font-weight:600; color:#555;}
       .total-bold{font-weight:bold; font-size:10pt;}
-      .inline-row{display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; margin-bottom:4px;}
-      hr{margin:6px 0;}
-      p{margin:4px 0;}
+      .inline-row{display:flex; justify-content:space-between; flex-wrap:wrap; gap:4px; margin-bottom:2px;}
+      hr{margin:4px 0;}
+      p{margin:2px 0;}
+      h3{margin:4px 0 2px 0; font-size:10pt;}
     </style></head><body>
-    <h1>MARLIFT EMPILHADEIRAS</h1>
+    <div style="display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap;">
+      <h1>MARLIFT EMPILHADEIRAS</h1>
+    </div>
     <h2>Ordem de Serviço - ${osNum}</h2>
-    <p>Data: ${data} | Tipo: ${tipo}</p>
+    <div class="tipo-container">TIPO DE CHAMADO: <span class="tipo-valor ${isEmergencial ? 'emergencial' : ''}">${tipoUpper}</span></div>
+    <p>Data: ${data}</p>
     <div class="section">
       <h3>Dados do Cliente</h3>
       <div class="inline-row"><strong>Cliente:</strong> ${cliente} &nbsp;&nbsp;|&nbsp;&nbsp; <strong>CNPJ:</strong> ${cnpj}</div>
@@ -603,8 +713,8 @@
     <div class="section"><h3>Serviço Realizado</h3><p><strong>Descrição:</strong><br>${descricao.replace(/\n/g,'<br>')}</p><p><strong>Peças Aplicadas:</strong><br>${pecas.replace(/\n/g,'<br>')}</p><p><strong>Pendências:</strong><br>${pendencias.replace(/\n/g,'<br>')}</p></div>
     <div class="section"><h3>Controle de Horas</h3><div class="grid"><div>Início: ${inicio}</div><div>Almoço Saída: ${almocoSaida}</div><div>Almoço Retorno: ${almocoRetorno}</div><div>Término: ${termino}</div><div>Horas Cobradas: ${horasTotais}</div><div>Horas Extras: ${extras}</div><div>Adicional Noturno: ${adicionalNoturno}</div><div><span class="total-bold">Total Geral: ${totalGeral}</span></div></div></div>
     ${photosHtml}
-    <div class="section"><h3>Assinaturas</h3><div style="display:flex;justify-content:space-between;margin-top:20px;"><div style="text-align:center;width:45%;border-top:1px solid #333;padding-top:4px;">${tecnico}<br>Técnico</div><div style="text-align:center;width:45%;border-top:1px solid #333;padding-top:4px;">${recebedor}<br>Cliente</div></div></div>
-    <footer style="text-align:center;margin-top:20px;font-size:8pt;">Documento gerado eletronicamente - MARLIFT Empilhadeiras</footer>
+    <div class="section"><h3>Assinaturas</h3><div style="display:flex;justify-content:space-between;margin-top:12px;"><div style="text-align:center;width:45%;border-top:1px solid #333;padding-top:2px;">${tecnico}<br>Técnico</div><div style="text-align:center;width:45%;border-top:1px solid #333;padding-top:2px;">${recebedor}<br>Cliente</div></div></div>
+    <footer style="text-align:center;margin-top:12px;font-size:8pt;">Documento gerado eletronicamente - MARLIFT Empilhadeiras</footer>
     </body></html>`;
   }
 
@@ -649,7 +759,6 @@
   // ==================== OS PERSISTÊNCIA ====================
   function getFormData(){ 
     const data={};
-    // Atualiza o hidden antes de salvar
     updateMarcaHidden();
     document.querySelectorAll('#osForm input, #osForm select, #osForm textarea').forEach(el=>{ 
       if(el.type === 'checkbox') {
@@ -692,7 +801,6 @@
         preview.appendChild(div); 
       }); 
     } 
-    // Restaurar marca a partir do hidden
     const marcaSalva = d.marca || '';
     const marcaSelect = document.getElementById('marcaSelect');
     const outraContainer = document.getElementById('marcaOutraContainer');
@@ -715,6 +823,7 @@
     updateProgress(); 
     atualizarLinkMapa(); 
     syncClienteFields(); 
+    updateTipoChamadoDisplay();
   }
   
   function saveCurrentOS(){ 
@@ -750,11 +859,11 @@
     atualizarLinkMapa(); 
     syncClienteFields(); 
     document.getElementById('tecnico').value = 'LEONARDO MARTINS';
-    // Reset marca
     document.getElementById('marcaSelect').value = '';
     document.getElementById('marcaOutraContainer').style.display = 'none';
     document.getElementById('marcaOutra').value = '';
     updateMarcaHidden();
+    updateTipoChamadoDisplay();
     showToast('Formulário limpo'); 
   }
 
@@ -938,7 +1047,6 @@
       document.getElementById('cidadeCliente').value=(cliente.cidade||'').toUpperCase(); 
       document.getElementById('endereco').value=(cliente.endereco||'').toUpperCase(); 
       document.getElementById('whatsappCliente').value=cliente.whatsapp||''; 
-      // Marca
       const marca = (cliente.marca || '').toUpperCase();
       const marcaSelect = document.getElementById('marcaSelect');
       const outraContainer = document.getElementById('marcaOutraContainer');
@@ -983,6 +1091,9 @@
     document.getElementById('cidadeCliente').addEventListener('input',syncClienteFields);
     document.getElementById('endereco').addEventListener('input',syncClienteFields);
     document.getElementById('cnpj').addEventListener('blur',buscarClientePorCNPJ);
+    const tipoSelect = document.getElementById('tipoChamado');
+    tipoSelect.addEventListener('change', updateTipoChamadoDisplay);
+    updateTipoChamadoDisplay();
     syncClienteFields(); atualizarLinkMapa();
     setInterval(()=>{ localStorage.setItem('marlift_draft',JSON.stringify(getFormData())); },15000);
     if(!document.getElementById('tecnico').value) document.getElementById('tecnico').value = 'LEONARDO MARTINS';
@@ -1003,7 +1114,6 @@
       cadResetForm();
     });
     document.getElementById('cad_searchInput').addEventListener('input',cadRenderFilteredTable);
-    // Configurar eventos do select de marca do cliente
     const cadMarcaSelect = document.getElementById('cad_marcaSelect');
     const cadOutraContainer = document.getElementById('cadMarcaOutraContainer');
     const cadOutraInput = document.getElementById('cad_marcaOutra');
