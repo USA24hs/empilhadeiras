@@ -3,12 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Marlift Empilhadeiras - OS Profissional + Clientes</title>
+  <title>Marlift Empilhadeiras - OS Profissional</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- PWA Meta Tags -->
+  <meta name="theme-color" content="#0c0f12">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Marlift OS">
   <style>
     :root {
       --bg: #0c0f12;
@@ -84,14 +89,6 @@
       display: inline-flex; align-items: center; gap: 8px;
     }
     .btn-secondary:hover { border-color: var(--accent); background: var(--bg-secondary); }
-    .btn-checklist {
-      background: linear-gradient(135deg, #8b5cf6, #7c3aed);
-      color: white; font-weight: 600;
-      padding: 10px 20px; border-radius: 6px;
-      border: none; cursor: pointer;
-      display: inline-flex; align-items: center; gap: 8px;
-    }
-    .btn-checklist:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(139,92,246,0.3); }
     .btn-whatsapp {
       background: #25D366; color: white;
       font-weight: 600; padding: 10px 20px;
@@ -114,7 +111,7 @@
     .photo-item { position: relative; width: 100px; height: 100px; border-radius: 8px; border: 1px solid var(--border); overflow: hidden; background: var(--bg); }
     .photo-item img { width: 100%; height: 100%; object-fit: cover; }
     .photo-remove { position: absolute; top: 2px; right: 2px; background: rgba(0,0,0,0.6); border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: white; font-size: 14px; font-weight: bold; }
-    .tab-button { padding: 10px 20px; font-weight: 600; background: transparent; border: none; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; }
+    .tab-button { padding: 10px 20px; font-weight: 600; background: transparent; border: none; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; font-size: 0.9rem; }
     .tab-button.active { color: var(--accent); border-bottom-color: var(--accent); }
     .tab-content { display: none; animation: fadeIn 0.3s ease; }
     .tab-content.active { display: block; }
@@ -258,6 +255,7 @@
       .historico-table { font-size: 0.7rem; }
       .historico-table th, .historico-table td { padding: 8px 4px; }
       .backup-buttons { flex-wrap: wrap; justify-content: center; }
+      .tab-button { padding: 10px 12px; font-size: 0.8rem; }
     }
   </style>
 </head>
@@ -270,7 +268,7 @@
           <div class="w-11 h-11 bg-gradient-to-br from-[var(--accent)] to-[var(--accent-light)] rounded-lg flex items-center justify-center">
             <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
           </div>
-          <div><h1 class="font-display text-2xl tracking-wide text-[var(--accent)]">MARLIFT</h1><p class="text-xs text-[var(--muted)] tracking-widest uppercase">Ordem de Servico Profissional</p></div>
+          <div><h1 class="font-display text-2xl tracking-wide text-[var(--accent)]">MARLIFT</h1><p class="text-xs text-[var(--muted)] tracking-widest uppercase">Sistema de OS</p></div>
         </div>
 
         <!-- Menu Suspenso -->
@@ -306,6 +304,10 @@
             </div>
             <div class="menu-divider"></div>
             <div class="menu-header">Sistema</div>
+            <div class="menu-item" id="installAppBtn" onclick="installApp(); closeMenu();" style="display: none;">
+              <i class="fas fa-mobile-alt"></i>
+              <span>Instalar App</span>
+            </div>
             <div class="menu-item" onclick="toggleFullscreen(); closeMenu();">
               <i class="fas fa-expand"></i>
               <span id="fullscreenText">Tela Cheia</span>
@@ -331,10 +333,11 @@
 
   <main class="max-w-7xl mx-auto px-4 py-6">
     <div class="flex border-b border-[var(--border)] mb-6 no-print">
-      <button class="tab-button active" data-tab="tab-os">Ordem de Servico</button>
-      <button class="tab-button" data-tab="tab-checklist">Checklist Tecnico</button>
+      <!-- ABAS RENOMEADAS -->
+      <button class="tab-button active" data-tab="tab-os">OS</button>
+      <button class="tab-button" data-tab="tab-checklist">Checklist</button>
       <button class="tab-button" data-tab="tab-clientes">Clientes</button>
-      <button class="tab-button" data-tab="tab-historico">Historico de OS</button>
+      <button class="tab-button" data-tab="tab-historico">Hist. de OS</button>
     </div>
 
     <!-- ABA OS -->
@@ -624,6 +627,52 @@
 <div id="toast" class="toast"><svg class="w-5 h-5 text-[var(--success)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><span id="toastMessage"></span></div>
 
 <script>
+  // ==================== PWA INSTALL ====================
+  let deferredPrompt;
+  const installBtn = document.getElementById('installAppBtn');
+
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    installBtn.style.display = 'flex';
+  });
+
+  function installApp() {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then((choiceResult) => {
+        if (choiceResult.outcome === 'accepted') {
+          showToast('App instalado com sucesso!');
+        }
+        deferredPrompt = null;
+        installBtn.style.display = 'none';
+      });
+    } else {
+      showToast('Para instalar, acesse via Chrome/Edge no celular e vá em "Adicionar à Tela Inicial".');
+    }
+  }
+
+  // Dynamic Manifest Injection
+  const manifest = {
+    "name": "Marlift Empilhadeiras OS",
+    "short_name": "Marlift OS",
+    "start_url": ".",
+    "display": "standalone",
+    "background_color": "#0c0f12",
+    "theme_color": "#f97316",
+    "description": "Sistema de OS Marlift",
+    "icons": [
+      {
+        "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23f97316' width='100' height='100' rx='20'/><text x='50' y='65' font-size='50' text-anchor='middle' fill='white'>M</text></svg>",
+        "sizes": "192x192",
+        "type": "image/svg+xml"
+      }
+    ]
+  };
+  const manifestBlob = new Blob([JSON.stringify(manifest)], {type: 'application/json'});
+  const manifestURL = URL.createObjectURL(manifestBlob);
+  document.querySelector('head').appendChild(Object.assign(document.createElement('link'), {rel: 'manifest', href: manifestURL}));
+
   // ==================== LISTA DE MARCAS ====================
   const marcasList = [
     "TOYOTA", "CLARK", "BYD", "PALETRANS", "LINDE", "HYSTER", "YALE", "CATERPILLAR", 
@@ -689,10 +738,13 @@
     lastScrollTop=st;
   });
   
+  // ALTERAÇÃO: Formato do número da OS para OS-2604-0001
   function generateOSNumber() { 
     let c=parseInt(localStorage.getItem('marlift_os_counter')||'0')+1; 
     const now=new Date(); 
-    const os=`OS-${now.getFullYear()}${String(now.getMonth()+1).padStart(2,'0')}-${String(c).padStart(4,'0')}`; 
+    const yy = now.getFullYear().toString().slice(-2); // Pega os 2 últimos dígitos do ano
+    const mm = String(now.getMonth()+1).padStart(2,'0');
+    const os=`OS-${yy}${mm}-${String(c).padStart(4,'0')}`; 
     document.getElementById('numeroOS').value=os; 
     document.getElementById('clienteNumeroOS').value=os; 
     localStorage.setItem('marlift_os_counter', c);
