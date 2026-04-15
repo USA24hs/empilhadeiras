@@ -2,22 +2,13 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Marlift Empilhadeiras - OS Profissional</title>
-  
-  <!-- PWA Meta Tags (Para instalar no celular) -->
-  <meta name="theme-color" content="#0c0f12">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="MARLIFT">
-  <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23f97316' width='100' height='100' rx='20'/><text x='50' y='70' font-size='60' text-anchor='middle' fill='white'>M</text></svg>">
-  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Marlift Empilhadeiras - OS Profissional + Clientes</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  
   <style>
     :root {
       --bg: #0c0f12;
@@ -31,6 +22,8 @@
       --success: #10b981;
       --warning: #f59e0b;
       --danger: #ef4444;
+      --whatsapp: #25D366;
+      --checklist-pdf: #8b5cf6;
     }
     * { font-family: 'Inter', sans-serif; box-sizing: border-box; }
     body { background: var(--bg); color: var(--fg); min-height: 100vh; margin: 0; }
@@ -43,33 +36,6 @@
     }
     header { transition: transform 0.3s ease-in-out; }
     header.header-hidden { transform: translateY(-100%); }
-    
-    /* Correção Tabs Mobile - Rolagem Horizontal */
-    .tabs-container {
-      display: flex;
-      overflow-x: auto;
-      white-space: nowrap;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none; /* Firefox */
-      -ms-overflow-style: none; /* IE/Edge */
-      border-bottom: 1px solid var(--border);
-      margin-bottom: 1.5rem;
-    }
-    .tabs-container::-webkit-scrollbar { display: none; } /* Chrome/Safari */
-    
-    .tab-button {
-      padding: 10px 16px;
-      font-weight: 600;
-      background: transparent;
-      border: none;
-      color: var(--muted);
-      cursor: pointer;
-      border-bottom: 2px solid transparent;
-      flex-shrink: 0; /* Não encolher */
-      font-size: 0.9rem;
-    }
-    .tab-button.active { color: var(--accent); border-bottom-color: var(--accent); }
-    
     .check-item { position: relative; cursor: pointer; }
     .check-item input { position: absolute; opacity: 0; cursor: pointer; }
     .checkmark {
@@ -85,7 +51,6 @@
     .check-item input:checked ~ .checkmark { background: var(--accent); border-color: var(--accent); }
     .checkmark svg { opacity: 0; transform: scale(0); transition: all 0.2s ease; }
     .check-item input:checked ~ .checkmark svg { opacity: 1; transform: scale(1); }
-    
     .checklist-card {
       background: var(--card);
       border: 1px solid var(--border);
@@ -103,7 +68,6 @@
     }
     .form-input:focus { outline: none; border-color: var(--accent); }
     .uppercase-input { text-transform: uppercase; }
-    
     .btn-primary {
       background: linear-gradient(135deg, var(--accent), var(--accent-light));
       color: white; font-weight: 600;
@@ -120,7 +84,67 @@
       display: inline-flex; align-items: center; gap: 8px;
     }
     .btn-secondary:hover { border-color: var(--accent); background: var(--bg-secondary); }
-    
+    .btn-checklist {
+      background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+      color: white; font-weight: 600;
+      padding: 10px 20px; border-radius: 6px;
+      border: none; cursor: pointer;
+      display: inline-flex; align-items: center; gap: 8px;
+    }
+    .btn-checklist:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(139,92,246,0.3); }
+    .btn-whatsapp {
+      background: #25D366; color: white;
+      font-weight: 600; padding: 10px 20px;
+      border-radius: 6px; border: none;
+      cursor: pointer;
+      display: inline-flex; align-items: center; gap: 8px;
+    }
+    .btn-whatsapp:hover { filter: brightness(1.1); transform: translateY(-2px); }
+    .btn-timer { padding: 12px 24px; border-radius: 8px; font-weight: 600; cursor: pointer; border: none; color: white; }
+    .btn-start { background: #10b981; }
+    .btn-pause { background: #f59e0b; color: black; }
+    .btn-stop { background: #ef4444; }
+    .progress-bar { height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+    .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-light)); transition: width 0.5s ease; }
+    .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    .section-icon { width: 36px; height: 36px; background: rgba(249,115,22,0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--accent); }
+    .timer-display { font-size: 3rem; font-weight: 700; letter-spacing: 2px; background: linear-gradient(135deg, var(--fg), var(--muted)); -webkit-background-clip: text; background-clip: text; }
+    .timer-running .timer-display { background: linear-gradient(135deg, var(--accent), var(--accent-light)); -webkit-background-clip: text; background-clip: text; }
+    .photo-preview { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px; }
+    .photo-item { position: relative; width: 100px; height: 100px; border-radius: 8px; border: 1px solid var(--border); overflow: hidden; background: var(--bg); }
+    .photo-item img { width: 100%; height: 100%; object-fit: cover; }
+    .photo-remove { position: absolute; top: 2px; right: 2px; background: rgba(0,0,0,0.6); border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: white; font-size: 14px; font-weight: bold; }
+    .tab-button { padding: 10px 20px; font-weight: 600; background: transparent; border: none; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; }
+    .tab-button.active { color: var(--accent); border-bottom-color: var(--accent); }
+    .tab-content { display: none; animation: fadeIn 0.3s ease; }
+    .tab-content.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+    .select-all-btn { background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 4px; padding: 4px 12px; font-size: 12px; cursor: pointer; }
+    .select-all-btn:hover { background: var(--accent); color: white; border-color: var(--accent); }
+    .toast { position: fixed; bottom: 24px; right: 24px; background: var(--card); border: 1px solid var(--success); padding: 16px 24px; border-radius: 8px; display: flex; align-items: center; gap: 12px; transform: translateY(100px); opacity: 0; transition: all 0.3s ease; z-index: 1000; }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .map-link { display: inline-flex; align-items: center; gap: 4px; background: rgba(66,133,244,0.1); padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #4285f4; text-decoration: none; }
+    .map-link:hover { background: rgba(66,133,244,0.2); }
+    .cliente-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 24px; }
+    .cliente-form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+    .cliente-input-group { display: flex; flex-direction: column; gap: 6px; }
+    .cliente-input-group label { font-size: 0.75rem; font-weight: 600; color: var(--muted); text-transform: uppercase; }
+    .cliente-input-group input, .cliente-input-group select { background: var(--bg); border: 1px solid var(--border); padding: 8px 12px; border-radius: 8px; color: var(--fg); }
+    .cliente-table-wrapper { overflow-x: auto; border-radius: 12px; border: 1px solid var(--border); }
+    .cliente-table { width: 100%; border-collapse: collapse; font-size: 0.75rem; }
+    .cliente-table th { background: var(--bg-secondary); color: var(--accent); padding: 10px 6px; text-align: center; cursor: pointer; }
+    .cliente-table td { padding: 8px 4px; border-bottom: 1px solid var(--border); text-align: center; }
+    .cliente-table tr:hover { background: rgba(249,115,22,0.1); }
+    .btn-selecionar { background: var(--accent); border: none; color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.7rem; cursor: pointer; }
+    .btn-selecionar:hover { background: var(--accent-light); }
+    .delete-icon, .edit-icon { cursor: pointer; margin: 0 5px; font-size: 1.1rem; }
+    .delete-icon { color: #ef4444; }
+    .edit-icon { color: #3b82f6; }
+    .cliente-search { background: var(--bg); border: 1px solid var(--border); padding: 8px 16px; border-radius: 40px; color: var(--fg); width: 250px; }
+    .tipo-chamado-destaque { font-weight: bold; text-transform: uppercase; display: inline-block; }
+    .tipo-chamado-destaque.emergencial { color: #ef4444; }
+    .backup-buttons { display: flex; gap: 12px; margin-bottom: 16px; justify-content: flex-end; }
+
     /* Menu Suspenso - Desktop */
     .menu-dropdown { position: relative; }
     .menu-toggle {
@@ -138,8 +162,6 @@
     .menu-toggle:hover { border-color: var(--accent); background: var(--bg-secondary); }
     .menu-toggle svg { transition: transform 0.3s ease; }
     .menu-toggle.active svg { transform: rotate(180deg); }
-    
-    /* CORREÇÃO: Menu Mobile - Tela Cheia */
     .menu-content {
       position: absolute;
       top: calc(100% + 8px);
@@ -161,23 +183,6 @@
       visibility: visible;
       transform: translateY(0);
     }
-    
-    @media (max-width: 640px) {
-      .menu-content {
-        position: fixed !important;
-        top: 70px !important;
-        left: 8px !important;
-        right: 8px !important;
-        bottom: auto !important;
-        min-width: 0 !important;
-        width: auto !important;
-        max-height: calc(100vh - 90px);
-        overflow-y: auto;
-        border-radius: 12px;
-      }
-      .menu-toggle span { display: none; }
-    }
-    
     .menu-item {
       display: flex;
       align-items: center;
@@ -203,54 +208,50 @@
       letter-spacing: 1px;
     }
 
-    /* Estilos restantes (resumidos para brevidade, mantenha os originais) */
-    .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
-    .section-icon { width: 36px; height: 36px; background: rgba(249,115,22,0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--accent); }
-    .timer-display { font-size: 3rem; font-weight: 700; letter-spacing: 2px; background: linear-gradient(135deg, var(--fg), var(--muted)); -webkit-background-clip: text; background-clip: text; }
-    .timer-running .timer-display { background: linear-gradient(135deg, var(--accent), var(--accent-light)); -webkit-background-clip: text; background-clip: text; }
-    .photo-preview { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px; }
-    .photo-item { position: relative; width: 100px; height: 100px; border-radius: 8px; border: 1px solid var(--border); overflow: hidden; background: var(--bg); }
-    .photo-item img { width: 100%; height: 100%; object-fit: cover; }
-    .photo-remove { position: absolute; top: 2px; right: 2px; background: rgba(0,0,0,0.6); border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: white; font-size: 14px; font-weight: bold; }
-    .tab-content { display: none; animation: fadeIn 0.3s ease; }
-    .tab-content.active { display: block; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-    .toast { position: fixed; bottom: 24px; right: 24px; background: var(--card); border: 1px solid var(--success); padding: 16px 24px; border-radius: 8px; display: flex; align-items: center; gap: 12px; transform: translateY(100px); opacity: 0; transition: all 0.3s ease; z-index: 1000; }
-    .toast.show { transform: translateY(0); opacity: 1; }
-    .map-link { display: inline-flex; align-items: center; gap: 4px; background: rgba(66,133,244,0.1); padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #4285f4; text-decoration: none; }
-    .cliente-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 24px; }
-    .cliente-form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
-    .cliente-input-group { display: flex; flex-direction: column; gap: 6px; }
-    .cliente-input-group label { font-size: 0.75rem; font-weight: 600; color: var(--muted); text-transform: uppercase; }
-    .cliente-input-group input, .cliente-input-group select { background: var(--bg); border: 1px solid var(--border); padding: 8px 12px; border-radius: 8px; color: var(--fg); }
-    .cliente-table-wrapper { overflow-x: auto; border-radius: 12px; border: 1px solid var(--border); }
-    .cliente-table { width: 100%; border-collapse: collapse; font-size: 0.75rem; }
-    .cliente-table th { background: var(--bg-secondary); color: var(--accent); padding: 10px 6px; text-align: center; }
-    .cliente-table td { padding: 8px 4px; border-bottom: 1px solid var(--border); text-align: center; }
-    .btn-selecionar { background: var(--accent); border: none; color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.7rem; cursor: pointer; }
-    .delete-icon, .edit-icon { cursor: pointer; margin: 0 5px; font-size: 1.1rem; }
-    .delete-icon { color: #ef4444; }
-    .edit-icon { color: #3b82f6; }
-    .cliente-search { background: var(--bg); border: 1px solid var(--border); padding: 8px 16px; border-radius: 40px; color: var(--fg); width: 250px; }
+    /* CORREÇÃO: Menu Mobile - Tela Cheia */
+    @media (max-width: 640px) {
+      .menu-content {
+        position: fixed !important;
+        top: 70px !important; /* Abaixo do header */
+        left: 8px !important;
+        right: 8px !important;
+        bottom: auto !important;
+        min-width: 0 !important;
+        width: auto !important;
+        max-height: calc(100vh - 90px);
+        overflow-y: auto;
+        border-radius: 12px;
+      }
+      .menu-toggle span { display: none; } /* Esconde texto "Menu" no mobile para economizar espaço */
+    }
+
+    /* Histórico de OS */
     .historico-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
     .historico-table th { background: var(--bg-secondary); color: var(--accent); padding: 12px 8px; text-align: center; border-bottom: 2px solid var(--accent); }
     .historico-table td { padding: 12px 8px; border-bottom: 1px solid var(--border); text-align: center; }
+    .historico-table tr:hover { background: rgba(249,115,22,0.08); }
     .status-badge { padding: 4px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; }
     .status-normal { background: rgba(16,185,129,0.2); color: #10b981; }
     .status-emergencial { background: rgba(239,68,68,0.2); color: #ef4444; }
     .status-garantia { background: rgba(139,92,246,0.2); color: #8b5cf6; }
     .status-preventiva { background: rgba(59,130,246,0.2); color: #3b82f6; }
+    .status-outro { background: rgba(107,114,128,0.2); color: #6b7280; }
     .historico-actions { display: flex; gap: 8px; justify-content: center; }
     .btn-action { padding: 6px 10px; border-radius: 6px; border: none; cursor: pointer; transition: all 0.2s ease; }
     .btn-view { background: rgba(59,130,246,0.2); color: #3b82f6; }
+    .btn-view:hover { background: #3b82f6; color: white; }
     .btn-edit { background: rgba(249,115,22,0.2); color: var(--accent); }
+    .btn-edit:hover { background: var(--accent); color: white; }
     .btn-delete { background: rgba(239,68,68,0.2); color: #ef4444; }
+    .btn-delete:hover { background: #ef4444; color: white; }
     .historico-search { background: var(--bg); border: 1px solid var(--border); padding: 10px 16px; border-radius: 40px; color: var(--fg); width: 300px; }
+    .historico-search:focus { outline: none; border-color: var(--accent); }
     .historico-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px; margin-bottom: 24px; }
     .stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; text-align: center; }
     .stat-number { font-size: 2.5rem; font-weight: 700; color: var(--accent); font-family: 'JetBrains Mono', monospace; }
     .stat-label { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
     .empty-state { text-align: center; padding: 60px 20px; color: var(--muted); }
+    .empty-state i { font-size: 4rem; margin-bottom: 16px; opacity: 0.5; }
 
     @media (max-width: 768px) {
       .historico-search { width: 100%; }
@@ -269,7 +270,7 @@
           <div class="w-11 h-11 bg-gradient-to-br from-[var(--accent)] to-[var(--accent-light)] rounded-lg flex items-center justify-center">
             <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
           </div>
-          <div><h1 class="font-display text-2xl tracking-wide text-[var(--accent)]">MARLIFT</h1><p class="text-xs text-[var(--muted)] tracking-widest uppercase">OS Profissional</p></div>
+          <div><h1 class="font-display text-2xl tracking-wide text-[var(--accent)]">MARLIFT</h1><p class="text-xs text-[var(--muted)] tracking-widest uppercase">Ordem de Servico Profissional</p></div>
         </div>
 
         <!-- Menu Suspenso -->
@@ -299,16 +300,15 @@
               <i class="fas fa-file-pdf" style="color: #ef4444;"></i>
               <span>Gerar PDF da OS</span>
             </div>
+            <div class="menu-item" onclick="printChecklistOnly(); closeMenu();">
+              <i class="fas fa-clipboard-check" style="color: #8b5cf6;"></i>
+              <span>PDF do Checklist</span>
+            </div>
             <div class="menu-divider"></div>
             <div class="menu-header">Sistema</div>
             <div class="menu-item" onclick="toggleFullscreen(); closeMenu();">
               <i class="fas fa-expand"></i>
               <span id="fullscreenText">Tela Cheia</span>
-            </div>
-            <!-- Botão de Instalar (só aparece se o navegador suportar) -->
-            <div class="menu-item" id="installBtn" style="display: none;" onclick="installPWA(); closeMenu();">
-              <i class="fas fa-mobile-alt"></i>
-              <span>Instalar App</span>
             </div>
             <div class="menu-item" onclick="backupClientes(); closeMenu();">
               <i class="fas fa-download"></i>
@@ -330,15 +330,14 @@
   </header>
 
   <main class="max-w-7xl mx-auto px-4 py-6">
-    <!-- Área de Tabs com Rolagem Horizontal -->
-    <div class="tabs-container no-print">
+    <div class="flex border-b border-[var(--border)] mb-6 no-print">
       <button class="tab-button active" data-tab="tab-os">Ordem de Servico</button>
       <button class="tab-button" data-tab="tab-checklist">Checklist Tecnico</button>
       <button class="tab-button" data-tab="tab-clientes">Clientes</button>
       <button class="tab-button" data-tab="tab-historico">Historico de OS</button>
     </div>
 
-    <!-- ABA OS (Resumida, mantenha o conteúdo original aqui) -->
+    <!-- ABA OS -->
     <div id="tab-os" class="tab-content active">
       <form id="osForm">
         <div class="checklist-card p-5 mb-5">
@@ -361,7 +360,7 @@
             </div>
             <div><div class="section-header mb-4"><div class="section-icon"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div><h2 class="font-display text-xl">Cronometro</h2></div>
               <div id="timerContainer" class="text-center mb-4"><div class="timer-display font-mono" id="timerDisplay">00:00:00</div><p class="text-xs text-[var(--muted)] mt-1" id="timerStatus">Pronto</p></div>
-              <div class="flex justify-center gap-2 mb-4 flex-wrap"><button type="button" onclick="startTimer()" class="btn-timer btn-start bg-green-600 text-white" id="btnStart">Iniciar</button><button type="button" onclick="pauseTimer()" class="btn-timer btn-pause bg-yellow-500 text-black" id="btnPause" disabled>Almoco</button><button type="button" onclick="stopTimer()" class="btn-timer btn-stop bg-red-600 text-white" id="btnStop" disabled>Finalizar</button></div>
+              <div class="flex justify-center gap-2 mb-4 flex-wrap"><button type="button" onclick="startTimer()" class="btn-timer btn-start" id="btnStart">Iniciar</button><button type="button" onclick="pauseTimer()" class="btn-timer btn-pause" id="btnPause" disabled>Almoco</button><button type="button" onclick="stopTimer()" class="btn-timer btn-stop" id="btnStop" disabled>Finalizar</button></div>
             </div>
           </div>
         </div>
@@ -372,7 +371,26 @@
               <label class="block text-xs text-[var(--muted)] mb-1">Marca</label>
               <select id="marcaSelect" class="form-input">
                 <option value="">Selecione</option>
-                <option value="TOYOTA">TOYOTA</option><option value="CLARK">CLARK</option><option value="BYD">BYD</option><option value="PALETRANS">PALETRANS</option><option value="LINDE">LINDE</option><option value="HYSTER">HYSTER</option><option value="YALE">YALE</option><option value="CATERPILLAR">CATERPILLAR</option><option value="KOMATSU">KOMATSU</option><option value="MITSUBISHI">MITSUBISHI</option><option value="NISSAN">NISSAN</option><option value="STILL">STILL</option><option value="CROWN">CROWN</option><option value="JUNGHEINRICH">JUNGHEINRICH</option><option value="TCM">TCM</option><option value="HYUNDAI">HYUNDAI</option><option value="DOOSAN">DOOSAN</option><option value="HELI">HELI</option><option value="HANGCHA">HANGCHA</option><option value="LONKING">LONKING</option>
+                <option value="TOYOTA">TOYOTA</option>
+                <option value="CLARK">CLARK</option>
+                <option value="BYD">BYD</option>
+                <option value="PALETRANS">PALETRANS</option>
+                <option value="LINDE">LINDE</option>
+                <option value="HYSTER">HYSTER</option>
+                <option value="YALE">YALE</option>
+                <option value="CATERPILLAR">CATERPILLAR</option>
+                <option value="KOMATSU">KOMATSU</option>
+                <option value="MITSUBISHI">MITSUBISHI</option>
+                <option value="NISSAN">NISSAN</option>
+                <option value="STILL">STILL</option>
+                <option value="CROWN">CROWN</option>
+                <option value="JUNGHEINRICH">JUNGHEINRICH</option>
+                <option value="TCM">TCM</option>
+                <option value="HYUNDAI">HYUNDAI</option>
+                <option value="DOOSAN">DOOSAN</option>
+                <option value="HELI">HELI</option>
+                <option value="HANGCHA">HANGCHA</option>
+                <option value="LONKING">LONKING</option>
                 <option value="OUTRA">Outra</option>
               </select>
               <div id="marcaOutraContainer" style="display: none; margin-top: 5px;">
@@ -395,7 +413,7 @@
             <label class="block text-xs text-[var(--muted)] mb-1">Endereco do Cliente</label>
             <div class="flex gap-2 items-start">
               <input type="text" class="form-input flex-1 uppercase-input" id="endereco">
-              <button type="button" onclick="abrirMapa()" class="btn-secondary text-sm whitespace-nowrap" style="padding:8px 12px;">Mapa</button>
+              <button type="button" onclick="abrirMapa()" class="btn-secondary text-sm whitespace-nowrap" style="padding:8px 12px;"><svg class="w-4 h-4 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg> Mapa</button>
             </div>
             <div class="text-right mt-1"><a href="#" id="mapLink" target="_blank" class="map-link text-xs">Abrir Google Maps</a></div>
           </div>
@@ -415,15 +433,30 @@
         </div>
 
         <div class="checklist-card p-5 mb-5">
-          <div class="section-header"><div class="section-icon"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg></div><h2 class="font-display text-xl">Horas Trabalhadas</h2></div>
-          <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-             <div><label class="block text-xs text-[var(--muted)] mb-1">Inicio</label><input type="time" id="horaInicio" class="form-input text-center font-mono"></div>
-             <div><label class="block text-xs text-[var(--muted)] mb-1">Almoco Saida</label><input type="time" id="horaAlmocoSaida" class="form-input text-center font-mono"></div>
-             <div><label class="block text-xs text-[var(--muted)] mb-1">Almoco Retorno</label><input type="time" id="horaAlmocoRetorno" class="form-input text-center font-mono"></div>
-             <div><label class="block text-xs text-[var(--muted)] mb-1">Termino</label><input type="time" id="horaTermino" class="form-input text-center font-mono"></div>
-             <div><label class="block text-xs text-[var(--muted)] mb-1">Horas Cobradas</label><input type="text" id="horasTotais" class="form-input text-center font-mono font-semibold" readonly></div>
-             <div><label class="block text-xs text-[var(--muted)] mb-1">Horas Extras</label><input type="text" id="horasExtras" class="form-input text-center font-mono" placeholder="00:00"></div>
-             <div><label class="block text-xs text-[var(--muted)] mb-1">Total Geral</label><input type="text" id="totalGeral" class="form-input text-center font-mono font-semibold" readonly></div>
+          <div class="section-header"><div class="section-icon"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg></div><h2 class="font-display text-xl">Informacoes da OS e Horas Trabalhadas</h2></div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div><h3 class="text-sm font-semibold mb-3 text-[var(--accent)]">Dados da OS</h3>
+              <div class="grid grid-cols-2 gap-3">
+                <div><label class="block text-xs text-[var(--muted)] mb-1">No. da OS</label><input type="text" id="clienteNumeroOS" class="form-input font-mono" readonly></div>
+                <div><label class="block text-xs text-[var(--muted)] mb-1">Data</label><input type="text" id="clienteDataOS" class="form-input" readonly></div>
+                <div class="col-span-2"><label class="block text-xs text-[var(--muted)] mb-1">Cliente</label><input type="text" id="clienteNome" class="form-input uppercase-input" readonly></div>
+                <div class="col-span-2"><label class="block text-xs text-[var(--muted)] mb-1">Cidade</label><input type="text" id="clienteCidade" class="form-input uppercase-input" readonly></div>
+                <div class="col-span-2"><label class="block text-xs text-[var(--muted)] mb-1">Endereco</label><input type="text" id="clienteEndereco" class="form-input uppercase-input" readonly></div>
+              </div>
+            </div>
+            <div><h3 class="text-sm font-semibold mb-3 text-[var(--accent)]">Controle de Horas</h3>
+              <div class="grid grid-cols-2 gap-3">
+                <div><label class="block text-xs text-[var(--muted)] mb-1">Inicio</label><input type="time" id="horaInicio" class="form-input text-center font-mono" step="1"></div>
+                <div><label class="block text-xs text-[var(--muted)] mb-1">Almoco Saida</label><input type="time" id="horaAlmocoSaida" class="form-input text-center font-mono"></div>
+                <div><label class="block text-xs text-[var(--muted)] mb-1">Almoco Retorno</label><input type="time" id="horaAlmocoRetorno" class="form-input text-center font-mono"></div>
+                <div><label class="block text-xs text-[var(--muted)] mb-1">Termino</label><input type="time" id="horaTermino" class="form-input text-center font-mono"></div>
+                <div><label class="block text-xs text-[var(--muted)] mb-1">Horas Cobradas</label><input type="text" id="horasTotais" class="form-input text-center font-mono font-semibold" readonly></div>
+                <div><label class="block text-xs text-[var(--muted)] mb-1">Horas Extras</label><input type="text" id="horasExtras" class="form-input text-center font-mono" placeholder="00:00"></div>
+                <div><label class="block text-xs text-[var(--muted)] mb-1">Adic. Noturno</label><input type="text" id="adicionalNoturno" class="form-input text-center font-mono" placeholder="00:00"></div>
+                <div><label class="block text-xs text-[var(--muted)] mb-1">Total Geral</label><input type="text" id="totalGeral" class="form-input text-center font-mono font-semibold" readonly></div>
+              </div>
+              <p class="text-xs text-[var(--muted)] mt-3">Minimo de 1 hora cobrada. Frações arredondadas para cima.</p>
+            </div>
           </div>
         </div>
 
@@ -441,19 +474,19 @@
       </form>
     </div>
 
-    <!-- ABA CHECKLIST (Resumida) -->
+    <!-- ABA CHECKLIST -->
     <div id="tab-checklist" class="tab-content">
       <div class="checklist-card p-4 mb-5">
         <div class="flex items-center justify-between mb-2"><span class="text-sm text-[var(--muted)]">Progresso do Checklist</span><span id="progressText" class="text-[var(--accent)] font-semibold">0%</span></div>
-        <div class="progress-bar" style="height: 6px; background: var(--border); border-radius: 3px;"><div id="progressFill" style="height: 100%; background: var(--accent); width:0%; transition: width 0.5s;"></div></div>
+        <div class="progress-bar"><div id="progressFill" class="progress-fill" style="width:0%"></div></div>
       </div>
       <div id="checklistSections" class="space-y-4"></div>
     </div>
 
-    <!-- ABA CLIENTES (Resumida) -->
+    <!-- ABA CLIENTES -->
     <div id="tab-clientes" class="tab-content">
       <div class="backup-buttons">
-        <button onclick="backupClientes()" class="btn-primary text-sm"><i class="fas fa-download"></i> Backup</button>
+        <button onclick="backupClientes()" class="btn-primary text-sm"><i class="fas fa-download"></i> Backup (JSON)</button>
         <button onclick="restaurarClientes()" class="btn-secondary text-sm"><i class="fas fa-upload"></i> Restaurar</button>
         <input type="file" id="restoreFileInput" accept=".json" style="display: none;">
       </div>
@@ -461,11 +494,44 @@
         <div class="cliente-form-grid">
           <div class="cliente-input-group"><label>Nome*</label><input type="text" id="cad_nome"></div>
           <div class="cliente-input-group"><label>CNPJ*</label><input type="text" id="cad_cnpj"></div>
+          <div class="cliente-input-group"><label>Endereco</label><input type="text" id="cad_endereco"></div>
           <div class="cliente-input-group"><label>Cidade</label><input type="text" id="cad_cidade"></div>
-          <div class="cliente-input-group"><label>WhatsApp</label><input type="text" id="cad_whatsapp"></div>
-          <div class="cliente-input-group"><label>Marca</label><select id="cad_marcaSelect" class="form-input"><option value="">Selecione</option><option value="TOYOTA">TOYOTA</option><option value="YALE">YALE</option><option value="CLARK">CLARK</option><option value="OUTRA">Outra</option></select></div>
+          <div class="cliente-input-group">
+            <label>Marca</label>
+            <select id="cad_marcaSelect" class="form-input">
+              <option value="">Selecione</option>
+              <option value="TOYOTA">TOYOTA</option>
+              <option value="CLARK">CLARK</option>
+              <option value="BYD">BYD</option>
+              <option value="PALETRANS">PALETRANS</option>
+              <option value="LINDE">LINDE</option>
+              <option value="HYSTER">HYSTER</option>
+              <option value="YALE">YALE</option>
+              <option value="CATERPILLAR">CATERPILLAR</option>
+              <option value="KOMATSU">KOMATSU</option>
+              <option value="MITSUBISHI">MITSUBISHI</option>
+              <option value="NISSAN">NISSAN</option>
+              <option value="STILL">STILL</option>
+              <option value="CROWN">CROWN</option>
+              <option value="JUNGHEINRICH">JUNGHEINRICH</option>
+              <option value="TCM">TCM</option>
+              <option value="HYUNDAI">HYUNDAI</option>
+              <option value="DOOSAN">DOOSAN</option>
+              <option value="HELI">HELI</option>
+              <option value="HANGCHA">HANGCHA</option>
+              <option value="LONKING">LONKING</option>
+              <option value="OUTRA">Outra</option>
+            </select>
+            <div id="cadMarcaOutraContainer" style="display: none; margin-top: 5px;">
+              <input type="text" id="cad_marcaOutra" class="form-input uppercase-input" placeholder="Digite a marca">
+            </div>
+            <input type="hidden" id="cad_marca" value="">
+          </div>
           <div class="cliente-input-group"><label>Modelo</label><input type="text" id="cad_modelo"></div>
           <div class="cliente-input-group"><label>Serie</label><input type="text" id="cad_serie"></div>
+          <div class="cliente-input-group"><label>Quantidade</label><input type="number" id="cad_quantidade" value="1"></div>
+          <div class="cliente-input-group"><label>Telefone</label><input type="text" id="cad_telefone"></div>
+          <div class="cliente-input-group"><label>WhatsApp</label><input type="text" id="cad_whatsapp"></div>
         </div>
         <div class="flex gap-3 mt-5">
           <button id="cad_btnSalvar" class="btn-primary">Adicionar Cliente</button>
@@ -475,79 +541,110 @@
       <div class="flex justify-between items-center my-4 flex-wrap gap-3">
         <input type="text" id="cad_searchInput" class="cliente-search" placeholder="Buscar cliente...">
       </div>
-      <div class="cliente-table-wrapper"><table class="cliente-table"><thead><tr><th>Nome</th><th>Cidade</th><th>WhatsApp</th><th>Marca</th><th>Acoes</th></tr></thead><tbody id="cad_tableBody"></tbody></table></div>
+      <div class="cliente-table-wrapper"><table class="cliente-table"><thead><tr><th>Nome</th><th>Endereco</th><th>Cidade</th><th>Marca</th><th>Modelo</th><th>Serie</th><th>Qtd</th><th>Telefone</th><th>WhatsApp</th><th>CNPJ</th><th>Acoes</th></tr></thead><tbody id="cad_tableBody"></tbody></table></div>
     </div>
 
-    <!-- ABA HISTÓRICO (Resumida) -->
+    <!-- ABA HISTÓRICO -->
     <div id="tab-historico" class="tab-content">
       <div class="checklist-card p-5 mb-5">
-        <div class="section-header"><div class="section-icon"><i class="fas fa-history text-xl"></i></div><h2 class="font-display text-xl">Historico de OS</h2></div>
-        <div class="historico-stats">
-          <div class="stat-card"><div class="stat-number" id="statTotal">0</div><div class="stat-label">Total de OS</div></div>
-          <div class="stat-card"><div class="stat-number" id="statMes">0</div><div class="stat-label">Este Mes</div></div>
+        <div class="section-header">
+          <div class="section-icon"><i class="fas fa-history text-xl"></i></div>
+          <h2 class="font-display text-xl">Historico de Ordens de Servico</h2>
         </div>
+        
+        <!-- Estatísticas -->
+        <div class="historico-stats" id="historicoStats">
+          <div class="stat-card">
+            <div class="stat-number" id="statTotal">0</div>
+            <div class="stat-label">Total de OS</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="statEmergenciais">0</div>
+            <div class="stat-label">Emergenciais</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="statPreventivas">0</div>
+            <div class="stat-label">Preventivas</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="statMes">0</div>
+            <div class="stat-label">Este Mes</div>
+          </div>
+        </div>
+
+        <!-- Filtros -->
         <div class="flex flex-wrap gap-4 mb-4 items-center justify-between">
-          <input type="text" id="historicoSearch" class="historico-search" placeholder="Buscar...">
-          <button onclick="limparHistorico()" class="btn-secondary text-sm" style="border-color: #ef4444; color: #ef4444;"><i class="fas fa-trash"></i> Limpar</button>
+          <input type="text" id="historicoSearch" class="historico-search" placeholder="Buscar por OS, cliente, marca...">
+          <div class="flex gap-2 flex-wrap">
+            <select id="historicoFiltroTipo" class="form-input" style="width: auto;">
+              <option value="">Todos os Tipos</option>
+              <option value="normal">Normal</option>
+              <option value="emergencial">Emergencial</option>
+              <option value="garantia">Garantia</option>
+              <option value="preventiva">Preventiva</option>
+              <option value="corretiva">Corretiva</option>
+            </select>
+            <button onclick="exportarHistorico()" class="btn-secondary text-sm"><i class="fas fa-file-export"></i> CSV</button>
+            <button onclick="limparHistorico()" class="btn-secondary text-sm" style="border-color: #ef4444; color: #ef4444;"><i class="fas fa-trash"></i> Limpar</button>
+          </div>
         </div>
-        <div class="cliente-table-wrapper"><table class="historico-table"><thead><tr><th>OS</th><th>Data</th><th>Cliente</th><th>Tipo</th><th>Acoes</th></tr></thead><tbody id="historicoTableBody"></tbody></table></div>
-        <div id="historicoEmpty" class="empty-state" style="display: none;"><i class="fas fa-folder-open"></i><h3>Nenhuma OS</h3></div>
+
+        <!-- Tabela -->
+        <div class="cliente-table-wrapper">
+          <table class="historico-table">
+            <thead>
+              <tr>
+                <th>OS</th>
+                <th>Data</th>
+                <th>Cliente</th>
+                <th>Cidade</th>
+                <th>Marca/Modelo</th>
+                <th>Tipo</th>
+                <th>Horas</th>
+                <th>Acoes</th>
+              </tr>
+            </thead>
+            <tbody id="historicoTableBody">
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Estado vazio -->
+        <div id="historicoEmpty" class="empty-state" style="display: none;">
+          <i class="fas fa-folder-open"></i>
+          <h3 class="text-xl font-semibold mb-2">Nenhuma OS encontrada</h3>
+          <p class="text-sm">Comece criando uma nova Ordem de Servico</p>
+        </div>
       </div>
     </div>
   </main>
+
   <footer class="no-print border-t border-[var(--border)] py-4 mt-8 text-center text-xs text-[var(--muted)]">MARLIFT EMPILHADEIRAS - Sistema Profissional</footer>
 </div>
 <div id="toast" class="toast"><svg class="w-5 h-5 text-[var(--success)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><span id="toastMessage"></span></div>
 
 <script>
-  // ==================== PWA INSTALL LOGIC ====================
-  let deferredPrompt;
-  const installBtn = document.getElementById('installBtn');
-
-  window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault();
-    deferredPrompt = e;
-    installBtn.style.display = 'flex'; // Mostra o botão de instalar no menu
-  });
-
-  function installPWA() {
-    if (deferredPrompt) {
-      deferredPrompt.prompt();
-      deferredPrompt.userChoice.then((choiceResult) => {
-        if (choiceResult.outcome === 'accepted') {
-          showToast('App instalado com sucesso!');
-        }
-        deferredPrompt = null;
-        installBtn.style.display = 'none';
-      });
-    }
-  }
-
-  // ==================== SERVICE WORKER (Registrador Básico) ====================
-  // Para funcionar offline real, é preciso criar um arquivo sw.js separado.
-  // Este registro ativa a capacidade de instalação em muitos navegadores.
-  if ('serviceWorker' in navigator) {
-    // Cria um Service Worker mínimo "inline" usando Blob para não precisar de arquivo externo
-    const swCode = `
-      self.addEventListener('install', e => self.skipWaiting());
-      self.addEventListener('activate', e => e.waitUntil(clients.claim()));
-      self.addEventListener('fetch', e => e.respondWith(fetch(e.request).catch(() => caches.match(e.request))));
-    `;
-    const blob = new Blob([swCode], { type: 'application/javascript' });
-    const swUrl = URL.createObjectURL(blob);
-    
-    // Nota: Alguns navegadores não aceitam SW de blob://, apenas de origem segura (HTTPS/Localhost)
-    // Se não funcionar a instalação via blob, ignore, pois o meta-tag já ajuda no iOS.
-  }
-
-  // ==================== DADOS E FUNÇÕES DO SISTEMA ====================
-  const marcasList = ["TOYOTA", "CLARK", "BYD", "PALETRANS", "LINDE", "HYSTER", "YALE", "CATERPILLAR", "KOMATSU", "MITSUBISHI", "NISSAN", "STILL", "CROWN", "JUNGHEINRICH", "TCM", "HYUNDAI", "DOOSAN", "HELI", "HANGCHA", "LONKING"];
-  const checklistData = [
-    { id:'motor', title:'Motor e Componentes', items:[{id:'motor_oleo',label:'Nivel de oleo do motor'},{id:'motor_filtro_oleo',label:'Filtro de oleo'},{id:'motor_filtro_ar',label:'Filtro de ar'},{id:'motor_correias',label:'Correias'}] },
-    { id:'eletrico', title:'Sistema Eletrico', items:[{id:'eletr_bateria',label:'Bateria'},{id:'eletr_alternador',label:'Alternador'}] },
-    { id:'hidraulico', title:'Sistema Hidraulico', items:[{id:'hidr_oleo',label:'Nivel oleo hidraulico'},{id:'hidr_vazamentos',label:'Vazamentos'}] },
+  // ==================== LISTA DE MARCAS ====================
+  const marcasList = [
+    "TOYOTA", "CLARK", "BYD", "PALETRANS", "LINDE", "HYSTER", "YALE", "CATERPILLAR", 
+    "KOMATSU", "MITSUBISHI", "NISSAN", "STILL", "CROWN", "JUNGHEINRICH", "TCM", 
+    "HYUNDAI", "DOOSAN", "HELI", "HANGCHA", "LONKING"
   ];
-  
+
+  // ==================== CHECKLIST ====================
+  const checklistData = [
+    { id:'motor', title:'Motor e Componentes', items:[{id:'motor_oleo',label:'Nivel de oleo do motor'},{id:'motor_filtro_oleo',label:'Filtro de oleo'},{id:'motor_filtro_ar',label:'Filtro de ar'},{id:'motor_filtro_comb',label:'Filtro de combustivel'},{id:'motor_correias',label:'Correias'},{id:'motor_radiador',label:'Radiador e arrefecimento'},{id:'motor_velas',label:'Velas de ignicao'},{id:'motor_mangueiras',label:'Mangueiras e conexoes'}] },
+    { id:'eletrico', title:'Sistema Eletrico', items:[{id:'eletr_bateria',label:'Bateria'},{id:'eletr_terminais',label:'Terminais e cabos'},{id:'eletr_alternador',label:'Alternador'},{id:'eletr_partida',label:'Motor de partida'},{id:'eletr_farois',label:'Faros e lanternas'},{id:'eletr_buzina',label:'Buzina'},{id:'eletr_painel',label:'Painel'},{id:'eletr_fusiveis',label:'Fuseveis'}] },
+    { id:'hidraulico', title:'Sistema Hidraulico', items:[{id:'hidr_oleo',label:'Nivel oleo hidraulico'},{id:'hidr_bomba',label:'Bomba hidraulica'},{id:'hidr_cilindros',label:'Cilindros elevacao'},{id:'hidr_inclinacao',label:'Cilindros inclinacao'},{id:'hidr_valvulas',label:'Valvulas'},{id:'hidr_vazamentos',label:'Vazamentos'},{id:'hidr_mangueiras',label:'Mangueiras'}] },
+    { id:'transmissao', title:'Transmissao e Freios', items:[{id:'trans_oleo',label:'Oleo transmissao'},{id:'trans_eixo',label:'Eixo traseiro'},{id:'trans_juntas',label:'Juntas homocineticas'},{id:'freio_servico',label:'Freio servico'},{id:'freio_estac',label:'Freio estacionamento'},{id:'freio_pastilhas',label:'Pastilhas/lonas'},{id:'freio_fluido',label:'Fluido freio'}] },
+    { id:'direcao', title:'Direcao', items:[{id:'dir_volante',label:'Volante'},{id:'dir_caixa',label:'Caixa direcao'},{id:'dir_hidraulica',label:'Direcao hidraulica'},{id:'dir_fluido',label:'Fluido direcao'},{id:'dir_terminais',label:'Terminais'}] },
+    { id:'estrutura', title:'Estrutura e Garfos', items:[{id:'est_chassi',label:'Chassi'},{id:'est_mastros',label:'Mastros'},{id:'est_correntes',label:'Correntes'},{id:'est_roletes',label:'Roletes'},{id:'est_garfos',label:'Garfos'},{id:'est_travas',label:'Travas'}] },
+    { id:'rodas', title:'Rodas e Pneus', items:[{id:'rod_pneus_diant',label:'Pneus dianteiros'},{id:'rod_pneus_tras',label:'Pneus traseiros'},{id:'rod_pressao',label:'Pressao'},{id:'rod_desgaste',label:'Desgaste'},{id:'rod_rolamentos',label:'Rolamentos'},{id:'rod_porcas',label:'Porcas'}] },
+    { id:'seguranca', title:'Seguranca', items:[{id:'seg_cinto',label:'Cinto seguranca'},{id:'seg_extintor',label:'Extintor'},{id:'seg_espelhos',label:'Espelhos'},{id:'seg_alarme',label:'Alarme re'},{id:'seg_luzes',label:'Luzes'},{id:'seg_giroflex',label:'Giroflex'},{id:'seg_plataforma',label:'Plataforma'},{id:'seg_assento',label:'Assento'}] },
+    { id:'bateria', title:'Bateria (Eletricos)', items:[{id:'bat_estado',label:'Estado geral'},{id:'bat_carga',label:'Carga'},{id:'bat_eletrolito',label:'Eletrolito'},{id:'bat_terminais',label:'Terminais'},{id:'bat_carregador',label:'Carregador'}] },
+    { id:'lubrificacao', title:'Lubrificacao', items:[{id:'lub_mastros',label:'Mastros/correntes'},{id:'lub_pivos',label:'Pivos'},{id:'lub_rolamentos',label:'Rolamentos'},{id:'lub_pedais',label:'Pedais'},{id:'lub_geral',label:'Pontos gerais'}] }
+  ];
+
   let timerInterval = null, timerSeconds = 0, timerRunning = false, timerPaused = false;
   let totalCheckItems = 0, checkedItems = 0;
   let photosData = [];
@@ -555,72 +652,986 @@
   let editingClientId = null;
   let osHistory = [];
 
-  // Helpers
-  function showToast(msg) { const toast=document.getElementById('toast'); document.getElementById('toastMessage').textContent=msg; toast.classList.add('show'); setTimeout(()=>toast.classList.remove('show'),3000); }
+  // ==================== FUNÇÕES AUXILIARES ====================
+  function showToast(msg, isError=false) { const toast=document.getElementById('toast'); document.getElementById('toastMessage').textContent=msg; toast.classList.add('show'); setTimeout(()=>toast.classList.remove('show'),3000); }
   function toggleFullscreen() { if (!document.fullscreenElement) document.documentElement.requestFullscreen(); else document.exitFullscreen(); }
+  document.addEventListener('fullscreenchange', () => { const text=document.getElementById('fullscreenText'); if (document.fullscreenElement) { text.textContent='Sair da Tela Cheia'; } else { text.textContent='Tela Cheia'; } });
   
-  // Menu
+  // Menu Dropdown
   const menuToggle = document.getElementById('menuToggle');
   const menuContent = document.getElementById('menuContent');
-  menuToggle.addEventListener('click', (e) => { e.stopPropagation(); menuToggle.classList.toggle('active'); menuContent.classList.toggle('show'); });
-  document.addEventListener('click', (e) => { if (!menuContent.contains(e.target) && !menuToggle.contains(e.target)) { menuToggle.classList.remove('active'); menuContent.classList.remove('show'); } });
-  function closeMenu() { menuToggle.classList.remove('active'); menuContent.classList.remove('show'); }
-
-  // OS Básico
-  function generateOSNumber() { let c=parseInt(localStorage.getItem('marlift_os_counter')||'0')+1; const now=new Date(); const os=`OS-${now.getFullYear()}${String(now.getMonth()+1).padStart(2,'0')}-${String(c).padStart(4,'0')}`; document.getElementById('numeroOS').value=os; localStorage.setItem('marlift_os_counter', c); }
-  function setDefaultDate() { document.getElementById('dataOS').value=new Date().toISOString().split('T')[0]; }
   
-  // Timer
-  function startTimer() { if(timerRunning) return; timerRunning=true; if(!document.getElementById('horaInicio').value) document.getElementById('horaInicio').value=new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}); timerInterval=setInterval(()=>{ if(!timerPaused){ timerSeconds++; const h=Math.floor(timerSeconds/3600),m=Math.floor((timerSeconds%3600)/60),s=timerSeconds%60; document.getElementById('timerDisplay').textContent=`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`; } },1000); }
-  function stopTimer() { clearInterval(timerInterval); timerRunning=false; if(!document.getElementById('horaTermino').value) document.getElementById('horaTermino').value=new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}); calculateTotals(); }
+  menuToggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    menuToggle.classList.toggle('active');
+    menuContent.classList.toggle('show');
+  });
   
-  // Cálculos
-  function calculateTotals(){ const inicio=document.getElementById('horaInicio').value, termino=document.getElementById('horaTermino').value; if(inicio && termino) { let diff = (parseInt(termino.split(':')[0])*60 + parseInt(termino.split(':')[1])) - (parseInt(inicio.split(':')[0])*60 + parseInt(inicio.split(':')[1])); if(diff < 60) diff = 60; document.getElementById('horasTotais').value=`${Math.ceil(diff/60)}h`; document.getElementById('totalGeral').value=`${String(Math.floor(diff/60)).padStart(2,'0')}:${String(diff%60).padStart(2,'0')}`; } }
+  document.addEventListener('click', (e) => {
+    if (!menuContent.contains(e.target) && !menuToggle.contains(e.target)) {
+      menuToggle.classList.remove('active');
+      menuContent.classList.remove('show');
+    }
+  });
+  
+  function closeMenu() {
+    menuToggle.classList.remove('active');
+    menuContent.classList.remove('show');
+  }
+  
+  let lastScrollTop=0; 
+  window.addEventListener('scroll',()=>{
+    const st=window.scrollY; 
+    if(Math.abs(lastScrollTop-st)<=5) return; 
+    const header=document.querySelector('header'); 
+    if(st>lastScrollTop && st>80) header.classList.add('header-hidden'); 
+    else if(st+window.innerHeight<document.body.scrollHeight) header.classList.remove('header-hidden'); 
+    lastScrollTop=st;
+  });
+  
+  function generateOSNumber() { 
+    let c=parseInt(localStorage.getItem('marlift_os_counter')||'0')+1; 
+    const now=new Date(); 
+    const os=`OS-${now.getFullYear()}${String(now.getMonth()+1).padStart(2,'0')}-${String(c).padStart(4,'0')}`; 
+    document.getElementById('numeroOS').value=os; 
+    document.getElementById('clienteNumeroOS').value=os; 
+    localStorage.setItem('marlift_os_counter', c);
+  }
+  
+  function setDefaultDate() { const hoje=new Date().toISOString().split('T')[0]; document.getElementById('dataOS').value=hoje; document.getElementById('clienteDataOS').value=hoje; }
+  function atualizarLinkMapa() { const end=document.getElementById('endereco').value; const link=document.getElementById('mapLink'); if(end){ link.href=`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(end)}`; link.style.display='inline-flex'; } else link.style.display='none'; }
+  function abrirMapa(){ const end=document.getElementById('endereco').value; if(end) window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(end)}`,'_blank'); else showToast('Digite o endereço primeiro'); }
+  
+  function syncClienteFields() {
+    document.getElementById('clienteNumeroOS').value = document.getElementById('numeroOS').value;
+    document.getElementById('clienteDataOS').value = document.getElementById('dataOS').value;
+    document.getElementById('clienteNome').value = document.getElementById('cliente').value;
+    document.getElementById('clienteCidade').value = document.getElementById('cidadeCliente').value;
+    document.getElementById('clienteEndereco').value = document.getElementById('endereco').value;
+  }
+  
+  function updateTipoChamadoDisplay() {
+    const select = document.getElementById('tipoChamado');
+    const selectedOption = select.options[select.selectedIndex];
+    let valor = selectedOption ? selectedOption.text : '';
+    valor = valor.toUpperCase();
+    const displayDiv = document.getElementById('tipoChamadoDisplay');
+    const isEmergencial = (valor === 'EMERGENCIAL');
+    displayDiv.innerHTML = `<span style="font-weight: bold;">TIPO DE CHAMADO:</span> <span class="tipo-chamado-destaque ${isEmergencial ? 'emergencial' : ''}" style="font-weight: bold;">${valor}</span>`;
+  }
+  
+  function buscarClientePorCNPJ() {
+    const cnpj = document.getElementById('cnpj').value.trim();
+    if(!cnpj) return;
+    const numeros = cnpj.replace(/\D/g,'');
+    const cliente = cadClients.find(c => (c.cnpj||'').replace(/\D/g,'') === numeros);
+    if(cliente){
+      document.getElementById('cliente').value = cliente.nome.toUpperCase();
+      document.getElementById('cidadeCliente').value = (cliente.cidade||'').toUpperCase();
+      document.getElementById('endereco').value = (cliente.endereco||'').toUpperCase();
+      document.getElementById('whatsappCliente').value = cliente.whatsapp||'';
+      const marca = (cliente.marca || '').toUpperCase();
+      const marcaSelect = document.getElementById('marcaSelect');
+      const outraContainer = document.getElementById('marcaOutraContainer');
+      const outraInput = document.getElementById('marcaOutra');
+      if (marcasList.includes(marca)) {
+        marcaSelect.value = marca;
+        outraContainer.style.display = 'none';
+        outraInput.value = '';
+      } else if (marca) {
+        marcaSelect.value = 'OUTRA';
+        outraContainer.style.display = 'block';
+        outraInput.value = marca;
+      } else {
+        marcaSelect.value = '';
+        outraContainer.style.display = 'none';
+        outraInput.value = '';
+      }
+      document.getElementById('modelo').value = (cliente.modelo || '').toUpperCase();
+      document.getElementById('numSerie').value = (cliente.serie || '').toUpperCase();
+      syncClienteFields();
+      atualizarLinkMapa();
+      showToast(`Cliente ${cliente.nome} carregado`);
+    }
+  }
 
-  // Tabs
-  document.querySelectorAll('.tab-button').forEach(btn=>btn.addEventListener('click',()=>{ const tabId=btn.getAttribute('data-tab'); document.querySelectorAll('.tab-button').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); document.querySelectorAll('.tab-content').forEach(tab=>tab.classList.remove('active')); document.getElementById(tabId).classList.add('active'); }));
+  function updateMarcaHidden() {
+    const select = document.getElementById('marcaSelect');
+    const outraInput = document.getElementById('marcaOutra');
+    let valor = '';
+    if (select.value === 'OUTRA') {
+      valor = outraInput.value.trim().toUpperCase();
+    } else {
+      valor = select.value;
+    }
+    document.getElementById('marca').value = valor;
+  }
 
-  // Checklist Render
-  function renderChecklist() { const container=document.getElementById('checklistSections'); totalCheckItems=0; container.innerHTML=''; checklistData.forEach(section=>{ totalCheckItems+=section.items.length; const div=document.createElement('div'); div.className='checklist-card p-5 mb-4'; div.innerHTML=`<div class="section-header"><h2 class="font-display text-xl">${section.title}</h2></div><div class="grid grid-cols-1 md:grid-cols-2 gap-2">${section.items.map(item=>`<div class="flex items-center justify-between p-2 rounded bg-[var(--bg)]"><label class="check-item flex items-center gap-2 flex-1 cursor-pointer"><input type="checkbox" data-check="true" id="${item.id}"><span class="checkmark"><svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg></span><span class="text-sm">${item.label}</span></label></div>`).join('')}</div>`; container.appendChild(div); }); document.querySelectorAll('input[data-check="true"]').forEach(cb=>cb.addEventListener('change',updateProgress)); updateProgress(); }
+  function updateCadMarcaHidden() {
+    const select = document.getElementById('cad_marcaSelect');
+    const outraInput = document.getElementById('cad_marcaOutra');
+    let valor = '';
+    if (select.value === 'OUTRA') {
+      valor = outraInput.value.trim().toUpperCase();
+    } else {
+      valor = select.value;
+    }
+    document.getElementById('cad_marca').value = valor;
+  }
+
+  function setupMarcaSelects() {
+    const marcaSelect = document.getElementById('marcaSelect');
+    const outraContainer = document.getElementById('marcaOutraContainer');
+    const outraInput = document.getElementById('marcaOutra');
+    marcaSelect.addEventListener('change', () => {
+      if (marcaSelect.value === 'OUTRA') {
+        outraContainer.style.display = 'block';
+        outraInput.focus();
+      } else {
+        outraContainer.style.display = 'none';
+        outraInput.value = '';
+        updateMarcaHidden();
+      }
+    });
+    outraInput.addEventListener('input', () => {
+      updateMarcaHidden();
+    });
+    
+    const cadMarcaSelect = document.getElementById('cad_marcaSelect');
+    const cadOutraContainer = document.getElementById('cadMarcaOutraContainer');
+    const cadOutraInput = document.getElementById('cad_marcaOutra');
+    cadMarcaSelect.addEventListener('change', () => {
+      if (cadMarcaSelect.value === 'OUTRA') {
+        cadOutraContainer.style.display = 'block';
+        cadOutraInput.focus();
+      } else {
+        cadOutraContainer.style.display = 'none';
+        cadOutraInput.value = '';
+        updateCadMarcaHidden();
+      }
+    });
+    cadOutraInput.addEventListener('input', () => {
+      updateCadMarcaHidden();
+    });
+  }
+
+  // ==================== CRONÔMETRO ====================
+  function startTimer() { if(timerRunning) return; timerRunning=true; timerPaused=false; document.getElementById('timerContainer').classList.add('timer-running'); document.getElementById('timerStatus').textContent='Servico em andamento'; document.getElementById('btnStart').disabled=true; document.getElementById('btnPause').disabled=false; document.getElementById('btnStop').disabled=false; if(!document.getElementById('horaInicio').value) document.getElementById('horaInicio').value=new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}); timerInterval=setInterval(()=>{ if(!timerPaused){ timerSeconds++; const h=Math.floor(timerSeconds/3600),m=Math.floor((timerSeconds%3600)/60),s=timerSeconds%60; document.getElementById('timerDisplay').textContent=`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`; } },1000); }
+  function pauseTimer() { if(!timerRunning) return; timerPaused=true; document.getElementById('timerStatus').textContent='Pausa almoco'; document.getElementById('btnPause').textContent='Retornar'; document.getElementById('btnPause').onclick=resumeTimer; if(!document.getElementById('horaAlmocoSaida').value) document.getElementById('horaAlmocoSaida').value=new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}); }
+  function resumeTimer() { timerPaused=false; document.getElementById('timerStatus').textContent='Servico em andamento'; document.getElementById('btnPause').textContent='Almoco'; document.getElementById('btnPause').onclick=pauseTimer; if(!document.getElementById('horaAlmocoRetorno').value) document.getElementById('horaAlmocoRetorno').value=new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}); }
+  function stopTimer() { if(!timerRunning) return; clearInterval(timerInterval); timerRunning=false; document.getElementById('timerContainer').classList.remove('timer-running'); document.getElementById('timerStatus').textContent='Finalizado'; document.getElementById('btnStart').disabled=false; document.getElementById('btnPause').disabled=true; document.getElementById('btnStop').disabled=true; if(!document.getElementById('horaTermino').value) document.getElementById('horaTermino').value=new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}); calculateTotals(); }
+  function timeDiff(start,end) { if(!start||!end) return 0; let [sh,sm]=start.split(':').map(Number),[eh,em]=end.split(':').map(Number); let diff=(eh*60+em)-(sh*60+sm); if(diff<0) diff+=1440; return diff; }
+  function calculateTotals(){ const inicio=document.getElementById('horaInicio').value,termino=document.getElementById('horaTermino').value,saida=document.getElementById('horaAlmocoSaida').value,retorno=document.getElementById('horaAlmocoRetorno').value; if(!inicio||!termino) return; let total=timeDiff(inicio,termino); if(saida&&retorno) total-=timeDiff(saida,retorno); let horas=Math.ceil(total/60); if(horas<1) horas=1; document.getElementById('horasTotais').value=`${horas}h`; updateTotalGeral(); }
+  function timeToMinutes(t){ if(!t) return 0; if(t.includes('h')) return parseInt(t)*60; let p=t.split(':'); return parseInt(p[0])*60+parseInt(p[1]); }
+  function updateTotalGeral(){ const horasStr=document.getElementById('horasTotais').value; let horasMin=0; if(horasStr){ const m=horasStr.match(/(\d+)h/); if(m) horasMin=parseInt(m[1])*60; } const extra=timeToMinutes(document.getElementById('horasExtras').value); const noturno=timeToMinutes(document.getElementById('adicionalNoturno').value); let total=horasMin+extra+noturno; const h=Math.floor(total/60),m=total%60; document.getElementById('totalGeral').value=`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`; }
+  function setupEventListeners(){ ['horaInicio','horaAlmocoSaida','horaAlmocoRetorno','horaTermino'].forEach(id=>document.getElementById(id).addEventListener('change',calculateTotals)); document.getElementById('horasExtras').addEventListener('input',updateTotalGeral); document.getElementById('adicionalNoturno').addEventListener('input',updateTotalGeral); }
+
+  // ==================== FOTOS ====================
+  function handlePhotoUpload(e){ const files=Array.from(e.target.files); const preview=document.getElementById('fotosPreview'); photosData=[]; preview.innerHTML=''; files.forEach(file=>{ const reader=new FileReader(); reader.onload=(ev)=>{ photosData.push(ev.target.result); const div=document.createElement('div'); div.className='photo-item'; div.innerHTML=`<img src="${ev.target.result}"><div class="photo-remove" onclick="removePhoto(this)">×</div>`; preview.appendChild(div); }; reader.readAsDataURL(file); }); }
+  function removePhoto(el){ const idx=Array.from(el.parentNode.parentNode.children).indexOf(el.parentNode); if(idx!==-1) photosData.splice(idx,1); el.parentNode.remove(); }
+
+  // ==================== CHECKLIST RENDER ====================
+  function renderChecklist() {
+    const container=document.getElementById('checklistSections');
+    totalCheckItems=0;
+    container.innerHTML='';
+    checklistData.forEach(section=>{
+      totalCheckItems+=section.items.length;
+      const div=document.createElement('div');
+      div.className='checklist-card p-5 mb-4';
+      div.innerHTML=`<div class="section-header"><div class="section-icon"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg></div><h2 class="font-display text-xl">${section.title}</h2><button type="button" class="select-all-btn ml-auto" data-section="${section.id}">Selecionar Todos</button></div><div class="grid grid-cols-1 md:grid-cols-2 gap-2" id="items-${section.id}">${section.items.map(item=>`<div class="flex items-center justify-between p-2 rounded bg-[var(--bg)]"><label class="check-item flex items-center gap-2 flex-1 cursor-pointer"><input type="checkbox" data-check="true" id="${item.id}"><span class="checkmark"><svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg></span><span class="text-sm">${item.label}</span></label><select class="form-input w-20 text-xs ml-2" id="${item.id}_status"><option value="ok">OK</option><option value="atencao">Aten.</option><option value="critico">Crit.</option><option value="na">N/A</option></select></div>`).join('')}</div>`;
+      container.appendChild(div);
+    });
+    document.querySelectorAll('.select-all-btn').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        const sectionId=btn.getAttribute('data-section');
+        const section=checklistData.find(s=>s.id===sectionId);
+        if(section){
+          const checkboxes=section.items.map(item=>document.getElementById(item.id));
+          const allChecked=checkboxes.every(cb=>cb.checked);
+          checkboxes.forEach(cb=>cb.checked=!allChecked);
+          updateProgress();
+        }
+      });
+    });
+    document.querySelectorAll('input[data-check="true"]').forEach(cb=>cb.addEventListener('change',updateProgress));
+    updateProgress();
+  }
   function updateProgress(){ const checkboxes=document.querySelectorAll('input[data-check="true"]'); checkedItems=Array.from(checkboxes).filter(cb=>cb.checked).length; const pct=totalCheckItems>0?Math.round((checkedItems/totalCheckItems)*100):0; document.getElementById('progressText').textContent=`${pct}%`; document.getElementById('progressFill').style.width=`${pct}%`; }
 
-  // Backup
-  function backupClientes() { if (cadClients.length === 0) return showToast('Nenhum cliente'); const blob = new Blob([JSON.stringify(cadClients, null, 2)], {type: 'application/json'}); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'marlift_clientes.json'; a.click(); showToast('Backup feito!'); }
-  function restaurarClientes() { const input = document.getElementById('restoreFileInput'); input.onchange = (e) => { const file = e.target.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = (ev) => { try { cadClients = JSON.parse(ev.target.result); localStorage.setItem('marlift_clientes', JSON.stringify(cadClients)); cadRenderFilteredTable(); showToast('Restaurado!'); } catch(err) { showToast('Erro no arquivo'); } }; reader.readAsText(file); }; input.click(); }
+  // ==================== BACKUP E RESTAURAÇÃO (JSON) ====================
+  function backupClientes() {
+    if (cadClients.length === 0) {
+      showToast('Nenhum cliente para fazer backup', true);
+      return;
+    }
+    const dataStr = JSON.stringify(cadClients, null, 2);
+    const blob = new Blob([dataStr], {type: 'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `marlift_clientes_backup_${new Date().toISOString().slice(0,19)}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showToast('Backup exportado com sucesso!');
+  }
 
-  // Print
-  function printOS() { const win=window.open('', '_blank'); win.document.write(`<html><head><title>OS</title><style>body{font-family:sans-serif;padding:20px;}</style></head><body><h1>MARLIFT</h1><p>OS: ${document.getElementById('numeroOS').value}</p><p>Cliente: ${document.getElementById('cliente').value}</p><p>Descricao: ${document.getElementById('descricaoServico').value}</p></body></html>`); win.document.close(); win.print(); }
+  function restaurarClientes() {
+    const input = document.getElementById('restoreFileInput');
+    input.onchange = (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        try {
+          const dados = JSON.parse(ev.target.result);
+          if (Array.isArray(dados)) {
+            const clientesImportados = dados.map(c => ({
+              id: c.id || Date.now() + Math.random(),
+              nome: c.nome || '',
+              cnpj: c.cnpj || '',
+              endereco: c.endereco || '',
+              cidade: c.cidade || '',
+              marca: c.marca || '',
+              modelo: c.modelo || '',
+              serie: c.serie || '',
+              quantidade: c.quantidade || 1,
+              telefone: c.telefone || '',
+              whatsapp: c.whatsapp || ''
+            }));
+            cadClients = clientesImportados;
+            localStorage.setItem('marlift_clientes', JSON.stringify(cadClients));
+            cadRenderFilteredTable();
+            showToast(`Restaurados ${cadClients.length} clientes com sucesso!`);
+          } else {
+            showToast('Arquivo invalido: nao e uma lista de clientes', true);
+          }
+        } catch (err) {
+          showToast('Erro ao ler o arquivo de backup', true);
+        }
+        input.value = '';
+      };
+      reader.readAsText(file);
+    };
+    input.click();
+  }
+
+  // ==================== PDF OS ====================
+  function printOS() { const win=window.open(); win.document.write(getPrintOSHTML()); win.document.close(); win.print(); }
+  function getPrintOSHTML() {
+    const osNum=document.getElementById('numeroOS').value, data=document.getElementById('dataOS').value;
+    const tipoSelect = document.getElementById('tipoChamado');
+    const tipoTexto = tipoSelect.options[tipoSelect.selectedIndex]?.text || '';
+    const tipoUpper = tipoTexto.toUpperCase();
+    const isEmergencial = (tipoUpper === 'EMERGENCIAL');
+    const cliente=(document.getElementById('cliente').value||'-').toUpperCase(), cnpj=document.getElementById('cnpj').value||'-', endereco=(document.getElementById('endereco').value||'-').toUpperCase(), cidade=document.getElementById('cidadeCliente').value||'-', whatsapp=document.getElementById('whatsappCliente').value||'-';
+    const marca = (document.getElementById('marca').value || '-').toUpperCase();
+    const modelo=(document.getElementById('modelo').value||'-').toUpperCase(), numSerie=(document.getElementById('numSerie').value||'-').toUpperCase(), horimetro=document.getElementById('horimetro').value||'-', combustivel=document.getElementById('combustivel').options[document.getElementById('combustivel').selectedIndex]?.text||'-';
+    const descricao=document.getElementById('descricaoServico').value||'-', pecas=document.getElementById('pecasAplicadas').value||'-', pendencias=document.getElementById('pendencias').value||'-';
+    const inicio=document.getElementById('horaInicio').value||'-', almocoSaida=document.getElementById('horaAlmocoSaida').value||'-', almocoRetorno=document.getElementById('horaAlmocoRetorno').value||'-', termino=document.getElementById('horaTermino').value||'-', horasTotais=document.getElementById('horasTotais').value||'-', extras=document.getElementById('horasExtras').value||'-', adicionalNoturno=document.getElementById('adicionalNoturno').value||'-', totalGeral=document.getElementById('totalGeral').value||'-';
+    const tecnico=(document.getElementById('tecnico').value||'-').toUpperCase(), recebedor=(document.getElementById('recebedor').value||'-').toUpperCase();
+    const mapLink = endereco !== '-' ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(endereco)}` : '#';
+    const mapLinkHtml = endereco !== '-' ? `<div style="margin-top: 2px;"><a href="${mapLink}" style="color: #4285f4; text-decoration: none; font-size: 8pt;">Ver localizacao no Google Maps</a></div>` : '';
+    let photosHtml=''; if(photosData.length){ photosHtml='<div style="margin-top:15px;"><h3>Fotos do Servico</h3><div style="display:flex;flex-wrap:wrap;gap:8px;">'; photosData.forEach(photo=>{ photosHtml+=`<div style="width:70px;height:70px;border:1px solid #ccc;border-radius:4px;overflow:hidden;"><img src="${photo}" style="width:100%;height:100%;object-fit:cover;"></div>`; }); photosHtml+='</div></div>'; }
+    return `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>OS_${osNum}</title><style>
+      body{font-family:Inter,sans-serif;padding:6mm;max-width:210mm;margin:0 auto;font-size:9pt; line-height:1.2;}
+      h1{color:#f97316; margin:0 0 2px 0; font-size:1.4rem;}
+      h2{margin:2px 0 2px 0; font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 1px;}
+      .tipo-container { margin: 2px 0 6px 0; font-size: 1.2rem; font-weight: bold; }
+      .tipo-valor { font-weight: bold; }
+      .tipo-valor.emergencial { color: #ef4444; }
+      .section{margin-bottom:6px; border-bottom:1px solid #ddd; padding-bottom:2px;}
+      .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:4px;}
+      .label{font-weight:600; color:#555;}
+      .total-bold{font-weight:bold; font-size:10pt;}
+      .inline-row{display:flex; justify-content:space-between; flex-wrap:wrap; gap:4px; margin-bottom:2px;}
+      hr{margin:4px 0;}
+      p{margin:2px 0;}
+      h3{margin:4px 0 2px 0; font-size:10pt;}
+    </style></head><body>
+    <div style="display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap;">
+      <h1>MARLIFT EMPILHADEIRAS</h1>
+    </div>
+    <h2>Ordem de Servico - ${osNum}</h2>
+    <div class="tipo-container">TIPO DE CHAMADO: <span class="tipo-valor ${isEmergencial ? 'emergencial' : ''}">${tipoUpper}</span></div>
+    <p>Data: ${data}</p>
+    <div class="section">
+      <h3>Dados do Cliente</h3>
+      <div class="inline-row"><strong>Cliente:</strong> ${cliente} &nbsp;&nbsp;|&nbsp;&nbsp; <strong>CNPJ:</strong> ${cnpj}</div>
+      <div><strong>Endereco:</strong> ${endereco}</div>
+      ${mapLinkHtml}
+      <div class="inline-row"><strong>Cidade:</strong> ${cidade} &nbsp;&nbsp;|&nbsp;&nbsp; <strong>WhatsApp:</strong> ${whatsapp}</div>
+    </div>
+    <div class="section"><h3>Dados do Equipamento</h3><div class="grid"><div><span class="label">Marca:</span> ${marca}</div><div><span class="label">Modelo:</span> ${modelo}</div><div><span class="label">No. Serie:</span> ${numSerie}</div><div><span class="label">Horimetro:</span> ${horimetro}h</div><div><span class="label">Combustivel:</span> ${combustivel}</div></div></div>
+    <div class="section"><h3>Servico Realizado</h3><p><strong>Descricao:</strong><br>${descricao.replace(/\n/g,'<br>')}</p><p><strong>Pecas Aplicadas:</strong><br>${pecas.replace(/\n/g,'<br>')}</p><p><strong>Pendencias:</strong><br>${pendencias.replace(/\n/g,'<br>')}</p></div>
+    <div class="section"><h3>Controle de Horas</h3><div class="grid"><div>Inicio: ${inicio}</div><div>Almoco Saida: ${almocoSaida}</div><div>Almoco Retorno: ${almocoRetorno}</div><div>Termino: ${termino}</div><div>Horas Cobradas: ${horasTotais}</div><div>Horas Extras: ${extras}</div><div>Adicional Noturno: ${adicionalNoturno}</div><div><span class="total-bold">Total Geral: ${totalGeral}</span></div></div></div>
+    ${photosHtml}
+    <div class="section"><h3>Assinaturas</h3><div style="display:flex;justify-content:space-between;margin-top:12px;"><div style="text-align:center;width:45%;border-top:1px solid #333;padding-top:2px;">${tecnico}<br>Tecnico</div><div style="text-align:center;width:45%;border-top:1px solid #333;padding-top:2px;">${recebedor}<br>Cliente</div></div></div>
+    <footer style="text-align:center;margin-top:12px;font-size:8pt;">Documento gerado eletronicamente - MARLIFT Empilhadeiras</footer>
+    </body></html>`;
+  }
+
+  // ==================== PDF CHECKLIST ====================
+  function printChecklistOnly() {
+    const osNum=document.getElementById('numeroOS').value;
+    const data=document.getElementById('dataOS').value;
+    const cliente=(document.getElementById('cliente').value||'-').toUpperCase();
+    const marca = (document.getElementById('marca').value || '-').toUpperCase();
+    const modelo=(document.getElementById('modelo').value||'-').toUpperCase();
+    const numSerie=(document.getElementById('numSerie').value||'-').toUpperCase();
+    const horimetro=document.getElementById('horimetro').value||'-';
+    const tecnico=(document.getElementById('tecnico').value||'-').toUpperCase();
+    const recebedor=(document.getElementById('recebedor').value||'-').toUpperCase();
+
+    let checklistHtml='';
+    checklistData.forEach(section=>{
+      checklistHtml+=`<div style="margin-bottom:20px;border:1px solid #ddd;border-radius:8px;overflow:hidden;"><div style="background:#f97316;color:white;padding:6px;font-weight:bold;">${section.title}</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:6px;">`;
+      section.items.forEach(item=>{
+        const cb=document.getElementById(item.id);
+        const statusSelect=document.getElementById(`${item.id}_status`);
+        let statusText='OK', statusClass='background:#d4edda;color:#155724;';
+        if(statusSelect){
+          const val=statusSelect.value;
+          if(val==='ok'){ statusText='OK'; statusClass='background:#d4edda;color:#155724;'; }
+          else if(val==='atencao'){ statusText='ATENCAO'; statusClass='background:#fff3cd;color:#856404;'; }
+          else if(val==='critico'){ statusText='CRITICO'; statusClass='background:#f8d7da;color:#721c24;'; }
+          else if(val==='na'){ statusText='N/A'; statusClass='background:#e2e3e5;color:#383d41;'; }
+        }
+        const checked=cb && cb.checked ? '✓' : '□';
+        checklistHtml+=`<div style="display:flex;align-items:center;gap:6px;padding:3px;"><span style="width:20px;">${checked}</span><span style="flex:1;">${item.label}</span><span style="padding:2px 8px;border-radius:12px;font-size:9px;font-weight:bold;${statusClass}">${statusText}</span></div>`;
+      });
+      checklistHtml+=`</div></div>`;
+    });
+
+    const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Checklist_${osNum}</title><style>body{font-family:Inter,sans-serif;padding:6mm;max-width:210mm;margin:0 auto;font-size:9pt;} h1{color:#f97316;} .header{text-align:center;margin-bottom:15px;} .info-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;background:#f8f9fa;padding:8px;border-radius:8px;margin-bottom:15px;} .signatures{display:flex;justify-content:space-between;margin-top:20px;} .signature-box{text-align:center;width:45%;border-top:1px solid #333;padding-top:4px;}</style></head><body><div class="header"><h1>MARLIFT EMPILHADEIRAS</h1><h2>Checklist Tecnico</h2><p>OS: ${osNum} | Data: ${data}</p></div><div class="info-grid"><div><strong>Cliente:</strong> ${cliente}</div><div><strong>Marca:</strong> ${marca}</div><div><strong>Modelo:</strong> ${modelo}</div><div><strong>No. Serie:</strong> ${numSerie}</div><div><strong>Horimetro:</strong> ${horimetro}h</div></div>${checklistHtml}<div class="signatures"><div class="signature-box">${tecnico}<br>Tecnico</div><div class="signature-box">${recebedor}<br>Cliente</div></div><footer style="text-align:center;margin-top:20px;font-size:8pt;">Documento gerado eletronicamente - MARLIFT Empilhadeiras</footer></body></html>`;
+    const win=window.open(); win.document.write(html); win.document.close(); win.print();
+  }
+
+  // ==================== WHATSAPP ====================
+  function sendWhatsApp() {
+    const whatsappCliente = document.getElementById('whatsappCliente').value;
+    const defaultNumber = whatsappCliente || '5511999999999';
+    let numero = prompt('Numero do WhatsApp (com DDD):', defaultNumber);
+    
+    if (!numero) return;
+    numero = numero.replace(/\D/g, '');
+    if (!numero.startsWith('55')) numero = '55' + numero;
+
+    const osNum = document.getElementById('numeroOS').value || '-';
+    const cliente = (document.getElementById('cliente').value || '-').toUpperCase();
+    const marca = (document.getElementById('marca').value || '').toUpperCase();
+    const modelo = (document.getElementById('modelo').value || '').toUpperCase();
+    const horas = document.getElementById('horasTotais').value || '-';
+    const descricao = document.getElementById('descricaoServico').value.trim();
+    const pecas = document.getElementById('pecasAplicadas').value.trim();
+    const pendencias = document.getElementById('pendencias').value.trim();
+
+    let equipStr = `${marca} ${modelo}`.trim() || 'Nao informado';
+
+    let mensagem = `🏭 *MARLIFT - ${osNum}*\n\n`;
+    mensagem += `👤 ${cliente}\n`;
+    mensagem += `🔧 ${equipStr}\n`;
+    mensagem += `⏱️ ${horas}\n\n`;
+
+    if (descricao) {
+      mensagem += `📝 ${descricao}\n\n`;
+    }
+    
+    if (pecas) {
+      mensagem += `🔩 Pecas:\n${pecas}\n\n`;
+    }
+    
+    if (pendencias) {
+      mensagem += `⚠️ Pendencias: ${pendencias}`;
+    }
+
+    window.open(`https://wa.me/${numero}?text=${encodeURIComponent(mensagem)}`, '_blank');
+    showToast('WhatsApp aberto!');
+  }
+
+  // ==================== OS PERSISTÊNCIA ====================
+  function getFormData(){ 
+    const data={};
+    updateMarcaHidden();
+    document.querySelectorAll('#osForm input, #osForm select, #osForm textarea').forEach(el=>{ 
+      if(el.type === 'checkbox') {
+        data[el.id] = el.checked;
+      } else if(el.type!=='file' && el.id) {
+        data[el.id] = el.value; 
+      }
+    });
+    document.querySelectorAll('#checklistSections input[type="checkbox"], #checklistSections select').forEach(el => {
+        if(el.id) {
+            if(el.type === 'checkbox') data[el.id] = el.checked;
+            else data[el.id] = el.value;
+        }
+    });
+    data.fotosBase64=photosData; 
+    return data; 
+  }
   
-  // WhatsApp
-  function sendWhatsApp() { const num = prompt('Numero:', document.getElementById('whatsappCliente').value || '5511999999999'); if(!num) return; const msg = `🏭 *MARLIFT - ${document.getElementById('numeroOS').value}*\n👤 ${document.getElementById('cliente').value}\n🔧 ${document.getElementById('marca').value} ${document.getElementById('modelo').value}\n⏱️ ${document.getElementById('horasTotais').value}\n\n📝 ${document.getElementById('descricaoServico').value}`; window.open(`https://wa.me/${num.replace(/\D/g,'')}?text=${encodeURIComponent(msg)}`, '_blank'); }
-
-  // Save
+  function setFormData(d){ 
+    if(!d) return; 
+    Object.keys(d).forEach(id=>{ 
+      if(id === 'fotosBase64') return;
+      const el=document.getElementById(id); 
+      if(el){
+        if(el.type === 'checkbox') {
+            el.checked = d[id];
+        } else {
+            el.value = d[id];
+        }
+      }
+    }); 
+    if(d.fotosBase64 && Array.isArray(d.fotosBase64)){ 
+      photosData=d.fotosBase64; 
+      const preview=document.getElementById('fotosPreview'); 
+      preview.innerHTML=''; 
+      photosData.forEach(src=>{ 
+        const div=document.createElement('div'); 
+        div.className='photo-item'; 
+        div.innerHTML=`<img src="${src}"><div class="photo-remove" onclick="removePhoto(this)">×</div>`; 
+        preview.appendChild(div); 
+      }); 
+    } 
+    const marcaSalva = d.marca || '';
+    const marcaSelect = document.getElementById('marcaSelect');
+    const outraContainer = document.getElementById('marcaOutraContainer');
+    const outraInput = document.getElementById('marcaOutra');
+    if (marcasList.includes(marcaSalva)) {
+      marcaSelect.value = marcaSalva;
+      outraContainer.style.display = 'none';
+      outraInput.value = '';
+    } else if (marcaSalva) {
+      marcaSelect.value = 'OUTRA';
+      outraContainer.style.display = 'block';
+      outraInput.value = marcaSalva;
+    } else {
+      marcaSelect.value = '';
+      outraContainer.style.display = 'none';
+      outraInput.value = '';
+    }
+    updateMarcaHidden();
+    calculateTotals(); 
+    updateProgress(); 
+    atualizarLinkMapa(); 
+    syncClienteFields(); 
+    updateTipoChamadoDisplay();
+  }
+  
   function saveCurrentOS(){ 
-    const data = { numeroOS: document.getElementById('numeroOS').value, dataOS: document.getElementById('dataOS').value, cliente: document.getElementById('cliente').value, cidadeCliente: document.getElementById('cidadeCliente').value, marca: document.getElementById('marca').value, modelo: document.getElementById('modelo').value, horasTotais: document.getElementById('horasTotais').value, descricaoServico: document.getElementById('descricaoServico').value, tipoChamado: document.getElementById('tipoChamado').value };
-    let history = JSON.parse(localStorage.getItem('marlift_os_history')||'[]');
-    history.unshift(data);
-    localStorage.setItem('marlift_os_history', JSON.stringify(history));
-    showToast('OS Salva!');
+    updateMarcaHidden();
+    const data=getFormData(); 
+    let history=JSON.parse(localStorage.getItem('marlift_os_history')||'[]'); 
+    const idx=history.findIndex(os=>os.numeroOS===data.numeroOS); 
+    if(idx>=0) history[idx]=data; 
+    else history.unshift(data);
+    localStorage.setItem('marlift_os_history',JSON.stringify(history)); 
+    showToast('OS e Checklist salvos localmente!'); 
     loadHistorico();
   }
   
-  function clearForm(){ if(confirm('Limpar tudo?')){ document.getElementById('osForm').reset(); generateOSNumber(); setDefaultDate(); showToast('Limpo'); } }
+  function clearForm(){ 
+    if(!confirm('Nova OS? Dados atuais serao perdidos.')) return; 
+    document.getElementById('osForm').reset(); 
+    document.querySelectorAll('#checklistSections input[type="checkbox"]').forEach(cb => cb.checked = false);
+    document.querySelectorAll('#checklistSections select').forEach(sel => sel.value = 'ok');
+    
+    photosData=[]; 
+    document.getElementById('fotosPreview').innerHTML=''; 
+    timerSeconds=0; timerRunning=false; timerPaused=false; 
+    clearInterval(timerInterval); 
+    document.getElementById('timerDisplay').textContent='00:00:00'; 
+    document.getElementById('timerContainer').classList.remove('timer-running'); 
+    document.getElementById('timerStatus').textContent='Pronto'; 
+    document.getElementById('btnStart').disabled=false; 
+    document.getElementById('btnPause').disabled=true; 
+    document.getElementById('btnStop').disabled=true; 
+    generateOSNumber(); 
+    setDefaultDate(); 
+    updateProgress(); 
+    atualizarLinkMapa(); 
+    syncClienteFields(); 
+    document.getElementById('tecnico').value = 'LEONARDO MARTINS';
+    document.getElementById('marcaSelect').value = '';
+    document.getElementById('marcaOutraContainer').style.display = 'none';
+    document.getElementById('marcaOutra').value = '';
+    updateMarcaHidden();
+    updateTipoChamadoDisplay();
+    showToast('Formulario limpo'); 
+  }
 
-  // Histórico
-  function loadHistorico() { osHistory = JSON.parse(localStorage.getItem('marlift_os_history')||'[]'); renderHistorico(); }
-  function renderHistorico() { const tbody = document.getElementById('historicoTableBody'); tbody.innerHTML = ''; document.getElementById('statTotal').textContent = osHistory.length; osHistory.forEach(os => { const row = tbody.insertRow(); row.innerHTML = `<td>${os.numeroOS}</td><td>${os.dataOS}</td><td>${os.cliente}</td><td>${os.tipoChamado}</td><td><button class="btn-view" onclick="viewOS('${os.numeroOS}')"><i class="fas fa-eye"></i></button></td>`; }); }
-  function viewOS(num) { const os = osHistory.find(o => o.numeroOS === num); if(os) { document.getElementById('numeroOS').value = os.numeroOS; document.getElementById('cliente').value = os.cliente; document.getElementById('descricaoServico').value = os.descricaoServico; document.querySelector('[data-tab="tab-os"]').click(); } }
-  function openHistorico() { document.querySelector('[data-tab="tab-historico"]').click(); }
-  function limparHistorico() { if(confirm('Apagar tudo?')){ osHistory=[]; localStorage.setItem('marlift_os_history', '[]'); loadHistorico(); showToast('Histórico limpo'); } }
+  // ==================== HISTÓRICO DE OS ====================
+  function loadHistorico() {
+    osHistory = JSON.parse(localStorage.getItem('marlift_os_history') || '[]');
+    renderHistoricoTable();
+    updateHistoricoStats();
+  }
 
-  // Clientes
-  function cadLoadFromLocalStorage(){ cadClients = JSON.parse(localStorage.getItem('marlift_clientes')||'[]'); cadRenderFilteredTable(); }
-  function cadRenderFilteredTable(){ const tbody = document.getElementById('cad_tableBody'); tbody.innerHTML=''; cadClients.forEach(c => { const row = tbody.insertRow(); row.innerHTML = `<td>${c.nome}</td><td>${c.cidade}</td><td>${c.whatsapp}</td><td>${c.marca}</td><td><button class="btn-selecionar" onclick="cadSelecionarCliente(${c.id})">Selecionar</button></td>`; }); }
-  function cadSelecionarCliente(id){ const c = cadClients.find(x => x.id === id); document.getElementById('cliente').value = c.nome; document.getElementById('cidadeCliente').value = c.cidade; document.getElementById('whatsappCliente').value = c.whatsapp; document.querySelector('[data-tab="tab-os"]').click(); showToast('Cliente selecionado'); }
-  document.getElementById('cad_btnSalvar').addEventListener('click', () => { const nome = document.getElementById('cad_nome').value; if(!nome) return; cadClients.push({ id: Date.now(), nome: nome, cnpj: document.getElementById('cad_cnpj').value, cidade: document.getElementById('cad_cidade').value, whatsapp: document.getElementById('cad_whatsapp').value, marca: document.getElementById('cad_marcaSelect').value }); localStorage.setItem('marlift_clientes', JSON.stringify(cadClients)); cadRenderFilteredTable(); showToast('Adicionado'); });
+  function renderHistoricoTable() {
+    const tbody = document.getElementById('historicoTableBody');
+    const emptyState = document.getElementById('historicoEmpty');
+    const searchTerm = document.getElementById('historicoSearch').value.toLowerCase();
+    const filtroTipo = document.getElementById('historicoFiltroTipo').value;
 
-  // Inicialização
-  document.addEventListener('DOMContentLoaded',()=>{ generateOSNumber(); setDefaultDate(); renderChecklist(); loadHistorico(); cadLoadFromLocalStorage(); });
+    let filtered = osHistory.filter(os => {
+      const matchSearch = !searchTerm || 
+        (os.numeroOS || '').toLowerCase().includes(searchTerm) ||
+        (os.cliente || '').toLowerCase().includes(searchTerm) ||
+        (os.marca || '').toLowerCase().includes(searchTerm) ||
+        (os.modelo || '').toLowerCase().includes(searchTerm) ||
+        (os.cidadeCliente || '').toLowerCase().includes(searchTerm);
+      
+      const matchTipo = !filtroTipo || (os.tipoChamado || '') === filtroTipo;
+      
+      return matchSearch && matchTipo;
+    });
+
+    if (filtered.length === 0) {
+      tbody.innerHTML = '';
+      emptyState.style.display = 'block';
+      return;
+    }
+
+    emptyState.style.display = 'none';
+    tbody.innerHTML = '';
+
+    filtered.forEach(os => {
+      const row = tbody.insertRow();
+      const tipoClass = getStatusClass(os.tipoChamado);
+      const marcaModelo = `${os.marca || '-'} / ${os.modelo || '-'}`;
+      
+      row.innerHTML = `
+        <td class="font-mono font-semibold">${os.numeroOS || '-'}</td>
+        <td>${formatDate(os.dataOS)}</td>
+        <td>${(os.cliente || '-').toUpperCase()}</td>
+        <td>${(os.cidadeCliente || '-').toUpperCase()}</td>
+        <td>${marcaModelo}</td>
+        <td><span class="status-badge ${tipoClass}">${getTipoLabel(os.tipoChamado)}</span></td>
+        <td class="font-mono">${os.horasTotais || '-'}</td>
+        <td>
+          <div class="historico-actions">
+            <button class="btn-action btn-view" onclick="viewOS('${os.numeroOS}')" title="Visualizar">
+              <i class="fas fa-eye"></i>
+            </button>
+            <button class="btn-action btn-edit" onclick="editOS('${os.numeroOS}')" title="Editar">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button class="btn-action btn-delete" onclick="deleteOS('${os.numeroOS}')" title="Excluir">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+        </td>
+      `;
+    });
+  }
+
+  function getStatusClass(tipo) {
+    switch(tipo) {
+      case 'emergencial': return 'status-emergencial';
+      case 'garantia': return 'status-garantia';
+      case 'preventiva': return 'status-preventiva';
+      default: return 'status-normal';
+    }
+  }
+
+  function getTipoLabel(tipo) {
+    const labels = {
+      'normal': 'Normal',
+      'emergencial': 'Emergencial',
+      'garantia': 'Garantia',
+      'preventiva': 'Preventiva',
+      'corretiva': 'Corretiva',
+      'retorno_pendencia': 'Retorno',
+      'orcamento': 'Orcamento',
+      'contrato': 'Contrato',
+      'locacao': 'Locacao'
+    };
+    return labels[tipo] || 'Normal';
+  }
+
+  function formatDate(dateStr) {
+    if (!dateStr) return '-';
+    const parts = dateStr.split('-');
+    if (parts.length === 3) {
+      return `${parts[2]}/${parts[1]}/${parts[0]}`;
+    }
+    return dateStr;
+  }
+
+  function updateHistoricoStats() {
+    const total = osHistory.length;
+    const emergenciais = osHistory.filter(os => os.tipoChamado === 'emergencial').length;
+    const preventivas = osHistory.filter(os => os.tipoChamado === 'preventiva').length;
+    
+    const now = new Date();
+    const currentMonth = now.getMonth();
+    const currentYear = now.getFullYear();
+    const esteMes = osHistory.filter(os => {
+      if (!os.dataOS) return false;
+      const osDate = new Date(os.dataOS);
+      return osDate.getMonth() === currentMonth && osDate.getFullYear() === currentYear;
+    }).length;
+
+    document.getElementById('statTotal').textContent = total;
+    document.getElementById('statEmergenciais').textContent = emergenciais;
+    document.getElementById('statPreventivas').textContent = preventivas;
+    document.getElementById('statMes').textContent = esteMes;
+  }
+
+  function viewOS(numeroOS) {
+    const os = osHistory.find(o => o.numeroOS === numeroOS);
+    if (!os) {
+      showToast('OS nao encontrada', true);
+      return;
+    }
+    setFormData(os);
+    document.querySelector('.tab-button[data-tab="tab-os"]').click();
+    showToast(`OS ${numeroOS} carregada para visualizacao`);
+  }
+
+  function editOS(numeroOS) {
+    const os = osHistory.find(o => o.numeroOS === numeroOS);
+    if (!os) {
+      showToast('OS nao encontrada', true);
+      return;
+    }
+    setFormData(os);
+    document.querySelector('.tab-button[data-tab="tab-os"]').click();
+    showToast(`Editando OS ${numeroOS}`);
+  }
+
+  function deleteOS(numeroOS) {
+    if (!confirm(`Excluir OS ${numeroOS}? Esta acao nao pode ser desfeita.`)) return;
+    
+    osHistory = osHistory.filter(os => os.numeroOS !== numeroOS);
+    localStorage.setItem('marlift_os_history', JSON.stringify(osHistory));
+    renderHistoricoTable();
+    updateHistoricoStats();
+    showToast('OS excluida com sucesso');
+  }
+
+  function openHistorico() {
+    document.querySelector('.tab-button[data-tab="tab-historico"]').click();
+  }
+
+  function exportarHistorico() {
+    if (osHistory.length === 0) {
+      showToast('Nenhum registro para exportar', true);
+      return;
+    }
+
+    let csv = 'OS;Data;Cliente;Cidade;Marca;Modelo;Tipo;Horas;Descricao\n';
+    osHistory.forEach(os => {
+      csv += `"${os.numeroOS || ''}";`;
+      csv += `"${formatDate(os.dataOS)}";`;
+      csv += `"${(os.cliente || '').toUpperCase()}";`;
+      csv += `"${(os.cidadeCliente || '').toUpperCase()}";`;
+      csv += `"${os.marca || ''}";`;
+      csv += `"${os.modelo || ''}";`;
+      csv += `"${getTipoLabel(os.tipoChamado)}";`;
+      csv += `"${os.horasTotais || ''}";`;
+      csv += `"${(os.descricaoServico || '').replace(/"/g, '""')}"\n`;
+    });
+
+    const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `marlift_historico_${new Date().toISOString().slice(0, 10)}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showToast('Historico exportado para CSV');
+  }
+
+  function limparHistorico() {
+    if (osHistory.length === 0) {
+      showToast('Historico ja esta vazio', true);
+      return;
+    }
+    if (!confirm('ATENCAO: Isso ira apagar TODAS as OS do historico. Continuar?')) return;
+    if (!confirm('Tem certeza? Esta acao e irreversivel!')) return;
+
+    osHistory = [];
+    localStorage.setItem('marlift_os_history', JSON.stringify(osHistory));
+    renderHistoricoTable();
+    updateHistoricoStats();
+    showToast('Historico limpo com sucesso');
+  }
+
+  // ==================== CLIENTES ====================
+  function cadLoadFromLocalStorage(){ 
+    const stored = localStorage.getItem('marlift_clientes'); 
+    if(stored) { 
+      try{ 
+        cadClients = JSON.parse(stored); 
+        if(!Array.isArray(cadClients)) cadClients=[]; 
+        cadClients = cadClients.map(c => {
+          if(c.equipamento && !c.marca) {
+            c.marca = c.equipamento;
+            c.modelo = c.modelo || '';
+            c.serie = c.serie || '';
+          }
+          if(c.marca === undefined) c.marca = '';
+          if(c.modelo === undefined) c.modelo = '';
+          if(c.serie === undefined) c.serie = '';
+          return c;
+        });
+      }catch(e){ cadClients=[]; } 
+    } 
+    cadRenderFilteredTable(); 
+  }
+  
+  function cadRenderFilteredTable(){ 
+    const term = document.getElementById('cad_searchInput').value.trim().toLowerCase(); 
+    const filtered = term ? cadClients.filter(c=>c.nome.toLowerCase().includes(term)||(c.cnpj||'').includes(term)) : cadClients; 
+    const tbody=document.getElementById('cad_tableBody'); 
+    tbody.innerHTML=''; 
+    if(filtered.length===0){ 
+      tbody.innerHTML='<tr><td colspan="11" class="text-center py-8">Nenhum cliente</td></tr>'; 
+    } else { 
+      filtered.forEach(c=>{ 
+        const row=tbody.insertRow(); 
+        row.innerHTML=`<td>${c.nome||'-'}</td>
+                        <td>${c.endereco||'-'}</td>
+                        <td>${c.cidade||'-'}</td>
+                        <td>${c.marca||'-'}</td>
+                        <td>${c.modelo||'-'}</td>
+                        <td>${c.serie||'-'}</td>
+                        <td>${c.quantidade||0}</td>
+                        <td>${c.telefone||'-'}</td>
+                        <td>${c.whatsapp||'-'}</td>
+                        <td>${c.cnpj||'-'}</td>
+                        <td>
+                         <button class="btn-selecionar" data-id="${c.id}">Selecionar</button>
+                         <i class="fas fa-edit edit-icon" data-id="${c.id}" style="cursor:pointer;"></i>
+                         <i class="fas fa-trash-alt delete-icon" data-id="${c.id}"></i>
+                        </td>`; 
+      }); 
+    } 
+    document.querySelectorAll('.btn-selecionar').forEach(btn=>btn.addEventListener('click',()=>cadSelecionarCliente(parseInt(btn.getAttribute('data-id'))))); 
+    document.querySelectorAll('.delete-icon').forEach(icon=>icon.addEventListener('click',()=>cadDeleteClient(parseInt(icon.getAttribute('data-id'))))); 
+    document.querySelectorAll('.edit-icon').forEach(icon=>icon.addEventListener('click',()=>cadEditClient(parseInt(icon.getAttribute('data-id'))))); 
+  }
+  
+  function cadResetForm() {
+    document.getElementById('cad_nome').value = '';
+    document.getElementById('cad_cnpj').value = '';
+    document.getElementById('cad_endereco').value = '';
+    document.getElementById('cad_cidade').value = '';
+    document.getElementById('cad_marcaSelect').value = '';
+    document.getElementById('cadMarcaOutraContainer').style.display = 'none';
+    document.getElementById('cad_marcaOutra').value = '';
+    document.getElementById('cad_marca').value = '';
+    document.getElementById('cad_modelo').value = '';
+    document.getElementById('cad_serie').value = '';
+    document.getElementById('cad_quantidade').value = '1';
+    document.getElementById('cad_telefone').value = '';
+    document.getElementById('cad_whatsapp').value = '';
+    editingClientId = null;
+    const btnSalvar = document.getElementById('cad_btnSalvar');
+    const btnCancelar = document.getElementById('cad_btnCancelar');
+    btnSalvar.textContent = 'Adicionar Cliente';
+    btnCancelar.style.display = 'none';
+  }
+  
+  function cadEditClient(id) {
+    const cliente = cadClients.find(c => c.id === id);
+    if(!cliente) return;
+    editingClientId = id;
+    document.getElementById('cad_nome').value = cliente.nome || '';
+    document.getElementById('cad_cnpj').value = cliente.cnpj || '';
+    document.getElementById('cad_endereco').value = cliente.endereco || '';
+    document.getElementById('cad_cidade').value = cliente.cidade || '';
+    const marca = (cliente.marca || '').toUpperCase();
+    const marcaSelect = document.getElementById('cad_marcaSelect');
+    const outraContainer = document.getElementById('cadMarcaOutraContainer');
+    const outraInput = document.getElementById('cad_marcaOutra');
+    if (marcasList.includes(marca)) {
+      marcaSelect.value = marca;
+      outraContainer.style.display = 'none';
+      outraInput.value = '';
+    } else if (marca) {
+      marcaSelect.value = 'OUTRA';
+      outraContainer.style.display = 'block';
+      outraInput.value = marca;
+    } else {
+      marcaSelect.value = '';
+      outraContainer.style.display = 'none';
+      outraInput.value = '';
+    }
+    updateCadMarcaHidden();
+    document.getElementById('cad_modelo').value = cliente.modelo || '';
+    document.getElementById('cad_serie').value = cliente.serie || '';
+    document.getElementById('cad_quantidade').value = cliente.quantidade || 1;
+    document.getElementById('cad_telefone').value = cliente.telefone || '';
+    document.getElementById('cad_whatsapp').value = cliente.whatsapp || '';
+    const btnSalvar = document.getElementById('cad_btnSalvar');
+    const btnCancelar = document.getElementById('cad_btnCancelar');
+    btnSalvar.textContent = 'Atualizar Cliente';
+    btnCancelar.style.display = 'inline-flex';
+    showToast('Editando cliente - clique em Atualizar para salvar');
+  }
+  
+  function cadUpdateClient() {
+    if(!editingClientId) return;
+    updateCadMarcaHidden();
+    const index = cadClients.findIndex(c => c.id === editingClientId);
+    if(index === -1) return;
+    cadClients[index] = {
+      id: editingClientId,
+      nome: document.getElementById('cad_nome').value.trim(),
+      cnpj: document.getElementById('cad_cnpj').value.trim(),
+      endereco: document.getElementById('cad_endereco').value.trim(),
+      cidade: document.getElementById('cad_cidade').value.trim(),
+      marca: document.getElementById('cad_marca').value,
+      modelo: document.getElementById('cad_modelo').value.trim(),
+      serie: document.getElementById('cad_serie').value.trim(),
+      quantidade: parseInt(document.getElementById('cad_quantidade').value) || 1,
+      telefone: document.getElementById('cad_telefone').value.trim(),
+      whatsapp: document.getElementById('cad_whatsapp').value.trim()
+    };
+    localStorage.setItem('marlift_clientes', JSON.stringify(cadClients));
+    cadResetForm();
+    cadRenderFilteredTable();
+    showToast('Cliente atualizado com sucesso');
+  }
+  
+  function cadAddClient(){ 
+    const nome=document.getElementById('cad_nome').value.trim(); 
+    const cnpj=document.getElementById('cad_cnpj').value.trim(); 
+    if(!nome){ showToast('Nome obrigatorio',true); return; } 
+    updateCadMarcaHidden();
+    const newClient={ 
+      id:Date.now(), 
+      nome, 
+      cnpj, 
+      endereco:document.getElementById('cad_endereco').value.trim(), 
+      cidade:document.getElementById('cad_cidade').value.trim(), 
+      marca: document.getElementById('cad_marca').value,
+      modelo: document.getElementById('cad_modelo').value.trim(), 
+      serie: document.getElementById('cad_serie').value.trim(), 
+      quantidade:parseInt(document.getElementById('cad_quantidade').value)||1, 
+      telefone:document.getElementById('cad_telefone').value.trim(), 
+      whatsapp:document.getElementById('cad_whatsapp').value.trim() 
+    }; 
+    cadClients.push(newClient); 
+    localStorage.setItem('marlift_clientes',JSON.stringify(cadClients)); 
+    cadResetForm();
+    cadRenderFilteredTable(); 
+    showToast('Cliente adicionado'); 
+  }
+  
+  function cadDeleteClient(id){ 
+    if(confirm('Excluir cliente?')){ 
+      cadClients=cadClients.filter(c=>c.id!==id); 
+      localStorage.setItem('marlift_clientes',JSON.stringify(cadClients)); 
+      cadRenderFilteredTable(); 
+      showToast('Cliente removido'); 
+    } 
+  }
+  
+  function cadSelecionarCliente(id){ 
+    const cliente=cadClients.find(c=>c.id===id); 
+    if(cliente){ 
+      document.getElementById('cliente').value=cliente.nome.toUpperCase(); 
+      document.getElementById('cnpj').value=cliente.cnpj; 
+      document.getElementById('cidadeCliente').value=(cliente.cidade||'').toUpperCase(); 
+      document.getElementById('endereco').value=(cliente.endereco||'').toUpperCase(); 
+      document.getElementById('whatsappCliente').value=cliente.whatsapp||''; 
+      const marca = (cliente.marca || '').toUpperCase();
+      const marcaSelect = document.getElementById('marcaSelect');
+      const outraContainer = document.getElementById('marcaOutraContainer');
+      const outraInput = document.getElementById('marcaOutra');
+      if (marcasList.includes(marca)) {
+        marcaSelect.value = marca;
+        outraContainer.style.display = 'none';
+        outraInput.value = '';
+      } else if (marca) {
+        marcaSelect.value = 'OUTRA';
+        outraContainer.style.display = 'block';
+        outraInput.value = marca;
+      } else {
+        marcaSelect.value = '';
+        outraContainer.style.display = 'none';
+        outraInput.value = '';
+      }
+      updateMarcaHidden();
+      document.getElementById('modelo').value = (cliente.modelo || '').toUpperCase();
+      document.getElementById('numSerie').value = (cliente.serie || '').toUpperCase();
+      syncClienteFields(); 
+      atualizarLinkMapa(); 
+      document.querySelector('.tab-button[data-tab="tab-os"]').click(); 
+      showToast(`Cliente ${cliente.nome} selecionado`); 
+    } 
+  }
+
+  // ==================== INICIALIZAÇÃO ====================
+  function initOS(){
+    generateOSNumber(); 
+    setDefaultDate(); 
+    renderChecklist(); 
+    setupEventListeners();
+    setupMarcaSelects();
+    loadHistorico();
+    document.getElementById('fotosServico').addEventListener('change',handlePhotoUpload);
+    document.querySelectorAll('.tab-button').forEach(btn=>btn.addEventListener('click',()=>{ const tabId=btn.getAttribute('data-tab'); document.querySelectorAll('.tab-button').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); document.querySelectorAll('.tab-content').forEach(tab=>tab.classList.remove('active')); document.getElementById(tabId).classList.add('active'); }));
+    document.querySelectorAll('.uppercase-input').forEach(inp=>inp.addEventListener('input',function(){ this.value=this.value.toUpperCase(); }));
+    document.getElementById('endereco').addEventListener('input',atualizarLinkMapa);
+    document.getElementById('numeroOS').addEventListener('change',syncClienteFields);
+    document.getElementById('dataOS').addEventListener('change',syncClienteFields);
+    document.getElementById('cliente').addEventListener('input',syncClienteFields);
+    document.getElementById('cidadeCliente').addEventListener('input',syncClienteFields);
+    document.getElementById('endereco').addEventListener('input',syncClienteFields);
+    document.getElementById('cnpj').addEventListener('blur',buscarClientePorCNPJ);
+    const tipoSelect = document.getElementById('tipoChamado');
+    tipoSelect.addEventListener('change', updateTipoChamadoDisplay);
+    
+    document.getElementById('historicoSearch').addEventListener('input', renderHistoricoTable);
+    document.getElementById('historicoFiltroTipo').addEventListener('change', renderHistoricoTable);
+    
+    updateTipoChamadoDisplay();
+    syncClienteFields(); atualizarLinkMapa();
+    setInterval(()=>{ localStorage.setItem('marlift_draft',JSON.stringify(getFormData())); },15000);
+    if(!document.getElementById('tecnico').value) document.getElementById('tecnico').value = 'LEONARDO MARTINS';
+  }
+  
+  function initClientes(){
+    cadLoadFromLocalStorage();
+    const btnSalvar = document.getElementById('cad_btnSalvar');
+    const btnCancelar = document.getElementById('cad_btnCancelar');
+    btnSalvar.addEventListener('click', () => {
+      if(editingClientId) {
+        cadUpdateClient();
+      } else {
+        cadAddClient();
+      }
+    });
+    btnCancelar.addEventListener('click', () => {
+      cadResetForm();
+    });
+    document.getElementById('cad_searchInput').addEventListener('input',cadRenderFilteredTable);
+    const cadMarcaSelect = document.getElementById('cad_marcaSelect');
+    const cadOutraContainer = document.getElementById('cadMarcaOutraContainer');
+    const cadOutraInput = document.getElementById('cad_marcaOutra');
+    cadMarcaSelect.addEventListener('change', () => {
+      if (cadMarcaSelect.value === 'OUTRA') {
+        cadOutraContainer.style.display = 'block';
+        cadOutraInput.focus();
+      } else {
+        cadOutraContainer.style.display = 'none';
+        cadOutraInput.value = '';
+        updateCadMarcaHidden();
+      }
+    });
+    cadOutraInput.addEventListener('input', updateCadMarcaHidden);
+  }
+  
+  document.addEventListener('DOMContentLoaded',()=>{ initOS(); initClientes(); });
 </script>
 </body>
 </html>
