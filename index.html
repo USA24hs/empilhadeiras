@@ -141,27 +141,12 @@
     .delete-icon { color: #ef4444; }
     .edit-icon { color: #3b82f6; }
     .cliente-search { background: var(--bg); border: 1px solid var(--border); padding: 8px 16px; border-radius: 40px; color: var(--fg); width: 250px; }
-    .marca-outra-container { display: flex; gap: 8px; align-items: center; margin-top: 4px; }
-    .marca-outra-container input { flex: 1; }
-    .tipo-chamado-destaque {
-      font-weight: bold;
-      text-transform: uppercase;
-      display: inline-block;
-    }
-    .tipo-chamado-destaque.emergencial {
-      color: #ef4444;
-    }
-    .backup-buttons {
-      display: flex;
-      gap: 12px;
-      margin-bottom: 16px;
-      justify-content: flex-end;
-    }
+    .tipo-chamado-destaque { font-weight: bold; text-transform: uppercase; display: inline-block; }
+    .tipo-chamado-destaque.emergencial { color: #ef4444; }
+    .backup-buttons { display: flex; gap: 12px; margin-bottom: 16px; justify-content: flex-end; }
 
-    /* Menu Suspenso */
-    .menu-dropdown {
-      position: relative;
-    }
+    /* Menu Suspenso - Desktop */
+    .menu-dropdown { position: relative; }
     .menu-toggle {
       background: var(--card);
       border: 1px solid var(--border);
@@ -174,16 +159,9 @@
       color: var(--fg);
       transition: all 0.2s ease;
     }
-    .menu-toggle:hover {
-      border-color: var(--accent);
-      background: var(--bg-secondary);
-    }
-    .menu-toggle svg {
-      transition: transform 0.3s ease;
-    }
-    .menu-toggle.active svg {
-      transform: rotate(180deg);
-    }
+    .menu-toggle:hover { border-color: var(--accent); background: var(--bg-secondary); }
+    .menu-toggle svg { transition: transform 0.3s ease; }
+    .menu-toggle.active svg { transform: rotate(180deg); }
     .menu-content {
       position: absolute;
       top: calc(100% + 8px);
@@ -215,26 +193,11 @@
       transition: all 0.2s ease;
       border-bottom: 1px solid var(--border);
     }
-    .menu-item:last-child {
-      border-bottom: none;
-    }
-    .menu-item:hover {
-      background: var(--bg-secondary);
-      color: var(--accent);
-    }
-    .menu-item i, .menu-item svg {
-      width: 20px;
-      text-align: center;
-      color: var(--muted);
-    }
-    .menu-item:hover i, .menu-item:hover svg {
-      color: var(--accent);
-    }
-    .menu-divider {
-      height: 1px;
-      background: var(--border);
-      margin: 8px 0;
-    }
+    .menu-item:last-child { border-bottom: none; }
+    .menu-item:hover { background: var(--bg-secondary); color: var(--accent); }
+    .menu-item i, .menu-item svg { width: 20px; text-align: center; color: var(--muted); }
+    .menu-item:hover i, .menu-item:hover svg { color: var(--accent); }
+    .menu-divider { height: 1px; background: var(--border); margin: 8px 0; }
     .menu-header {
       padding: 12px 20px;
       background: var(--bg-secondary);
@@ -245,110 +208,56 @@
       letter-spacing: 1px;
     }
 
+    /* CORREÇÃO: Menu Mobile - Tela Cheia */
+    @media (max-width: 640px) {
+      .menu-content {
+        position: fixed !important;
+        top: 70px !important; /* Abaixo do header */
+        left: 8px !important;
+        right: 8px !important;
+        bottom: auto !important;
+        min-width: 0 !important;
+        width: auto !important;
+        max-height: calc(100vh - 90px);
+        overflow-y: auto;
+        border-radius: 12px;
+      }
+      .menu-toggle span { display: none; } /* Esconde texto "Menu" no mobile para economizar espaço */
+    }
+
     /* Histórico de OS */
-    .historico-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.8rem;
-    }
-    .historico-table th {
-      background: var(--bg-secondary);
-      color: var(--accent);
-      padding: 12px 8px;
-      text-align: center;
-      border-bottom: 2px solid var(--accent);
-    }
-    .historico-table td {
-      padding: 12px 8px;
-      border-bottom: 1px solid var(--border);
-      text-align: center;
-    }
-    .historico-table tr:hover {
-      background: rgba(249,115,22,0.08);
-    }
-    .status-badge {
-      padding: 4px 12px;
-      border-radius: 20px;
-      font-size: 0.7rem;
-      font-weight: 600;
-      text-transform: uppercase;
-    }
+    .historico-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+    .historico-table th { background: var(--bg-secondary); color: var(--accent); padding: 12px 8px; text-align: center; border-bottom: 2px solid var(--accent); }
+    .historico-table td { padding: 12px 8px; border-bottom: 1px solid var(--border); text-align: center; }
+    .historico-table tr:hover { background: rgba(249,115,22,0.08); }
+    .status-badge { padding: 4px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; }
     .status-normal { background: rgba(16,185,129,0.2); color: #10b981; }
     .status-emergencial { background: rgba(239,68,68,0.2); color: #ef4444; }
     .status-garantia { background: rgba(139,92,246,0.2); color: #8b5cf6; }
     .status-preventiva { background: rgba(59,130,246,0.2); color: #3b82f6; }
     .status-outro { background: rgba(107,114,128,0.2); color: #6b7280; }
-    .historico-actions {
-      display: flex;
-      gap: 8px;
-      justify-content: center;
-    }
-    .btn-action {
-      padding: 6px 10px;
-      border-radius: 6px;
-      border: none;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
+    .historico-actions { display: flex; gap: 8px; justify-content: center; }
+    .btn-action { padding: 6px 10px; border-radius: 6px; border: none; cursor: pointer; transition: all 0.2s ease; }
     .btn-view { background: rgba(59,130,246,0.2); color: #3b82f6; }
     .btn-view:hover { background: #3b82f6; color: white; }
     .btn-edit { background: rgba(249,115,22,0.2); color: var(--accent); }
     .btn-edit:hover { background: var(--accent); color: white; }
     .btn-delete { background: rgba(239,68,68,0.2); color: #ef4444; }
     .btn-delete:hover { background: #ef4444; color: white; }
-    .historico-search {
-      background: var(--bg);
-      border: 1px solid var(--border);
-      padding: 10px 16px;
-      border-radius: 40px;
-      color: var(--fg);
-      width: 300px;
-    }
-    .historico-search:focus {
-      outline: none;
-      border-color: var(--accent);
-    }
-    .historico-stats {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 16px;
-      margin-bottom: 24px;
-    }
-    .stat-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 20px;
-      text-align: center;
-    }
-    .stat-number {
-      font-size: 2.5rem;
-      font-weight: 700;
-      color: var(--accent);
-      font-family: 'JetBrains Mono', monospace;
-    }
-    .stat-label {
-      font-size: 0.75rem;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-top: 4px;
-    }
-    .empty-state {
-      text-align: center;
-      padding: 60px 20px;
-      color: var(--muted);
-    }
-    .empty-state i {
-      font-size: 4rem;
-      margin-bottom: 16px;
-      opacity: 0.5;
-    }
+    .historico-search { background: var(--bg); border: 1px solid var(--border); padding: 10px 16px; border-radius: 40px; color: var(--fg); width: 300px; }
+    .historico-search:focus { outline: none; border-color: var(--accent); }
+    .historico-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px; margin-bottom: 24px; }
+    .stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; text-align: center; }
+    .stat-number { font-size: 2.5rem; font-weight: 700; color: var(--accent); font-family: 'JetBrains Mono', monospace; }
+    .stat-label { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
+    .empty-state { text-align: center; padding: 60px 20px; color: var(--muted); }
+    .empty-state i { font-size: 4rem; margin-bottom: 16px; opacity: 0.5; }
 
     @media (max-width: 768px) {
       .historico-search { width: 100%; }
       .historico-table { font-size: 0.7rem; }
       .historico-table th, .historico-table td { padding: 8px 4px; }
+      .backup-buttons { flex-wrap: wrap; justify-content: center; }
     }
   </style>
 </head>
@@ -504,7 +413,7 @@
             <label class="block text-xs text-[var(--muted)] mb-1">Endereco do Cliente</label>
             <div class="flex gap-2 items-start">
               <input type="text" class="form-input flex-1 uppercase-input" id="endereco">
-              <button type="button" onclick="abrirMapa()" class="btn-secondary text-sm whitespace-nowrap" style="padding:8px 12px;"><svg class="w-4 h-4 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg> Ver no Mapa</button>
+              <button type="button" onclick="abrirMapa()" class="btn-secondary text-sm whitespace-nowrap" style="padding:8px 12px;"><svg class="w-4 h-4 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg> Mapa</button>
             </div>
             <div class="text-right mt-1"><a href="#" id="mapLink" target="_blank" class="map-link text-xs">Abrir Google Maps</a></div>
           </div>
@@ -577,8 +486,8 @@
     <!-- ABA CLIENTES -->
     <div id="tab-clientes" class="tab-content">
       <div class="backup-buttons">
-        <button onclick="backupClientes()" class="btn-primary text-sm"><i class="fas fa-download"></i> Backup (Exportar)</button>
-        <button onclick="restaurarClientes()" class="btn-secondary text-sm"><i class="fas fa-upload"></i> Restaurar (Importar)</button>
+        <button onclick="backupClientes()" class="btn-primary text-sm"><i class="fas fa-download"></i> Backup (JSON)</button>
+        <button onclick="restaurarClientes()" class="btn-secondary text-sm"><i class="fas fa-upload"></i> Restaurar</button>
         <input type="file" id="restoreFileInput" accept=".json" style="display: none;">
       </div>
       <div class="cliente-card"><div class="section-header"><div class="section-icon"><i class="fas fa-users text-[var(--accent)] text-xl"></i></div><h2 class="font-display text-xl">Cadastro de Clientes</h2></div>
@@ -666,7 +575,7 @@
         <!-- Filtros -->
         <div class="flex flex-wrap gap-4 mb-4 items-center justify-between">
           <input type="text" id="historicoSearch" class="historico-search" placeholder="Buscar por OS, cliente, marca...">
-          <div class="flex gap-2">
+          <div class="flex gap-2 flex-wrap">
             <select id="historicoFiltroTipo" class="form-input" style="width: auto;">
               <option value="">Todos os Tipos</option>
               <option value="normal">Normal</option>
@@ -675,8 +584,8 @@
               <option value="preventiva">Preventiva</option>
               <option value="corretiva">Corretiva</option>
             </select>
-            <button onclick="exportarHistorico()" class="btn-secondary text-sm"><i class="fas fa-file-export"></i> Exportar CSV</button>
-            <button onclick="limparHistorico()" class="btn-secondary text-sm" style="border-color: #ef4444; color: #ef4444;"><i class="fas fa-trash"></i> Limpar Tudo</button>
+            <button onclick="exportarHistorico()" class="btn-secondary text-sm"><i class="fas fa-file-export"></i> CSV</button>
+            <button onclick="limparHistorico()" class="btn-secondary text-sm" style="border-color: #ef4444; color: #ef4444;"><i class="fas fa-trash"></i> Limpar</button>
           </div>
         </div>
 
@@ -715,14 +624,14 @@
 <div id="toast" class="toast"><svg class="w-5 h-5 text-[var(--success)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><span id="toastMessage"></span></div>
 
 <script>
-  // ==================== LISTA DE MARCAS ATUALIZADA ====================
+  // ==================== LISTA DE MARCAS ====================
   const marcasList = [
     "TOYOTA", "CLARK", "BYD", "PALETRANS", "LINDE", "HYSTER", "YALE", "CATERPILLAR", 
     "KOMATSU", "MITSUBISHI", "NISSAN", "STILL", "CROWN", "JUNGHEINRICH", "TCM", 
     "HYUNDAI", "DOOSAN", "HELI", "HANGCHA", "LONKING"
   ];
 
-  // ==================== CHECKLIST COMPLETO ====================
+  // ==================== CHECKLIST ====================
   const checklistData = [
     { id:'motor', title:'Motor e Componentes', items:[{id:'motor_oleo',label:'Nivel de oleo do motor'},{id:'motor_filtro_oleo',label:'Filtro de oleo'},{id:'motor_filtro_ar',label:'Filtro de ar'},{id:'motor_filtro_comb',label:'Filtro de combustivel'},{id:'motor_correias',label:'Correias'},{id:'motor_radiador',label:'Radiador e arrefecimento'},{id:'motor_velas',label:'Velas de ignicao'},{id:'motor_mangueiras',label:'Mangueiras e conexoes'}] },
     { id:'eletrico', title:'Sistema Eletrico', items:[{id:'eletr_bateria',label:'Bateria'},{id:'eletr_terminais',label:'Terminais e cabos'},{id:'eletr_alternador',label:'Alternador'},{id:'eletr_partida',label:'Motor de partida'},{id:'eletr_farois',label:'Faros e lanternas'},{id:'eletr_buzina',label:'Buzina'},{id:'eletr_painel',label:'Painel'},{id:'eletr_fusiveis',label:'Fuseveis'}] },
@@ -950,7 +859,7 @@
   }
   function updateProgress(){ const checkboxes=document.querySelectorAll('input[data-check="true"]'); checkedItems=Array.from(checkboxes).filter(cb=>cb.checked).length; const pct=totalCheckItems>0?Math.round((checkedItems/totalCheckItems)*100):0; document.getElementById('progressText').textContent=`${pct}%`; document.getElementById('progressFill').style.width=`${pct}%`; }
 
-  // ==================== BACKUP E RESTAURAÇÃO ====================
+  // ==================== BACKUP E RESTAURAÇÃO (JSON) ====================
   function backupClientes() {
     if (cadClients.length === 0) {
       showToast('Nenhum cliente para fazer backup', true);
@@ -1100,7 +1009,7 @@
     const win=window.open(); win.document.write(html); win.document.close(); win.print();
   }
 
-  // ==================== WHATSAPP - MODELO PROFISSIONAL ====================
+  // ==================== WHATSAPP ====================
   function sendWhatsApp() {
     const whatsappCliente = document.getElementById('whatsappCliente').value;
     const defaultNumber = whatsappCliente || '5511999999999';
@@ -1119,10 +1028,8 @@
     const pecas = document.getElementById('pecasAplicadas').value.trim();
     const pendencias = document.getElementById('pendencias').value.trim();
 
-    // Monta string do equipamento
     let equipStr = `${marca} ${modelo}`.trim() || 'Nao informado';
 
-    // Monta mensagem no novo formato profissional
     let mensagem = `🏭 *MARLIFT - ${osNum}*\n\n`;
     mensagem += `👤 ${cliente}\n`;
     mensagem += `🔧 ${equipStr}\n`;
@@ -1220,10 +1127,10 @@
     let history=JSON.parse(localStorage.getItem('marlift_os_history')||'[]'); 
     const idx=history.findIndex(os=>os.numeroOS===data.numeroOS); 
     if(idx>=0) history[idx]=data; 
-    else history.unshift(data); // Adiciona no início
+    else history.unshift(data);
     localStorage.setItem('marlift_os_history',JSON.stringify(history)); 
     showToast('OS e Checklist salvos localmente!'); 
-    loadHistorico(); // Atualiza o histórico
+    loadHistorico();
   }
   
   function clearForm(){ 
@@ -1670,7 +1577,7 @@
     renderChecklist(); 
     setupEventListeners();
     setupMarcaSelects();
-    loadHistorico(); // Carrega histórico
+    loadHistorico();
     document.getElementById('fotosServico').addEventListener('change',handlePhotoUpload);
     document.querySelectorAll('.tab-button').forEach(btn=>btn.addEventListener('click',()=>{ const tabId=btn.getAttribute('data-tab'); document.querySelectorAll('.tab-button').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); document.querySelectorAll('.tab-content').forEach(tab=>tab.classList.remove('active')); document.getElementById(tabId).classList.add('active'); }));
     document.querySelectorAll('.uppercase-input').forEach(inp=>inp.addEventListener('input',function(){ this.value=this.value.toUpperCase(); }));
@@ -1684,7 +1591,6 @@
     const tipoSelect = document.getElementById('tipoChamado');
     tipoSelect.addEventListener('change', updateTipoChamadoDisplay);
     
-    // Filtros do histórico
     document.getElementById('historicoSearch').addEventListener('input', renderHistoricoTable);
     document.getElementById('historicoFiltroTipo').addEventListener('change', renderHistoricoTable);
     
