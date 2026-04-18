@@ -2,18 +2,11 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Marlift Empilhadeiras - OS Profissional</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Marlift Empilhadeiras - OS Profissional v5.1</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <!-- PWA Meta Tags -->
-  <meta name="theme-color" content="#0c0f12">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Marlift OS">
   <style>
     :root {
       --bg: #0c0f12;
@@ -27,1663 +20,522 @@
       --success: #10b981;
       --warning: #f59e0b;
       --danger: #ef4444;
-      --whatsapp: #25D366;
-      --checklist-pdf: #8b5cf6;
+      --info: #3b82f6;
+      --purple: #8b5cf6;
+      --pink: #ec4899;
+      --cyan: #06b6d4;
     }
     * { font-family: 'Inter', sans-serif; box-sizing: border-box; }
     body { background: var(--bg); color: var(--fg); min-height: 100vh; margin: 0; }
     .font-display { font-family: 'Bebas Neue', sans-serif; }
     .font-mono { font-family: 'JetBrains Mono', monospace; }
-    .bg-pattern {
-      background-image: 
-        radial-gradient(ellipse at 0% 0%, rgba(249, 115, 22, 0.08) 0%, transparent 50%),
-        radial-gradient(ellipse at 100% 100%, rgba(59, 130, 246, 0.05) 0%, transparent 50%);
-    }
-    header { transition: transform 0.3s ease-in-out; }
-    header.header-hidden { transform: translateY(-100%); }
-    .check-item { position: relative; cursor: pointer; }
-    .check-item input { position: absolute; opacity: 0; cursor: pointer; }
-    .checkmark {
-      width: 20px; height: 20px;
-      border: 2px solid var(--border);
-      border-radius: 4px;
-      display: flex; align-items: center; justify-content: center;
-      transition: all 0.2s ease;
-      background: var(--bg);
-      flex-shrink: 0;
-    }
-    .check-item:hover .checkmark { border-color: var(--accent); }
-    .check-item input:checked ~ .checkmark { background: var(--accent); border-color: var(--accent); }
-    .checkmark svg { opacity: 0; transform: scale(0); transition: all 0.2s ease; }
-    .check-item input:checked ~ .checkmark svg { opacity: 1; transform: scale(1); }
-    .checklist-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      transition: all 0.3s ease;
-    }
-    .form-input {
-      background: var(--bg);
-      border: 1px solid var(--border);
-      color: var(--fg);
-      padding: 8px 12px;
-      border-radius: 6px;
-      transition: all 0.2s ease;
-      width: 100%;
-    }
-    .form-input:focus { outline: none; border-color: var(--accent); }
-    .uppercase-input { text-transform: uppercase; }
-    .btn-primary {
-      background: linear-gradient(135deg, var(--accent), var(--accent-light));
-      color: white; font-weight: 600;
-      padding: 10px 20px; border-radius: 6px;
-      border: none; cursor: pointer;
-      display: inline-flex; align-items: center; gap: 8px;
-    }
-    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(249,115,22,0.3); }
-    .btn-secondary {
-      background: var(--card); color: var(--fg);
-      font-weight: 500; padding: 10px 20px;
-      border-radius: 6px; border: 1px solid var(--border);
-      cursor: pointer;
-      display: inline-flex; align-items: center; gap: 8px;
-    }
-    .btn-secondary:hover { border-color: var(--accent); background: var(--bg-secondary); }
-    .btn-whatsapp {
-      background: #25D366; color: white;
-      font-weight: 600; padding: 10px 20px;
-      border-radius: 6px; border: none;
-      cursor: pointer;
-      display: inline-flex; align-items: center; gap: 8px;
-    }
-    .btn-whatsapp:hover { filter: brightness(1.1); transform: translateY(-2px); }
-    .btn-timer { padding: 12px 24px; border-radius: 8px; font-weight: 600; cursor: pointer; border: none; color: white; }
-    .btn-start { background: #10b981; }
-    .btn-pause { background: #f59e0b; color: black; }
-    .btn-stop { background: #ef4444; }
+    .checklist-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; transition: all 0.3s; }
+    .form-input { background: var(--bg); border: 1px solid var(--border); color: var(--fg); padding: 8px 12px; border-radius: 8px; width: 100%; transition: border-color 0.2s, box-shadow 0.2s; }
+    .form-input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.15); }
+    .form-input:disabled { opacity: 0.6; cursor: not-allowed; background: var(--bg-secondary); }
+    .btn { font-weight: 600; padding: 10px 18px; border-radius: 8px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; border: none; transition: all 0.2s; font-size: 14px; }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
+    .btn-primary { background: linear-gradient(135deg, var(--accent), var(--accent-light)); color: white; }
+    .btn-primary:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(249, 115, 22, 0.3); }
+    .btn-secondary { background: var(--card); color: var(--fg); border: 1px solid var(--border); }
+    .btn-secondary:hover:not(:disabled) { background: var(--bg-secondary); border-color: var(--accent); }
+    .btn-success { background: var(--success); color: white; }
+    .btn-danger { background: var(--danger); color: white; }
+    .btn-warning { background: var(--warning); color: white; }
+    .btn-info { background: var(--info); color: white; }
+    .btn-yellow { background: #eab308; color: #1e293b; border: none; }
+    .btn-yellow:hover:not(:disabled) { background: #ca8a04; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(234, 179, 8, 0.3); }
+    .signature-canvas { border: 2px dashed var(--border); border-radius: 8px; background: white; width: 100%; height: 140px; cursor: crosshair; touch-action: none; }
     .progress-bar { height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
     .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-light)); transition: width 0.5s ease; }
-    .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
-    .section-icon { width: 36px; height: 36px; background: rgba(249,115,22,0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--accent); }
-    .timer-display { font-size: 3rem; font-weight: 700; letter-spacing: 2px; background: linear-gradient(135deg, var(--fg), var(--muted)); -webkit-background-clip: text; background-clip: text; }
-    .timer-running .timer-display { background: linear-gradient(135deg, var(--accent), var(--accent-light)); -webkit-background-clip: text; background-clip: text; }
-    .photo-preview { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px; }
-    .photo-item { position: relative; width: 100px; height: 100px; border-radius: 8px; border: 1px solid var(--border); overflow: hidden; background: var(--bg); }
-    .photo-item img { width: 100%; height: 100%; object-fit: cover; }
-    .photo-remove { position: absolute; top: 2px; right: 2px; background: rgba(0,0,0,0.6); border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: white; font-size: 14px; font-weight: bold; }
-    .tab-button { padding: 10px 20px; font-weight: 600; background: transparent; border: none; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; font-size: 0.9rem; }
+    .status-badge { padding: 5px 14px; border-radius: 20px; font-size: 0.7rem; font-weight: 700; display: inline-block; text-transform: uppercase; letter-spacing: 0.5px; }
+    .status-abertura { background: rgba(59, 130, 246, 0.2); color: #60a5fa; }
+    .status-execucao { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
+    .status-finalizacao { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+    .status-fechada { background: rgba(139, 92, 246, 0.25); color: #a78bfa; border: 1px solid #8b5cf6; }
+    .status-aprovada { background: rgba(34, 197, 94, 0.3); color: #4ade80; border: 1px solid #22c55e; }
+    .toast-center { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--card); border: 2px solid var(--success); color: var(--fg); padding: 24px 48px; border-radius: 16px; font-weight: bold; font-size: 1.1rem; z-index: 2000; box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5); display: none; align-items: center; gap: 14px; white-space: nowrap; }
+    .toast-center.show { display: flex; animation: fadeInOut 2.5s ease forwards; }
+    @keyframes fadeInOut { 0% { opacity: 0; transform: translate(-50%, -50%) scale(0.9); } 10% { opacity: 1; transform: translate(-50%, -50%) scale(1); } 80% { opacity: 1; transform: translate(-50%, -50%) scale(1); } 100% { opacity: 0; transform: translate(-50%, -50%) scale(0.9); } }
+    .tab-button { padding: 12px 20px; font-weight: 600; background: transparent; border: none; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s; }
+    .tab-button:hover { color: var(--fg); }
     .tab-button.active { color: var(--accent); border-bottom-color: var(--accent); }
     .tab-content { display: none; animation: fadeIn 0.3s ease; }
     .tab-content.active { display: block; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-    .select-all-btn { background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 4px; padding: 4px 12px; font-size: 12px; cursor: pointer; }
-    .select-all-btn:hover { background: var(--accent); color: white; border-color: var(--accent); }
-    .toast { position: fixed; bottom: 24px; right: 24px; background: var(--card); border: 1px solid var(--success); padding: 16px 24px; border-radius: 8px; display: flex; align-items: center; gap: 12px; transform: translateY(100px); opacity: 0; transition: all 0.3s ease; z-index: 1000; }
-    .toast.show { transform: translateY(0); opacity: 1; }
-    .map-link { display: inline-flex; align-items: center; gap: 4px; background: rgba(66,133,244,0.1); padding: 4px 8px; border-radius: 6px; font-size: 12px; color: #4285f4; text-decoration: none; }
-    .map-link:hover { background: rgba(66,133,244,0.2); }
-    .cliente-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 24px; }
-    .cliente-form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
-    .cliente-input-group { display: flex; flex-direction: column; gap: 6px; }
-    .cliente-input-group label { font-size: 0.75rem; font-weight: 600; color: var(--muted); text-transform: uppercase; }
-    .cliente-input-group input, .cliente-input-group select { background: var(--bg); border: 1px solid var(--border); padding: 8px 12px; border-radius: 8px; color: var(--fg); }
-    .cliente-table-wrapper { overflow-x: auto; border-radius: 12px; border: 1px solid var(--border); }
-    .cliente-table { width: 100%; border-collapse: collapse; font-size: 0.75rem; }
-    .cliente-table th { background: var(--bg-secondary); color: var(--accent); padding: 10px 6px; text-align: center; cursor: pointer; }
-    .cliente-table td { padding: 8px 4px; border-bottom: 1px solid var(--border); text-align: center; }
-    .cliente-table tr:hover { background: rgba(249,115,22,0.1); }
-    .btn-selecionar { background: var(--accent); border: none; color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.7rem; cursor: pointer; }
-    .btn-selecionar:hover { background: var(--accent-light); }
-    .delete-icon, .edit-icon { cursor: pointer; margin: 0 5px; font-size: 1.1rem; }
-    .delete-icon { color: #ef4444; }
-    .edit-icon { color: #3b82f6; }
-    .cliente-search { background: var(--bg); border: 1px solid var(--border); padding: 8px 16px; border-radius: 40px; color: var(--fg); width: 250px; }
-    .tipo-chamado-destaque { font-weight: bold; text-transform: uppercase; display: inline-block; }
-    .tipo-chamado-destaque.emergencial { color: #ef4444; }
-    .backup-buttons { display: flex; gap: 12px; margin-bottom: 16px; justify-content: flex-end; }
-
-    /* Menu Suspenso - Desktop */
-    .menu-dropdown { position: relative; }
-    .menu-toggle {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 10px 16px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      color: var(--fg);
-      transition: all 0.2s ease;
-    }
-    .menu-toggle:hover { border-color: var(--accent); background: var(--bg-secondary); }
-    .menu-toggle svg { transition: transform 0.3s ease; }
-    .menu-toggle.active svg { transform: rotate(180deg); }
-    .menu-content {
-      position: absolute;
-      top: calc(100% + 8px);
-      right: 0;
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      min-width: 280px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-      opacity: 0;
-      visibility: hidden;
-      transform: translateY(-10px);
-      transition: all 0.3s ease;
-      z-index: 100;
-      overflow: hidden;
-    }
-    .menu-content.show {
-      opacity: 1;
-      visibility: visible;
-      transform: translateY(0);
-    }
-    .menu-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 14px 20px;
-      color: var(--fg);
-      cursor: pointer;
-      transition: all 0.2s ease;
-      border-bottom: 1px solid var(--border);
-    }
-    .menu-item:last-child { border-bottom: none; }
-    .menu-item:hover { background: var(--bg-secondary); color: var(--accent); }
-    .menu-item i, .menu-item svg { width: 20px; text-align: center; color: var(--muted); }
-    .menu-item:hover i, .menu-item:hover svg { color: var(--accent); }
-    .menu-divider { height: 1px; background: var(--border); margin: 8px 0; }
-    .menu-header {
-      padding: 12px 20px;
-      background: var(--bg-secondary);
-      font-weight: 600;
-      color: var(--accent);
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-
-    /* CORREÇÃO: Menu Mobile - Tela Cheia */
-    @media (max-width: 640px) {
-      .menu-content {
-        position: fixed !important;
-        top: 70px !important; /* Abaixo do header */
-        left: 8px !important;
-        right: 8px !important;
-        bottom: auto !important;
-        min-width: 0 !important;
-        width: auto !important;
-        max-height: calc(100vh - 90px);
-        overflow-y: auto;
-        border-radius: 12px;
-      }
-      .menu-toggle span { display: none; } /* Esconde texto "Menu" no mobile para economizar espaço */
-    }
-
-    /* Histórico de OS */
-    .historico-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
-    .historico-table th { background: var(--bg-secondary); color: var(--accent); padding: 12px 8px; text-align: center; border-bottom: 2px solid var(--accent); }
-    .historico-table td { padding: 12px 8px; border-bottom: 1px solid var(--border); text-align: center; }
-    .historico-table tr:hover { background: rgba(249,115,22,0.08); }
-    .status-badge { padding: 4px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; }
-    .status-normal { background: rgba(16,185,129,0.2); color: #10b981; }
-    .status-emergencial { background: rgba(239,68,68,0.2); color: #ef4444; }
-    .status-garantia { background: rgba(139,92,246,0.2); color: #8b5cf6; }
-    .status-preventiva { background: rgba(59,130,246,0.2); color: #3b82f6; }
-    .status-outro { background: rgba(107,114,128,0.2); color: #6b7280; }
-    .historico-actions { display: flex; gap: 8px; justify-content: center; }
-    .btn-action { padding: 6px 10px; border-radius: 6px; border: none; cursor: pointer; transition: all 0.2s ease; }
-    .btn-view { background: rgba(59,130,246,0.2); color: #3b82f6; }
-    .btn-view:hover { background: #3b82f6; color: white; }
-    .btn-edit { background: rgba(249,115,22,0.2); color: var(--accent); }
-    .btn-edit:hover { background: var(--accent); color: white; }
-    .btn-delete { background: rgba(239,68,68,0.2); color: #ef4444; }
-    .btn-delete:hover { background: #ef4444; color: white; }
-    .historico-search { background: var(--bg); border: 1px solid var(--border); padding: 10px 16px; border-radius: 40px; color: var(--fg); width: 300px; }
-    .historico-search:focus { outline: none; border-color: var(--accent); }
-    .historico-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px; margin-bottom: 24px; }
-    .stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; text-align: center; }
-    .stat-number { font-size: 2.5rem; font-weight: 700; color: var(--accent); font-family: 'JetBrains Mono', monospace; }
-    .stat-label { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
-    .empty-state { text-align: center; padding: 60px 20px; color: var(--muted); }
-    .empty-state i { font-size: 4rem; margin-bottom: 16px; opacity: 0.5; }
-
-    @media (max-width: 768px) {
-      .historico-search { width: 100%; }
-      .historico-table { font-size: 0.7rem; }
-      .historico-table th, .historico-table td { padding: 8px 4px; }
-      .backup-buttons { flex-wrap: wrap; justify-content: center; }
-      .tab-button { padding: 10px 12px; font-size: 0.8rem; }
-    }
+    .photo-preview { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px; }
+    .photo-item { position: relative; width: 120px; height: 120px; border-radius: 8px; border: 2px solid var(--border); overflow: hidden; background: var(--bg); }
+    .photo-item img { width: 100%; height: 100%; object-fit: cover; }
+    .photo-remove { position: absolute; top: 4px; right: 4px; background: rgba(220, 38, 38, 0.9); border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: white; font-size: 14px; font-weight: bold; }
+    .equip-item { background: var(--bg-secondary); border-radius: 8px; padding: 10px; margin-bottom: 8px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+    .step-indicator { display: flex; justify-content: space-between; margin-bottom: 20px; background: var(--card); border-radius: 40px; padding: 5px; border: 1px solid var(--border); }
+    .step { flex: 1; text-align: center; padding: 10px 6px; border-radius: 30px; font-weight: 600; font-size: 10px; transition: all 0.3s; color: var(--muted); }
+    .step.active { background: var(--accent); color: white; }
+    .step.completed { background: var(--success); color: white; }
+    .step.locked { background: var(--purple); color: white; }
+    .timer-display { font-size: 2.5rem; font-weight: 700; font-family: 'JetBrains Mono', monospace; background: linear-gradient(135deg, var(--accent), var(--accent-light)); -webkit-background-clip: text; background-clip: text; color: transparent; letter-spacing: 3px; }
+    .checklist-item { display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; border-radius: 8px; background: var(--bg); margin-bottom: 6px; }
+    .checklist-item label { display: flex; align-items: center; gap: 10px; cursor: pointer; flex: 1; }
+    .checklist-item input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--accent); cursor: pointer; }
+    .action-buttons { display: flex; flex-wrap: wrap; gap: 8px; padding: 12px; background: var(--bg-secondary); border-radius: 12px; margin-top: 16px; }
+    .loading-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(12, 15, 18, 0.95); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; }
+    .spinner { border: 4px solid var(--border); border-top: 4px solid var(--accent); border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; margin-bottom: 20px; }
+    .stat-card { background: linear-gradient(135deg, var(--card), var(--bg-secondary)); border-radius: 12px; padding: 12px; text-align: center; border: 1px solid var(--border); transition: transform 0.2s; }
+    .stat-card:hover { transform: translateY(-3px); border-color: var(--accent); }
+    .stat-value { font-size: 1.8rem; font-weight: 700; font-family: 'JetBrains Mono', monospace; }
+    .stat-label { font-size: 0.7rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+    .table-os { width: 100%; border-collapse: collapse; }
+    .table-os th, .table-os td { padding: 10px 8px; text-align: left; border-bottom: 1px solid var(--border); }
+    .table-os th { background: var(--bg-secondary); font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); }
+    .table-os td { vertical-align: middle; }
+    @media print { .no-print { display: none !important; } body { background: white; color: black; } }
+    @media (max-width: 768px) { .step { font-size: 9px; padding: 8px 4px; } .timer-display { font-size: 1.8rem; } .btn { padding: 8px 12px; font-size: 12px; } .photo-item { width: 100px; height: 100px; } .stat-value { font-size: 1.2rem; } .table-os th, .table-os td { padding: 6px 4px; font-size: 11px; } }
   </style>
 </head>
-<body class="bg-pattern">
-<div class="min-h-screen">
-  <header class="no-print border-b border-[var(--border)] bg-[var(--bg)]/90 backdrop-blur-sm sticky top-0 z-50">
-    <div class="max-w-7xl mx-auto px-4 py-3">
-      <div class="flex items-center justify-between flex-wrap gap-4">
-        <div class="flex items-center gap-4">
-          <div class="w-11 h-11 bg-gradient-to-br from-[var(--accent)] to-[var(--accent-light)] rounded-lg flex items-center justify-center">
-            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
-          </div>
-          <div><h1 class="font-display text-2xl tracking-wide text-[var(--accent)]">MARLIFT</h1><p class="text-xs text-[var(--muted)] tracking-widest uppercase">Sistema de OS</p></div>
+<body>
+<div id="loadingOverlay" class="loading-overlay">
+  <div class="spinner"></div>
+  <p class="mt-4 text-[var(--accent)] font-display text-xl">Carregando Sistema...</p>
+</div>
+<div class="min-h-screen" id="appContainer" style="display:none;">
+  <header class="no-print border-b border-[var(--border)] bg-[var(--bg)]/95 backdrop-blur-sm sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap justify-between items-center gap-3">
+      <div class="flex items-center gap-4">
+        <div class="w-12 h-12 bg-gradient-to-br from-[var(--accent)] to-[var(--accent-light)] rounded-xl flex items-center justify-center shadow-lg">
+          <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
         </div>
-
-        <!-- Menu Suspenso -->
-        <div class="menu-dropdown">
-          <button class="menu-toggle" id="menuToggle">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
-            <span class="font-semibold">Menu</span>
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-          </button>
-          <div class="menu-content" id="menuContent">
-            <div class="menu-header">Acoes Rapidas</div>
-            <div class="menu-item" onclick="saveCurrentOS(); closeMenu();">
-              <i class="fas fa-save"></i>
-              <span>Salvar OS Atual</span>
-            </div>
-            <div class="menu-item" onclick="clearForm(); closeMenu();">
-              <i class="fas fa-plus-circle"></i>
-              <span>Nova OS</span>
-            </div>
-            <div class="menu-divider"></div>
-            <div class="menu-header">Exportar</div>
-            <div class="menu-item" onclick="sendWhatsApp(); closeMenu();">
-              <i class="fab fa-whatsapp" style="color: #25D366;"></i>
-              <span>Enviar via WhatsApp</span>
-            </div>
-            <div class="menu-item" onclick="printOS(); closeMenu();">
-              <i class="fas fa-file-pdf" style="color: #ef4444;"></i>
-              <span>Gerar PDF da OS</span>
-            </div>
-            <div class="menu-item" onclick="printChecklistOnly(); closeMenu();">
-              <i class="fas fa-clipboard-check" style="color: #8b5cf6;"></i>
-              <span>PDF do Checklist</span>
-            </div>
-            <div class="menu-divider"></div>
-            <div class="menu-header">Sistema</div>
-            <div class="menu-item" id="installAppBtn" onclick="installApp(); closeMenu();" style="display: none;">
-              <i class="fas fa-mobile-alt"></i>
-              <span>Instalar App</span>
-            </div>
-            <div class="menu-item" onclick="toggleFullscreen(); closeMenu();">
-              <i class="fas fa-expand"></i>
-              <span id="fullscreenText">Tela Cheia</span>
-            </div>
-            <div class="menu-item" onclick="backupClientes(); closeMenu();">
-              <i class="fas fa-download"></i>
-              <span>Backup Clientes</span>
-            </div>
-            <div class="menu-item" onclick="restaurarClientes(); closeMenu();">
-              <i class="fas fa-upload"></i>
-              <span>Restaurar Clientes</span>
-            </div>
-            <div class="menu-divider"></div>
-            <div class="menu-item" onclick="openHistorico(); closeMenu();">
-              <i class="fas fa-history"></i>
-              <span>Historico de OS</span>
-            </div>
-          </div>
-        </div>
+        <div><h1 class="font-display text-2xl tracking-wide text-[var(--accent)]">MARLIFT EMPILHADEIRAS</h1><p class="text-xs text-[var(--muted)]">Sistema de O.S - v5.1</p></div>
+      </div>
+      <div class="flex flex-wrap gap-2">
+        <button onclick="App.enviarEmailComRelatorio()" id="btnEnviarEmail" class="btn btn-primary text-sm" disabled><i class="fas fa-envelope"></i> E-mail</button>
+        <button onclick="App.gerarRelatorioFinal()" id="btnRelatorioFinal" class="btn btn-secondary text-sm" disabled><i class="fas fa-file-pdf"></i> Relatório</button>
+        <button onclick="App.sendWhatsAppMessage()" class="btn btn-secondary text-sm"><i class="fab fa-whatsapp text-green-500"></i> WhatsApp</button>
+        <button onclick="App.novaOS()" class="btn btn-yellow text-sm"><i class="fas fa-plus"></i> Nova O.S</button>
       </div>
     </div>
   </header>
-
   <main class="max-w-7xl mx-auto px-4 py-6">
-    <div class="flex border-b border-[var(--border)] mb-6 no-print">
-      <!-- ABAS RENOMEADAS -->
-      <button class="tab-button active" data-tab="tab-os">OS</button>
+    <div class="step-indicator no-print mb-6">
+      <div class="step" data-step="abertura">Abertura</div>
+      <div class="step" data-step="execucao">Execução</div>
+      <div class="step" data-step="finalizacao">Finalizando</div>
+      <div class="step" data-step="fechada">Fechada</div>
+      <div class="step" data-step="aprovada">Aprovada</div>
+    </div>
+    <div class="flex border-b border-[var(--border)] mb-6 no-print overflow-x-auto">
+      <button class="tab-button active" data-tab="tab-os">O.S</button>
       <button class="tab-button" data-tab="tab-checklist">Checklist</button>
       <button class="tab-button" data-tab="tab-clientes">Clientes</button>
-      <button class="tab-button" data-tab="tab-historico">Hist. de OS</button>
+      <button class="tab-button" data-tab="tab-historico">Histórico</button>
     </div>
-
-    <!-- ABA OS -->
+    <!-- Tab OS (mesmo conteúdo anterior - omitido por brevidade mas mantido igual) -->
     <div id="tab-os" class="tab-content active">
-      <form id="osForm">
-        <div class="checklist-card p-5 mb-5">
-          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div><div class="section-header mb-4"><div class="section-icon"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg></div><h2 class="font-display text-xl">Ordem de Servico</h2></div>
-              <div class="grid grid-cols-2 gap-4"><div><label class="block text-xs text-[var(--muted)] mb-1">No. da OS</label><input type="text" id="numeroOS" class="form-input font-mono font-semibold text-lg" readonly></div><div><label class="block text-xs text-[var(--muted)] mb-1">Data</label><input type="date" id="dataOS" class="form-input"></div><div class="col-span-2"><label class="block text-xs text-[var(--muted)] mb-1">Tipo de Chamado</label>
-                <select id="tipoChamado" class="form-input">
-                  <option value="normal">Normal</option>
-                  <option value="emergencial">Emergencial</option>
-                  <option value="garantia">Garantia</option>
-                  <option value="preventiva">Preventiva</option>
-                  <option value="corretiva">Corretiva</option>
-                  <option value="retorno_pendencia">Retorno Pendencia</option>
-                  <option value="orcamento">Orcamento</option>
-                  <option value="contrato">Contrato</option>
-                  <option value="locacao">Locacao</option>
-                </select>
-                <div id="tipoChamadoDisplay" class="text-sm mt-1"></div>
-              </div></div>
-            </div>
-            <div><div class="section-header mb-4"><div class="section-icon"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div><h2 class="font-display text-xl">Cronometro</h2></div>
-              <div id="timerContainer" class="text-center mb-4"><div class="timer-display font-mono" id="timerDisplay">00:00:00</div><p class="text-xs text-[var(--muted)] mt-1" id="timerStatus">Pronto</p></div>
-              <div class="flex justify-center gap-2 mb-4 flex-wrap"><button type="button" onclick="startTimer()" class="btn-timer btn-start" id="btnStart">Iniciar</button><button type="button" onclick="pauseTimer()" class="btn-timer btn-pause" id="btnPause" disabled>Almoco</button><button type="button" onclick="stopTimer()" class="btn-timer btn-stop" id="btnStop" disabled>Finalizar</button></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="checklist-card p-5 mb-5"><div class="section-header"><div class="section-icon"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg></div><h2 class="font-display text-xl">Dados do Equipamento</h2></div>
-          <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-            <div>
-              <label class="block text-xs text-[var(--muted)] mb-1">Marca</label>
-              <select id="marcaSelect" class="form-input">
-                <option value="">Selecione</option>
-                <option value="TOYOTA">TOYOTA</option>
-                <option value="CLARK">CLARK</option>
-                <option value="BYD">BYD</option>
-                <option value="PALETRANS">PALETRANS</option>
-                <option value="LINDE">LINDE</option>
-                <option value="HYSTER">HYSTER</option>
-                <option value="YALE">YALE</option>
-                <option value="CATERPILLAR">CATERPILLAR</option>
-                <option value="KOMATSU">KOMATSU</option>
-                <option value="MITSUBISHI">MITSUBISHI</option>
-                <option value="NISSAN">NISSAN</option>
-                <option value="STILL">STILL</option>
-                <option value="CROWN">CROWN</option>
-                <option value="JUNGHEINRICH">JUNGHEINRICH</option>
-                <option value="TCM">TCM</option>
-                <option value="HYUNDAI">HYUNDAI</option>
-                <option value="DOOSAN">DOOSAN</option>
-                <option value="HELI">HELI</option>
-                <option value="HANGCHA">HANGCHA</option>
-                <option value="LONKING">LONKING</option>
-                <option value="OUTRA">Outra</option>
-              </select>
-              <div id="marcaOutraContainer" style="display: none; margin-top: 5px;">
-                <input type="text" id="marcaOutra" class="form-input uppercase-input" placeholder="Digite a marca">
-              </div>
-              <input type="hidden" id="marca" value="">
-            </div>
-            <div><label class="block text-xs text-[var(--muted)] mb-1">Modelo</label><input type="text" class="form-input uppercase-input" id="modelo"></div>
-            <div><label class="block text-xs text-[var(--muted)] mb-1">No. Serie</label><input type="text" class="form-input uppercase-input" id="numSerie"></div>
-            <div><label class="block text-xs text-[var(--muted)] mb-1">Horimetro</label><input type="text" class="form-input" id="horimetro"></div>
-            <div><label class="block text-xs text-[var(--muted)] mb-1">Combustivel</label><select class="form-input" id="combustivel"><option value="">Selecione</option><option value="eletrico">Eletrico</option><option value="gasolina">Gasolina</option><option value="diesel">Diesel</option><option value="glp">GLP</option></select></div>
-            <div><label class="block text-xs text-[var(--muted)] mb-1">WhatsApp</label><input type="text" class="form-input" id="whatsappCliente"></div>
-          </div>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
-            <div><label class="block text-xs text-[var(--muted)] mb-1">Cliente</label><input type="text" class="form-input uppercase-input" id="cliente"></div>
-            <div><label class="block text-xs text-[var(--muted)] mb-1">CNPJ/CPF</label><input type="text" class="form-input" id="cnpj" placeholder="Digite o CNPJ para buscar cliente"></div>
-            <div><label class="block text-xs text-[var(--muted)] mb-1">Cidade</label><input type="text" class="form-input uppercase-input" id="cidadeCliente" placeholder="Cidade - UF"></div>
-          </div>
-          <div class="mt-4">
-            <label class="block text-xs text-[var(--muted)] mb-1">Endereco do Cliente</label>
-            <div class="flex gap-2 items-start">
-              <input type="text" class="form-input flex-1 uppercase-input" id="endereco">
-              <button type="button" onclick="abrirMapa()" class="btn-secondary text-sm whitespace-nowrap" style="padding:8px 12px;"><svg class="w-4 h-4 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg> Mapa</button>
-            </div>
-            <div class="text-right mt-1"><a href="#" id="mapLink" target="_blank" class="map-link text-xs">Abrir Google Maps</a></div>
-          </div>
-        </div>
-
-        <div class="checklist-card p-5 mb-5"><div class="section-header"><div class="section-icon"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></div><h2 class="font-display text-xl">Servico Realizado</h2></div>
-          <div class="grid grid-cols-1 gap-5">
-            <div><label class="block text-sm font-semibold mb-2">Descricao do Servico / Diagnostico</label><textarea id="descricaoServico" class="form-input min-h-24"></textarea></div>
-            <div><label class="block text-sm font-semibold mb-2">Pecas e Materiais Aplicados</label><textarea id="pecasAplicadas" class="form-input min-h-20"></textarea></div>
-            <div><label class="block text-sm font-semibold mb-2">Pendencias / Itens Criticos</label><textarea id="pendencias" class="form-input min-h-20"></textarea></div>
-          </div>
-        </div>
-
-        <div class="checklist-card p-5 mb-5"><div class="section-header"><div class="section-icon"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg></div><h2 class="font-display text-xl">Fotos do Servico</h2></div>
-          <input type="file" id="fotosServico" multiple accept="image/*" class="form-input mb-3">
-          <div id="fotosPreview" class="photo-preview"></div>
-        </div>
-
-        <div class="checklist-card p-5 mb-5">
-          <div class="section-header"><div class="section-icon"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg></div><h2 class="font-display text-xl">Informacoes da OS e Horas Trabalhadas</h2></div>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div><h3 class="text-sm font-semibold mb-3 text-[var(--accent)]">Dados da OS</h3>
-              <div class="grid grid-cols-2 gap-3">
-                <div><label class="block text-xs text-[var(--muted)] mb-1">No. da OS</label><input type="text" id="clienteNumeroOS" class="form-input font-mono" readonly></div>
-                <div><label class="block text-xs text-[var(--muted)] mb-1">Data</label><input type="text" id="clienteDataOS" class="form-input" readonly></div>
-                <div class="col-span-2"><label class="block text-xs text-[var(--muted)] mb-1">Cliente</label><input type="text" id="clienteNome" class="form-input uppercase-input" readonly></div>
-                <div class="col-span-2"><label class="block text-xs text-[var(--muted)] mb-1">Cidade</label><input type="text" id="clienteCidade" class="form-input uppercase-input" readonly></div>
-                <div class="col-span-2"><label class="block text-xs text-[var(--muted)] mb-1">Endereco</label><input type="text" id="clienteEndereco" class="form-input uppercase-input" readonly></div>
-              </div>
-            </div>
-            <div><h3 class="text-sm font-semibold mb-3 text-[var(--accent)]">Controle de Horas</h3>
-              <div class="grid grid-cols-2 gap-3">
-                <div><label class="block text-xs text-[var(--muted)] mb-1">Inicio</label><input type="time" id="horaInicio" class="form-input text-center font-mono" step="1"></div>
-                <div><label class="block text-xs text-[var(--muted)] mb-1">Almoco Saida</label><input type="time" id="horaAlmocoSaida" class="form-input text-center font-mono"></div>
-                <div><label class="block text-xs text-[var(--muted)] mb-1">Almoco Retorno</label><input type="time" id="horaAlmocoRetorno" class="form-input text-center font-mono"></div>
-                <div><label class="block text-xs text-[var(--muted)] mb-1">Termino</label><input type="time" id="horaTermino" class="form-input text-center font-mono"></div>
-                <div><label class="block text-xs text-[var(--muted)] mb-1">Horas Cobradas</label><input type="text" id="horasTotais" class="form-input text-center font-mono font-semibold" readonly></div>
-                <div><label class="block text-xs text-[var(--muted)] mb-1">Horas Extras</label><input type="text" id="horasExtras" class="form-input text-center font-mono" placeholder="00:00"></div>
-                <div><label class="block text-xs text-[var(--muted)] mb-1">Adic. Noturno</label><input type="text" id="adicionalNoturno" class="form-input text-center font-mono" placeholder="00:00"></div>
-                <div><label class="block text-xs text-[var(--muted)] mb-1">Total Geral</label><input type="text" id="totalGeral" class="form-input text-center font-mono font-semibold" readonly></div>
-              </div>
-              <p class="text-xs text-[var(--muted)] mt-3">Minimo de 1 hora cobrada. Frações arredondadas para cima.</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="checklist-card p-5 mb-5"><div class="section-header"><div class="section-icon"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg></div><h2 class="font-display text-xl">Assinaturas</h2></div>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div><label class="block text-xs text-[var(--muted)] mb-1">Tecnico</label><input type="text" class="form-input uppercase-input mb-3" id="tecnico" value="LEONARDO MARTINS"><div class="border-2 border-dashed border-[var(--border)] rounded-lg h-20 flex items-center justify-center text-[var(--muted)] text-sm">Assinatura do Tecnico</div></div>
-            <div><label class="block text-xs text-[var(--muted)] mb-1">Recebido por (Cliente)</label><input type="text" class="form-input uppercase-input mb-3" id="recebedor"><div class="border-2 border-dashed border-[var(--border)] rounded-lg h-20 flex items-center justify-center text-[var(--muted)] text-sm">Assinatura do Cliente</div></div>
-          </div>
-        </div>
-
-        <div class="no-print flex flex-wrap gap-3 justify-center mb-8">
-          <button type="button" onclick="saveCurrentOS()" class="btn-primary">Salvar OS Atual</button>
-          <button type="button" onclick="clearForm()" class="btn-secondary">Nova OS</button>
-        </div>
-      </form>
-    </div>
-
-    <!-- ABA CHECKLIST -->
-    <div id="tab-checklist" class="tab-content">
-      <div class="checklist-card p-4 mb-5">
-        <div class="flex items-center justify-between mb-2"><span class="text-sm text-[var(--muted)]">Progresso do Checklist</span><span id="progressText" class="text-[var(--accent)] font-semibold">0%</span></div>
-        <div class="progress-bar"><div id="progressFill" class="progress-fill" style="width:0%"></div></div>
-      </div>
-      <div id="checklistSections" class="space-y-4"></div>
-    </div>
-
-    <!-- ABA CLIENTES -->
-    <div id="tab-clientes" class="tab-content">
-      <div class="backup-buttons">
-        <button onclick="backupClientes()" class="btn-primary text-sm"><i class="fas fa-download"></i> Backup (JSON)</button>
-        <button onclick="restaurarClientes()" class="btn-secondary text-sm"><i class="fas fa-upload"></i> Restaurar</button>
-        <input type="file" id="restoreFileInput" accept=".json" style="display: none;">
-      </div>
-      <div class="cliente-card"><div class="section-header"><div class="section-icon"><i class="fas fa-users text-[var(--accent)] text-xl"></i></div><h2 class="font-display text-xl">Cadastro de Clientes</h2></div>
-        <div class="cliente-form-grid">
-          <div class="cliente-input-group"><label>Nome*</label><input type="text" id="cad_nome"></div>
-          <div class="cliente-input-group"><label>CNPJ*</label><input type="text" id="cad_cnpj"></div>
-          <div class="cliente-input-group"><label>Endereco</label><input type="text" id="cad_endereco"></div>
-          <div class="cliente-input-group"><label>Cidade</label><input type="text" id="cad_cidade"></div>
-          <div class="cliente-input-group">
-            <label>Marca</label>
-            <select id="cad_marcaSelect" class="form-input">
-              <option value="">Selecione</option>
-              <option value="TOYOTA">TOYOTA</option>
-              <option value="CLARK">CLARK</option>
-              <option value="BYD">BYD</option>
-              <option value="PALETRANS">PALETRANS</option>
-              <option value="LINDE">LINDE</option>
-              <option value="HYSTER">HYSTER</option>
-              <option value="YALE">YALE</option>
-              <option value="CATERPILLAR">CATERPILLAR</option>
-              <option value="KOMATSU">KOMATSU</option>
-              <option value="MITSUBISHI">MITSUBISHI</option>
-              <option value="NISSAN">NISSAN</option>
-              <option value="STILL">STILL</option>
-              <option value="CROWN">CROWN</option>
-              <option value="JUNGHEINRICH">JUNGHEINRICH</option>
-              <option value="TCM">TCM</option>
-              <option value="HYUNDAI">HYUNDAI</option>
-              <option value="DOOSAN">DOOSAN</option>
-              <option value="HELI">HELI</option>
-              <option value="HANGCHA">HANGCHA</option>
-              <option value="LONKING">LONKING</option>
-              <option value="OUTRA">Outra</option>
-            </select>
-            <div id="cadMarcaOutraContainer" style="display: none; margin-top: 5px;">
-              <input type="text" id="cad_marcaOutra" class="form-input uppercase-input" placeholder="Digite a marca">
-            </div>
-            <input type="hidden" id="cad_marca" value="">
-          </div>
-          <div class="cliente-input-group"><label>Modelo</label><input type="text" id="cad_modelo"></div>
-          <div class="cliente-input-group"><label>Serie</label><input type="text" id="cad_serie"></div>
-          <div class="cliente-input-group"><label>Quantidade</label><input type="number" id="cad_quantidade" value="1"></div>
-          <div class="cliente-input-group"><label>Telefone</label><input type="text" id="cad_telefone"></div>
-          <div class="cliente-input-group"><label>WhatsApp</label><input type="text" id="cad_whatsapp"></div>
-        </div>
-        <div class="flex gap-3 mt-5">
-          <button id="cad_btnSalvar" class="btn-primary">Adicionar Cliente</button>
-          <button id="cad_btnCancelar" class="btn-secondary" style="display: none;">Cancelar</button>
-        </div>
-      </div>
-      <div class="flex justify-between items-center my-4 flex-wrap gap-3">
-        <input type="text" id="cad_searchInput" class="cliente-search" placeholder="Buscar cliente...">
-      </div>
-      <div class="cliente-table-wrapper"><table class="cliente-table"><thead><tr><th>Nome</th><th>Endereco</th><th>Cidade</th><th>Marca</th><th>Modelo</th><th>Serie</th><th>Qtd</th><th>Telefone</th><th>WhatsApp</th><th>CNPJ</th><th>Acoes</th></tr></thead><tbody id="cad_tableBody"></tbody></table></div>
-    </div>
-
-    <!-- ABA HISTÓRICO -->
-    <div id="tab-historico" class="tab-content">
       <div class="checklist-card p-5 mb-5">
-        <div class="section-header">
-          <div class="section-icon"><i class="fas fa-history text-xl"></i></div>
-          <h2 class="font-display text-xl">Historico de Ordens de Servico</h2>
+        <div class="flex flex-wrap justify-between items-center gap-3 mb-4"><h2 class="font-display text-xl">Informações da O.S</h2><div><span class="status-badge" id="statusBadge">EM ABERTURA</span></div></div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+          <div><label class="block text-xs text-[var(--muted)] mb-1">N° O.S</label><input type="text" id="numeroOS" class="form-input font-mono font-bold text-lg" readonly placeholder="Clique em Nova OS"></div>
+          <div><label class="block text-xs text-[var(--muted)] mb-1">Data</label><input type="date" id="dataOS" class="form-input"></div>
+          <div><label class="block text-xs text-[var(--muted)] mb-1">Tipo de Chamado</label><select id="tipoChamado" class="form-input"><option value="normal">Normal</option><option value="emergencial">Emergencial</option><option value="garantia">Garantia</option><option value="preventiva">Preventiva</option><option value="corretiva">Corretiva</option><option value="avaliacao">Avaliação</option><option value="orcamento">Orçamento</option></select></div>
         </div>
-        
-        <!-- Estatísticas -->
-        <div class="historico-stats" id="historicoStats">
-          <div class="stat-card">
-            <div class="stat-number" id="statTotal">0</div>
-            <div class="stat-label">Total de OS</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-number" id="statEmergenciais">0</div>
-            <div class="stat-label">Emergenciais</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-number" id="statPreventivas">0</div>
-            <div class="stat-label">Preventivas</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-number" id="statMes">0</div>
-            <div class="stat-label">Este Mes</div>
-          </div>
+        <div><label class="block text-xs text-[var(--muted)] mb-1">Relato do Cliente</label><textarea id="relatoCliente" class="form-input" rows="2" placeholder="Descreva o problema..."></textarea></div>
+        <div class="action-buttons no-print">
+          <button id="btnAbrirOS" class="btn btn-primary" onclick="App.mudarStatus('abertura')"><i class="fas fa-plus-circle"></i> Abrir O.S</button>
+          <button id="btnIniciarExecucao" class="btn btn-info" onclick="App.iniciarExecucao()"><i class="fas fa-play"></i> Iniciar Execucao</button>
+          <button id="btnFinalizar" class="btn btn-warning" onclick="App.finalizarServico()"><i class="fas fa-stop"></i> Finalizar Serviço</button>
+          <button id="btnFecharOS" class="btn btn-danger" onclick="App.fecharOS()"><i class="fas fa-lock"></i> Fechar O.S</button>
+          <button id="btnAprovar" class="btn btn-success" onclick="App.mudarStatus('aprovada')"><i class="fas fa-stamp"></i> Aprovar com Assinatura</button>
         </div>
-
-        <!-- Filtros -->
-        <div class="flex flex-wrap gap-4 mb-4 items-center justify-between">
-          <input type="text" id="historicoSearch" class="historico-search" placeholder="Buscar por OS, cliente, marca...">
-          <div class="flex gap-2 flex-wrap">
-            <select id="historicoFiltroTipo" class="form-input" style="width: auto;">
-              <option value="">Todos os Tipos</option>
-              <option value="normal">Normal</option>
-              <option value="emergencial">Emergencial</option>
-              <option value="garantia">Garantia</option>
-              <option value="preventiva">Preventiva</option>
-              <option value="corretiva">Corretiva</option>
-            </select>
-            <button onclick="exportarHistorico()" class="btn-secondary text-sm"><i class="fas fa-file-export"></i> CSV</button>
-            <button onclick="limparHistorico()" class="btn-secondary text-sm" style="border-color: #ef4444; color: #ef4444;"><i class="fas fa-trash"></i> Limpar</button>
-          </div>
+      </div>
+      <div class="checklist-card p-5 mb-5">
+        <h2 class="font-display text-xl mb-3">Dados do Equipamento</h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div><label class="block text-xs text-[var(--muted)] mb-1">Marca</label><select id="marcaSelect" class="form-input"></select><div id="marcaOutraDiv" style="display:none;" class="mt-1"><input type="text" id="marcaOutra" class="form-input" placeholder="Digite a marca"></div><input type="hidden" id="marca"></div>
+          <div><label class="block text-xs text-[var(--muted)] mb-1">Modelo</label><input type="text" id="modelo" class="form-input"></div>
+          <div><label class="block text-xs text-[var(--muted)] mb-1">N° Série</label><input type="text" id="numSerie" class="form-input"></div>
+          <div><label class="block text-xs text-[var(--muted)] mb-1">Horímetro <span class="text-red-400">*</span></label><input type="text" id="horimetro" class="form-input" placeholder="Ex: 1250h" required></div>
+          <div><label class="block text-xs text-[var(--muted)] mb-1">Combustível</label><select id="combustivel" class="form-input"><option value="">Selecione</option><option value="eletrico">Elétrico</option><option value="diesel">Diesel</option><option value="gasolina">Gasolina</option><option value="glp">GLP</option></select></div>
+          <div><label class="block text-xs text-[var(--muted)] mb-1">WhatsApp Cliente</label><input type="text" id="whatsappCliente" class="form-input" placeholder="(00) 00000-0000"></div>
         </div>
-
-        <!-- Tabela -->
-        <div class="cliente-table-wrapper">
-          <table class="historico-table">
-            <thead>
-              <tr>
-                <th>OS</th>
-                <th>Data</th>
-                <th>Cliente</th>
-                <th>Cidade</th>
-                <th>Marca/Modelo</th>
-                <th>Tipo</th>
-                <th>Horas</th>
-                <th>Acoes</th>
-              </tr>
-            </thead>
-            <tbody id="historicoTableBody">
-            </tbody>
+        <div class="grid md:grid-cols-3 gap-4 mt-4">
+          <div><label class="block text-xs text-[var(--muted)] mb-1">Cliente</label><input type="text" id="cliente" class="form-input" required></div>
+          <div><label class="block text-xs text-[var(--muted)] mb-1">CNPJ/CPF</label><input type="text" id="cnpj" class="form-input"></div>
+          <div><label class="block text-xs text-[var(--muted)] mb-1">Cidade</label><input type="text" id="cidadeCliente" class="form-input"></div>
+        </div>
+        <div class="mt-4"><label class="block text-xs text-[var(--muted)] mb-1">Endereco</label><div class="flex gap-2"><input type="text" id="endereco" class="form-input flex-1"><button type="button" onclick="App.abrirMapa()" class="btn btn-secondary"><i class="fas fa-map-marker-alt"></i></button></div></div>
+      </div>
+      <div class="checklist-card p-5 mb-5">
+        <h2 class="font-display text-xl mb-3">Serviço Realizado</h2>
+        <div><label class="block text-xs text-[var(--muted)] mb-1">Diagnóstico / Serviços executados</label><textarea id="descricaoServico" class="form-input min-h-24" placeholder="Descreva o diagnostico..."></textarea></div>
+        <div class="mt-3"><label class="block text-xs text-[var(--muted)] mb-1">Peças / Materiais Aplicados</label><textarea id="pecasAplicadas" class="form-input min-h-20" placeholder="Liste as pecas..."></textarea></div>
+        <div class="mt-3"><label class="block text-xs text-[var(--muted)] mb-1">Pendencias / Itens Críticos</label><textarea id="pendencias" class="form-input min-h-20" placeholder="Pendencias..."></textarea></div>
+      </div>
+      <div class="checklist-card p-5 mb-5"><h2 class="font-display text-xl mb-2"><i class="fas fa-camera"></i> Foto do Horímetro</h2><input type="file" id="fotoHorimetroInput" accept="image/*" class="form-input"><div id="fotoHorimetroPreview" class="photo-preview"></div></div>
+      <div class="checklist-card p-5 mb-5"><h2 class="font-display text-xl mb-2">Fotos do Servico (max. 4)</h2><input type="file" id="fotosServico" multiple accept="image/*" class="form-input"><div id="fotosPreview" class="photo-preview"></div></div>
+      <div class="checklist-card p-5 mb-5">
+        <h2 class="font-display text-xl mb-3">Assinaturas Digitais</h2>
+        <div class="grid md:grid-cols-2 gap-6">
+          <div><label class="block text-xs text-[var(--muted)] mb-1">Técnico</label><canvas id="sigTecnicoCanvas" class="signature-canvas" width="400" height="140"></canvas><div class="flex gap-2 mt-2"><button type="button" onclick="Signature.clear('tec')" class="btn btn-secondary text-xs">Limpar</button><button type="button" onclick="Signature.save('tec')" class="btn btn-primary text-xs">Salvar</button></div><input type="hidden" id="assinaturaTecnicoData"><input type="text" id="tecnico" value="LEONARDO MARTINS" class="form-input mt-2"></div>
+          <div><label class="block text-xs text-[var(--muted)] mb-1">Cliente / Recebedor</label><canvas id="sigClienteCanvas" class="signature-canvas" width="400" height="140"></canvas><div class="flex gap-2 mt-2"><button type="button" onclick="Signature.clear('cli')" class="btn btn-secondary text-xs">Limpar</button><button type="button" onclick="Signature.save('cli')" class="btn btn-primary text-xs">Salvar</button></div><input type="hidden" id="assinaturaClienteData"><input type="text" id="recebedor" placeholder="Nome do recebedor" class="form-input mt-2"></div>
+        </div>
+      </div>
+      <div class="checklist-card p-5 mb-5">
+        <h2 class="font-display text-xl mb-3">Controle de Horas</h2>
+        <div class="text-center mb-4"><div class="timer-display" id="timerDisplay">00:00:00</div><div class="flex gap-2 justify-center mt-3"><button type="button" onclick="Timer.control('start')" class="btn btn-success text-sm">Iniciar</button><button type="button" onclick="Timer.control('pause')" class="btn btn-warning text-sm">Pausar</button><button type="button" onclick="Timer.control('stop')" class="btn btn-danger text-sm">Parar</button></div></div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <div><label class="block text-xs text-[var(--muted)] mb-1">Início</label><input type="time" id="horaInicio" class="form-input"></div>
+          <div><label class="block text-xs text-[var(--muted)] mb-1">Saída Almoço</label><input type="time" id="horaAlmocoSaida" class="form-input"></div>
+          <div><label class="block text-xs text-[var(--muted)] mb-1">Retorno Almoço</label><input type="time" id="horaAlmocoRetorno" class="form-input"></div>
+          <div><label class="block text-xs text-[var(--muted)] mb-1">Termino</label><input type="time" id="horaTermino" class="form-input"></div>
+          <div><label class="block text-xs text-[var(--muted)] mb-1">Horas Cobradas</label><input type="text" id="horasTotais" class="form-input font-mono font-bold" readonly></div>
+          <div><label class="block text-xs text-[var(--muted)] mb-1">Horas Extras</label><input type="text" id="horasExtras" class="form-input" placeholder="00:00"></div>
+          <div><label class="block text-xs text-[var(--muted)] mb-1">Adicional Noturno</label><input type="text" id="adicionalNoturno" class="form-input" placeholder="00:00"></div>
+          <div><label class="block text-xs text-[var(--muted)] mb-1">Total Geral</label><input type="text" id="totalGeral" class="form-input font-mono font-bold text-[var(--success)]" readonly></div>
+        </div>
+      </div>
+      <div class="flex gap-3 justify-center mb-8 no-print"><button onclick="App.salvarOSManual()" class="btn btn-primary"><i class="fas fa-save"></i> Salvar Progresso</button></div>
+    </div>
+    <div id="tab-checklist" class="tab-content"><div class="checklist-card p-4 mb-5"><div class="flex justify-between items-center"><span class="font-semibold">Progresso do Checklist</span><span id="progressText" class="font-mono text-[var(--accent)] text-lg">0%</span></div><div class="progress-bar mt-2"><div id="progressFill" class="progress-fill" style="width:0%"></div></div></div><div id="checklistSections"></div></div>
+    <div id="tab-clientes" class="tab-content">
+      <div class="stats-grid no-print" id="clientesStats">
+        <div class="stat-card"><div class="stat-value" id="statTotalClientes">0</div><div class="stat-label">Total Clientes</div></div>
+        <div class="stat-card"><div class="stat-value" id="statTotalMarcas">0</div><div class="stat-label">Total Marcas</div></div>
+        <div class="stat-card"><div class="stat-value" id="statClientesComOS">0</div><div class="stat-label">Clientes c/ OS</div></div>
+        <div class="stat-card"><div class="stat-value" id="statTotalOSClientes">0</div><div class="stat-label">Total OS</div></div>
+        <div class="stat-card"><div class="stat-value" id="statOSAbertasCliente">0</div><div class="stat-label">OS em Aberto</div></div>
+        <div class="stat-card"><div class="stat-value" id="statOSAprovadasCliente">0</div><div class="stat-label">OS Aprovadas</div></div>
+      </div>
+      <div class="checklist-card p-5 mb-5">
+        <h2 class="font-display text-xl mb-3">Cadastro de Cliente</h2>
+        <div class="grid md:grid-cols-2 gap-3"><input type="text" id="cad_nome" placeholder="Nome*" class="form-input"><input type="text" id="cad_cnpj" placeholder="CNPJ" class="form-input"><input type="text" id="cad_endereco" placeholder="Endereço" class="form-input"><input type="text" id="cad_cidade" placeholder="Cidade" class="form-input"><input type="text" id="cad_telefone" placeholder="Telefone" class="form-input"><input type="text" id="cad_whatsapp" placeholder="WhatsApp" class="form-input"><input type="email" id="cad_email" placeholder="E-mail" class="form-input"><input type="text" id="cad_responsavel_nome" placeholder="Responsável (Nome)" class="form-input"><input type="text" id="cad_responsavel_telefone" placeholder="Telefone do Responsável" class="form-input"></div>
+        <div class="mt-4"><label class="font-semibold text-sm">Equipamentos do Cliente</label><div id="equipamentosList"></div><button type="button" onclick="Clientes.addEquipField()" class="btn btn-secondary text-sm mt-2"><i class="fas fa-plus"></i> Adicionar Equipamento</button></div>
+        <div class="flex gap-3 mt-5"><button class="btn btn-primary" onclick="Clientes.save()"><i class="fas fa-save"></i> Salvar Cliente</button><button id="cad_btnCancelar" class="btn btn-secondary" style="display:none;" onclick="Clientes.cancelEdit()">Cancelar</button><button class="btn btn-secondary" onclick="Clientes.exportCSV()"><i class="fas fa-file-csv"></i> Exportar CSV</button><button class="btn btn-secondary" onclick="Clientes.importCSV()"><i class="fas fa-upload"></i> Importar CSV</button></div>
+      </div>
+      <div class="mt-5"><input type="text" id="cad_searchInput" placeholder="Buscar cliente..." class="form-input w-full md:w-64 mb-3"><div class="overflow-x-auto"><table class="w-full text-sm"><thead class="bg-[var(--bg-secondary)]"><tr><th class="p-3 text-left">Nome</th><th class="p-3 text-left">Cidade</th><th class="p-3 text-left">Marcas</th><th class="p-3 text-left">Ações</th></tr></thead><tbody id="cad_tableBody"></tbody></table></div></div>
+    </div>
+    <div id="tab-historico" class="tab-content">
+      <div class="stats-grid no-print">
+        <div class="stat-card"><div class="stat-value" id="statTotalOS">0</div><div class="stat-label">Total de OS</div></div>
+        <div class="stat-card"><div class="stat-value text-[#60a5fa]" id="statStatusAbertura">0</div><div class="stat-label">Em Abertura</div></div>
+        <div class="stat-card"><div class="stat-value text-[#fbbf24]" id="statStatusExecucao">0</div><div class="stat-label">Em Execução</div></div>
+        <div class="stat-card"><div class="stat-value text-[#34d399]" id="statStatusFinalizacao">0</div><div class="stat-label">Finalizando</div></div>
+        <div class="stat-card"><div class="stat-value text-[#a78bfa]" id="statStatusFechada">0</div><div class="stat-label">Fechadas</div></div>
+        <div class="stat-card"><div class="stat-value text-[#4ade80]" id="statStatusAprovada">0</div><div class="stat-label">Aprovadas</div></div>
+        <div class="stat-card"><div class="stat-value text-[#f97316]" id="statTipoEmergencial">0</div><div class="stat-label">Emergenciais</div></div>
+        <div class="stat-card"><div class="stat-value text-[#10b981]" id="statTipoPreventiva">0</div><div class="stat-label">Preventivas</div></div>
+        <div class="stat-card"><div class="stat-value text-[#ef4444]" id="statTipoCorretiva">0</div><div class="stat-label">Corretivas</div></div>
+        <div class="stat-card"><div class="stat-value text-[#8b5cf6]" id="statTipoGarantia">0</div><div class="stat-label">Garantia</div></div>
+        <div class="stat-card"><div class="stat-value text-[#06b6d4]" id="statTipoNormal">0</div><div class="stat-label">Normal</div></div>
+        <div class="stat-card"><div class="stat-value text-[#ec4899]" id="statTipoAvaliacao">0</div><div class="stat-label">Avaliações</div></div>
+        <div class="stat-card"><div class="stat-value text-[#f59e0b]" id="statTipoOrcamento">0</div><div class="stat-label">Orçamentos</div></div>
+        <div class="stat-card"><div class="stat-value" id="statEsteMes">0</div><div class="stat-label">OS este Mês</div></div>
+      </div>
+      <div class="checklist-card p-5">
+        <h2 class="font-display text-xl mb-3">Histórico de O.S</h2>
+        <div class="flex flex-wrap gap-3 mb-4"><input type="text" id="historicoSearch" placeholder="Buscar..." class="form-input w-64"><select id="historicoFiltroTipo" class="form-input w-40"><option value="">Todos os Tipos</option><option value="emergencial">Emergencial</option><option value="preventiva">Preventiva</option><option value="corretiva">Corretiva</option><option value="garantia">Garantia</option><option value="normal">Normal</option><option value="avaliacao">Avaliação</option><option value="orcamento">Orçamento</option></select><select id="historicoFiltroStatus" class="form-input w-36"><option value="">Todos Status</option><option value="abertura">Abertura</option><option value="execucao">Execução</option><option value="finalizacao">Finalizando</option><option value="fechada">Fechada</option><option value="aprovada">Aprovada</option></select><button onclick="Historico.exportCSV()" class="btn btn-secondary text-sm"><i class="fas fa-file-csv"></i> Exportar CSV</button><button onclick="Historico.importCSV()" class="btn btn-secondary text-sm"><i class="fas fa-upload"></i> Restaurar CSV</button><button onclick="Historico.clear()" class="btn btn-secondary text-sm text-red-400"><i class="fas fa-trash"></i> Limpar</button></div>
+        <div class="overflow-x-auto">
+          <table class="table-os">
+            <thead><tr><th class="w-28">O.S</th><th class="w-28">Data</th><th>Cliente</th><th class="w-28">Status</th><th class="w-20">Horas</th><th class="w-28">Ações</th></tr></thead>
+            <tbody id="historicoTableBody"></tbody>
           </table>
         </div>
-
-        <!-- Estado vazio -->
-        <div id="historicoEmpty" class="empty-state" style="display: none;">
-          <i class="fas fa-folder-open"></i>
-          <h3 class="text-xl font-semibold mb-2">Nenhuma OS encontrada</h3>
-          <p class="text-sm">Comece criando uma nova Ordem de Servico</p>
-        </div>
+        <div id="historicoEmpty" class="text-center py-8 text-[var(--muted)] hidden">Nenhuma O.S encontrada</div>
       </div>
     </div>
   </main>
-
-  <footer class="no-print border-t border-[var(--border)] py-4 mt-8 text-center text-xs text-[var(--muted)]">MARLIFT EMPILHADEIRAS - Sistema Profissional</footer>
+  <div id="toastCenter" class="toast-center"><i class="fas fa-check-circle text-green-500 text-2xl"></i><span id="toastMessage">Operação realizada</span></div>
 </div>
-<div id="toast" class="toast"><svg class="w-5 h-5 text-[var(--success)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><span id="toastMessage"></span></div>
-
 <script>
-  // ==================== PWA INSTALL ====================
-  let deferredPrompt;
-  const installBtn = document.getElementById('installAppBtn');
+// ==================== SISTEMA COMPLETO v5.1 ====================
+var Config = {
+  marcas: ["TOYOTA","CLARK","BYD","PALETRANS","LINDE","HYSTER","YALE","CATERPILLAR","KOMATSU","MITSUBISHI","NISSAN","STILL","CROWN","JUNGHEINRICH","TCM","HYUNDAI","DOOSAN","HELI","HANGCHA","LONKING","OUTRA"],
+  checklist: [ { id:'motor', title:'Motor e Componentes', items:[{id:'motor_oleo',label:'Nivel de oleo do motor'},{id:'motor_filtro_oleo',label:'Filtro de oleo'},{id:'motor_filtro_ar',label:'Filtro de ar'},{id:'motor_filtro_comb',label:'Filtro de combustivel'},{id:'motor_correias',label:'Correias'},{id:'motor_radiador',label:'Radiador'}] }, { id:'eletrico', title:'Sistema Eletrico', items:[{id:'eletr_bateria',label:'Bateria'},{id:'eletr_terminais',label:'Terminais'},{id:'eletr_alternador',label:'Alternador'},{id:'eletr_partida',label:'Motor de partida'},{id:'eletr_farois',label:'Farois'},{id:'eletr_buzina',label:'Buzina'}] }, { id:'hidraulico', title:'Sistema Hidraulico', items:[{id:'hidr_oleo',label:'Nivel oleo hidraulico'},{id:'hidr_bomba',label:'Bomba hidraulica'},{id:'hidr_cilindros',label:'Cilindros'},{id:'hidr_vazamentos',label:'Vazamentos'},{id:'hidr_mangueiras',label:'Mangueiras'}] }, { id:'transmissao', title:'Transmissao e Freios', items:[{id:'trans_oleo',label:'Oleo transmissao'},{id:'freio_servico',label:'Freio de servico'},{id:'freio_estac',label:'Freio de estacionamento'},{id:'freio_pastilhas',label:'Pastilhas/Lonas'}] }, { id:'direcao', title:'Direcao', items:[{id:'dir_volante',label:'Volante'},{id:'dir_caixa',label:'Caixa de direcao'},{id:'dir_hidraulica',label:'Direcao hidraulica'}] }, { id:'estrutura', title:'Estrutura e Garfos', items:[{id:'est_mastros',label:'Mastros'},{id:'est_correntes',label:'Correntes'},{id:'est_garfos',label:'Garfos'},{id:'est_roletes',label:'Roletes'}] }, { id:'seguranca', title:'Seguranca', items:[{id:'seg_cinto',label:'Cinto de seguranca'},{id:'seg_extintor',label:'Extintor'},{id:'seg_espelhos',label:'Espelhos'},{id:'seg_alarme',label:'Alarme de re'}] } ],
+  dbName: 'MarliftDB_v5', dbVersion: 1, photoSize: { width:800, height:600, quality:0.7 }
+};
 
-  window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault();
-    deferredPrompt = e;
-    installBtn.style.display = 'flex';
-  });
+var State = { currentStatus:'abertura', photos:[], fotoHorimetro:null, clients:[], osHistory:[], editingClientId:null, hasUnsavedChanges:false, db:null, osNumberGenerated:false };
 
-  function installApp() {
-    if (deferredPrompt) {
-      deferredPrompt.prompt();
-      deferredPrompt.userChoice.then((choiceResult) => {
-        if (choiceResult.outcome === 'accepted') {
-          showToast('App instalado com sucesso!');
-        }
-        deferredPrompt = null;
-        installBtn.style.display = 'none';
-      });
-    } else {
-      showToast('Para instalar, acesse via Chrome/Edge no celular e vá em "Adicionar à Tela Inicial".');
-    }
-  }
+function $(id) { return document.getElementById(id); }
 
-  // Dynamic Manifest Injection
-  const manifest = {
-    "name": "Marlift Empilhadeiras OS",
-    "short_name": "Marlift OS",
-    "start_url": ".",
-    "display": "standalone",
-    "background_color": "#0c0f12",
-    "theme_color": "#f97316",
-    "description": "Sistema de OS Marlift",
-    "icons": [
-      {
-        "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23f97316' width='100' height='100' rx='20'/><text x='50' y='65' font-size='50' text-anchor='middle' fill='white'>M</text></svg>",
-        "sizes": "192x192",
-        "type": "image/svg+xml"
-      }
-    ]
-  };
-  const manifestBlob = new Blob([JSON.stringify(manifest)], {type: 'application/json'});
-  const manifestURL = URL.createObjectURL(manifestBlob);
-  document.querySelector('head').appendChild(Object.assign(document.createElement('link'), {rel: 'manifest', href: manifestURL}));
+function showToast(msg, isError) {
+  var t = $('toastCenter');
+  if (!t) return;
+  var msgSpan = $('toastMessage');
+  if (msgSpan) msgSpan.textContent = msg;
+  t.style.borderColor = isError ? 'var(--danger)' : 'var(--success)';
+  t.classList.add('show');
+  setTimeout(function() { if (t) t.classList.remove('show'); }, 2500);
+}
 
-  // ==================== LISTA DE MARCAS ====================
-  const marcasList = [
-    "TOYOTA", "CLARK", "BYD", "PALETRANS", "LINDE", "HYSTER", "YALE", "CATERPILLAR", 
-    "KOMATSU", "MITSUBISHI", "NISSAN", "STILL", "CROWN", "JUNGHEINRICH", "TCM", 
-    "HYUNDAI", "DOOSAN", "HELI", "HANGCHA", "LONKING"
-  ];
-
-  // ==================== CHECKLIST ====================
-  const checklistData = [
-    { id:'motor', title:'Motor e Componentes', items:[{id:'motor_oleo',label:'Nivel de oleo do motor'},{id:'motor_filtro_oleo',label:'Filtro de oleo'},{id:'motor_filtro_ar',label:'Filtro de ar'},{id:'motor_filtro_comb',label:'Filtro de combustivel'},{id:'motor_correias',label:'Correias'},{id:'motor_radiador',label:'Radiador e arrefecimento'},{id:'motor_velas',label:'Velas de ignicao'},{id:'motor_mangueiras',label:'Mangueiras e conexoes'}] },
-    { id:'eletrico', title:'Sistema Eletrico', items:[{id:'eletr_bateria',label:'Bateria'},{id:'eletr_terminais',label:'Terminais e cabos'},{id:'eletr_alternador',label:'Alternador'},{id:'eletr_partida',label:'Motor de partida'},{id:'eletr_farois',label:'Faros e lanternas'},{id:'eletr_buzina',label:'Buzina'},{id:'eletr_painel',label:'Painel'},{id:'eletr_fusiveis',label:'Fuseveis'}] },
-    { id:'hidraulico', title:'Sistema Hidraulico', items:[{id:'hidr_oleo',label:'Nivel oleo hidraulico'},{id:'hidr_bomba',label:'Bomba hidraulica'},{id:'hidr_cilindros',label:'Cilindros elevacao'},{id:'hidr_inclinacao',label:'Cilindros inclinacao'},{id:'hidr_valvulas',label:'Valvulas'},{id:'hidr_vazamentos',label:'Vazamentos'},{id:'hidr_mangueiras',label:'Mangueiras'}] },
-    { id:'transmissao', title:'Transmissao e Freios', items:[{id:'trans_oleo',label:'Oleo transmissao'},{id:'trans_eixo',label:'Eixo traseiro'},{id:'trans_juntas',label:'Juntas homocineticas'},{id:'freio_servico',label:'Freio servico'},{id:'freio_estac',label:'Freio estacionamento'},{id:'freio_pastilhas',label:'Pastilhas/lonas'},{id:'freio_fluido',label:'Fluido freio'}] },
-    { id:'direcao', title:'Direcao', items:[{id:'dir_volante',label:'Volante'},{id:'dir_caixa',label:'Caixa direcao'},{id:'dir_hidraulica',label:'Direcao hidraulica'},{id:'dir_fluido',label:'Fluido direcao'},{id:'dir_terminais',label:'Terminais'}] },
-    { id:'estrutura', title:'Estrutura e Garfos', items:[{id:'est_chassi',label:'Chassi'},{id:'est_mastros',label:'Mastros'},{id:'est_correntes',label:'Correntes'},{id:'est_roletes',label:'Roletes'},{id:'est_garfos',label:'Garfos'},{id:'est_travas',label:'Travas'}] },
-    { id:'rodas', title:'Rodas e Pneus', items:[{id:'rod_pneus_diant',label:'Pneus dianteiros'},{id:'rod_pneus_tras',label:'Pneus traseiros'},{id:'rod_pressao',label:'Pressao'},{id:'rod_desgaste',label:'Desgaste'},{id:'rod_rolamentos',label:'Rolamentos'},{id:'rod_porcas',label:'Porcas'}] },
-    { id:'seguranca', title:'Seguranca', items:[{id:'seg_cinto',label:'Cinto seguranca'},{id:'seg_extintor',label:'Extintor'},{id:'seg_espelhos',label:'Espelhos'},{id:'seg_alarme',label:'Alarme re'},{id:'seg_luzes',label:'Luzes'},{id:'seg_giroflex',label:'Giroflex'},{id:'seg_plataforma',label:'Plataforma'},{id:'seg_assento',label:'Assento'}] },
-    { id:'bateria', title:'Bateria (Eletricos)', items:[{id:'bat_estado',label:'Estado geral'},{id:'bat_carga',label:'Carga'},{id:'bat_eletrolito',label:'Eletrolito'},{id:'bat_terminais',label:'Terminais'},{id:'bat_carregador',label:'Carregador'}] },
-    { id:'lubrificacao', title:'Lubrificacao', items:[{id:'lub_mastros',label:'Mastros/correntes'},{id:'lub_pivos',label:'Pivos'},{id:'lub_rolamentos',label:'Rolamentos'},{id:'lub_pedais',label:'Pedais'},{id:'lub_geral',label:'Pontos gerais'}] }
-  ];
-
-  let timerInterval = null, timerSeconds = 0, timerRunning = false, timerPaused = false;
-  let totalCheckItems = 0, checkedItems = 0;
-  let photosData = [];
-  let cadClients = [];
-  let editingClientId = null;
-  let osHistory = [];
-
-  // ==================== FUNÇÕES AUXILIARES ====================
-  function showToast(msg, isError=false) { const toast=document.getElementById('toast'); document.getElementById('toastMessage').textContent=msg; toast.classList.add('show'); setTimeout(()=>toast.classList.remove('show'),3000); }
-  function toggleFullscreen() { if (!document.fullscreenElement) document.documentElement.requestFullscreen(); else document.exitFullscreen(); }
-  document.addEventListener('fullscreenchange', () => { const text=document.getElementById('fullscreenText'); if (document.fullscreenElement) { text.textContent='Sair da Tela Cheia'; } else { text.textContent='Tela Cheia'; } });
-  
-  // Menu Dropdown
-  const menuToggle = document.getElementById('menuToggle');
-  const menuContent = document.getElementById('menuContent');
-  
-  menuToggle.addEventListener('click', (e) => {
-    e.stopPropagation();
-    menuToggle.classList.toggle('active');
-    menuContent.classList.toggle('show');
-  });
-  
-  document.addEventListener('click', (e) => {
-    if (!menuContent.contains(e.target) && !menuToggle.contains(e.target)) {
-      menuToggle.classList.remove('active');
-      menuContent.classList.remove('show');
-    }
-  });
-  
-  function closeMenu() {
-    menuToggle.classList.remove('active');
-    menuContent.classList.remove('show');
-  }
-  
-  let lastScrollTop=0; 
-  window.addEventListener('scroll',()=>{
-    const st=window.scrollY; 
-    if(Math.abs(lastScrollTop-st)<=5) return; 
-    const header=document.querySelector('header'); 
-    if(st>lastScrollTop && st>80) header.classList.add('header-hidden'); 
-    else if(st+window.innerHeight<document.body.scrollHeight) header.classList.remove('header-hidden'); 
-    lastScrollTop=st;
-  });
-  
-  // ALTERAÇÃO: Formato do número da OS para OS-2604-0001
-  function generateOSNumber() { 
-    let c=parseInt(localStorage.getItem('marlift_os_counter')||'0')+1; 
-    const now=new Date(); 
-    const yy = now.getFullYear().toString().slice(-2); // Pega os 2 últimos dígitos do ano
-    const mm = String(now.getMonth()+1).padStart(2,'0');
-    const os=`OS-${yy}${mm}-${String(c).padStart(4,'0')}`; 
-    document.getElementById('numeroOS').value=os; 
-    document.getElementById('clienteNumeroOS').value=os; 
-    localStorage.setItem('marlift_os_counter', c);
-  }
-  
-  function setDefaultDate() { const hoje=new Date().toISOString().split('T')[0]; document.getElementById('dataOS').value=hoje; document.getElementById('clienteDataOS').value=hoje; }
-  function atualizarLinkMapa() { const end=document.getElementById('endereco').value; const link=document.getElementById('mapLink'); if(end){ link.href=`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(end)}`; link.style.display='inline-flex'; } else link.style.display='none'; }
-  function abrirMapa(){ const end=document.getElementById('endereco').value; if(end) window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(end)}`,'_blank'); else showToast('Digite o endereço primeiro'); }
-  
-  function syncClienteFields() {
-    document.getElementById('clienteNumeroOS').value = document.getElementById('numeroOS').value;
-    document.getElementById('clienteDataOS').value = document.getElementById('dataOS').value;
-    document.getElementById('clienteNome').value = document.getElementById('cliente').value;
-    document.getElementById('clienteCidade').value = document.getElementById('cidadeCliente').value;
-    document.getElementById('clienteEndereco').value = document.getElementById('endereco').value;
-  }
-  
-  function updateTipoChamadoDisplay() {
-    const select = document.getElementById('tipoChamado');
-    const selectedOption = select.options[select.selectedIndex];
-    let valor = selectedOption ? selectedOption.text : '';
-    valor = valor.toUpperCase();
-    const displayDiv = document.getElementById('tipoChamadoDisplay');
-    const isEmergencial = (valor === 'EMERGENCIAL');
-    displayDiv.innerHTML = `<span style="font-weight: bold;">TIPO DE CHAMADO:</span> <span class="tipo-chamado-destaque ${isEmergencial ? 'emergencial' : ''}" style="font-weight: bold;">${valor}</span>`;
-  }
-  
-  function buscarClientePorCNPJ() {
-    const cnpj = document.getElementById('cnpj').value.trim();
-    if(!cnpj) return;
-    const numeros = cnpj.replace(/\D/g,'');
-    const cliente = cadClients.find(c => (c.cnpj||'').replace(/\D/g,'') === numeros);
-    if(cliente){
-      document.getElementById('cliente').value = cliente.nome.toUpperCase();
-      document.getElementById('cidadeCliente').value = (cliente.cidade||'').toUpperCase();
-      document.getElementById('endereco').value = (cliente.endereco||'').toUpperCase();
-      document.getElementById('whatsappCliente').value = cliente.whatsapp||'';
-      const marca = (cliente.marca || '').toUpperCase();
-      const marcaSelect = document.getElementById('marcaSelect');
-      const outraContainer = document.getElementById('marcaOutraContainer');
-      const outraInput = document.getElementById('marcaOutra');
-      if (marcasList.includes(marca)) {
-        marcaSelect.value = marca;
-        outraContainer.style.display = 'none';
-        outraInput.value = '';
-      } else if (marca) {
-        marcaSelect.value = 'OUTRA';
-        outraContainer.style.display = 'block';
-        outraInput.value = marca;
-      } else {
-        marcaSelect.value = '';
-        outraContainer.style.display = 'none';
-        outraInput.value = '';
-      }
-      document.getElementById('modelo').value = (cliente.modelo || '').toUpperCase();
-      document.getElementById('numSerie').value = (cliente.serie || '').toUpperCase();
-      syncClienteFields();
-      atualizarLinkMapa();
-      showToast(`Cliente ${cliente.nome} carregado`);
-    }
-  }
-
-  function updateMarcaHidden() {
-    const select = document.getElementById('marcaSelect');
-    const outraInput = document.getElementById('marcaOutra');
-    let valor = '';
-    if (select.value === 'OUTRA') {
-      valor = outraInput.value.trim().toUpperCase();
-    } else {
-      valor = select.value;
-    }
-    document.getElementById('marca').value = valor;
-  }
-
-  function updateCadMarcaHidden() {
-    const select = document.getElementById('cad_marcaSelect');
-    const outraInput = document.getElementById('cad_marcaOutra');
-    let valor = '';
-    if (select.value === 'OUTRA') {
-      valor = outraInput.value.trim().toUpperCase();
-    } else {
-      valor = select.value;
-    }
-    document.getElementById('cad_marca').value = valor;
-  }
-
-  function setupMarcaSelects() {
-    const marcaSelect = document.getElementById('marcaSelect');
-    const outraContainer = document.getElementById('marcaOutraContainer');
-    const outraInput = document.getElementById('marcaOutra');
-    marcaSelect.addEventListener('change', () => {
-      if (marcaSelect.value === 'OUTRA') {
-        outraContainer.style.display = 'block';
-        outraInput.focus();
-      } else {
-        outraContainer.style.display = 'none';
-        outraInput.value = '';
-        updateMarcaHidden();
-      }
-    });
-    outraInput.addEventListener('input', () => {
-      updateMarcaHidden();
-    });
-    
-    const cadMarcaSelect = document.getElementById('cad_marcaSelect');
-    const cadOutraContainer = document.getElementById('cadMarcaOutraContainer');
-    const cadOutraInput = document.getElementById('cad_marcaOutra');
-    cadMarcaSelect.addEventListener('change', () => {
-      if (cadMarcaSelect.value === 'OUTRA') {
-        cadOutraContainer.style.display = 'block';
-        cadOutraInput.focus();
-      } else {
-        cadOutraContainer.style.display = 'none';
-        cadOutraInput.value = '';
-        updateCadMarcaHidden();
-      }
-    });
-    cadOutraInput.addEventListener('input', () => {
-      updateCadMarcaHidden();
-    });
-  }
-
-  // ==================== CRONÔMETRO ====================
-  function startTimer() { if(timerRunning) return; timerRunning=true; timerPaused=false; document.getElementById('timerContainer').classList.add('timer-running'); document.getElementById('timerStatus').textContent='Servico em andamento'; document.getElementById('btnStart').disabled=true; document.getElementById('btnPause').disabled=false; document.getElementById('btnStop').disabled=false; if(!document.getElementById('horaInicio').value) document.getElementById('horaInicio').value=new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}); timerInterval=setInterval(()=>{ if(!timerPaused){ timerSeconds++; const h=Math.floor(timerSeconds/3600),m=Math.floor((timerSeconds%3600)/60),s=timerSeconds%60; document.getElementById('timerDisplay').textContent=`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`; } },1000); }
-  function pauseTimer() { if(!timerRunning) return; timerPaused=true; document.getElementById('timerStatus').textContent='Pausa almoco'; document.getElementById('btnPause').textContent='Retornar'; document.getElementById('btnPause').onclick=resumeTimer; if(!document.getElementById('horaAlmocoSaida').value) document.getElementById('horaAlmocoSaida').value=new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}); }
-  function resumeTimer() { timerPaused=false; document.getElementById('timerStatus').textContent='Servico em andamento'; document.getElementById('btnPause').textContent='Almoco'; document.getElementById('btnPause').onclick=pauseTimer; if(!document.getElementById('horaAlmocoRetorno').value) document.getElementById('horaAlmocoRetorno').value=new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}); }
-  function stopTimer() { if(!timerRunning) return; clearInterval(timerInterval); timerRunning=false; document.getElementById('timerContainer').classList.remove('timer-running'); document.getElementById('timerStatus').textContent='Finalizado'; document.getElementById('btnStart').disabled=false; document.getElementById('btnPause').disabled=true; document.getElementById('btnStop').disabled=true; if(!document.getElementById('horaTermino').value) document.getElementById('horaTermino').value=new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}); calculateTotals(); }
-  function timeDiff(start,end) { if(!start||!end) return 0; let [sh,sm]=start.split(':').map(Number),[eh,em]=end.split(':').map(Number); let diff=(eh*60+em)-(sh*60+sm); if(diff<0) diff+=1440; return diff; }
-  function calculateTotals(){ const inicio=document.getElementById('horaInicio').value,termino=document.getElementById('horaTermino').value,saida=document.getElementById('horaAlmocoSaida').value,retorno=document.getElementById('horaAlmocoRetorno').value; if(!inicio||!termino) return; let total=timeDiff(inicio,termino); if(saida&&retorno) total-=timeDiff(saida,retorno); let horas=Math.ceil(total/60); if(horas<1) horas=1; document.getElementById('horasTotais').value=`${horas}h`; updateTotalGeral(); }
-  function timeToMinutes(t){ if(!t) return 0; if(t.includes('h')) return parseInt(t)*60; let p=t.split(':'); return parseInt(p[0])*60+parseInt(p[1]); }
-  function updateTotalGeral(){ const horasStr=document.getElementById('horasTotais').value; let horasMin=0; if(horasStr){ const m=horasStr.match(/(\d+)h/); if(m) horasMin=parseInt(m[1])*60; } const extra=timeToMinutes(document.getElementById('horasExtras').value); const noturno=timeToMinutes(document.getElementById('adicionalNoturno').value); let total=horasMin+extra+noturno; const h=Math.floor(total/60),m=total%60; document.getElementById('totalGeral').value=`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`; }
-  function setupEventListeners(){ ['horaInicio','horaAlmocoSaida','horaAlmocoRetorno','horaTermino'].forEach(id=>document.getElementById(id).addEventListener('change',calculateTotals)); document.getElementById('horasExtras').addEventListener('input',updateTotalGeral); document.getElementById('adicionalNoturno').addEventListener('input',updateTotalGeral); }
-
-  // ==================== FOTOS ====================
-  function handlePhotoUpload(e){ const files=Array.from(e.target.files); const preview=document.getElementById('fotosPreview'); photosData=[]; preview.innerHTML=''; files.forEach(file=>{ const reader=new FileReader(); reader.onload=(ev)=>{ photosData.push(ev.target.result); const div=document.createElement('div'); div.className='photo-item'; div.innerHTML=`<img src="${ev.target.result}"><div class="photo-remove" onclick="removePhoto(this)">×</div>`; preview.appendChild(div); }; reader.readAsDataURL(file); }); }
-  function removePhoto(el){ const idx=Array.from(el.parentNode.parentNode.children).indexOf(el.parentNode); if(idx!==-1) photosData.splice(idx,1); el.parentNode.remove(); }
-
-  // ==================== CHECKLIST RENDER ====================
-  function renderChecklist() {
-    const container=document.getElementById('checklistSections');
-    totalCheckItems=0;
-    container.innerHTML='';
-    checklistData.forEach(section=>{
-      totalCheckItems+=section.items.length;
-      const div=document.createElement('div');
-      div.className='checklist-card p-5 mb-4';
-      div.innerHTML=`<div class="section-header"><div class="section-icon"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg></div><h2 class="font-display text-xl">${section.title}</h2><button type="button" class="select-all-btn ml-auto" data-section="${section.id}">Selecionar Todos</button></div><div class="grid grid-cols-1 md:grid-cols-2 gap-2" id="items-${section.id}">${section.items.map(item=>`<div class="flex items-center justify-between p-2 rounded bg-[var(--bg)]"><label class="check-item flex items-center gap-2 flex-1 cursor-pointer"><input type="checkbox" data-check="true" id="${item.id}"><span class="checkmark"><svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg></span><span class="text-sm">${item.label}</span></label><select class="form-input w-20 text-xs ml-2" id="${item.id}_status"><option value="ok">OK</option><option value="atencao">Aten.</option><option value="critico">Crit.</option><option value="na">N/A</option></select></div>`).join('')}</div>`;
-      container.appendChild(div);
-    });
-    document.querySelectorAll('.select-all-btn').forEach(btn=>{
-      btn.addEventListener('click',()=>{
-        const sectionId=btn.getAttribute('data-section');
-        const section=checklistData.find(s=>s.id===sectionId);
-        if(section){
-          const checkboxes=section.items.map(item=>document.getElementById(item.id));
-          const allChecked=checkboxes.every(cb=>cb.checked);
-          checkboxes.forEach(cb=>cb.checked=!allChecked);
-          updateProgress();
-        }
-      });
-    });
-    document.querySelectorAll('input[data-check="true"]').forEach(cb=>cb.addEventListener('change',updateProgress));
-    updateProgress();
-  }
-  function updateProgress(){ const checkboxes=document.querySelectorAll('input[data-check="true"]'); checkedItems=Array.from(checkboxes).filter(cb=>cb.checked).length; const pct=totalCheckItems>0?Math.round((checkedItems/totalCheckItems)*100):0; document.getElementById('progressText').textContent=`${pct}%`; document.getElementById('progressFill').style.width=`${pct}%`; }
-
-  // ==================== BACKUP E RESTAURAÇÃO (JSON) ====================
-  function backupClientes() {
-    if (cadClients.length === 0) {
-      showToast('Nenhum cliente para fazer backup', true);
-      return;
-    }
-    const dataStr = JSON.stringify(cadClients, null, 2);
-    const blob = new Blob([dataStr], {type: 'application/json'});
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `marlift_clientes_backup_${new Date().toISOString().slice(0,19)}.json`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-    showToast('Backup exportado com sucesso!');
-  }
-
-  function restaurarClientes() {
-    const input = document.getElementById('restoreFileInput');
+async function saveFilePicker(content, defaultName, fileType) {
+  if ('showSaveFilePicker' in window) {
+    try {
+      const opts = { suggestedName: defaultName, types: [{ description: fileType === 'csv' ? 'CSV File' : 'Text File', accept: { 'text/csv': ['.csv'] } }] };
+      const handle = await window.showSaveFilePicker(opts);
+      const writable = await handle.createWritable();
+      await writable.write(content);
+      await writable.close();
+      showToast('Arquivo salvo com sucesso!');
+      return true;
+    } catch (err) { if (err.name !== 'AbortError') return fallbackDownload(content, defaultName); return false; }
+  } else { return fallbackDownload(content, defaultName); }
+}
+function fallbackDownload(content, filename) {
+  const blob = new Blob([content], { type: 'text/csv;charset=utf-8;' });
+  const link = document.createElement('a');
+  const url = URL.createObjectURL(blob);
+  link.href = url; link.download = filename;
+  document.body.appendChild(link); link.click(); document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+  showToast('Arquivo salvo (download padrão)');
+  return true;
+}
+async function openFilePicker(acceptType) {
+  if ('showOpenFilePicker' in window) {
+    try {
+      const opts = { types: [{ description: 'CSV File', accept: { 'text/csv': ['.csv'] } }], multiple: false };
+      const handles = await window.showOpenFilePicker(opts);
+      const file = await handles[0].getFile();
+      return await file.text();
+    } catch (err) { if (err.name !== 'AbortError') return fallbackOpenFile(); return null; }
+  } else { return fallbackOpenFile(); }
+}
+function fallbackOpenFile() {
+  return new Promise((resolve) => {
+    const input = document.createElement('input');
+    input.type = 'file'; input.accept = '.csv';
     input.onchange = (e) => {
       const file = e.target.files[0];
-      if (!file) return;
+      if (!file) { resolve(null); return; }
       const reader = new FileReader();
-      reader.onload = (ev) => {
-        try {
-          const dados = JSON.parse(ev.target.result);
-          if (Array.isArray(dados)) {
-            const clientesImportados = dados.map(c => ({
-              id: c.id || Date.now() + Math.random(),
-              nome: c.nome || '',
-              cnpj: c.cnpj || '',
-              endereco: c.endereco || '',
-              cidade: c.cidade || '',
-              marca: c.marca || '',
-              modelo: c.modelo || '',
-              serie: c.serie || '',
-              quantidade: c.quantidade || 1,
-              telefone: c.telefone || '',
-              whatsapp: c.whatsapp || ''
-            }));
-            cadClients = clientesImportados;
-            localStorage.setItem('marlift_clientes', JSON.stringify(cadClients));
-            cadRenderFilteredTable();
-            showToast(`Restaurados ${cadClients.length} clientes com sucesso!`);
-          } else {
-            showToast('Arquivo invalido: nao e uma lista de clientes', true);
-          }
-        } catch (err) {
-          showToast('Erro ao ler o arquivo de backup', true);
-        }
-        input.value = '';
-      };
-      reader.readAsText(file);
+      reader.onload = (ev) => resolve(ev.target.result);
+      reader.onerror = () => resolve(null);
+      reader.readAsText(file, 'UTF-8');
     };
     input.click();
-  }
+  });
+}
 
-  // ==================== PDF OS ====================
-  function printOS() { const win=window.open(); win.document.write(getPrintOSHTML()); win.document.close(); win.print(); }
-  function getPrintOSHTML() {
-    const osNum=document.getElementById('numeroOS').value, data=document.getElementById('dataOS').value;
-    const tipoSelect = document.getElementById('tipoChamado');
-    const tipoTexto = tipoSelect.options[tipoSelect.selectedIndex]?.text || '';
-    const tipoUpper = tipoTexto.toUpperCase();
-    const isEmergencial = (tipoUpper === 'EMERGENCIAL');
-    const cliente=(document.getElementById('cliente').value||'-').toUpperCase(), cnpj=document.getElementById('cnpj').value||'-', endereco=(document.getElementById('endereco').value||'-').toUpperCase(), cidade=document.getElementById('cidadeCliente').value||'-', whatsapp=document.getElementById('whatsappCliente').value||'-';
-    const marca = (document.getElementById('marca').value || '-').toUpperCase();
-    const modelo=(document.getElementById('modelo').value||'-').toUpperCase(), numSerie=(document.getElementById('numSerie').value||'-').toUpperCase(), horimetro=document.getElementById('horimetro').value||'-', combustivel=document.getElementById('combustivel').options[document.getElementById('combustivel').selectedIndex]?.text||'-';
-    const descricao=document.getElementById('descricaoServico').value||'-', pecas=document.getElementById('pecasAplicadas').value||'-', pendencias=document.getElementById('pendencias').value||'-';
-    const inicio=document.getElementById('horaInicio').value||'-', almocoSaida=document.getElementById('horaAlmocoSaida').value||'-', almocoRetorno=document.getElementById('horaAlmocoRetorno').value||'-', termino=document.getElementById('horaTermino').value||'-', horasTotais=document.getElementById('horasTotais').value||'-', extras=document.getElementById('horasExtras').value||'-', adicionalNoturno=document.getElementById('adicionalNoturno').value||'-', totalGeral=document.getElementById('totalGeral').value||'-';
-    const tecnico=(document.getElementById('tecnico').value||'-').toUpperCase(), recebedor=(document.getElementById('recebedor').value||'-').toUpperCase();
-    const mapLink = endereco !== '-' ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(endereco)}` : '#';
-    const mapLinkHtml = endereco !== '-' ? `<div style="margin-top: 2px;"><a href="${mapLink}" style="color: #4285f4; text-decoration: none; font-size: 8pt;">Ver localizacao no Google Maps</a></div>` : '';
-    let photosHtml=''; if(photosData.length){ photosHtml='<div style="margin-top:15px;"><h3>Fotos do Servico</h3><div style="display:flex;flex-wrap:wrap;gap:8px;">'; photosData.forEach(photo=>{ photosHtml+=`<div style="width:70px;height:70px;border:1px solid #ccc;border-radius:4px;overflow:hidden;"><img src="${photo}" style="width:100%;height:100%;object-fit:cover;"></div>`; }); photosHtml+='</div></div>'; }
-    return `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>OS_${osNum}</title><style>
-      body{font-family:Inter,sans-serif;padding:6mm;max-width:210mm;margin:0 auto;font-size:9pt; line-height:1.2;}
-      h1{color:#f97316; margin:0 0 2px 0; font-size:1.4rem;}
-      h2{margin:2px 0 2px 0; font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 1px;}
-      .tipo-container { margin: 2px 0 6px 0; font-size: 1.2rem; font-weight: bold; }
-      .tipo-valor { font-weight: bold; }
-      .tipo-valor.emergencial { color: #ef4444; }
-      .section{margin-bottom:6px; border-bottom:1px solid #ddd; padding-bottom:2px;}
-      .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:4px;}
-      .label{font-weight:600; color:#555;}
-      .total-bold{font-weight:bold; font-size:10pt;}
-      .inline-row{display:flex; justify-content:space-between; flex-wrap:wrap; gap:4px; margin-bottom:2px;}
-      hr{margin:4px 0;}
-      p{margin:2px 0;}
-      h3{margin:4px 0 2px 0; font-size:10pt;}
-    </style></head><body>
-    <div style="display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap;">
-      <h1>MARLIFT EMPILHADEIRAS</h1>
-    </div>
-    <h2>Ordem de Servico - ${osNum}</h2>
-    <div class="tipo-container">TIPO DE CHAMADO: <span class="tipo-valor ${isEmergencial ? 'emergencial' : ''}">${tipoUpper}</span></div>
-    <p>Data: ${data}</p>
-    <div class="section">
-      <h3>Dados do Cliente</h3>
-      <div class="inline-row"><strong>Cliente:</strong> ${cliente} &nbsp;&nbsp;|&nbsp;&nbsp; <strong>CNPJ:</strong> ${cnpj}</div>
-      <div><strong>Endereco:</strong> ${endereco}</div>
-      ${mapLinkHtml}
-      <div class="inline-row"><strong>Cidade:</strong> ${cidade} &nbsp;&nbsp;|&nbsp;&nbsp; <strong>WhatsApp:</strong> ${whatsapp}</div>
-    </div>
-    <div class="section"><h3>Dados do Equipamento</h3><div class="grid"><div><span class="label">Marca:</span> ${marca}</div><div><span class="label">Modelo:</span> ${modelo}</div><div><span class="label">No. Serie:</span> ${numSerie}</div><div><span class="label">Horimetro:</span> ${horimetro}h</div><div><span class="label">Combustivel:</span> ${combustivel}</div></div></div>
-    <div class="section"><h3>Servico Realizado</h3><p><strong>Descricao:</strong><br>${descricao.replace(/\n/g,'<br>')}</p><p><strong>Pecas Aplicadas:</strong><br>${pecas.replace(/\n/g,'<br>')}</p><p><strong>Pendencias:</strong><br>${pendencias.replace(/\n/g,'<br>')}</p></div>
-    <div class="section"><h3>Controle de Horas</h3><div class="grid"><div>Inicio: ${inicio}</div><div>Almoco Saida: ${almocoSaida}</div><div>Almoco Retorno: ${almocoRetorno}</div><div>Termino: ${termino}</div><div>Horas Cobradas: ${horasTotais}</div><div>Horas Extras: ${extras}</div><div>Adicional Noturno: ${adicionalNoturno}</div><div><span class="total-bold">Total Geral: ${totalGeral}</span></div></div></div>
-    ${photosHtml}
-    <div class="section"><h3>Assinaturas</h3><div style="display:flex;justify-content:space-between;margin-top:12px;"><div style="text-align:center;width:45%;border-top:1px solid #333;padding-top:2px;">${tecnico}<br>Tecnico</div><div style="text-align:center;width:45%;border-top:1px solid #333;padding-top:2px;">${recebedor}<br>Cliente</div></div></div>
-    <footer style="text-align:center;margin-top:12px;font-size:8pt;">Documento gerado eletronicamente - MARLIFT Empilhadeiras</footer>
-    </body></html>`;
-  }
+var DB = {
+  init: function() { return new Promise(function(resolve, reject) { var req = indexedDB.open(Config.dbName, Config.dbVersion); req.onupgradeneeded = function(e) { var db = e.target.result; if (!db.objectStoreNames.contains('os_history')) db.createObjectStore('os_history', {keyPath: 'numeroOS'}); if (!db.objectStoreNames.contains('clientes')) db.createObjectStore('clientes', {keyPath: 'id'}); if (!db.objectStoreNames.contains('config')) db.createObjectStore('config', {keyPath: 'key'}); }; req.onsuccess = function(e) { State.db = e.target.result; resolve(e.target.result); }; req.onerror = function() { reject('Erro ao abrir banco'); }; }); },
+  get: function(storeName, key) { return new Promise(function(resolve, reject) { var tx = State.db.transaction(storeName, 'readonly'); var req = tx.objectStore(storeName).get(key); req.onsuccess = function() { resolve(req.result); }; req.onerror = function() { reject(req.error); }; }); },
+  getAll: function(storeName) { return new Promise(function(resolve, reject) { var tx = State.db.transaction(storeName, 'readonly'); var req = tx.objectStore(storeName).getAll(); req.onsuccess = function() { resolve(req.result || []); }; req.onerror = function() { reject(req.error); }; }); },
+  put: function(storeName, data) { return new Promise(function(resolve, reject) { var tx = State.db.transaction(storeName, 'readwrite'); var req = tx.objectStore(storeName).put(data); req.onsuccess = function() { resolve(req.result); }; req.onerror = function() { reject(req.error); }; }); },
+  delete: function(storeName, key) { return new Promise(function(resolve, reject) { var tx = State.db.transaction(storeName, 'readwrite'); var req = tx.objectStore(storeName).delete(key); req.onsuccess = function() { resolve(); }; req.onerror = function() { reject(req.error); }; }); },
+  clear: function(storeName) { return new Promise(function(resolve, reject) { var tx = State.db.transaction(storeName, 'readwrite'); var req = tx.objectStore(storeName).clear(); req.onsuccess = function() { resolve(); }; req.onerror = function() { reject(req.error); }; }); }
+};
 
-  // ==================== PDF CHECKLIST ====================
-  function printChecklistOnly() {
-    const osNum=document.getElementById('numeroOS').value;
-    const data=document.getElementById('dataOS').value;
-    const cliente=(document.getElementById('cliente').value||'-').toUpperCase();
-    const marca = (document.getElementById('marca').value || '-').toUpperCase();
-    const modelo=(document.getElementById('modelo').value||'-').toUpperCase();
-    const numSerie=(document.getElementById('numSerie').value||'-').toUpperCase();
-    const horimetro=document.getElementById('horimetro').value||'-';
-    const tecnico=(document.getElementById('tecnico').value||'-').toUpperCase();
-    const recebedor=(document.getElementById('recebedor').value||'-').toUpperCase();
+var Utils = {
+  generateOSNumber: async function() { var cfg = await DB.get('config', 'os_counter'); var counter = (cfg ? cfg.value : 0) + 1; var now = new Date(); var yy = now.getFullYear().toString().slice(-2); var mm = String(now.getMonth() + 1).padStart(2, '0'); var os = 'OS-' + yy + mm + '-' + String(counter).padStart(4, '0'); var inp = $('numeroOS'); if (inp) inp.value = os; await DB.put('config', {key: 'os_counter', value: counter}); return os; },
+  setDefaultDate: function() { var inp = $('dataOS'); if (inp && !inp.value) inp.value = new Date().toISOString().split('T')[0]; },
+  getVal: function(id) { var e = $(id); return e ? e.value : ''; },
+  setVal: function(id, v) { var e = $(id); if (e) e.value = v || ''; },
+  formatStatus: function(st) { var map = {abertura:'ABERTURA', execucao:'EM EXECUCAO', finalizacao:'FINALIZANDO', fechada:'FECHADA', aprovada:'APROVADA'}; return map[st] || (st || '').toUpperCase(); },
+  formatTipoChamado: function(tipo) { var map = {normal:'NORMAL', emergencial:'EMERGENCIAL', garantia:'GARANTIA', preventiva:'PREVENTIVA', corretiva:'CORRETIVA', avaliacao:'AVALIAÇÃO', orcamento:'ORÇAMENTO'}; return map[tipo] || tipo.toUpperCase(); },
+  timeDiff: function(s, e) { if (!s || !e) return 0; var sp = s.split(':').map(Number), ep = e.split(':').map(Number); var diff = (ep[0]*60 + ep[1]) - (sp[0]*60 + sp[1]); if (diff < 0) diff += 1440; return diff; },
+  timeToMinutes: function(t) { if (!t) return 0; if (t.indexOf('h') !== -1) return parseInt(t) * 60; var p = t.split(':'); return parseInt(p[0]) * 60 + parseInt(p[1]); }
+};
 
-    let checklistHtml='';
-    checklistData.forEach(section=>{
-      checklistHtml+=`<div style="margin-bottom:20px;border:1px solid #ddd;border-radius:8px;overflow:hidden;"><div style="background:#f97316;color:white;padding:6px;font-weight:bold;">${section.title}</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:6px;">`;
-      section.items.forEach(item=>{
-        const cb=document.getElementById(item.id);
-        const statusSelect=document.getElementById(`${item.id}_status`);
-        let statusText='OK', statusClass='background:#d4edda;color:#155724;';
-        if(statusSelect){
-          const val=statusSelect.value;
-          if(val==='ok'){ statusText='OK'; statusClass='background:#d4edda;color:#155724;'; }
-          else if(val==='atencao'){ statusText='ATENCAO'; statusClass='background:#fff3cd;color:#856404;'; }
-          else if(val==='critico'){ statusText='CRITICO'; statusClass='background:#f8d7da;color:#721c24;'; }
-          else if(val==='na'){ statusText='N/A'; statusClass='background:#e2e3e5;color:#383d41;'; }
-        }
-        const checked=cb && cb.checked ? '✓' : '□';
-        checklistHtml+=`<div style="display:flex;align-items:center;gap:6px;padding:3px;"><span style="width:20px;">${checked}</span><span style="flex:1;">${item.label}</span><span style="padding:2px 8px;border-radius:12px;font-size:9px;font-weight:bold;${statusClass}">${statusText}</span></div>`;
-      });
-      checklistHtml+=`</div></div>`;
-    });
+var Timer = {
+  interval: null, seconds: 0, running: false, paused: false,
+  control: function(a) { if (a === 'start') this.start(); else if (a === 'pause') this.pause(); else if (a === 'stop') this.stop(); },
+  start: function() { if (this.running && !this.paused) return; if (this.paused) { this.paused = false; this.running = true; } else { this.running = true; this.paused = false; if (this.seconds === 0) this.reset(); } if (!Utils.getVal('horaInicio')) { var n = new Date(); Utils.setVal('horaInicio', n.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'})); } if (this.interval) clearInterval(this.interval); var self = this; this.interval = setInterval(function() { if (!self.paused && self.running) { self.seconds++; self.updateDisplay(); } }, 1000); },
+  pause: function() { if (!this.running) return; this.paused = true; if (!Utils.getVal('horaAlmocoSaida')) { var n = new Date(); Utils.setVal('horaAlmocoSaida', n.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'})); } },
+  stop: function() { if (!this.running) return; clearInterval(this.interval); this.running = false; this.paused = false; if (!Utils.getVal('horaTermino')) { var n = new Date(); Utils.setVal('horaTermino', n.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'})); } Horas.calcular(); },
+  reset: function() { this.seconds = 0; var d = $('timerDisplay'); if (d) d.textContent = '00:00:00'; },
+  updateDisplay: function() { var h = Math.floor(this.seconds/3600), m = Math.floor((this.seconds%3600)/60), s = this.seconds%60; var d = $('timerDisplay'); if (d) d.textContent = String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0'); }
+};
 
-    const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Checklist_${osNum}</title><style>body{font-family:Inter,sans-serif;padding:6mm;max-width:210mm;margin:0 auto;font-size:9pt;} h1{color:#f97316;} .header{text-align:center;margin-bottom:15px;} .info-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;background:#f8f9fa;padding:8px;border-radius:8px;margin-bottom:15px;} .signatures{display:flex;justify-content:space-between;margin-top:20px;} .signature-box{text-align:center;width:45%;border-top:1px solid #333;padding-top:4px;}</style></head><body><div class="header"><h1>MARLIFT EMPILHADEIRAS</h1><h2>Checklist Tecnico</h2><p>OS: ${osNum} | Data: ${data}</p></div><div class="info-grid"><div><strong>Cliente:</strong> ${cliente}</div><div><strong>Marca:</strong> ${marca}</div><div><strong>Modelo:</strong> ${modelo}</div><div><strong>No. Serie:</strong> ${numSerie}</div><div><strong>Horimetro:</strong> ${horimetro}h</div></div>${checklistHtml}<div class="signatures"><div class="signature-box">${tecnico}<br>Tecnico</div><div class="signature-box">${recebedor}<br>Cliente</div></div><footer style="text-align:center;margin-top:20px;font-size:8pt;">Documento gerado eletronicamente - MARLIFT Empilhadeiras</footer></body></html>`;
-    const win=window.open(); win.document.write(html); win.document.close(); win.print();
-  }
+var Horas = {
+  calcular: function() { var i = Utils.getVal('horaInicio'), t = Utils.getVal('horaTermino'); if (!i || !t) return 0; var total = Utils.timeDiff(i, t); var saida = Utils.getVal('horaAlmocoSaida'), retorno = Utils.getVal('horaAlmocoRetorno'); if (saida && retorno) total -= Utils.timeDiff(saida, retorno); var horas = Math.ceil(total / 60); if (horas < 1) horas = 1; Utils.setVal('horasTotais', horas + 'h'); this.updateTotal(); return horas; },
+  updateTotal: function() { var hs = Utils.getVal('horasTotais'); var min = 0; if (hs) { var m = hs.match(/(\d+)h/); if (m) min = parseInt(m[1]) * 60; } var extra = Utils.timeToMinutes(Utils.getVal('horasExtras')), not = Utils.timeToMinutes(Utils.getVal('adicionalNoturno')); var total = min + extra + not; var h = Math.floor(total / 60), m = total % 60; Utils.setVal('totalGeral', String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')); },
+  initListeners: function() { var self = this; ['horaInicio','horaTermino','horaAlmocoSaida','horaAlmocoRetorno'].forEach(function(id) { var el = $(id); if (el) el.addEventListener('change', function() { self.calcular(); }); }); var extras = $('horasExtras'); if (extras) extras.addEventListener('input', function() { self.updateTotal(); }); var noturno = $('adicionalNoturno'); if (noturno) noturno.addEventListener('input', function() { self.updateTotal(); }); }
+};
 
-  // ==================== WHATSAPP ====================
-  function sendWhatsApp() {
-    const whatsappCliente = document.getElementById('whatsappCliente').value;
-    const defaultNumber = whatsappCliente || '5511999999999';
-    let numero = prompt('Numero do WhatsApp (com DDD):', defaultNumber);
+var Signature = {
+  canvases: {}, drawing: {tec:false, cli:false},
+  init: function() { this.canvases.tec = $('sigTecnicoCanvas'); this.canvases.cli = $('sigClienteCanvas'); this.setupCanvas('tec'); this.setupCanvas('cli'); this.clear('tec'); this.clear('cli'); },
+  setupCanvas: function(who) { var self = this, canvas = this.canvases[who]; if (!canvas) return; var ctx = canvas.getContext('2d'); ctx.strokeStyle = '#1a1a1a'; ctx.lineWidth = 2; ctx.lineCap = 'round'; ctx.lineJoin = 'round'; var draw = function(e) { if (!self.drawing[who]) return; var rect = canvas.getBoundingClientRect(); var scaleX = canvas.width / rect.width; var scaleY = canvas.height / rect.height; var cx = e.touches ? e.touches[0].clientX : e.clientX; var cy = e.touches ? e.touches[0].clientY : e.clientY; var x = (cx - rect.left) * scaleX; var y = (cy - rect.top) * scaleY; ctx.lineTo(x, y); ctx.stroke(); ctx.beginPath(); ctx.moveTo(x, y); }; var start = function(e) { self.drawing[who] = true; ctx.beginPath(); draw(e); }; var stop = function() { self.drawing[who] = false; ctx.beginPath(); }; canvas.addEventListener('mousedown', start); canvas.addEventListener('mousemove', draw); canvas.addEventListener('mouseup', stop); canvas.addEventListener('mouseleave', stop); canvas.addEventListener('touchstart', function(e) { e.preventDefault(); start(e.touches[0]); }, {passive: false}); canvas.addEventListener('touchmove', function(e) { e.preventDefault(); draw(e.touches[0]); }, {passive: false}); canvas.addEventListener('touchend', stop); },
+  clear: function(who) { var canvas = this.canvases[who]; if (!canvas) return; var ctx = canvas.getContext('2d'); ctx.clearRect(0, 0, canvas.width, canvas.height); ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, canvas.width, canvas.height); ctx.strokeStyle = '#1a1a1a'; ctx.lineWidth = 2; Utils.setVal(who === 'tec' ? 'assinaturaTecnicoData' : 'assinaturaClienteData', ''); },
+  save: function(who) { var canvas = this.canvases[who]; if (!canvas) return; var dataURL = canvas.toDataURL('image/png'); Utils.setVal(who === 'tec' ? 'assinaturaTecnicoData' : 'assinaturaClienteData', dataURL); showToast('Assinatura salva'); State.hasUnsavedChanges = true; },
+  loadFromData: function(who, dataUrl) { if (!dataUrl) return; var canvas = this.canvases[who]; if (!canvas) return; var ctx = canvas.getContext('2d'); var img = new Image(); img.onload = function() { ctx.clearRect(0, 0, canvas.width, canvas.height); ctx.drawImage(img, 0, 0); Utils.setVal(who === 'tec' ? 'assinaturaTecnicoData' : 'assinaturaClienteData', dataUrl); }; img.src = dataUrl; }
+};
+
+var Fotos = {
+  compress: function(b64) { return new Promise(function(resolve, reject) { var img = new Image(); img.src = b64; img.onload = function() { var canvas = document.createElement('canvas'); var w = img.width, h = img.height; var tw = Config.photoSize.width, th = Config.photoSize.height; var ratio = Math.min(tw / w, th / h); w = Math.round(w * ratio); h = Math.round(h * ratio); canvas.width = w; canvas.height = h; var ctx = canvas.getContext('2d'); ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, w, h); ctx.drawImage(img, 0, 0, w, h); resolve(canvas.toDataURL('image/jpeg', Config.photoSize.quality)); }; img.onerror = function() { reject(new Error('Falha ao carregar')); }; }); },
+  init: function() { var self = this; var fotoHorimetroInput = $('fotoHorimetroInput'); if (fotoHorimetroInput) { fotoHorimetroInput.addEventListener('change', async function(e) { var file = e.target.files[0]; if (file) { var reader = new FileReader(); reader.onload = async function(ev) { try { State.fotoHorimetro = await self.compress(ev.target.result); var preview = $('fotoHorimetroPreview'); if (preview) preview.innerHTML = '<div class="photo-item"><img src="' + State.fotoHorimetro + '"><div class="photo-remove" onclick="Fotos.removeHorimetro()">x</div></div>'; State.hasUnsavedChanges = true; showToast('Foto carregada'); } catch (err) { showToast('Erro ao processar', true); } }; reader.readAsDataURL(file); } }); } var fotosServico = $('fotosServico'); if (fotosServico) { fotosServico.addEventListener('change', async function(e) { var files = Array.from(e.target.files); if (State.photos.length + files.length > 4) { showToast('Máximo de 4 fotos.', true); return; } var preview = $('fotosPreview'); for (var i = 0; i < files.length; i++) { var file = files[i]; var reader = new FileReader(); await new Promise(function(resolve) { reader.onload = async function(ev) { try { var compressed = await self.compress(ev.target.result); State.photos.push(compressed); if (preview) { var div = document.createElement('div'); div.className = 'photo-item'; div.innerHTML = '<img src="' + compressed + '"><div class="photo-remove" onclick="Fotos.remove(this)">x</div>'; preview.appendChild(div); } } catch (err) { console.error(err); } resolve(); }; reader.readAsDataURL(file); }); } fotosServico.value = ''; State.hasUnsavedChanges = true; }); } },
+  removeHorimetro: function() { State.fotoHorimetro = null; var inp = $('fotoHorimetroInput'); if (inp) inp.value = ''; var preview = $('fotoHorimetroPreview'); if (preview) preview.innerHTML = ''; },
+  remove: function(el) { var container = el.parentNode.parentNode; var idx = Array.from(container.children).indexOf(el.parentNode); if (idx !== -1) { State.photos.splice(idx, 1); el.parentNode.remove(); } }
+};
+
+var Checklist = {
+  total: 0, checked: 0,
+  render: function() { var container = $('checklistSections'); if (!container) return; container.innerHTML = ''; this.total = 0; var self = this; Config.checklist.forEach(function(section) { self.total += section.items.length; var div = document.createElement('div'); div.className = 'checklist-card p-5 mb-4'; var itemsHtml = section.items.map(function(item) { return '<div class="checklist-item"><label><input type="checkbox" data-check="true" id="' + item.id + '" onchange="Checklist.updateProgress()"><span class="text-sm">' + item.label + '</span></label><select class="form-input w-20 text-xs" id="' + item.id + '_status"><option value="ok">OK</option><option value="atencao">Atencao</option><option value="critico">Critico</option><option value="na">N/A</option></select></div>'; }).join(''); div.innerHTML = '<div class="flex justify-between items-center mb-3"><h3 class="font-display text-xl">' + section.title + '</h3><button type="button" class="btn btn-secondary text-xs" onclick="Checklist.selectAll(\'' + section.id + '\')">Selecionar Todos</button></div><div class="grid grid-cols-1 md:grid-cols-2 gap-2">' + itemsHtml + '</div>'; container.appendChild(div); }); this.updateProgress(); },
+  selectAll: function(sectionId) { var section = Config.checklist.find(function(s) { return s.id === sectionId; }); if (section) { section.items.forEach(function(item) { var cb = $(item.id); if (cb) cb.checked = true; }); } this.updateProgress(); },
+  updateProgress: function() { var checkboxes = document.querySelectorAll('input[data-check="true"]'); this.checked = Array.from(checkboxes).filter(function(cb) { return cb.checked; }).length; var pct = this.total > 0 ? Math.round((this.checked / this.total) * 100) : 0; var progText = $('progressText'); if (progText) progText.textContent = pct + '%'; var fill = $('progressFill'); if (fill) fill.style.width = pct + '%'; }
+};
+
+var Clientes = {
+  load: async function() { State.clients = await DB.getAll('clientes'); this.renderTable(); this.updateStats(); },
+  updateStats: function() { var totalClientes = State.clients.length; var totalMarcas = 0; State.clients.forEach(function(c) { totalMarcas += (c.equipamentos || []).length; }); var clientesComOS = new Set(); var totalOS = 0; var osAbertas = 0; var osAprovadas = 0; State.osHistory.forEach(function(os) { if (os.cliente) { clientesComOS.add(os.cliente); totalOS++; } if (os.status === 'abertura' || os.status === 'execucao' || os.status === 'finalizacao') osAbertas++; if (os.status === 'aprovada') osAprovadas++; }); $('statTotalClientes').innerText = totalClientes; $('statTotalMarcas').innerText = totalMarcas; $('statClientesComOS').innerText = clientesComOS.size; $('statTotalOSClientes').innerText = totalOS; $('statOSAbertasCliente').innerText = osAbertas; $('statOSAprovadasCliente').innerText = osAprovadas; },
+  renderTable: function() { var tbody = $('cad_tableBody'); if (!tbody) return; tbody.innerHTML = ''; State.clients.forEach(function(c) { var row = tbody.insertRow(); var marcasLista = (c.equipamentos || []).map(function(eq) { return eq.marca; }).join(', '); row.innerHTML = '<td class="p-2 font-medium">' + c.nome + '</td><td class="p-2">' + (c.cidade || '-') + '</td><td class="p-2">' + (marcasLista || '-') + '</td><td class="p-2"><button onclick="Clientes.select(' + c.id + ')" class="btn btn-primary text-xs py-1 px-2">Selecionar</button> <i class="fas fa-edit text-blue-400 cursor-pointer ml-2" onclick="Clientes.edit(' + c.id + ')"></i> <i class="fas fa-trash text-red-400 cursor-pointer ml-2" onclick="Clientes.delete(' + c.id + ')"></i></td>'; }); },
+  addEquipField: function(marca, modelo, serie, qtd, combustivel) { marca = marca || ''; modelo = modelo || ''; serie = serie || ''; qtd = qtd || 1; combustivel = combustivel || ''; var container = $('equipamentosList'); if (!container) return; var div = document.createElement('div'); div.className = 'equip-item'; var options = Config.marcas.map(function(m) { return '<option value="' + m + '"' + (marca === m ? ' selected' : '') + '>' + m + '</option>'; }).join(''); div.innerHTML = '<select class="form-input w-24 equip-marca">' + options + '<option value="OUTRA">OUTRA</option></select><div class="outra-marca-container" style="display:none"><input type="text" placeholder="Outra marca" class="form-input w-24 outra-marca"></div><input type="text" placeholder="Modelo" class="form-input w-24 equip-modelo" value="' + modelo + '"><input type="text" placeholder="Serie" class="form-input w-24 equip-serie" value="' + serie + '"><input type="number" placeholder="Qtd" class="form-input w-20 equip-qtd" value="' + qtd + '"><select class="form-input w-28 equip-combustivel"><option value="">Combustível</option><option value="eletrico" ' + (combustivel === 'eletrico' ? 'selected' : '') + '>Elétrico</option><option value="diesel" ' + (combustivel === 'diesel' ? 'selected' : '') + '>Diesel</option><option value="gasolina" ' + (combustivel === 'gasolina' ? 'selected' : '') + '>Gasolina</option><option value="glp" ' + (combustivel === 'glp' ? 'selected' : '') + '>GLP</option></select><button type="button" class="text-red-500" onclick="this.parentElement.remove()"><i class="fas fa-trash"></i></button>'; container.appendChild(div); var select = div.querySelector('.equip-marca'); var outraDiv = div.querySelector('.outra-marca-container'); select.addEventListener('change', function() { outraDiv.style.display = select.value === 'OUTRA' ? 'block' : 'none'; }); if (marca && Config.marcas.indexOf(marca) === -1) { select.value = 'OUTRA'; div.querySelector('.outra-marca').value = marca; outraDiv.style.display = 'block'; } },
+  save: async function() { var nome = Utils.getVal('cad_nome').trim(); if (!nome) { showToast('Nome do cliente obrigatório', true); return; } var equipamentos = []; var container = $('equipamentosList'); if (container) { container.querySelectorAll('.equip-item').forEach(function(item) { var marca = item.querySelector('.equip-marca').value; var outra = item.querySelector('.outra-marca') ? item.querySelector('.outra-marca').value : ''; equipamentos.push({ marca: marca === 'OUTRA' ? outra.toUpperCase() : marca, modelo: item.querySelector('.equip-modelo').value, serie: item.querySelector('.equip-serie').value, qtd: parseInt(item.querySelector('.equip-qtd').value) || 1, combustivel: item.querySelector('.equip-combustivel').value }); }); } var cliente = { id: State.editingClientId || Date.now(), nome: nome, cnpj: Utils.getVal('cad_cnpj'), endereco: Utils.getVal('cad_endereco'), cidade: Utils.getVal('cad_cidade'), telefone: Utils.getVal('cad_telefone'), whatsapp: Utils.getVal('cad_whatsapp'), email: Utils.getVal('cad_email'), responsavel_nome: Utils.getVal('cad_responsavel_nome'), responsavel_telefone: Utils.getVal('cad_responsavel_telefone'), equipamentos: equipamentos }; await DB.put('clientes', cliente); if (State.editingClientId) { var idx = State.clients.findIndex(function(c) { return c.id === State.editingClientId; }); if (idx >= 0) State.clients[idx] = cliente; State.editingClientId = null; var cancelBtn = $('cad_btnCancelar'); if (cancelBtn) cancelBtn.style.display = 'none'; } else { State.clients.push(cliente); } this.renderTable(); this.clearForm(); this.updateStats(); showToast('Cliente salvo'); },
+  select: function(id) { var c = State.clients.find(function(c) { return c.id === id; }); if (!c) return; Utils.setVal('cliente', c.nome); Utils.setVal('cnpj', c.cnpj); Utils.setVal('cidadeCliente', c.cidade); Utils.setVal('endereco', c.endereco); Utils.setVal('whatsappCliente', c.whatsapp); if (c.equipamentos && c.equipamentos.length) { var eq = c.equipamentos[0]; var select = $('marcaSelect'); if (select) { if (Config.marcas.indexOf(eq.marca) !== -1) { select.value = eq.marca; var outraDiv = $('marcaOutraDiv'); if (outraDiv) outraDiv.style.display = 'none'; } else if (eq.marca) { select.value = 'OUTRA'; Utils.setVal('marcaOutra', eq.marca); var outraDiv = $('marcaOutraDiv'); if (outraDiv) outraDiv.style.display = 'block'; } } Utils.setVal('modelo', eq.modelo); Utils.setVal('numSerie', eq.serie); if (eq.combustivel) Utils.setVal('combustivel', eq.combustivel); } showToast('Cliente carregado'); var tabOsBtn = document.querySelector('.tab-button[data-tab="tab-os"]'); if (tabOsBtn) tabOsBtn.click(); },
+  edit: function(id) { var c = State.clients.find(function(c) { return c.id === id; }); if (!c) return; State.editingClientId = id; Utils.setVal('cad_nome', c.nome); Utils.setVal('cad_cnpj', c.cnpj); Utils.setVal('cad_endereco', c.endereco); Utils.setVal('cad_cidade', c.cidade); Utils.setVal('cad_telefone', c.telefone); Utils.setVal('cad_whatsapp', c.whatsapp); Utils.setVal('cad_email', c.email || ''); Utils.setVal('cad_responsavel_nome', c.responsavel_nome || ''); Utils.setVal('cad_responsavel_telefone', c.responsavel_telefone || ''); var container = $('equipamentosList'); if (container) container.innerHTML = ''; if (c.equipamentos && c.equipamentos.length) { c.equipamentos.forEach(function(eq) { Clientes.addEquipField(eq.marca, eq.modelo, eq.serie, eq.qtd, eq.combustivel); }); } var cancelBtn = $('cad_btnCancelar'); if (cancelBtn) cancelBtn.style.display = 'inline-flex'; showToast('Editando cliente'); },
+  delete: async function(id) { if (!confirm('Excluir este cliente?')) return; await DB.delete('clientes', id); State.clients = State.clients.filter(function(c) { return c.id !== id; }); this.renderTable(); this.updateStats(); showToast('Cliente excluido'); },
+  cancelEdit: function() { State.editingClientId = null; this.clearForm(); var cancelBtn = $('cad_btnCancelar'); if (cancelBtn) cancelBtn.style.display = 'none'; },
+  clearForm: function() { ['cad_nome','cad_cnpj','cad_endereco','cad_cidade','cad_telefone','cad_whatsapp','cad_email','cad_responsavel_nome','cad_responsavel_telefone'].forEach(function(id) { Utils.setVal(id, ''); }); var container = $('equipamentosList'); if (container) container.innerHTML = ''; },
+  exportCSV: async function() { var csv = "Nome,CNPJ,Endereco,Cidade,Telefone,WhatsApp,Email,Responsavel,TelefoneResponsavel,Marcas\n"; State.clients.forEach(function(c) { var marcasLista = (c.equipamentos || []).map(function(eq) { return eq.marca; }).join('; '); csv += '"' + c.nome + '",' + (c.cnpj || '') + ',"' + (c.endereco || '') + '","' + (c.cidade || '') + '",' + (c.telefone || '') + ',' + (c.whatsapp || '') + ',' + (c.email || '') + ',' + (c.responsavel_nome || '') + ',' + (c.responsavel_telefone || '') + ',"' + marcasLista + '"\n'; }); await saveFilePicker(csv, 'clientes_' + new Date().toISOString().split('T')[0] + '.csv', 'csv'); },
+  importCSV: async function() { var text = await openFilePicker('csv'); if (!text) return; var lines = text.split(/\r?\n/); var imported = 0; for (var i = 1; i < lines.length; i++) { if (!lines[i].trim()) continue; var values = []; var inQuote = false; var currentValue = ''; for (var j = 0; j < lines[i].length; j++) { var ch = lines[i][j]; if (ch === '"') { inQuote = !inQuote; } else if (ch === ',' && !inQuote) { values.push(currentValue); currentValue = ''; } else { currentValue += ch; } } values.push(currentValue); if (values.length >= 9) { var nome = values[0].replace(/^"|"$/g, ''); var cliente = { id: Date.now() + i, nome: nome, cnpj: values[1] || '', endereco: (values[2] || '').replace(/^"|"$/g, ''), cidade: (values[3] || '').replace(/^"|"$/g, ''), telefone: values[4] || '', whatsapp: values[5] || '', email: values[6] || '', responsavel_nome: values[7] || '', responsavel_telefone: values[8] || '', equipamentos: [] }; await DB.put('clientes', cliente); State.clients.push(cliente); imported++; } } Clientes.renderTable(); Clientes.updateStats(); showToast('Importados ' + imported + ' clientes'); }
+};
+
+var Historico = {
+  load: async function() { State.osHistory = await DB.getAll('os_history'); this.render(); this.updateStats(); Clientes.updateStats(); },
+  updateStats: function() { var total = State.osHistory.length; var statusAbertura = 0, statusExecucao = 0, statusFinalizacao = 0, statusFechada = 0, statusAprovada = 0; var tipoEmergencial = 0, tipoPreventiva = 0, tipoCorretiva = 0, tipoGarantia = 0, tipoNormal = 0, tipoAvaliacao = 0, tipoOrcamento = 0; var esteMes = 0; var now = new Date(); var mesAtual = now.getMonth(), anoAtual = now.getFullYear(); State.osHistory.forEach(function(os) { if (os.status === 'abertura') statusAbertura++; else if (os.status === 'execucao') statusExecucao++; else if (os.status === 'finalizacao') statusFinalizacao++; else if (os.status === 'fechada') statusFechada++; else if (os.status === 'aprovada') statusAprovada++; if (os.tipoChamado === 'emergencial') tipoEmergencial++; else if (os.tipoChamado === 'preventiva') tipoPreventiva++; else if (os.tipoChamado === 'corretiva') tipoCorretiva++; else if (os.tipoChamado === 'garantia') tipoGarantia++; else if (os.tipoChamado === 'normal') tipoNormal++; else if (os.tipoChamado === 'avaliacao') tipoAvaliacao++; else if (os.tipoChamado === 'orcamento') tipoOrcamento++; if (os.dataOS) { var d = new Date(os.dataOS); if (d.getMonth() === mesAtual && d.getFullYear() === anoAtual) esteMes++; } }); $('statTotalOS').innerText = total; $('statStatusAbertura').innerText = statusAbertura; $('statStatusExecucao').innerText = statusExecucao; $('statStatusFinalizacao').innerText = statusFinalizacao; $('statStatusFechada').innerText = statusFechada; $('statStatusAprovada').innerText = statusAprovada; $('statTipoEmergencial').innerText = tipoEmergencial; $('statTipoPreventiva').innerText = tipoPreventiva; $('statTipoCorretiva').innerText = tipoCorretiva; $('statTipoGarantia').innerText = tipoGarantia; $('statTipoNormal').innerText = tipoNormal; $('statTipoAvaliacao').innerText = tipoAvaliacao; $('statTipoOrcamento').innerText = tipoOrcamento; $('statEsteMes').innerText = esteMes; },
+  render: function() { var search = Utils.getVal('historicoSearch').toLowerCase(); var tipo = Utils.getVal('historicoFiltroTipo'); var statusFiltro = Utils.getVal('historicoFiltroStatus'); var filtered = State.osHistory.filter(function(os) { var matchSearch = !search || (os.numeroOS && os.numeroOS.toLowerCase().indexOf(search) !== -1) || (os.cliente && os.cliente.toLowerCase().indexOf(search) !== -1); var matchTipo = !tipo || os.tipoChamado === tipo; var matchStatus = !statusFiltro || os.status === statusFiltro; return matchSearch && matchTipo && matchStatus; }); var tbody = $('historicoTableBody'), empty = $('historicoEmpty'); if (!tbody) return; tbody.innerHTML = ''; if (filtered.length === 0) { if (empty) empty.classList.remove('hidden'); return; } if (empty) empty.classList.add('hidden'); filtered.forEach(function(os) { var row = tbody.insertRow(); var statusClass = 'status-' + (os.status || 'abertura'); var statusText = Utils.formatStatus(os.status); row.innerHTML = '<td class="font-mono font-bold">' + (os.numeroOS || '-') + '</td><td>' + (os.dataOS || '-') + '</td><td class="font-medium">' + (os.cliente || '-').toUpperCase() + '<td><td><span class="status-badge ' + statusClass + '">' + statusText + '</span></td><td class="font-mono font-bold text-[var(--success)]">' + (os.horasTotais || '-') + '</td><td><button onclick="Historico.view(\'' + os.numeroOS + '\')" class="text-blue-400 hover:text-blue-300"><i class="fas fa-eye"></i></button> <button onclick="Historico.edit(\'' + os.numeroOS + '\')" class="text-orange-400 hover:text-orange-300 ml-2"><i class="fas fa-edit"></i></button> <button onclick="Historico.delete(\'' + os.numeroOS + '\')" class="text-red-400 hover:text-red-300 ml-2"><i class="fas fa-trash"></i></button></td>'; }); },
+  view: async function(num) { var os = await DB.get('os_history', num); if (!os) return; State.currentStatus = os.status || 'abertura'; document.querySelectorAll('#tab-os input, #tab-os select, #tab-os textarea').forEach(function(el) { if (el.id && el.type !== 'file') el.value = ''; }); for (var key in os) { if (['fotosBase64','fotoHorimetro','assinaturaTecnico','assinaturaCliente'].indexOf(key) === -1) Utils.setVal(key, os[key]); } if (os.fotoHorimetro) { State.fotoHorimetro = os.fotoHorimetro; var preview = $('fotoHorimetroPreview'); if (preview) preview.innerHTML = '<div class="photo-item"><img src="' + os.fotoHorimetro + '"><div class="photo-remove" onclick="Fotos.removeHorimetro()">x</div></div>'; } else Fotos.removeHorimetro(); if (os.fotosBase64 && os.fotosBase64.length) { State.photos = os.fotosBase64; var preview = $('fotosPreview'); if (preview) preview.innerHTML = ''; os.fotosBase64.forEach(function(src) { if (preview) { var div = document.createElement('div'); div.className = 'photo-item'; div.innerHTML = '<img src="' + src + '"><div class="photo-remove" onclick="Fotos.remove(this)">x</div>'; preview.appendChild(div); } }); } else { State.photos = []; var preview = $('fotosPreview'); if (preview) preview.innerHTML = ''; } Signature.loadFromData('tec', os.assinaturaTecnico); Signature.loadFromData('cli', os.assinaturaCliente); document.querySelectorAll('input[data-check="true"]').forEach(function(cb) { cb.checked = os[cb.id] === true; }); App.updateUI(); showToast('OS carregada'); var tabOsBtn = document.querySelector('.tab-button[data-tab="tab-os"]'); if (tabOsBtn) tabOsBtn.click(); },
+  edit: function(num) { this.view(num); },
+  delete: async function(num) { if (!confirm('Excluir OS ' + num + '?')) return; await DB.delete('os_history', num); State.osHistory = State.osHistory.filter(function(o) { return o.numeroOS !== num; }); this.render(); this.updateStats(); Clientes.updateStats(); showToast('OS excluida'); },
+  exportCSV: async function() { var csv = 'OS,Data,Cliente,Status,Tipo,Horas,Total Geral\n'; State.osHistory.forEach(function(o) { csv += (o.numeroOS || '') + ',' + (o.dataOS || '') + ',"' + (o.cliente || '') + '",' + Utils.formatStatus(o.status) + ',' + (o.tipoChamado || '') + ',' + (o.horasTotais || '') + ',' + (o.totalGeral || '') + '\n'; }); await saveFilePicker(csv, 'historico_os_' + new Date().toISOString().split('T')[0] + '.csv', 'csv'); },
+  importCSV: async function() { var text = await openFilePicker('csv'); if (!text) return; var lines = text.split(/\r?\n/); var imported = 0; for (var i = 1; i < lines.length; i++) { if (!lines[i].trim()) continue; var values = []; var inQuote = false; var currentValue = ''; for (var j = 0; j < lines[i].length; j++) { var ch = lines[i][j]; if (ch === '"') { inQuote = !inQuote; } else if (ch === ',' && !inQuote) { values.push(currentValue); currentValue = ''; } else { currentValue += ch; } } values.push(currentValue); if (values.length >= 7) { var os = { numeroOS: values[0] || 'OS-' + Date.now() + '-' + i, dataOS: values[1] || '', cliente: (values[2] || '').replace(/^"|"$/g, ''), status: (values[3] || '').toLowerCase() || 'abertura', tipoChamado: (values[4] || '').toLowerCase() || 'normal', horasTotais: values[5] || '0h', totalGeral: values[6] || '00:00', descricaoServico: '', pecasAplicadas: '', pendencias: '', relatoCliente: '', marca: '', modelo: '', numSerie: '', horimetro: '', combustivel: '', whatsappCliente: '', cnpj: '', cidadeCliente: '', endereco: '', tecnico: 'LEONARDO MARTINS', recebedor: '', fotosBase64: [], fotoHorimetro: null, assinaturaTecnico: '', assinaturaCliente: '' }; await DB.put('os_history', os); State.osHistory.push(os); imported++; } } Historico.render(); Historico.updateStats(); Clientes.updateStats(); showToast('Importadas ' + imported + ' OS'); },
+  clear: async function() { if (!confirm('Limpar TODO o historico?')) return; await DB.clear('os_history'); State.osHistory = []; this.render(); this.updateStats(); Clientes.updateStats(); showToast('Historico limpo'); }
+};
+
+var App = {
+  init: async function() { try { await DB.init(); await Clientes.load(); await Historico.load(); this.populateMarcas(); Checklist.render(); Signature.init(); Fotos.init(); Horas.initListeners(); Utils.setDefaultDate(); this.setupTabs(); this.setupMarcaSelect(); this.setupSearch(); State.currentStatus = 'abertura'; State.osNumberGenerated = false; this.updateUI(); var loading = $('loadingOverlay'); if (loading) loading.style.display = 'none'; var container = $('appContainer'); if (container) container.style.display = 'block'; } catch (e) { console.error(e); var loading = $('loadingOverlay'); if (loading) loading.innerHTML = '<div class="text-center"><i class="fas fa-exclamation-triangle text-red-500 text-4xl mb-4"></i><p class="text-red-400">Erro ao carregar</p><p class="text-sm text-[var(--muted)] mt-2">' + e + '</p><button onclick="location.reload()" class="btn btn-primary mt-4">Recarregar</button></div>'; } },
+  populateMarcas: function() { var select = $('marcaSelect'); if (!select) return; select.innerHTML = '<option value="">Selecione</option>'; Config.marcas.forEach(function(m) { select.innerHTML += '<option value="' + m + '">' + m + '</option>'; }); },
+  setupMarcaSelect: function() { var select = $('marcaSelect'), div = $('marcaOutraDiv'), input = $('marcaOutra'); if (!select || !div || !input) return; select.addEventListener('change', function() { div.style.display = select.value === 'OUTRA' ? 'block' : 'none'; if (select.value === 'OUTRA') input.focus(); Utils.setVal('marca', select.value === 'OUTRA' ? input.value.toUpperCase() : select.value); }); input.addEventListener('input', function() { Utils.setVal('marca', input.value.toUpperCase()); }); },
+  setupTabs: function() { var tabs = document.querySelectorAll('.tab-button'); var contents = document.querySelectorAll('.tab-content'); tabs.forEach(function(tab) { tab.addEventListener('click', function() { var targetId = this.getAttribute('data-tab'); if (!targetId) return; tabs.forEach(function(t) { t.classList.remove('active'); }); contents.forEach(function(c) { c.classList.remove('active'); }); this.classList.add('active'); var target = document.getElementById(targetId); if (target) target.classList.add('active'); }); }); },
+  setupSearch: function() { var histSearch = $('historicoSearch'); if (histSearch) histSearch.addEventListener('input', function() { Historico.render(); }); var tipoFiltro = $('historicoFiltroTipo'); if (tipoFiltro) tipoFiltro.addEventListener('change', function() { Historico.render(); }); var statusFiltro = $('historicoFiltroStatus'); if (statusFiltro) statusFiltro.addEventListener('change', function() { Historico.render(); }); var searchInput = $('cad_searchInput'); if (searchInput) { searchInput.addEventListener('input', function(e) { var search = e.target.value.toLowerCase(); var filtered = State.clients.filter(function(c) { return c.nome.toLowerCase().indexOf(search) !== -1 || (c.cidade && c.cidade.toLowerCase().indexOf(search) !== -1); }); var original = State.clients; State.clients = filtered; Clientes.renderTable(); State.clients = original; }); } },
+  updateUI: function() { var isAbertura = State.currentStatus === 'abertura'; var isExecucao = State.currentStatus === 'execucao'; var isFinalizacao = State.currentStatus === 'finalizacao'; var isFechada = State.currentStatus === 'fechada'; var isAprovada = State.currentStatus === 'aprovada'; var btnIniciar = $('btnIniciarExecucao'); if (btnIniciar) btnIniciar.disabled = !isAbertura; var btnFinalizar = $('btnFinalizar'); if (btnFinalizar) btnFinalizar.disabled = !isExecucao; var btnFechar = $('btnFecharOS'); if (btnFechar) btnFechar.disabled = !isFinalizacao; var btnAprovar = $('btnAprovar'); if (btnAprovar) btnAprovar.disabled = !isFechada; var btnRel = $('btnRelatorioFinal'); var btnEmail = $('btnEnviarEmail'); if (btnRel) btnRel.disabled = !isAprovada; if (btnEmail) btnEmail.disabled = !isAprovada; var editFields = ['descricaoServico','pecasAplicadas','pendencias','horasExtras','adicionalNoturno','modelo','numSerie','horimetro']; editFields.forEach(function(id) { var el = $(id); if (el) el.disabled = isFechada || isAprovada; }); var marcaSelect = $('marcaSelect'); if (marcaSelect) marcaSelect.disabled = isFechada || isAprovada; var badge = $('statusBadge'); if (badge) { badge.className = 'status-badge'; var statusConfig = { abertura: {text:'EM ABERTURA', class:'status-abertura'}, execucao: {text:'EM EXECUCAO', class:'status-execucao'}, finalizacao: {text:'FINALIZANDO', class:'status-finalizacao'}, fechada: {text:'FECHADA', class:'status-fechada'}, aprovada: {text:'APROVADA', class:'status-aprovada'} }; var cfg = statusConfig[State.currentStatus]; badge.textContent = cfg.text; badge.classList.add(cfg.class); } var steps = ['abertura','execucao','finalizacao','fechada','aprovada']; document.querySelectorAll('.step').forEach(function(step, idx) { step.classList.remove('active','completed','locked'); if (steps[idx] === State.currentStatus) step.classList.add('active'); else if (steps.indexOf(State.currentStatus) > idx) step.classList.add(steps[idx] === 'fechada' && State.currentStatus === 'aprovada' ? 'locked' : 'completed'); }); },
+  coletarDados: function() { var data = {}; document.querySelectorAll('#tab-os input, #tab-os select, #tab-os textarea').forEach(function(el) { if (el.id && el.type !== 'file') data[el.id] = el.value; }); document.querySelectorAll('input[data-check="true"]').forEach(function(cb) { data[cb.id] = cb.checked; }); document.querySelectorAll('#checklistSections select').forEach(function(sel) { data[sel.id] = sel.value; }); var marcaSelect = $('marcaSelect').value, marcaOutra = $('marcaOutra').value; data.marca = marcaSelect === 'OUTRA' ? marcaOutra.toUpperCase() : marcaSelect; return data; },
+  salvar: async function() { Signature.save('tec'); Signature.save('cli'); var data = this.coletarDados(); data.status = State.currentStatus; data.fotosBase64 = State.photos; data.fotoHorimetro = State.fotoHorimetro; data.assinaturaTecnico = Utils.getVal('assinaturaTecnicoData'); data.assinaturaCliente = Utils.getVal('assinaturaClienteData'); Horas.calcular(); data.horasTotais = Utils.getVal('horasTotais'); data.totalGeral = Utils.getVal('totalGeral'); if (!data.numeroOS) { showToast('Clique em Nova OS primeiro.', true); return false; } try { await DB.put('os_history', data); var idx = State.osHistory.findIndex(function(os) { return os.numeroOS === data.numeroOS; }); if (idx >= 0) State.osHistory[idx] = data; else State.osHistory.unshift(data); State.hasUnsavedChanges = false; Historico.updateStats(); Clientes.updateStats(); return true; } catch (e) { showToast('Erro ao salvar', true); return false; } },
+  salvarOSManual: async function() { var ok = await this.salvar(); if (ok) { showToast('OS salva com sucesso'); Historico.render(); } },
+  mudarStatus: async function(novoStatus) { if (novoStatus === 'abertura') { if (!Utils.getVal('numeroOS')) { showToast('Clique em Nova OS primeiro.', true); return; } if (!Utils.getVal('cliente').trim()) { showToast('Cliente obrigatório para abrir a OS.', true); return; } } if (novoStatus === 'execucao' && State.currentStatus !== 'abertura') { showToast('A OS precisa estar EM ABERTURA para iniciar execução.', true); return; } if (novoStatus === 'finalizacao' && State.currentStatus !== 'execucao') { showToast('A OS precisa estar EM EXECUÇÃO para finalizar.', true); return; } if (novoStatus === 'fechada' && State.currentStatus !== 'finalizacao') { showToast('A OS precisa estar FINALIZANDO para ser fechada.', true); return; } if (novoStatus === 'aprovada') { if (State.currentStatus !== 'fechada') { showToast('A OS precisa estar FECHADA para aprovação.', true); return; } if (!Utils.getVal('assinaturaClienteData')) { showToast('O cliente deve assinar digitalmente.', true); return; } if (!Utils.getVal('recebedor').trim()) { showToast('Informe o nome do recebedor.', true); return; } } State.currentStatus = novoStatus; if (novoStatus === 'finalizacao' || novoStatus === 'fechada') Horas.calcular(); var ok = await this.salvar(); if (ok) { this.updateUI(); Historico.render(); showToast('Status: ' + Utils.formatStatus(novoStatus)); } },
+  iniciarExecucao: function() { if (State.currentStatus !== 'abertura') return; this.mudarStatus('execucao'); Timer.control('start'); showToast('Execução iniciada'); },
+  finalizarServico: function() { if (State.currentStatus !== 'execucao') return; var horimetro = Utils.getVal('horimetro'); if (!horimetro) { showToast('Preencha o campo Horímetro antes de finalizar o serviço.', true); return; } Timer.control('stop'); Horas.calcular(); this.mudarStatus('finalizacao'); showToast('Serviço finalizado'); },
+  fecharOS: async function() { if (State.currentStatus !== 'finalizacao') return; var descricao = Utils.getVal('descricaoServico').trim(); if (!descricao) { showToast('Descreva o serviço realizado antes de fechar a OS.', true); return; } var horimetro = Utils.getVal('horimetro'); if (!horimetro) { showToast('Campo Horímetro obrigatório.', true); return; } Horas.calcular(); if (!confirm('Fechar esta OS? Após fechada, os dados não poderão ser alterados.')) return; await this.mudarStatus('fechada'); showToast('OS fechada'); },
+  novaOS: async function() { if (State.hasUnsavedChanges && !confirm('Há alterações não salvas. Criar nova OS?')) return; State.currentStatus = 'abertura'; State.photos = []; State.fotoHorimetro = null; State.hasUnsavedChanges = false; document.querySelectorAll('#tab-os input, #tab-os select, #tab-os textarea').forEach(function(el) { if (el.id && el.type !== 'file') { el.value = ''; } }); Utils.setDefaultDate(); document.querySelectorAll('input[data-check="true"]').forEach(function(cb) { cb.checked = false; }); Checklist.updateProgress(); var preview = $('fotosPreview'); if (preview) preview.innerHTML = ''; var previewH = $('fotoHorimetroPreview'); if (previewH) previewH.innerHTML = ''; $('fotosServico').value = ''; $('fotoHorimetroInput').value = ''; Signature.clear('tec'); Signature.clear('cli'); Timer.reset(); Timer.seconds = 0; Timer.running = false; Timer.paused = false; if (Timer.interval) clearInterval(Timer.interval); await Utils.generateOSNumber(); State.osNumberGenerated = true; App.updateUI(); showToast('Nova OS criada'); var tabClientesBtn = document.querySelector('.tab-button[data-tab="tab-clientes"]'); if (tabClientesBtn) tabClientesBtn.click(); },
+  getCorpoEmailHTML: function() { 
+    var tipoChamado = Utils.getVal('tipoChamado') || 'normal';
+    var tipoChamadoFormatado = Utils.formatTipoChamado(tipoChamado);
+    var statusTexto = Utils.formatStatus(State.currentStatus);
+    var horasTotais = Utils.getVal('horasTotais') || '0h';
+    var marca = Utils.getVal('marca') || 'Não informada';
+    var modelo = Utils.getVal('modelo') || 'Não informado';
+    var descricao = (Utils.getVal('descricaoServico') || 'Não informado').replace(/\n/g, '<br>');
+    var pecas = (Utils.getVal('pecasAplicadas') || 'Nenhuma peça informada').replace(/\n/g, '<br>');
+    var pendencias = (Utils.getVal('pendencias') || 'Nenhuma pendência informada').replace(/\n/g, '<br>');
+    var relato = Utils.getVal('relatoCliente') || 'Não informado';
+    var clienteNome = Utils.getVal('cliente');
+    var clienteEncontrado = State.clients.find(function(c) { return c.nome === clienteNome; });
+    var emailCliente = clienteEncontrado ? clienteEncontrado.email : '';
+    var responsavelNome = clienteEncontrado ? clienteEncontrado.responsavel_nome : '';
+    var cnpjCliente = Utils.getVal('cnpj') || (clienteEncontrado ? clienteEncontrado.cnpj : '');
+    var dataOS = Utils.getVal('dataOS') || new Date().toLocaleDateString('pt-BR');
     
-    if (!numero) return;
-    numero = numero.replace(/\D/g, '');
-    if (!numero.startsWith('55')) numero = '55' + numero;
-
-    const osNum = document.getElementById('numeroOS').value || '-';
-    const cliente = (document.getElementById('cliente').value || '-').toUpperCase();
-    const marca = (document.getElementById('marca').value || '').toUpperCase();
-    const modelo = (document.getElementById('modelo').value || '').toUpperCase();
-    const horas = document.getElementById('horasTotais').value || '-';
-    const descricao = document.getElementById('descricaoServico').value.trim();
-    const pecas = document.getElementById('pecasAplicadas').value.trim();
-    const pendencias = document.getElementById('pendencias').value.trim();
-
-    let equipStr = `${marca} ${modelo}`.trim() || 'Nao informado';
-
-    let mensagem = `🏭 *MARLIFT - ${osNum}*\n\n`;
-    mensagem += `👤 ${cliente}\n`;
-    mensagem += `🔧 ${equipStr}\n`;
-    mensagem += `⏱️ ${horas}\n\n`;
-
-    if (descricao) {
-      mensagem += `📝 ${descricao}\n\n`;
+    return '<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">' +
+      '<div style="background: linear-gradient(135deg, #f97316, #fb923c); padding: 20px; text-align: center; border-radius: 10px 10px 0 0;">' +
+      '<h1 style="color: white; margin: 0;">🏭 MARLIFT EMPILHADEIRAS</h1>' +
+      '<p style="color: #fff3e6; margin: 5px 0 0;">Excelência em Movimento</p>' +
+      '</div>' +
+      '<div style="background: #1a2129; padding: 20px; border-radius: 0 0 10px 10px; border: 1px solid #2a3441;">' +
+      '<h2 style="color: #f97316; margin-top: 0;">📋 RELATÓRIO DA ORDEM DE SERVIÇO</h2>' +
+      '<div style="background: #0c0f12; padding: 15px; border-radius: 8px; margin-bottom: 20px;">' +
+      '<p><strong style="color: #f97316;">📋 N° O.S:</strong> ' + Utils.getVal('numeroOS') + '</p>' +
+      '<p><strong style="color: #f97316;">📅 Data:</strong> ' + dataOS + '</p>' +
+      '<p><strong style="color: #f97316;">✅ Status:</strong> ' + statusTexto + '</p>' +
+      '<p><strong style="color: #f97316;">📄 Tipo de Chamado:</strong> ' + tipoChamadoFormatado + '</p>' +
+      '</div>' +
+      '<div style="background: #0c0f12; padding: 15px; border-radius: 8px; margin-bottom: 20px;">' +
+      '<h3 style="color: #f97316; margin-top: 0;">👤 DADOS DO CLIENTE</h3>' +
+      '<p><strong>Nome:</strong> ' + Utils.getVal('cliente') + '</p>' +
+      (cnpjCliente ? '<p><strong>CNPJ/CPF:</strong> ' + cnpjCliente + '</p>' : '') +
+      (emailCliente ? '<p><strong>E-mail:</strong> ' + emailCliente + '</p>' : '') +
+      (responsavelNome ? '<p><strong>Responsável:</strong> ' + responsavelNome + '</p>' : '') +
+      '<p><strong>Endereço:</strong> ' + Utils.getVal('endereco') + ' - ' + Utils.getVal('cidadeCliente') + '</p>' +
+      '</div>' +
+      '<div style="background: #0c0f12; padding: 15px; border-radius: 8px; margin-bottom: 20px;">' +
+      '<h3 style="color: #f97316; margin-top: 0;">🔧 DADOS DO EQUIPAMENTO</h3>' +
+      '<p><strong>Marca:</strong> ' + Utils.getVal('marca') + '</p>' +
+      '<p><strong>Modelo:</strong> ' + Utils.getVal('modelo') + '</p>' +
+      '<p><strong>N° Série:</strong> ' + Utils.getVal('numSerie') + '</p>' +
+      '<p><strong>Horímetro:</strong> ' + Utils.getVal('horimetro') + 'h</p>' +
+      '</div>' +
+      '<div style="background: #0c0f12; padding: 15px; border-radius: 8px; margin-bottom: 20px;">' +
+      '<h3 style="color: #f97316; margin-top: 0;">📝 SERVIÇO REALIZADO</h3>' +
+      '<p><strong>Diagnóstico:</strong><br>' + descricao + '</p>' +
+      '<p><strong>Peças Aplicadas:</strong><br>' + pecas + '</p>' +
+      '<p><strong>Pendências:</strong><br>' + pendencias + '</p>' +
+      '</div>' +
+      '<div style="background: #0c0f12; padding: 15px; border-radius: 8px; margin-bottom: 20px;">' +
+      '<h3 style="color: #f97316; margin-top: 0;">⏱️ HORAS TRABALHADAS</h3>' +
+      '<p><strong>Horas Cobradas:</strong> ' + Utils.getVal('horasTotais') + '</p>' +
+      '<p><strong>Horas Extras:</strong> ' + Utils.getVal('horasExtras') + '</p>' +
+      '<p><strong>Adicional Noturno:</strong> ' + Utils.getVal('adicionalNoturno') + '</p>' +
+      '<p><strong style="color: #10b981;">TOTAL GERAL:</strong> ' + Utils.getVal('totalGeral') + '</p>' +
+      '</div>' +
+      '<div style="background: #0c0f12; padding: 15px; border-radius: 8px;">' +
+      '<h3 style="color: #f97316; margin-top: 0;">✍️ ASSINATURAS</h3>' +
+      '<p><strong>Técnico:</strong> ' + Utils.getVal('tecnico') + '</p>' +
+      '<p><strong>Cliente/Recebedor:</strong> ' + Utils.getVal('recebedor') + '</p>' +
+      '</div>' +
+      '<div style="text-align: center; margin-top: 20px; padding-top: 15px; border-top: 1px solid #2a3441;">' +
+      '<p style="color: #6b7280; font-size: 12px;">Documento gerado eletronicamente - MARLIFT Empilhadeiras<br>Este documento é válido como comprovante de serviço prestado.</p>' +
+      '</div></div></div>';
+  },
+  enviarEmailComRelatorio: function() { 
+    if (State.currentStatus !== 'aprovada') { showToast('Somente OS aprovadas podem ser enviadas por e-mail.', true); return; } 
+    var clienteNome = Utils.getVal('cliente');
+    var clienteEncontrado = State.clients.find(function(c) { return c.nome === clienteNome; });
+    var emailCliente = clienteEncontrado ? clienteEncontrado.email : '';
+    if (!emailCliente) { 
+      var emailDigitado = prompt('Cliente não possui e-mail cadastrado. Digite o e-mail para envio:', '');
+      if (!emailDigitado || !emailDigitado.includes('@')) { showToast('E-mail inválido!', true); return; }
+      emailCliente = emailDigitado;
     }
-    
-    if (pecas) {
-      mensagem += `🔩 Pecas:\n${pecas}\n\n`;
-    }
-    
-    if (pendencias) {
-      mensagem += `⚠️ Pendencias: ${pendencias}`;
-    }
+    var assunto = 'MARLIFT - Relatório da Ordem de Serviço ' + Utils.getVal('numeroOS');
+    var corpoHTML = this.getCorpoEmailHTML();
+    var pdfBlob = this.gerarPDFBlob();
+    var mailtoLink = 'mailto:' + encodeURIComponent(emailCliente) + '?subject=' + encodeURIComponent(assunto) + '&body=' + encodeURIComponent(corpoHTML.replace(/<[^>]*>/g, '').substring(0, 2000));
+    window.location.href = mailtoLink;
+    showToast('Abrindo cliente de e-mail. O PDF será anexado manualmente. Em breve teremos anexo automático!');
+  },
+  gerarPDFBlob: function() {
+    var html = this.gerarRelatorioHTML();
+    return new Blob([html], { type: 'application/pdf' });
+  },
+  gerarRelatorioHTML: function() {
+    var tipoChamado = Utils.getVal('tipoChamado') || 'normal';
+    var tipoChamadoFormatado = Utils.formatTipoChamado(tipoChamado);
+    var endereco = Utils.getVal('endereco');
+    var mapaLink = endereco ? 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(endereco) : '#';
+    var mapaHtml = endereco ? '<div style="margin-top:8px;"><a href="' + mapaLink + '" target="_blank" style="display:inline-flex; align-items:center; gap:8px; background:#f97316; color:white; padding:8px 16px; border-radius:8px; text-decoration:none; font-weight:bold;"><i class="fas fa-map-marker-alt"></i> 📍 Ver localização no Google Maps</a></div>' : '';
+    var fotosHtml = State.photos.length ? '<div style="margin-top:20px;"><h3>📸 Registro Fotográfico</h3><div style="display:flex;flex-wrap:wrap;gap:10px;">' + State.photos.map(function(src) { return '<img src="' + src + '" style="max-width:200px;max-height:200px;border-radius:8px;border:1px solid #ccc;">'; }).join('') + '</div></div>' : '';
+    var horimetroImg = State.fotoHorimetro ? '<div><h3>📊 Horímetro</h3><img src="' + State.fotoHorimetro + '" style="max-width:180px;border:1px solid #ccc;border-radius:8px;"></div>' : '';
+    var checklistItems = [];
+    document.querySelectorAll('input[data-check="true"]').forEach(function(cb) { if (cb.checked) checklistItems.push(cb.parentElement.innerText.trim()); });
+    var checklistHtml = checklistItems.length ? '<div><h3>✅ Itens Verificados</h3><ul style="columns:2;">' + checklistItems.map(function(i) { return '<li style="margin:3px 0;">' + i + '</li>'; }).join('') + '</ul></div>' : '';
+    var horasCobradas = Utils.getVal('horasTotais') || '0h';
+    var horasExtras = Utils.getVal('horasExtras') || '00:00';
+    var adicionalNoturno = Utils.getVal('adicionalNoturno') || '00:00';
+    var totalGeral = Utils.getVal('totalGeral') || '00:00';
+    var horasHtml = '<div style="margin-top:25px; margin-bottom:25px;"><h3>⏱️ Horas Trabalhadas</h3><div style="background:#f0fdf4; border:1px solid #22c55e; border-radius:12px; padding:15px; display:inline-block; width:100%;"><div style="display:flex; flex-wrap:wrap; justify-content:space-between; gap:15px;"><div><strong>Horas Cobradas:</strong> <span style="font-size:1.3em; color:#16a34a;">' + horasCobradas + '</span></div><div><strong>Horas Extras:</strong> ' + horasExtras + '</div><div><strong>Adicional Noturno:</strong> ' + adicionalNoturno + '</div><div><strong style="font-size:1.1em;">TOTAL GERAL:</strong> <span style="font-size:1.3em; color:#16a34a; font-weight:bold;">' + totalGeral + '</span></div></div></div></div>';
+    var clienteNome = Utils.getVal('cliente');
+    var clienteEncontrado = State.clients.find(function(c) { return c.nome === clienteNome; });
+    var emailCliente = clienteEncontrado ? (clienteEncontrado.email || 'Não informado') : 'Não informado';
+    var responsavelNome = clienteEncontrado ? (clienteEncontrado.responsavel_nome || 'Não informado') : 'Não informado';
+    var responsavelTelefone = clienteEncontrado ? (clienteEncontrado.responsavel_telefone || 'Não informado') : 'Não informado';
+    return '<!DOCTYPE html><html><head><title>Relatorio_' + Utils.getVal('numeroOS') + '</title><style>body{font-family:Arial,sans-serif;padding:30px;max-width:900px;margin:auto;color:#1e293b;}h1{color:#f97316;margin-bottom:5px;font-size:28px;}h2{color:#374151;margin-top:25px;font-size:20px;}h3{color:#4b5563;margin-top:15px;border-bottom:1px solid #e5e7eb;padding-bottom:5px;}.header{border-bottom:2px solid #f97316;margin-bottom:20px;padding-bottom:15px;text-align:center;}.logo-area{display:flex;align-items:center;justify-content:center;gap:15px;margin-bottom:10px;}.logo-icon{width:60px;height:60px;background:linear-gradient(135deg,#f97316,#fb923c);border-radius:15px;display:flex;align-items:center;justify-content:center;}.logo-icon svg{width:40px;height:40px;color:white;}.footer{margin-top:40px;font-size:10px;text-align:center;border-top:1px solid #ccc;padding-top:15px;color:#6b7280;}.assinatura-img{max-width:200px;max-height:80px;border:1px solid #ddd;border-radius:8px;}.section{margin-bottom:20px;}p{margin:5px 0;}.status-aprovada{background:#22c55e20;color:#16a34a;padding:5px 12px;border-radius:20px;font-weight:bold;display:inline-block;}.info-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;margin-top:10px;gap:10px;}.cliente-linha{background:#f8fafc;padding:12px;border-radius:8px;margin:10px 0;border-left:4px solid #f97316;}.equip-linha{background:#f1f5f9;padding:12px;border-radius:8px;margin:10px 0;border-left:4px solid #10b981;}</style></head><body><div class="header"><div class="logo-area"><div class="logo-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg></div><div><h1>MARLIFT EMPILHADEIRAS</h1><p style="margin:0;">Excelência em Movimento</p></div></div><h2>RELATÓRIO FINAL - OS ' + Utils.getVal('numeroOS') + '</h2><p><strong>Data de Emissão:</strong> ' + new Date().toLocaleString('pt-BR') + '</p><div class="info-row"><span class="status-aprovada">✅ APROVADA PELO CLIENTE</span> <span style="background:#f9731620; color:#f97316; padding:5px 12px; border-radius:20px; font-weight:bold;">📋 TIPO: ' + tipoChamadoFormatado + '</span></div></div><div class="section"><h3>📋 Dados do Cliente</h3><div class="cliente-linha"><strong>👤 Cliente:</strong> ' + Utils.getVal('cliente') + '  |  <strong>📄 CNPJ/CPF:</strong> ' + Utils.getVal('cnpj') + '</div><div><strong>📧 E-mail:</strong> ' + emailCliente + '</div><div><strong>👨‍💼 Responsável:</strong> ' + responsavelNome + '  |  <strong>📞 Telefone:</strong> ' + responsavelTelefone + '</div><div><strong>📍 Endereço:</strong> ' + Utils.getVal('endereco') + ' - ' + Utils.getVal('cidadeCliente') + '</div>' + mapaHtml + '</div><div class="section"><h3>🏗️ Equipamento</h3><div class="equip-linha"><strong>🔧 Marca:</strong> ' + Utils.getVal('marca') + '  |  <strong>📐 Modelo:</strong> ' + Utils.getVal('modelo') + '  |  <strong>🔢 Nº Série:</strong> ' + Utils.getVal('numSerie') + '  |  <strong>⏱️ Horímetro:</strong> ' + Utils.getVal('horimetro') + 'h</div>' + horimetroImg + '</div><div class="section"><h3>🔧 Serviço Executado</h3><p><strong>Diagnóstico:</strong><br>' + (Utils.getVal('descricaoServico') || '').replace(/\n/g, '<br>') + '</p><p><strong>Peças Aplicadas:</strong><br>' + (Utils.getVal('pecasAplicadas') || '').replace(/\n/g, '<br>') + '</p><p><strong>Pendências:</strong><br>' + (Utils.getVal('pendencias') || '').replace(/\n/g, '<br>') + '</p></div>' + checklistHtml + fotosHtml + horasHtml + '<div class="section"><h3>✍️ Assinaturas de Aprovação</h3><div style="display:flex;gap:60px;margin-top:15px;flex-wrap:wrap;"><div><strong>Técnico:</strong> ' + Utils.getVal('tecnico') + '<br>' + (Utils.getVal('assinaturaTecnicoData') ? '<img src="' + Utils.getVal('assinaturaTecnicoData') + '" class="assinatura-img">' : '<p style="color:#999;">Não assinado</p>') + '</div><div><strong>Cliente:</strong> ' + Utils.getVal('recebedor') + '<br>' + (Utils.getVal('assinaturaClienteData') ? '<img src="' + Utils.getVal('assinaturaClienteData') + '" class="assinatura-img">' : '<p style="color:#999;">Não assinado</p>') + '</div></div></div><div class="footer">Documento gerado eletronicamente - MARLIFT Empilhadeiras<br>Este documento é válido como comprovante de serviço prestado.</div></body></html>';
+  },
+  gerarRelatorioFinal: function() { if (State.currentStatus !== 'aprovada') { showToast('Somente OS aprovadas geram relatório.', true); return; } var win = window.open(); win.document.write(this.gerarRelatorioHTML()); win.document.close(); setTimeout(function() { win.print(); }, 500); },
+  abrirMapa: function() { var end = Utils.getVal('endereco'); if (end) window.open('https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(end)); else showToast('Informe o endereço primeiro.', true); },
+  sendWhatsAppMessage: function() { var numero = prompt('WhatsApp com DDD:', Utils.getVal('whatsappCliente')); if (!numero) return; var tipoChamado = Utils.getVal('tipoChamado') || 'normal'; var tipoChamadoFormatado = Utils.formatTipoChamado(tipoChamado); var statusTexto = Utils.formatStatus(State.currentStatus); var horasTotais = Utils.getVal('horasTotais') || '0h'; var marca = Utils.getVal('marca') || 'Não informada'; var modelo = Utils.getVal('modelo') || 'Não informado'; var descricao = Utils.getVal('descricaoServico') || 'Não informado'; var pecas = Utils.getVal('pecasAplicadas') || 'Nenhuma peça informada'; var pendencias = Utils.getVal('pendencias') || 'Nenhuma pendência informada'; var relato = Utils.getVal('relatoCliente') || 'Não informado'; var clienteNome = Utils.getVal('cliente'); var clienteEncontrado = State.clients.find(function(c) { return c.nome === clienteNome; }); var emailCliente = clienteEncontrado ? clienteEncontrado.email : ''; var responsavelNome = clienteEncontrado ? clienteEncontrado.responsavel_nome : ''; var cnpjCliente = Utils.getVal('cnpj') || (clienteEncontrado ? clienteEncontrado.cnpj : ''); var dataOS = Utils.getVal('dataOS') || new Date().toLocaleDateString('pt-BR'); var msg = '🏭 *MARLIFT EMPILHADEIRAS*\n━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━\n📋 *OS:* ' + Utils.getVal('numeroOS') + '\n📅 *Data:* ' + dataOS + '\n👤 *Cliente:* ' + Utils.getVal('cliente') + '\n' + (cnpjCliente ? '🏭 *CNPJ/CPF:* ' + cnpjCliente + '\n' : '') + (emailCliente ? '📧 *E-mail:* ' + emailCliente + '\n' : '') + (responsavelNome ? '👨‍💼 *Responsável:* ' + responsavelNome + '\n' : '') + '🔧 *Empilhadeira:* ' + marca + ' ' + modelo + '\n⏱️ *Tempo de Serviço:* ' + horasTotais + '\n✅ *Status:* ' + statusTexto + '\n\n📄 *Tipo de Chamado:* ' + tipoChamadoFormatado + '\n🗣️ *Relato do Cliente:* ' + relato + '\n\n📝 *Serviço Realizado:*\n```\n' + descricao + '\n```\n\n' + (pecas && pecas !== 'Nenhuma peça informada' ? '🔩 *Peças Aplicadas:*\n```\n' + pecas + '\n```\n\n' : '') + (pendencias && pendencias !== 'Nenhuma pendência informada' ? '⚠️ *Pendências:*\n```\n' + pendencias + '\n```\n\n' : '') + '━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━\n📱 *MARLIFT Empilhadeiras*\n🏭 *Excelência em Movimento*'; window.open('https://wa.me/' + numero.replace(/\D/g, '') + '?text=' + encodeURIComponent(msg)); },
+  printOS: function() { window.print(); }
+};
 
-    window.open(`https://wa.me/${numero}?text=${encodeURIComponent(mensagem)}`, '_blank');
-    showToast('WhatsApp aberto!');
-  }
-
-  // ==================== OS PERSISTÊNCIA ====================
-  function getFormData(){ 
-    const data={};
-    updateMarcaHidden();
-    document.querySelectorAll('#osForm input, #osForm select, #osForm textarea').forEach(el=>{ 
-      if(el.type === 'checkbox') {
-        data[el.id] = el.checked;
-      } else if(el.type!=='file' && el.id) {
-        data[el.id] = el.value; 
-      }
-    });
-    document.querySelectorAll('#checklistSections input[type="checkbox"], #checklistSections select').forEach(el => {
-        if(el.id) {
-            if(el.type === 'checkbox') data[el.id] = el.checked;
-            else data[el.id] = el.value;
-        }
-    });
-    data.fotosBase64=photosData; 
-    return data; 
-  }
-  
-  function setFormData(d){ 
-    if(!d) return; 
-    Object.keys(d).forEach(id=>{ 
-      if(id === 'fotosBase64') return;
-      const el=document.getElementById(id); 
-      if(el){
-        if(el.type === 'checkbox') {
-            el.checked = d[id];
-        } else {
-            el.value = d[id];
-        }
-      }
-    }); 
-    if(d.fotosBase64 && Array.isArray(d.fotosBase64)){ 
-      photosData=d.fotosBase64; 
-      const preview=document.getElementById('fotosPreview'); 
-      preview.innerHTML=''; 
-      photosData.forEach(src=>{ 
-        const div=document.createElement('div'); 
-        div.className='photo-item'; 
-        div.innerHTML=`<img src="${src}"><div class="photo-remove" onclick="removePhoto(this)">×</div>`; 
-        preview.appendChild(div); 
-      }); 
-    } 
-    const marcaSalva = d.marca || '';
-    const marcaSelect = document.getElementById('marcaSelect');
-    const outraContainer = document.getElementById('marcaOutraContainer');
-    const outraInput = document.getElementById('marcaOutra');
-    if (marcasList.includes(marcaSalva)) {
-      marcaSelect.value = marcaSalva;
-      outraContainer.style.display = 'none';
-      outraInput.value = '';
-    } else if (marcaSalva) {
-      marcaSelect.value = 'OUTRA';
-      outraContainer.style.display = 'block';
-      outraInput.value = marcaSalva;
-    } else {
-      marcaSelect.value = '';
-      outraContainer.style.display = 'none';
-      outraInput.value = '';
-    }
-    updateMarcaHidden();
-    calculateTotals(); 
-    updateProgress(); 
-    atualizarLinkMapa(); 
-    syncClienteFields(); 
-    updateTipoChamadoDisplay();
-  }
-  
-  function saveCurrentOS(){ 
-    updateMarcaHidden();
-    const data=getFormData(); 
-    let history=JSON.parse(localStorage.getItem('marlift_os_history')||'[]'); 
-    const idx=history.findIndex(os=>os.numeroOS===data.numeroOS); 
-    if(idx>=0) history[idx]=data; 
-    else history.unshift(data);
-    localStorage.setItem('marlift_os_history',JSON.stringify(history)); 
-    showToast('OS e Checklist salvos localmente!'); 
-    loadHistorico();
-  }
-  
-  function clearForm(){ 
-    if(!confirm('Nova OS? Dados atuais serao perdidos.')) return; 
-    document.getElementById('osForm').reset(); 
-    document.querySelectorAll('#checklistSections input[type="checkbox"]').forEach(cb => cb.checked = false);
-    document.querySelectorAll('#checklistSections select').forEach(sel => sel.value = 'ok');
-    
-    photosData=[]; 
-    document.getElementById('fotosPreview').innerHTML=''; 
-    timerSeconds=0; timerRunning=false; timerPaused=false; 
-    clearInterval(timerInterval); 
-    document.getElementById('timerDisplay').textContent='00:00:00'; 
-    document.getElementById('timerContainer').classList.remove('timer-running'); 
-    document.getElementById('timerStatus').textContent='Pronto'; 
-    document.getElementById('btnStart').disabled=false; 
-    document.getElementById('btnPause').disabled=true; 
-    document.getElementById('btnStop').disabled=true; 
-    generateOSNumber(); 
-    setDefaultDate(); 
-    updateProgress(); 
-    atualizarLinkMapa(); 
-    syncClienteFields(); 
-    document.getElementById('tecnico').value = 'LEONARDO MARTINS';
-    document.getElementById('marcaSelect').value = '';
-    document.getElementById('marcaOutraContainer').style.display = 'none';
-    document.getElementById('marcaOutra').value = '';
-    updateMarcaHidden();
-    updateTipoChamadoDisplay();
-    showToast('Formulario limpo'); 
-  }
-
-  // ==================== HISTÓRICO DE OS ====================
-  function loadHistorico() {
-    osHistory = JSON.parse(localStorage.getItem('marlift_os_history') || '[]');
-    renderHistoricoTable();
-    updateHistoricoStats();
-  }
-
-  function renderHistoricoTable() {
-    const tbody = document.getElementById('historicoTableBody');
-    const emptyState = document.getElementById('historicoEmpty');
-    const searchTerm = document.getElementById('historicoSearch').value.toLowerCase();
-    const filtroTipo = document.getElementById('historicoFiltroTipo').value;
-
-    let filtered = osHistory.filter(os => {
-      const matchSearch = !searchTerm || 
-        (os.numeroOS || '').toLowerCase().includes(searchTerm) ||
-        (os.cliente || '').toLowerCase().includes(searchTerm) ||
-        (os.marca || '').toLowerCase().includes(searchTerm) ||
-        (os.modelo || '').toLowerCase().includes(searchTerm) ||
-        (os.cidadeCliente || '').toLowerCase().includes(searchTerm);
-      
-      const matchTipo = !filtroTipo || (os.tipoChamado || '') === filtroTipo;
-      
-      return matchSearch && matchTipo;
-    });
-
-    if (filtered.length === 0) {
-      tbody.innerHTML = '';
-      emptyState.style.display = 'block';
-      return;
-    }
-
-    emptyState.style.display = 'none';
-    tbody.innerHTML = '';
-
-    filtered.forEach(os => {
-      const row = tbody.insertRow();
-      const tipoClass = getStatusClass(os.tipoChamado);
-      const marcaModelo = `${os.marca || '-'} / ${os.modelo || '-'}`;
-      
-      row.innerHTML = `
-        <td class="font-mono font-semibold">${os.numeroOS || '-'}</td>
-        <td>${formatDate(os.dataOS)}</td>
-        <td>${(os.cliente || '-').toUpperCase()}</td>
-        <td>${(os.cidadeCliente || '-').toUpperCase()}</td>
-        <td>${marcaModelo}</td>
-        <td><span class="status-badge ${tipoClass}">${getTipoLabel(os.tipoChamado)}</span></td>
-        <td class="font-mono">${os.horasTotais || '-'}</td>
-        <td>
-          <div class="historico-actions">
-            <button class="btn-action btn-view" onclick="viewOS('${os.numeroOS}')" title="Visualizar">
-              <i class="fas fa-eye"></i>
-            </button>
-            <button class="btn-action btn-edit" onclick="editOS('${os.numeroOS}')" title="Editar">
-              <i class="fas fa-edit"></i>
-            </button>
-            <button class="btn-action btn-delete" onclick="deleteOS('${os.numeroOS}')" title="Excluir">
-              <i class="fas fa-trash"></i>
-            </button>
-          </div>
-        </td>
-      `;
-    });
-  }
-
-  function getStatusClass(tipo) {
-    switch(tipo) {
-      case 'emergencial': return 'status-emergencial';
-      case 'garantia': return 'status-garantia';
-      case 'preventiva': return 'status-preventiva';
-      default: return 'status-normal';
-    }
-  }
-
-  function getTipoLabel(tipo) {
-    const labels = {
-      'normal': 'Normal',
-      'emergencial': 'Emergencial',
-      'garantia': 'Garantia',
-      'preventiva': 'Preventiva',
-      'corretiva': 'Corretiva',
-      'retorno_pendencia': 'Retorno',
-      'orcamento': 'Orcamento',
-      'contrato': 'Contrato',
-      'locacao': 'Locacao'
-    };
-    return labels[tipo] || 'Normal';
-  }
-
-  function formatDate(dateStr) {
-    if (!dateStr) return '-';
-    const parts = dateStr.split('-');
-    if (parts.length === 3) {
-      return `${parts[2]}/${parts[1]}/${parts[0]}`;
-    }
-    return dateStr;
-  }
-
-  function updateHistoricoStats() {
-    const total = osHistory.length;
-    const emergenciais = osHistory.filter(os => os.tipoChamado === 'emergencial').length;
-    const preventivas = osHistory.filter(os => os.tipoChamado === 'preventiva').length;
-    
-    const now = new Date();
-    const currentMonth = now.getMonth();
-    const currentYear = now.getFullYear();
-    const esteMes = osHistory.filter(os => {
-      if (!os.dataOS) return false;
-      const osDate = new Date(os.dataOS);
-      return osDate.getMonth() === currentMonth && osDate.getFullYear() === currentYear;
-    }).length;
-
-    document.getElementById('statTotal').textContent = total;
-    document.getElementById('statEmergenciais').textContent = emergenciais;
-    document.getElementById('statPreventivas').textContent = preventivas;
-    document.getElementById('statMes').textContent = esteMes;
-  }
-
-  function viewOS(numeroOS) {
-    const os = osHistory.find(o => o.numeroOS === numeroOS);
-    if (!os) {
-      showToast('OS nao encontrada', true);
-      return;
-    }
-    setFormData(os);
-    document.querySelector('.tab-button[data-tab="tab-os"]').click();
-    showToast(`OS ${numeroOS} carregada para visualizacao`);
-  }
-
-  function editOS(numeroOS) {
-    const os = osHistory.find(o => o.numeroOS === numeroOS);
-    if (!os) {
-      showToast('OS nao encontrada', true);
-      return;
-    }
-    setFormData(os);
-    document.querySelector('.tab-button[data-tab="tab-os"]').click();
-    showToast(`Editando OS ${numeroOS}`);
-  }
-
-  function deleteOS(numeroOS) {
-    if (!confirm(`Excluir OS ${numeroOS}? Esta acao nao pode ser desfeita.`)) return;
-    
-    osHistory = osHistory.filter(os => os.numeroOS !== numeroOS);
-    localStorage.setItem('marlift_os_history', JSON.stringify(osHistory));
-    renderHistoricoTable();
-    updateHistoricoStats();
-    showToast('OS excluida com sucesso');
-  }
-
-  function openHistorico() {
-    document.querySelector('.tab-button[data-tab="tab-historico"]').click();
-  }
-
-  function exportarHistorico() {
-    if (osHistory.length === 0) {
-      showToast('Nenhum registro para exportar', true);
-      return;
-    }
-
-    let csv = 'OS;Data;Cliente;Cidade;Marca;Modelo;Tipo;Horas;Descricao\n';
-    osHistory.forEach(os => {
-      csv += `"${os.numeroOS || ''}";`;
-      csv += `"${formatDate(os.dataOS)}";`;
-      csv += `"${(os.cliente || '').toUpperCase()}";`;
-      csv += `"${(os.cidadeCliente || '').toUpperCase()}";`;
-      csv += `"${os.marca || ''}";`;
-      csv += `"${os.modelo || ''}";`;
-      csv += `"${getTipoLabel(os.tipoChamado)}";`;
-      csv += `"${os.horasTotais || ''}";`;
-      csv += `"${(os.descricaoServico || '').replace(/"/g, '""')}"\n`;
-    });
-
-    const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `marlift_historico_${new Date().toISOString().slice(0, 10)}.csv`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-    showToast('Historico exportado para CSV');
-  }
-
-  function limparHistorico() {
-    if (osHistory.length === 0) {
-      showToast('Historico ja esta vazio', true);
-      return;
-    }
-    if (!confirm('ATENCAO: Isso ira apagar TODAS as OS do historico. Continuar?')) return;
-    if (!confirm('Tem certeza? Esta acao e irreversivel!')) return;
-
-    osHistory = [];
-    localStorage.setItem('marlift_os_history', JSON.stringify(osHistory));
-    renderHistoricoTable();
-    updateHistoricoStats();
-    showToast('Historico limpo com sucesso');
-  }
-
-  // ==================== CLIENTES ====================
-  function cadLoadFromLocalStorage(){ 
-    const stored = localStorage.getItem('marlift_clientes'); 
-    if(stored) { 
-      try{ 
-        cadClients = JSON.parse(stored); 
-        if(!Array.isArray(cadClients)) cadClients=[]; 
-        cadClients = cadClients.map(c => {
-          if(c.equipamento && !c.marca) {
-            c.marca = c.equipamento;
-            c.modelo = c.modelo || '';
-            c.serie = c.serie || '';
-          }
-          if(c.marca === undefined) c.marca = '';
-          if(c.modelo === undefined) c.modelo = '';
-          if(c.serie === undefined) c.serie = '';
-          return c;
-        });
-      }catch(e){ cadClients=[]; } 
-    } 
-    cadRenderFilteredTable(); 
-  }
-  
-  function cadRenderFilteredTable(){ 
-    const term = document.getElementById('cad_searchInput').value.trim().toLowerCase(); 
-    const filtered = term ? cadClients.filter(c=>c.nome.toLowerCase().includes(term)||(c.cnpj||'').includes(term)) : cadClients; 
-    const tbody=document.getElementById('cad_tableBody'); 
-    tbody.innerHTML=''; 
-    if(filtered.length===0){ 
-      tbody.innerHTML='<tr><td colspan="11" class="text-center py-8">Nenhum cliente</td></tr>'; 
-    } else { 
-      filtered.forEach(c=>{ 
-        const row=tbody.insertRow(); 
-        row.innerHTML=`<td>${c.nome||'-'}</td>
-                        <td>${c.endereco||'-'}</td>
-                        <td>${c.cidade||'-'}</td>
-                        <td>${c.marca||'-'}</td>
-                        <td>${c.modelo||'-'}</td>
-                        <td>${c.serie||'-'}</td>
-                        <td>${c.quantidade||0}</td>
-                        <td>${c.telefone||'-'}</td>
-                        <td>${c.whatsapp||'-'}</td>
-                        <td>${c.cnpj||'-'}</td>
-                        <td>
-                         <button class="btn-selecionar" data-id="${c.id}">Selecionar</button>
-                         <i class="fas fa-edit edit-icon" data-id="${c.id}" style="cursor:pointer;"></i>
-                         <i class="fas fa-trash-alt delete-icon" data-id="${c.id}"></i>
-                        </td>`; 
-      }); 
-    } 
-    document.querySelectorAll('.btn-selecionar').forEach(btn=>btn.addEventListener('click',()=>cadSelecionarCliente(parseInt(btn.getAttribute('data-id'))))); 
-    document.querySelectorAll('.delete-icon').forEach(icon=>icon.addEventListener('click',()=>cadDeleteClient(parseInt(icon.getAttribute('data-id'))))); 
-    document.querySelectorAll('.edit-icon').forEach(icon=>icon.addEventListener('click',()=>cadEditClient(parseInt(icon.getAttribute('data-id'))))); 
-  }
-  
-  function cadResetForm() {
-    document.getElementById('cad_nome').value = '';
-    document.getElementById('cad_cnpj').value = '';
-    document.getElementById('cad_endereco').value = '';
-    document.getElementById('cad_cidade').value = '';
-    document.getElementById('cad_marcaSelect').value = '';
-    document.getElementById('cadMarcaOutraContainer').style.display = 'none';
-    document.getElementById('cad_marcaOutra').value = '';
-    document.getElementById('cad_marca').value = '';
-    document.getElementById('cad_modelo').value = '';
-    document.getElementById('cad_serie').value = '';
-    document.getElementById('cad_quantidade').value = '1';
-    document.getElementById('cad_telefone').value = '';
-    document.getElementById('cad_whatsapp').value = '';
-    editingClientId = null;
-    const btnSalvar = document.getElementById('cad_btnSalvar');
-    const btnCancelar = document.getElementById('cad_btnCancelar');
-    btnSalvar.textContent = 'Adicionar Cliente';
-    btnCancelar.style.display = 'none';
-  }
-  
-  function cadEditClient(id) {
-    const cliente = cadClients.find(c => c.id === id);
-    if(!cliente) return;
-    editingClientId = id;
-    document.getElementById('cad_nome').value = cliente.nome || '';
-    document.getElementById('cad_cnpj').value = cliente.cnpj || '';
-    document.getElementById('cad_endereco').value = cliente.endereco || '';
-    document.getElementById('cad_cidade').value = cliente.cidade || '';
-    const marca = (cliente.marca || '').toUpperCase();
-    const marcaSelect = document.getElementById('cad_marcaSelect');
-    const outraContainer = document.getElementById('cadMarcaOutraContainer');
-    const outraInput = document.getElementById('cad_marcaOutra');
-    if (marcasList.includes(marca)) {
-      marcaSelect.value = marca;
-      outraContainer.style.display = 'none';
-      outraInput.value = '';
-    } else if (marca) {
-      marcaSelect.value = 'OUTRA';
-      outraContainer.style.display = 'block';
-      outraInput.value = marca;
-    } else {
-      marcaSelect.value = '';
-      outraContainer.style.display = 'none';
-      outraInput.value = '';
-    }
-    updateCadMarcaHidden();
-    document.getElementById('cad_modelo').value = cliente.modelo || '';
-    document.getElementById('cad_serie').value = cliente.serie || '';
-    document.getElementById('cad_quantidade').value = cliente.quantidade || 1;
-    document.getElementById('cad_telefone').value = cliente.telefone || '';
-    document.getElementById('cad_whatsapp').value = cliente.whatsapp || '';
-    const btnSalvar = document.getElementById('cad_btnSalvar');
-    const btnCancelar = document.getElementById('cad_btnCancelar');
-    btnSalvar.textContent = 'Atualizar Cliente';
-    btnCancelar.style.display = 'inline-flex';
-    showToast('Editando cliente - clique em Atualizar para salvar');
-  }
-  
-  function cadUpdateClient() {
-    if(!editingClientId) return;
-    updateCadMarcaHidden();
-    const index = cadClients.findIndex(c => c.id === editingClientId);
-    if(index === -1) return;
-    cadClients[index] = {
-      id: editingClientId,
-      nome: document.getElementById('cad_nome').value.trim(),
-      cnpj: document.getElementById('cad_cnpj').value.trim(),
-      endereco: document.getElementById('cad_endereco').value.trim(),
-      cidade: document.getElementById('cad_cidade').value.trim(),
-      marca: document.getElementById('cad_marca').value,
-      modelo: document.getElementById('cad_modelo').value.trim(),
-      serie: document.getElementById('cad_serie').value.trim(),
-      quantidade: parseInt(document.getElementById('cad_quantidade').value) || 1,
-      telefone: document.getElementById('cad_telefone').value.trim(),
-      whatsapp: document.getElementById('cad_whatsapp').value.trim()
-    };
-    localStorage.setItem('marlift_clientes', JSON.stringify(cadClients));
-    cadResetForm();
-    cadRenderFilteredTable();
-    showToast('Cliente atualizado com sucesso');
-  }
-  
-  function cadAddClient(){ 
-    const nome=document.getElementById('cad_nome').value.trim(); 
-    const cnpj=document.getElementById('cad_cnpj').value.trim(); 
-    if(!nome){ showToast('Nome obrigatorio',true); return; } 
-    updateCadMarcaHidden();
-    const newClient={ 
-      id:Date.now(), 
-      nome, 
-      cnpj, 
-      endereco:document.getElementById('cad_endereco').value.trim(), 
-      cidade:document.getElementById('cad_cidade').value.trim(), 
-      marca: document.getElementById('cad_marca').value,
-      modelo: document.getElementById('cad_modelo').value.trim(), 
-      serie: document.getElementById('cad_serie').value.trim(), 
-      quantidade:parseInt(document.getElementById('cad_quantidade').value)||1, 
-      telefone:document.getElementById('cad_telefone').value.trim(), 
-      whatsapp:document.getElementById('cad_whatsapp').value.trim() 
-    }; 
-    cadClients.push(newClient); 
-    localStorage.setItem('marlift_clientes',JSON.stringify(cadClients)); 
-    cadResetForm();
-    cadRenderFilteredTable(); 
-    showToast('Cliente adicionado'); 
-  }
-  
-  function cadDeleteClient(id){ 
-    if(confirm('Excluir cliente?')){ 
-      cadClients=cadClients.filter(c=>c.id!==id); 
-      localStorage.setItem('marlift_clientes',JSON.stringify(cadClients)); 
-      cadRenderFilteredTable(); 
-      showToast('Cliente removido'); 
-    } 
-  }
-  
-  function cadSelecionarCliente(id){ 
-    const cliente=cadClients.find(c=>c.id===id); 
-    if(cliente){ 
-      document.getElementById('cliente').value=cliente.nome.toUpperCase(); 
-      document.getElementById('cnpj').value=cliente.cnpj; 
-      document.getElementById('cidadeCliente').value=(cliente.cidade||'').toUpperCase(); 
-      document.getElementById('endereco').value=(cliente.endereco||'').toUpperCase(); 
-      document.getElementById('whatsappCliente').value=cliente.whatsapp||''; 
-      const marca = (cliente.marca || '').toUpperCase();
-      const marcaSelect = document.getElementById('marcaSelect');
-      const outraContainer = document.getElementById('marcaOutraContainer');
-      const outraInput = document.getElementById('marcaOutra');
-      if (marcasList.includes(marca)) {
-        marcaSelect.value = marca;
-        outraContainer.style.display = 'none';
-        outraInput.value = '';
-      } else if (marca) {
-        marcaSelect.value = 'OUTRA';
-        outraContainer.style.display = 'block';
-        outraInput.value = marca;
-      } else {
-        marcaSelect.value = '';
-        outraContainer.style.display = 'none';
-        outraInput.value = '';
-      }
-      updateMarcaHidden();
-      document.getElementById('modelo').value = (cliente.modelo || '').toUpperCase();
-      document.getElementById('numSerie').value = (cliente.serie || '').toUpperCase();
-      syncClienteFields(); 
-      atualizarLinkMapa(); 
-      document.querySelector('.tab-button[data-tab="tab-os"]').click(); 
-      showToast(`Cliente ${cliente.nome} selecionado`); 
-    } 
-  }
-
-  // ==================== INICIALIZAÇÃO ====================
-  function initOS(){
-    generateOSNumber(); 
-    setDefaultDate(); 
-    renderChecklist(); 
-    setupEventListeners();
-    setupMarcaSelects();
-    loadHistorico();
-    document.getElementById('fotosServico').addEventListener('change',handlePhotoUpload);
-    document.querySelectorAll('.tab-button').forEach(btn=>btn.addEventListener('click',()=>{ const tabId=btn.getAttribute('data-tab'); document.querySelectorAll('.tab-button').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); document.querySelectorAll('.tab-content').forEach(tab=>tab.classList.remove('active')); document.getElementById(tabId).classList.add('active'); }));
-    document.querySelectorAll('.uppercase-input').forEach(inp=>inp.addEventListener('input',function(){ this.value=this.value.toUpperCase(); }));
-    document.getElementById('endereco').addEventListener('input',atualizarLinkMapa);
-    document.getElementById('numeroOS').addEventListener('change',syncClienteFields);
-    document.getElementById('dataOS').addEventListener('change',syncClienteFields);
-    document.getElementById('cliente').addEventListener('input',syncClienteFields);
-    document.getElementById('cidadeCliente').addEventListener('input',syncClienteFields);
-    document.getElementById('endereco').addEventListener('input',syncClienteFields);
-    document.getElementById('cnpj').addEventListener('blur',buscarClientePorCNPJ);
-    const tipoSelect = document.getElementById('tipoChamado');
-    tipoSelect.addEventListener('change', updateTipoChamadoDisplay);
-    
-    document.getElementById('historicoSearch').addEventListener('input', renderHistoricoTable);
-    document.getElementById('historicoFiltroTipo').addEventListener('change', renderHistoricoTable);
-    
-    updateTipoChamadoDisplay();
-    syncClienteFields(); atualizarLinkMapa();
-    setInterval(()=>{ localStorage.setItem('marlift_draft',JSON.stringify(getFormData())); },15000);
-    if(!document.getElementById('tecnico').value) document.getElementById('tecnico').value = 'LEONARDO MARTINS';
-  }
-  
-  function initClientes(){
-    cadLoadFromLocalStorage();
-    const btnSalvar = document.getElementById('cad_btnSalvar');
-    const btnCancelar = document.getElementById('cad_btnCancelar');
-    btnSalvar.addEventListener('click', () => {
-      if(editingClientId) {
-        cadUpdateClient();
-      } else {
-        cadAddClient();
-      }
-    });
-    btnCancelar.addEventListener('click', () => {
-      cadResetForm();
-    });
-    document.getElementById('cad_searchInput').addEventListener('input',cadRenderFilteredTable);
-    const cadMarcaSelect = document.getElementById('cad_marcaSelect');
-    const cadOutraContainer = document.getElementById('cadMarcaOutraContainer');
-    const cadOutraInput = document.getElementById('cad_marcaOutra');
-    cadMarcaSelect.addEventListener('change', () => {
-      if (cadMarcaSelect.value === 'OUTRA') {
-        cadOutraContainer.style.display = 'block';
-        cadOutraInput.focus();
-      } else {
-        cadOutraContainer.style.display = 'none';
-        cadOutraInput.value = '';
-        updateCadMarcaHidden();
-      }
-    });
-    cadOutraInput.addEventListener('input', updateCadMarcaHidden);
-  }
-  
-  document.addEventListener('DOMContentLoaded',()=>{ initOS(); initClientes(); });
+document.addEventListener('DOMContentLoaded', function() { App.init(); });
 </script>
 </body>
 </html>
