@@ -3,12 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Marlift Empilhadeiras - OS Profissional v6.0 (Cloud)</title>
+  <title>Marlift Empilhadeiras - OS Profissional v6.1 (Cloud Sync)</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
-    /* Estilos iguais aos anteriores - omitido por brevidade */
     :root {
       --bg: #0c0f12;
       --bg-secondary: #141a21;
@@ -88,33 +87,86 @@
     .table-os th, .table-os td { padding: 10px 8px; text-align: left; border-bottom: 1px solid var(--border); }
     .table-os th { background: var(--bg-secondary); font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); }
     .table-os td { vertical-align: middle; }
-    .sync-status { position: fixed; bottom: 20px; right: 20px; background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 8px 16px; font-size: 12px; z-index: 1000; display: flex; align-items: center; gap: 8px; }
-    .sync-status.online { border-color: var(--success); color: var(--success); }
-    .sync-status.offline { border-color: var(--danger); color: var(--danger); }
+    
+    /* Status de conexão */
+    .sync-status {
+      position: fixed;
+      top: 80px;
+      right: 20px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 30px;
+      padding: 8px 16px;
+      font-size: 12px;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+    .sync-status.online { border-color: var(--success); color: var(--success); background: rgba(16, 185, 129, 0.1); }
+    .sync-status.offline { border-color: var(--danger); color: var(--danger); background: rgba(239, 68, 68, 0.1); }
+    .sync-status.syncing { border-color: var(--accent); color: var(--accent); background: rgba(249, 115, 22, 0.1); }
+    
+    /* Banner offline */
+    .offline-banner {
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.9), rgba(220, 38, 38, 0.9));
+      color: white;
+      text-align: center;
+      padding: 10px;
+      font-size: 13px;
+      font-weight: 500;
+      position: fixed;
+      top: 70px;
+      left: 0;
+      right: 0;
+      z-index: 999;
+      backdrop-filter: blur(8px);
+      display: none;
+    }
+    .offline-banner.show { display: block; }
+    .offline-banner i { margin-right: 8px; }
+    
     @media print { .no-print { display: none !important; } body { background: white; color: black; } }
-    @media (max-width: 768px) { .step { font-size: 9px; padding: 8px 4px; } .timer-display { font-size: 1.8rem; } .btn { padding: 8px 12px; font-size: 12px; } .photo-item { width: 100px; height: 100px; } .stat-value { font-size: 1.2rem; } }
+    @media (max-width: 768px) { 
+      .step { font-size: 9px; padding: 8px 4px; } 
+      .timer-display { font-size: 1.8rem; } 
+      .btn { padding: 8px 12px; font-size: 12px; } 
+      .photo-item { width: 100px; height: 100px; } 
+      .stat-value { font-size: 1.2rem; }
+      .sync-status { top: 70px; right: 10px; padding: 4px 10px; font-size: 10px; }
+    }
   </style>
 </head>
 <body>
 <div id="loadingOverlay" class="loading-overlay">
   <div class="spinner"></div>
-  <p class="mt-4 text-[var(--accent)] font-display text-xl">Sincronizando com Cloud...</p>
+  <p class="mt-4 text-[var(--accent)] font-display text-xl">Carregando Sistema...</p>
 </div>
+
+<!-- Banner offline -->
+<div id="offlineBanner" class="offline-banner">
+  <i class="fas fa-wifi"></i> ⚠️ VOCÊ ESTÁ OFFLINE - Os dados estão sendo salvos LOCALMENTE. Quando a conexão voltar, a sincronização será automática.
+</div>
+
 <div class="min-h-screen" id="appContainer" style="display:none;">
-  <div class="sync-status" id="syncStatus">
-    <i class="fas fa-cloud-upload-alt"></i>
+  <!-- Indicador de status -->
+  <div class="sync-status online" id="syncStatus">
+    <i class="fas fa-cloud-upload-alt" id="syncIcon"></i>
     <span id="syncText">Sincronizado</span>
   </div>
+  
   <header class="no-print border-b border-[var(--border)] bg-[var(--bg)]/95 backdrop-blur-sm sticky top-0 z-50">
     <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap justify-between items-center gap-3">
       <div class="flex items-center gap-4">
         <div class="w-12 h-12 bg-gradient-to-br from-[var(--accent)] to-[var(--accent-light)] rounded-xl flex items-center justify-center shadow-lg">
           <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
         </div>
-        <div><h1 class="font-display text-2xl tracking-wide text-[var(--accent)]">MARLIFT EMPILHADEIRAS</h1><p class="text-xs text-[var(--muted)]">Sistema de O.S - v6.0 (Cloud Sync)</p></div>
+        <div><h1 class="font-display text-2xl tracking-wide text-[var(--accent)]">MARLIFT EMPILHADEIRAS</h1><p class="text-xs text-[var(--muted)]">Sistema de O.S - v6.1 (Cloud Sync)</p></div>
       </div>
       <div class="flex flex-wrap gap-2">
-        <button onclick="Cloud.syncNow()" class="btn btn-secondary text-sm" id="btnSync"><i class="fas fa-sync-alt"></i> Sincronizar</button>
+        <button onclick="Cloud.syncNow()" id="btnSync" class="btn btn-secondary text-sm"><i class="fas fa-sync-alt"></i> Sincronizar</button>
         <button onclick="App.gerarPreviaPDF()" id="btnPreviaPDF" class="btn btn-primary text-sm" disabled><i class="fas fa-file-pdf"></i> Visualizar PDF</button>
         <button onclick="App.enviarEmailComResumo()" id="btnEnviarEmail" class="btn btn-secondary text-sm" disabled><i class="fas fa-envelope"></i> Enviar E-mail</button>
         <button onclick="App.sendWhatsAppMessage()" class="btn btn-secondary text-sm"><i class="fab fa-whatsapp text-green-500"></i> WhatsApp</button>
@@ -122,7 +174,9 @@
       </div>
     </div>
   </header>
+  
   <main class="max-w-7xl mx-auto px-4 py-6">
+    <!-- Restante do conteúdo igual ao sistema anterior -->
     <div class="step-indicator no-print mb-6">
       <div class="step" data-step="abertura">Abertura</div>
       <div class="step" data-step="execucao">Execução</div>
@@ -136,7 +190,8 @@
       <button class="tab-button" data-tab="tab-clientes">Clientes</button>
       <button class="tab-button" data-tab="tab-historico">Histórico</button>
     </div>
-    <!-- Tab OS (mesmo conteúdo do sistema anterior) -->
+    
+    <!-- Tab OS (conteúdo completo - mantido do sistema anterior) -->
     <div id="tab-os" class="tab-content active">
       <div class="checklist-card p-5 mb-5">
         <div class="flex flex-wrap justify-between items-center gap-3 mb-4"><h2 class="font-display text-xl">Informações da O.S</h2><div><span class="status-badge" id="statusBadge">EM ABERTURA</span></div></div>
@@ -202,7 +257,10 @@
       </div>
       <div class="flex gap-3 justify-center mb-8 no-print"><button onclick="App.salvarOSManual()" class="btn btn-primary"><i class="fas fa-save"></i> Salvar Progresso</button></div>
     </div>
+    
+    <!-- Tab Checklist, Clientes e Histórico (mesmo conteúdo do sistema anterior) -->
     <div id="tab-checklist" class="tab-content"><div class="checklist-card p-4 mb-5"><div class="flex justify-between items-center"><span class="font-semibold">Progresso do Checklist</span><span id="progressText" class="font-mono text-[var(--accent)] text-lg">0%</span></div><div class="progress-bar mt-2"><div id="progressFill" class="progress-fill" style="width:0%"></div></div></div><div id="checklistSections"></div></div>
+    
     <div id="tab-clientes" class="tab-content">
       <div class="stats-grid no-print" id="clientesStats">
         <div class="stat-card"><div class="stat-value" id="statTotalClientes">0</div><div class="stat-label">Total Clientes</div></div>
@@ -220,6 +278,7 @@
       </div>
       <div class="mt-5"><input type="text" id="cad_searchInput" placeholder="Buscar cliente..." class="form-input w-full md:w-64 mb-3"><div class="overflow-x-auto"><table class="w-full text-sm"><thead class="bg-[var(--bg-secondary)]"><tr><th class="p-3 text-left">Nome</th><th class="p-3 text-left">Cidade</th><th class="p-3 text-left">Marcas</th><th class="p-3 text-left">Ações</th></tr></thead><tbody id="cad_tableBody"></tbody></table></div></div>
     </div>
+    
     <div id="tab-historico" class="tab-content">
       <div class="stats-grid no-print">
         <div class="stat-card"><div class="stat-value" id="statTotalOS">0</div><div class="stat-label">Total de OS</div></div>
@@ -252,56 +311,78 @@
   </main>
   <div id="toastCenter" class="toast-center"><i class="fas fa-check-circle text-green-500 text-2xl"></i><span id="toastMessage">Operação realizada</span></div>
 </div>
+
 <script>
 // ==================== CONFIGURAÇÃO DO GOOGLE SHEETS ====================
 // ⚠️ ATENÇÃO: Substitua pela URL do seu Web App do Google Apps Script
 const GOOGLE_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbz-cTJVkrzFzKFJrGHEDKeNsnPgcMoMvV2VJn0sCRU_NY7SX8_Ujg0AScv9EGlcp7PX/exec';
 
-// ==================== CLIENTE CLOUD ====================
+// ==================== CLIENTE CLOUD COM STATUS OFFLINE ====================
 var Cloud = {
   isOnline: true,
   pendingSync: false,
+  lastSyncTime: null,
   
-  updateStatus: function(online) {
+  updateStatus: function(online, syncing) {
     this.isOnline = online;
     var statusDiv = document.getElementById('syncStatus');
     var statusText = document.getElementById('syncText');
+    var syncIcon = document.getElementById('syncIcon');
+    var offlineBanner = document.getElementById('offlineBanner');
+    
     if (statusDiv && statusText) {
-      if (online) {
+      if (syncing) {
+        statusDiv.className = 'sync-status syncing';
+        statusText.textContent = 'Sincronizando...';
+        syncIcon.className = 'fas fa-spinner fa-pulse';
+      } else if (online) {
         statusDiv.className = 'sync-status online';
-        statusText.textContent = 'Cloud sincronizada';
+        statusText.textContent = 'Online ✓';
+        syncIcon.className = 'fas fa-cloud-upload-alt';
       } else {
         statusDiv.className = 'sync-status offline';
-        statusText.textContent = 'Offline - dados locais';
+        statusText.textContent = 'Offline 📴 - dados locais';
+        syncIcon.className = 'fas fa-database';
+      }
+    }
+    
+    if (offlineBanner) {
+      if (!online && !syncing) {
+        offlineBanner.classList.add('show');
+      } else {
+        offlineBanner.classList.remove('show');
       }
     }
   },
   
   syncNow: async function() {
+    this.updateStatus(this.isOnline, true);
     showToast('Sincronizando...');
     await this.syncAll();
+    this.updateStatus(this.isOnline, false);
     showToast('Sincronização concluída!');
   },
   
   syncAll: async function() {
     await this.loadClientesFromCloud();
     await this.loadOSFromCloud();
+    this.lastSyncTime = new Date();
   },
   
   loadClientesFromCloud: async function() {
     try {
-      const response = await fetch(`${GOOGLE_SHEETS_URL}?action=getAll&sheet=Clientes`);
+      const response = await fetch(`${GOOGLE_SHEETS_URL}?action=getAll&sheet=Clientes&t=${Date.now()}`);
       const result = await response.json();
       if (result.success && result.data) {
         State.clients = result.data;
         Clientes.renderTable();
         Clientes.updateStats();
-        this.updateStatus(true);
+        this.updateStatus(true, false);
         return true;
       }
     } catch (error) {
       console.error('Erro ao carregar clientes da cloud:', error);
-      this.updateStatus(false);
+      this.updateStatus(false, false);
       // Carregar do IndexedDB como fallback
       State.clients = await DB.getAll('clientes');
       Clientes.renderTable();
@@ -313,19 +394,19 @@ var Cloud = {
   
   loadOSFromCloud: async function() {
     try {
-      const response = await fetch(`${GOOGLE_SHEETS_URL}?action=getAll&sheet=OS`);
+      const response = await fetch(`${GOOGLE_SHEETS_URL}?action=getAll&sheet=OS&t=${Date.now()}`);
       const result = await response.json();
       if (result.success && result.data) {
         State.osHistory = result.data;
         Historico.render();
         Historico.updateStats();
         Clientes.updateStats();
-        this.updateStatus(true);
+        this.updateStatus(true, false);
         return true;
       }
     } catch (error) {
       console.error('Erro ao carregar OS da cloud:', error);
-      this.updateStatus(false);
+      this.updateStatus(false, false);
       State.osHistory = await DB.getAll('os_history');
       Historico.render();
       Historico.updateStats();
@@ -342,10 +423,7 @@ var Cloud = {
       formData.append('sheet', 'Clientes');
       formData.append('data', JSON.stringify(cliente));
       
-      const response = await fetch(GOOGLE_SHEETS_URL, {
-        method: 'POST',
-        body: formData
-      });
+      const response = await fetch(GOOGLE_SHEETS_URL, { method: 'POST', body: formData });
       const result = await response.json();
       if (result.success) {
         await this.loadClientesFromCloud();
@@ -353,7 +431,8 @@ var Cloud = {
       }
     } catch (error) {
       console.error('Erro ao salvar cliente na cloud:', error);
-      this.updateStatus(false);
+      this.updateStatus(false, false);
+      showToast('⚠️ Sem internet - Cliente salvo LOCALMENTE. Será sincronizado quando a conexão voltar.', true);
     }
     return false;
   },
@@ -365,10 +444,7 @@ var Cloud = {
       formData.append('sheet', 'OS');
       formData.append('data', JSON.stringify(os));
       
-      const response = await fetch(GOOGLE_SHEETS_URL, {
-        method: 'POST',
-        body: formData
-      });
+      const response = await fetch(GOOGLE_SHEETS_URL, { method: 'POST', body: formData });
       const result = await response.json();
       if (result.success) {
         await this.loadOSFromCloud();
@@ -376,7 +452,8 @@ var Cloud = {
       }
     } catch (error) {
       console.error('Erro ao salvar OS na cloud:', error);
-      this.updateStatus(false);
+      this.updateStatus(false, false);
+      showToast('⚠️ Sem internet - OS salva LOCALMENTE. Será sincronizada quando a conexão voltar.', true);
     }
     return false;
   },
@@ -392,13 +469,28 @@ var Cloud = {
       }
     } catch (error) {
       console.error('Erro ao deletar da cloud:', error);
-      this.updateStatus(false);
+      this.updateStatus(false, false);
     }
     return false;
+  },
+  
+  monitorConnection: function() {
+    window.addEventListener('online', async () => {
+      showToast('🟢 Conexão restabelecida! Sincronizando dados...');
+      this.updateStatus(true, true);
+      await this.syncAll();
+      this.updateStatus(true, false);
+      showToast('✅ Dados sincronizados com sucesso!');
+    });
+    
+    window.addEventListener('offline', () => {
+      this.updateStatus(false, false);
+      showToast('🔴 Você está offline. Os dados serão salvos localmente.', true);
+    });
   }
 };
 
-// ==================== DB MODIFICADO PARA SINCronizar ====================
+// ==================== DB (IndexedDB para fallback offline) ====================
 var DB = {
   init: function() { return new Promise(function(resolve, reject) { var req = indexedDB.open('MarliftDB_v6', 1); req.onupgradeneeded = function(e) { var db = e.target.result; if (!db.objectStoreNames.contains('os_history')) db.createObjectStore('os_history', {keyPath: 'numeroOS'}); if (!db.objectStoreNames.contains('clientes')) db.createObjectStore('clientes', {keyPath: 'id'}); if (!db.objectStoreNames.contains('config')) db.createObjectStore('config', {keyPath: 'key'}); }; req.onsuccess = function(e) { State.db = e.target.result; resolve(e.target.result); }; req.onerror = function() { reject('Erro ao abrir banco'); }; }); },
   get: function(storeName, key) { return new Promise(function(resolve, reject) { var tx = State.db.transaction(storeName, 'readonly'); var req = tx.objectStore(storeName).get(key); req.onsuccess = function() { resolve(req.result); }; req.onerror = function() { reject(req.error); }; }); },
@@ -413,7 +505,7 @@ var State = { currentStatus:'abertura', photos:[], fotoHorimetro:null, clients:[
 
 // ==================== FUNÇÕES AUXILIARES ====================
 function $(id) { return document.getElementById(id); }
-function showToast(msg, isError) { var t = $('toastCenter'); if (!t) return; var msgSpan = $('toastMessage'); if (msgSpan) msgSpan.textContent = msg; t.style.borderColor = isError ? 'var(--danger)' : 'var(--success)'; t.classList.add('show'); setTimeout(function() { if (t) t.classList.remove('show'); }, 2500); }
+function showToast(msg, isError) { var t = $('toastCenter'); if (!t) return; var msgSpan = $('toastMessage'); if (msgSpan) msgSpan.textContent = msg; t.style.borderColor = isError ? 'var(--danger)' : 'var(--success)'; t.classList.add('show'); setTimeout(function() { if (t) t.classList.remove('show'); }, 3000); }
 
 // ==================== TIMER ====================
 var Timer = {
@@ -452,6 +544,11 @@ var Fotos = {
 };
 
 // ==================== CHECKLIST ====================
+var Config = {
+  marcas: ["TOYOTA","CLARK","BYD","PALETRANS","LINDE","HYSTER","YALE","CATERPILLAR","KOMATSU","MITSUBISHI","NISSAN","STILL","CROWN","JUNGHEINRICH","TCM","HYUNDAI","DOOSAN","HELI","HANGCHA","LONKING","OUTRA"],
+  checklist: [ { id:'motor', title:'Motor e Componentes', items:[{id:'motor_oleo',label:'Nivel de oleo do motor'},{id:'motor_filtro_oleo',label:'Filtro de oleo'},{id:'motor_filtro_ar',label:'Filtro de ar'},{id:'motor_filtro_comb',label:'Filtro de combustivel'},{id:'motor_correias',label:'Correias'},{id:'motor_radiador',label:'Radiador'}] }, { id:'eletrico', title:'Sistema Eletrico', items:[{id:'eletr_bateria',label:'Bateria'},{id:'eletr_terminais',label:'Terminais'},{id:'eletr_alternador',label:'Alternador'},{id:'eletr_partida',label:'Motor de partida'},{id:'eletr_farois',label:'Farois'},{id:'eletr_buzina',label:'Buzina'}] }, { id:'hidraulico', title:'Sistema Hidraulico', items:[{id:'hidr_oleo',label:'Nivel oleo hidraulico'},{id:'hidr_bomba',label:'Bomba hidraulica'},{id:'hidr_cilindros',label:'Cilindros'},{id:'hidr_vazamentos',label:'Vazamentos'},{id:'hidr_mangueiras',label:'Mangueiras'}] }, { id:'transmissao', title:'Transmissao e Freios', items:[{id:'trans_oleo',label:'Oleo transmissao'},{id:'freio_servico',label:'Freio de servico'},{id:'freio_estac',label:'Freio de estacionamento'},{id:'freio_pastilhas',label:'Pastilhas/Lonas'}] }, { id:'direcao', title:'Direcao', items:[{id:'dir_volante',label:'Volante'},{id:'dir_caixa',label:'Caixa de direcao'},{id:'dir_hidraulica',label:'Direcao hidraulica'}] }, { id:'estrutura', title:'Estrutura e Garfos', items:[{id:'est_mastros',label:'Mastros'},{id:'est_correntes',label:'Correntes'},{id:'est_garfos',label:'Garfos'},{id:'est_roletes',label:'Roletes'}] }, { id:'seguranca', title:'Seguranca', items:[{id:'seg_cinto',label:'Cinto de seguranca'},{id:'seg_extintor',label:'Extintor'},{id:'seg_espelhos',label:'Espelhos'},{id:'seg_alarme',label:'Alarme de re'}] } ]
+};
+
 var Checklist = {
   total: 0, checked: 0,
   render: function() { var container = $('checklistSections'); if (!container) return; container.innerHTML = ''; this.total = 0; var self = this; Config.checklist.forEach(function(section) { self.total += section.items.length; var div = document.createElement('div'); div.className = 'checklist-card p-5 mb-4'; var itemsHtml = section.items.map(function(item) { return '<div class="checklist-item"><label><input type="checkbox" data-check="true" id="' + item.id + '" onchange="Checklist.updateProgress()"><span class="text-sm">' + item.label + '</span></label><select class="form-input w-20 text-xs" id="' + item.id + '_status"><option value="ok">OK</option><option value="atencao">Atencao</option><option value="critico">Critico</option><option value="na">N/A</option></select></div>'; }).join(''); div.innerHTML = '<div class="flex justify-between items-center mb-3"><h3 class="font-display text-xl">' + section.title + '</h3><button type="button" class="btn btn-secondary text-xs" onclick="Checklist.selectAll(\'' + section.id + '\')">Selecionar Todos</button></div><div class="grid grid-cols-1 md:grid-cols-2 gap-2">' + itemsHtml + '</div>'; container.appendChild(div); }); this.updateProgress(); },
@@ -459,7 +556,7 @@ var Checklist = {
   updateProgress: function() { var checkboxes = document.querySelectorAll('input[data-check="true"]'); this.checked = Array.from(checkboxes).filter(function(cb) { return cb.checked; }).length; var pct = this.total > 0 ? Math.round((this.checked / this.total) * 100) : 0; var progText = $('progressText'); if (progText) progText.textContent = pct + '%'; var fill = $('progressFill'); if (fill) fill.style.width = pct + '%'; }
 };
 
-// ==================== CLIENTES (COM CLOUD) ====================
+// ==================== CLIENTES ====================
 var Clientes = {
   load: async function() { await Cloud.loadClientesFromCloud(); },
   updateStats: function() { var totalClientes = State.clients.length; var totalMarcas = 0; State.clients.forEach(function(c) { totalMarcas += (c.equipamentos || []).length; }); var clientesComOS = new Set(); var totalOS = 0; var osAbertas = 0; var osAprovadas = 0; State.osHistory.forEach(function(os) { if (os.cliente) { clientesComOS.add(os.cliente); totalOS++; } if (os.status === 'abertura' || os.status === 'execucao' || os.status === 'finalizacao') osAbertas++; if (os.status === 'aprovada') osAprovadas++; }); $('statTotalClientes').innerText = totalClientes; $('statTotalMarcas').innerText = totalMarcas; $('statClientesComOS').innerText = clientesComOS.size; $('statTotalOSClientes').innerText = totalOS; $('statOSAbertasCliente').innerText = osAbertas; $('statOSAprovadasCliente').innerText = osAprovadas; },
@@ -475,7 +572,7 @@ var Clientes = {
   importCSV: function() { var input = document.createElement('input'); input.type = 'file'; input.accept = '.csv'; input.onchange = function(e) { var file = e.target.files[0]; var reader = new FileReader(); reader.onload = async function(ev) { var lines = ev.target.result.split('\n'); for (var i = 1; i < lines.length; i++) { if (!lines[i].trim()) continue; var parts = lines[i].split(','); if (parts[0]) { var nome = parts[0].replace(/"/g, ''); var cliente = { id: Date.now() + i, nome: nome, cnpj: parts[1] || '', endereco: (parts[2] || '').replace(/"/g, ''), cidade: (parts[3] || '').replace(/"/g, ''), telefone: parts[4] || '', whatsapp: parts[5] || '', email: parts[6] || '', responsavel_nome: parts[7] || '', responsavel_telefone: parts[8] || '', equipamentos: [] }; await Cloud.saveClienteToCloud(cliente); await DB.put('clientes', cliente); State.clients.push(cliente); } } Clientes.renderTable(); Clientes.updateStats(); showToast('Importação concluída'); }; reader.readAsText(file, 'UTF-8'); }; input.click(); }
 };
 
-// ==================== HISTÓRICO (COM CLOUD) ====================
+// ==================== HISTÓRICO ====================
 var Historico = {
   load: async function() { await Cloud.loadOSFromCloud(); },
   updateStats: function() { var total = State.osHistory.length; var statusAbertura = 0, statusExecucao = 0, statusFinalizacao = 0, statusFechada = 0, statusAprovada = 0; var tipoEmergencial = 0, tipoPreventiva = 0, tipoCorretiva = 0, tipoGarantia = 0, tipoNormal = 0, tipoAvaliacao = 0, tipoOrcamento = 0; var esteMes = 0; var now = new Date(); var mesAtual = now.getMonth(), anoAtual = now.getFullYear(); State.osHistory.forEach(function(os) { if (os.status === 'abertura') statusAbertura++; else if (os.status === 'execucao') statusExecucao++; else if (os.status === 'finalizacao') statusFinalizacao++; else if (os.status === 'fechada') statusFechada++; else if (os.status === 'aprovada') statusAprovada++; if (os.tipoChamado === 'emergencial') tipoEmergencial++; else if (os.tipoChamado === 'preventiva') tipoPreventiva++; else if (os.tipoChamado === 'corretiva') tipoCorretiva++; else if (os.tipoChamado === 'garantia') tipoGarantia++; else if (os.tipoChamado === 'normal') tipoNormal++; else if (os.tipoChamado === 'avaliacao') tipoAvaliacao++; else if (os.tipoChamado === 'orcamento') tipoOrcamento++; if (os.dataOS) { var d = new Date(os.dataOS); if (d.getMonth() === mesAtual && d.getFullYear() === anoAtual) esteMes++; } }); $('statTotalOS').innerText = total; $('statStatusAbertura').innerText = statusAbertura; $('statStatusExecucao').innerText = statusExecucao; $('statStatusFinalizacao').innerText = statusFinalizacao; $('statStatusFechada').innerText = statusFechada; $('statStatusAprovada').innerText = statusAprovada; $('statTipoEmergencial').innerText = tipoEmergencial; $('statTipoPreventiva').innerText = tipoPreventiva; $('statTipoCorretiva').innerText = tipoCorretiva; $('statTipoGarantia').innerText = tipoGarantia; $('statTipoNormal').innerText = tipoNormal; $('statTipoAvaliacao').innerText = tipoAvaliacao; $('statTipoOrcamento').innerText = tipoOrcamento; $('statEsteMes').innerText = esteMes; },
@@ -485,15 +582,10 @@ var Historico = {
   delete: async function(num) { if (!confirm('Excluir OS ' + num + '?')) return; await Cloud.deleteFromCloud('OS', 'numeroOS', num); await DB.delete('os_history', num); State.osHistory = State.osHistory.filter(function(o) { return o.numeroOS !== num; }); this.render(); this.updateStats(); Clientes.updateStats(); showToast('OS excluida'); },
   exportCSV: function() { var csv = 'OS,Data,Cliente,Status,Tipo,Horas,Total Geral\n'; State.osHistory.forEach(function(o) { csv += (o.numeroOS || '') + ',' + (o.dataOS || '') + ',"' + (o.cliente || '') + '",' + Utils.formatStatus(o.status) + ',' + (o.tipoChamado || '') + ',' + (o.horasTotais || '') + ',' + (o.totalGeral || '') + '\n'; }); var blob = new Blob([csv], {type: 'text/csv;charset=utf-8;'}); var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'historico_os_' + new Date().toISOString().split('T')[0] + '.csv'; a.click(); showToast('CSV exportado'); },
   importCSV: function() { var input = document.createElement('input'); input.type = 'file'; input.accept = '.csv'; input.onchange = function(e) { var file = e.target.files[0]; var reader = new FileReader(); reader.onload = async function(ev) { var lines = ev.target.result.split('\n'); for (var i = 1; i < lines.length; i++) { if (!lines[i].trim()) continue; var parts = lines[i].split(','); if (parts[0]) { var os = { numeroOS: parts[0] || 'OS-' + Date.now() + '-' + i, dataOS: parts[1] || '', cliente: (parts[2] || '').replace(/"/g, ''), status: (parts[3] || '').toLowerCase() || 'abertura', tipoChamado: (parts[4] || '').toLowerCase() || 'normal', horasTotais: parts[5] || '0h', totalGeral: parts[6] || '00:00', descricaoServico: '', pecasAplicadas: '', pendencias: '', relatoCliente: '', marca: '', modelo: '', numSerie: '', horimetro: '', combustivel: '', whatsappCliente: '', cnpj: '', cidadeCliente: '', endereco: '', tecnico: 'LEONARDO MARTINS', recebedor: '', fotosBase64: [], fotoHorimetro: null, assinaturaTecnico: '', assinaturaCliente: '' }; await Cloud.saveOSToCloud(os); await DB.put('os_history', os); State.osHistory.push(os); } } Historico.render(); Historico.updateStats(); Clientes.updateStats(); showToast('Importação concluída'); }; reader.readAsText(file, 'UTF-8'); }; input.click(); },
-  clear: async function() { if (!confirm('Limpar TODO o historico?')) return; await Cloud.deleteFromCloud('OS', 'all', 'all'); await DB.clear('os_history'); State.osHistory = []; this.render(); this.updateStats(); Clientes.updateStats(); showToast('Historico limpo'); }
+  clear: async function() { if (!confirm('Limpar TODO o historico?')) return; await DB.clear('os_history'); State.osHistory = []; this.render(); this.updateStats(); Clientes.updateStats(); showToast('Historico limpo'); }
 };
 
 // ==================== UTILS ====================
-var Config = {
-  marcas: ["TOYOTA","CLARK","BYD","PALETRANS","LINDE","HYSTER","YALE","CATERPILLAR","KOMATSU","MITSUBISHI","NISSAN","STILL","CROWN","JUNGHEINRICH","TCM","HYUNDAI","DOOSAN","HELI","HANGCHA","LONKING","OUTRA"],
-  checklist: [ { id:'motor', title:'Motor e Componentes', items:[{id:'motor_oleo',label:'Nivel de oleo do motor'},{id:'motor_filtro_oleo',label:'Filtro de oleo'},{id:'motor_filtro_ar',label:'Filtro de ar'},{id:'motor_filtro_comb',label:'Filtro de combustivel'},{id:'motor_correias',label:'Correias'},{id:'motor_radiador',label:'Radiador'}] }, { id:'eletrico', title:'Sistema Eletrico', items:[{id:'eletr_bateria',label:'Bateria'},{id:'eletr_terminais',label:'Terminais'},{id:'eletr_alternador',label:'Alternador'},{id:'eletr_partida',label:'Motor de partida'},{id:'eletr_farois',label:'Farois'},{id:'eletr_buzina',label:'Buzina'}] }, { id:'hidraulico', title:'Sistema Hidraulico', items:[{id:'hidr_oleo',label:'Nivel oleo hidraulico'},{id:'hidr_bomba',label:'Bomba hidraulica'},{id:'hidr_cilindros',label:'Cilindros'},{id:'hidr_vazamentos',label:'Vazamentos'},{id:'hidr_mangueiras',label:'Mangueiras'}] }, { id:'transmissao', title:'Transmissao e Freios', items:[{id:'trans_oleo',label:'Oleo transmissao'},{id:'freio_servico',label:'Freio de servico'},{id:'freio_estac',label:'Freio de estacionamento'},{id:'freio_pastilhas',label:'Pastilhas/Lonas'}] }, { id:'direcao', title:'Direcao', items:[{id:'dir_volante',label:'Volante'},{id:'dir_caixa',label:'Caixa de direcao'},{id:'dir_hidraulica',label:'Direcao hidraulica'}] }, { id:'estrutura', title:'Estrutura e Garfos', items:[{id:'est_mastros',label:'Mastros'},{id:'est_correntes',label:'Correntes'},{id:'est_garfos',label:'Garfos'},{id:'est_roletes',label:'Roletes'}] }, { id:'seguranca', title:'Seguranca', items:[{id:'seg_cinto',label:'Cinto de seguranca'},{id:'seg_extintor',label:'Extintor'},{id:'seg_espelhos',label:'Espelhos'},{id:'seg_alarme',label:'Alarme de re'}] } ]
-};
-
 var Utils = {
   generateOSNumber: function() { var now = new Date(); var yy = now.getFullYear().toString().slice(-2); var mm = String(now.getMonth() + 1).padStart(2, '0'); var os = 'OS-' + yy + mm + '-' + String(Math.floor(Math.random() * 10000)).padStart(4, '0'); var inp = $('numeroOS'); if (inp) inp.value = os; return os; },
   setDefaultDate: function() { var inp = $('dataOS'); if (inp && !inp.value) inp.value = new Date().toISOString().split('T')[0]; },
@@ -507,7 +599,7 @@ var Utils = {
 
 // ==================== APP ====================
 var App = {
-  init: async function() { try { await DB.init(); await Clientes.load(); await Historico.load(); this.populateMarcas(); Checklist.render(); Signature.init(); Fotos.init(); Horas.initListeners(); Utils.setDefaultDate(); this.setupTabs(); this.setupMarcaSelect(); this.setupSearch(); State.currentStatus = 'abertura'; this.updateUI(); var loading = $('loadingOverlay'); if (loading) loading.style.display = 'none'; var container = $('appContainer'); if (container) container.style.display = 'block'; Cloud.syncAll(); } catch (e) { console.error(e); var loading = $('loadingOverlay'); if (loading) loading.innerHTML = '<div class="text-center"><i class="fas fa-exclamation-triangle text-red-500 text-4xl mb-4"></i><p class="text-red-400">Erro ao carregar</p><button onclick="location.reload()" class="btn btn-primary mt-4">Recarregar</button></div>'; } },
+  init: async function() { try { await DB.init(); await Clientes.load(); await Historico.load(); this.populateMarcas(); Checklist.render(); Signature.init(); Fotos.init(); Horas.initListeners(); Utils.setDefaultDate(); this.setupTabs(); this.setupMarcaSelect(); this.setupSearch(); State.currentStatus = 'abertura'; this.updateUI(); var loading = $('loadingOverlay'); if (loading) loading.style.display = 'none'; var container = $('appContainer'); if (container) container.style.display = 'block'; Cloud.monitorConnection(); await Cloud.syncAll(); } catch (e) { console.error(e); var loading = $('loadingOverlay'); if (loading) loading.innerHTML = '<div class="text-center"><i class="fas fa-exclamation-triangle text-red-500 text-4xl mb-4"></i><p class="text-red-400">Erro ao carregar</p><button onclick="location.reload()" class="btn btn-primary mt-4">Recarregar</button></div>'; } },
   populateMarcas: function() { var select = $('marcaSelect'); if (!select) return; select.innerHTML = '<option value="">Selecione</option>'; Config.marcas.forEach(function(m) { select.innerHTML += '<option value="' + m + '">' + m + '</option>'; }); },
   setupMarcaSelect: function() { var select = $('marcaSelect'), div = $('marcaOutraDiv'), input = $('marcaOutra'); if (!select || !div || !input) return; select.addEventListener('change', function() { div.style.display = select.value === 'OUTRA' ? 'block' : 'none'; if (select.value === 'OUTRA') input.focus(); Utils.setVal('marca', select.value === 'OUTRA' ? input.value.toUpperCase() : select.value); }); input.addEventListener('input', function() { Utils.setVal('marca', input.value.toUpperCase()); }); },
   setupTabs: function() { var tabs = document.querySelectorAll('.tab-button'); var contents = document.querySelectorAll('.tab-content'); tabs.forEach(function(tab) { tab.addEventListener('click', function() { var targetId = this.getAttribute('data-tab'); if (!targetId) return; tabs.forEach(function(t) { t.classList.remove('active'); }); contents.forEach(function(c) { c.classList.remove('active'); }); this.classList.add('active'); var target = document.getElementById(targetId); if (target) target.classList.add('active'); }); }); },
