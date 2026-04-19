@@ -3,11 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Marlift Empilhadeiras - OS Profissional v5.5</title>
+  <title>Marlift Empilhadeiras - OS Profissional v6.0 (Cloud)</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
+    /* Estilos iguais aos anteriores - omitido por brevidade */
     :root {
       --bg: #0c0f12;
       --bg-secondary: #141a21;
@@ -87,6 +88,9 @@
     .table-os th, .table-os td { padding: 10px 8px; text-align: left; border-bottom: 1px solid var(--border); }
     .table-os th { background: var(--bg-secondary); font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); }
     .table-os td { vertical-align: middle; }
+    .sync-status { position: fixed; bottom: 20px; right: 20px; background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 8px 16px; font-size: 12px; z-index: 1000; display: flex; align-items: center; gap: 8px; }
+    .sync-status.online { border-color: var(--success); color: var(--success); }
+    .sync-status.offline { border-color: var(--danger); color: var(--danger); }
     @media print { .no-print { display: none !important; } body { background: white; color: black; } }
     @media (max-width: 768px) { .step { font-size: 9px; padding: 8px 4px; } .timer-display { font-size: 1.8rem; } .btn { padding: 8px 12px; font-size: 12px; } .photo-item { width: 100px; height: 100px; } .stat-value { font-size: 1.2rem; } }
   </style>
@@ -94,18 +98,23 @@
 <body>
 <div id="loadingOverlay" class="loading-overlay">
   <div class="spinner"></div>
-  <p class="mt-4 text-[var(--accent)] font-display text-xl">Carregando Sistema...</p>
+  <p class="mt-4 text-[var(--accent)] font-display text-xl">Sincronizando com Cloud...</p>
 </div>
 <div class="min-h-screen" id="appContainer" style="display:none;">
+  <div class="sync-status" id="syncStatus">
+    <i class="fas fa-cloud-upload-alt"></i>
+    <span id="syncText">Sincronizado</span>
+  </div>
   <header class="no-print border-b border-[var(--border)] bg-[var(--bg)]/95 backdrop-blur-sm sticky top-0 z-50">
     <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap justify-between items-center gap-3">
       <div class="flex items-center gap-4">
         <div class="w-12 h-12 bg-gradient-to-br from-[var(--accent)] to-[var(--accent-light)] rounded-xl flex items-center justify-center shadow-lg">
           <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
         </div>
-        <div><h1 class="font-display text-2xl tracking-wide text-[var(--accent)]">MARLIFT EMPILHADEIRAS</h1><p class="text-xs text-[var(--muted)]">Sistema de O.S - v5.5</p></div>
+        <div><h1 class="font-display text-2xl tracking-wide text-[var(--accent)]">MARLIFT EMPILHADEIRAS</h1><p class="text-xs text-[var(--muted)]">Sistema de O.S - v6.0 (Cloud Sync)</p></div>
       </div>
       <div class="flex flex-wrap gap-2">
+        <button onclick="Cloud.syncNow()" class="btn btn-secondary text-sm" id="btnSync"><i class="fas fa-sync-alt"></i> Sincronizar</button>
         <button onclick="App.gerarPreviaPDF()" id="btnPreviaPDF" class="btn btn-primary text-sm" disabled><i class="fas fa-file-pdf"></i> Visualizar PDF</button>
         <button onclick="App.enviarEmailComResumo()" id="btnEnviarEmail" class="btn btn-secondary text-sm" disabled><i class="fas fa-envelope"></i> Enviar E-mail</button>
         <button onclick="App.sendWhatsAppMessage()" class="btn btn-secondary text-sm"><i class="fab fa-whatsapp text-green-500"></i> WhatsApp</button>
@@ -127,7 +136,7 @@
       <button class="tab-button" data-tab="tab-clientes">Clientes</button>
       <button class="tab-button" data-tab="tab-historico">Histórico</button>
     </div>
-    <!-- Tab OS -->
+    <!-- Tab OS (mesmo conteúdo do sistema anterior) -->
     <div id="tab-os" class="tab-content active">
       <div class="checklist-card p-5 mb-5">
         <div class="flex flex-wrap justify-between items-center gap-3 mb-4"><h2 class="font-display text-xl">Informações da O.S</h2><div><span class="status-badge" id="statusBadge">EM ABERTURA</span></div></div>
@@ -244,30 +253,154 @@
   <div id="toastCenter" class="toast-center"><i class="fas fa-check-circle text-green-500 text-2xl"></i><span id="toastMessage">Operação realizada</span></div>
 </div>
 <script>
-// ==================== SISTEMA COMPLETO v5.5 ====================
-var Config = {
-  marcas: ["TOYOTA","CLARK","BYD","PALETRANS","LINDE","HYSTER","YALE","CATERPILLAR","KOMATSU","MITSUBISHI","NISSAN","STILL","CROWN","JUNGHEINRICH","TCM","HYUNDAI","DOOSAN","HELI","HANGCHA","LONKING","OUTRA"],
-  checklist: [ { id:'motor', title:'Motor e Componentes', items:[{id:'motor_oleo',label:'Nivel de oleo do motor'},{id:'motor_filtro_oleo',label:'Filtro de oleo'},{id:'motor_filtro_ar',label:'Filtro de ar'},{id:'motor_filtro_comb',label:'Filtro de combustivel'},{id:'motor_correias',label:'Correias'},{id:'motor_radiador',label:'Radiador'}] }, { id:'eletrico', title:'Sistema Eletrico', items:[{id:'eletr_bateria',label:'Bateria'},{id:'eletr_terminais',label:'Terminais'},{id:'eletr_alternador',label:'Alternador'},{id:'eletr_partida',label:'Motor de partida'},{id:'eletr_farois',label:'Farois'},{id:'eletr_buzina',label:'Buzina'}] }, { id:'hidraulico', title:'Sistema Hidraulico', items:[{id:'hidr_oleo',label:'Nivel oleo hidraulico'},{id:'hidr_bomba',label:'Bomba hidraulica'},{id:'hidr_cilindros',label:'Cilindros'},{id:'hidr_vazamentos',label:'Vazamentos'},{id:'hidr_mangueiras',label:'Mangueiras'}] }, { id:'transmissao', title:'Transmissao e Freios', items:[{id:'trans_oleo',label:'Oleo transmissao'},{id:'freio_servico',label:'Freio de servico'},{id:'freio_estac',label:'Freio de estacionamento'},{id:'freio_pastilhas',label:'Pastilhas/Lonas'}] }, { id:'direcao', title:'Direcao', items:[{id:'dir_volante',label:'Volante'},{id:'dir_caixa',label:'Caixa de direcao'},{id:'dir_hidraulica',label:'Direcao hidraulica'}] }, { id:'estrutura', title:'Estrutura e Garfos', items:[{id:'est_mastros',label:'Mastros'},{id:'est_correntes',label:'Correntes'},{id:'est_garfos',label:'Garfos'},{id:'est_roletes',label:'Roletes'}] }, { id:'seguranca', title:'Seguranca', items:[{id:'seg_cinto',label:'Cinto de seguranca'},{id:'seg_extintor',label:'Extintor'},{id:'seg_espelhos',label:'Espelhos'},{id:'seg_alarme',label:'Alarme de re'}] } ],
-  dbName: 'MarliftDB_v5', dbVersion: 1, photoSize: { width:800, height:600, quality:0.7 }
+// ==================== CONFIGURAÇÃO DO GOOGLE SHEETS ====================
+// ⚠️ ATENÇÃO: Substitua pela URL do seu Web App do Google Apps Script
+const GOOGLE_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbyEN5Cb4Wf5GNtgIL-W71WUzw8_ZCw9D3RqkrOnZPwYOJqHNm7aPSeZzA5A_v9eTclf/exec';
+
+// ==================== CLIENTE CLOUD ====================
+var Cloud = {
+  isOnline: true,
+  pendingSync: false,
+  
+  updateStatus: function(online) {
+    this.isOnline = online;
+    var statusDiv = document.getElementById('syncStatus');
+    var statusText = document.getElementById('syncText');
+    if (statusDiv && statusText) {
+      if (online) {
+        statusDiv.className = 'sync-status online';
+        statusText.textContent = 'Cloud sincronizada';
+      } else {
+        statusDiv.className = 'sync-status offline';
+        statusText.textContent = 'Offline - dados locais';
+      }
+    }
+  },
+  
+  syncNow: async function() {
+    showToast('Sincronizando...');
+    await this.syncAll();
+    showToast('Sincronização concluída!');
+  },
+  
+  syncAll: async function() {
+    await this.loadClientesFromCloud();
+    await this.loadOSFromCloud();
+  },
+  
+  loadClientesFromCloud: async function() {
+    try {
+      const response = await fetch(`${GOOGLE_SHEETS_URL}?action=getAll&sheet=Clientes`);
+      const result = await response.json();
+      if (result.success && result.data) {
+        State.clients = result.data;
+        Clientes.renderTable();
+        Clientes.updateStats();
+        this.updateStatus(true);
+        return true;
+      }
+    } catch (error) {
+      console.error('Erro ao carregar clientes da cloud:', error);
+      this.updateStatus(false);
+      // Carregar do IndexedDB como fallback
+      State.clients = await DB.getAll('clientes');
+      Clientes.renderTable();
+      Clientes.updateStats();
+      return false;
+    }
+    return false;
+  },
+  
+  loadOSFromCloud: async function() {
+    try {
+      const response = await fetch(`${GOOGLE_SHEETS_URL}?action=getAll&sheet=OS`);
+      const result = await response.json();
+      if (result.success && result.data) {
+        State.osHistory = result.data;
+        Historico.render();
+        Historico.updateStats();
+        Clientes.updateStats();
+        this.updateStatus(true);
+        return true;
+      }
+    } catch (error) {
+      console.error('Erro ao carregar OS da cloud:', error);
+      this.updateStatus(false);
+      State.osHistory = await DB.getAll('os_history');
+      Historico.render();
+      Historico.updateStats();
+      Clientes.updateStats();
+      return false;
+    }
+    return false;
+  },
+  
+  saveClienteToCloud: async function(cliente) {
+    try {
+      const formData = new FormData();
+      formData.append('action', 'save');
+      formData.append('sheet', 'Clientes');
+      formData.append('data', JSON.stringify(cliente));
+      
+      const response = await fetch(GOOGLE_SHEETS_URL, {
+        method: 'POST',
+        body: formData
+      });
+      const result = await response.json();
+      if (result.success) {
+        await this.loadClientesFromCloud();
+        return true;
+      }
+    } catch (error) {
+      console.error('Erro ao salvar cliente na cloud:', error);
+      this.updateStatus(false);
+    }
+    return false;
+  },
+  
+  saveOSToCloud: async function(os) {
+    try {
+      const formData = new FormData();
+      formData.append('action', 'save');
+      formData.append('sheet', 'OS');
+      formData.append('data', JSON.stringify(os));
+      
+      const response = await fetch(GOOGLE_SHEETS_URL, {
+        method: 'POST',
+        body: formData
+      });
+      const result = await response.json();
+      if (result.success) {
+        await this.loadOSFromCloud();
+        return true;
+      }
+    } catch (error) {
+      console.error('Erro ao salvar OS na cloud:', error);
+      this.updateStatus(false);
+    }
+    return false;
+  },
+  
+  deleteFromCloud: async function(sheet, key, value) {
+    try {
+      const response = await fetch(`${GOOGLE_SHEETS_URL}?action=delete&sheet=${sheet}&key=${key}&value=${value}`);
+      const result = await response.json();
+      if (result.success) {
+        if (sheet === 'Clientes') await this.loadClientesFromCloud();
+        else await this.loadOSFromCloud();
+        return true;
+      }
+    } catch (error) {
+      console.error('Erro ao deletar da cloud:', error);
+      this.updateStatus(false);
+    }
+    return false;
+  }
 };
 
-var State = { currentStatus:'abertura', photos:[], fotoHorimetro:null, clients:[], osHistory:[], editingClientId:null, hasUnsavedChanges:false, db:null, osNumberGenerated:false };
-
-function $(id) { return document.getElementById(id); }
-
-function showToast(msg, isError) {
-  var t = $('toastCenter');
-  if (!t) return;
-  var msgSpan = $('toastMessage');
-  if (msgSpan) msgSpan.textContent = msg;
-  t.style.borderColor = isError ? 'var(--danger)' : 'var(--success)';
-  t.classList.add('show');
-  setTimeout(function() { if (t) t.classList.remove('show'); }, 2500);
-}
-
-// DB
+// ==================== DB MODIFICADO PARA SINCronizar ====================
 var DB = {
-  init: function() { return new Promise(function(resolve, reject) { var req = indexedDB.open(Config.dbName, Config.dbVersion); req.onupgradeneeded = function(e) { var db = e.target.result; if (!db.objectStoreNames.contains('os_history')) db.createObjectStore('os_history', {keyPath: 'numeroOS'}); if (!db.objectStoreNames.contains('clientes')) db.createObjectStore('clientes', {keyPath: 'id'}); if (!db.objectStoreNames.contains('config')) db.createObjectStore('config', {keyPath: 'key'}); }; req.onsuccess = function(e) { State.db = e.target.result; resolve(e.target.result); }; req.onerror = function() { reject('Erro ao abrir banco'); }; }); },
+  init: function() { return new Promise(function(resolve, reject) { var req = indexedDB.open('MarliftDB_v6', 1); req.onupgradeneeded = function(e) { var db = e.target.result; if (!db.objectStoreNames.contains('os_history')) db.createObjectStore('os_history', {keyPath: 'numeroOS'}); if (!db.objectStoreNames.contains('clientes')) db.createObjectStore('clientes', {keyPath: 'id'}); if (!db.objectStoreNames.contains('config')) db.createObjectStore('config', {keyPath: 'key'}); }; req.onsuccess = function(e) { State.db = e.target.result; resolve(e.target.result); }; req.onerror = function() { reject('Erro ao abrir banco'); }; }); },
   get: function(storeName, key) { return new Promise(function(resolve, reject) { var tx = State.db.transaction(storeName, 'readonly'); var req = tx.objectStore(storeName).get(key); req.onsuccess = function() { resolve(req.result); }; req.onerror = function() { reject(req.error); }; }); },
   getAll: function(storeName) { return new Promise(function(resolve, reject) { var tx = State.db.transaction(storeName, 'readonly'); var req = tx.objectStore(storeName).getAll(); req.onsuccess = function() { resolve(req.result || []); }; req.onerror = function() { reject(req.error); }; }); },
   put: function(storeName, data) { return new Promise(function(resolve, reject) { var tx = State.db.transaction(storeName, 'readwrite'); var req = tx.objectStore(storeName).put(data); req.onsuccess = function() { resolve(req.result); }; req.onerror = function() { reject(req.error); }; }); },
@@ -275,76 +408,32 @@ var DB = {
   clear: function(storeName) { return new Promise(function(resolve, reject) { var tx = State.db.transaction(storeName, 'readwrite'); var req = tx.objectStore(storeName).clear(); req.onsuccess = function() { resolve(); }; req.onerror = function() { reject(req.error); }; }); }
 };
 
-var Utils = {
-  generateOSNumber: async function() { var cfg = await DB.get('config', 'os_counter'); var counter = (cfg ? cfg.value : 0) + 1; var now = new Date(); var yy = now.getFullYear().toString().slice(-2); var mm = String(now.getMonth() + 1).padStart(2, '0'); var os = 'OS-' + yy + mm + '-' + String(counter).padStart(4, '0'); var inp = $('numeroOS'); if (inp) inp.value = os; await DB.put('config', {key: 'os_counter', value: counter}); return os; },
-  setDefaultDate: function() { var inp = $('dataOS'); if (inp && !inp.value) inp.value = new Date().toISOString().split('T')[0]; },
-  getVal: function(id) { var e = $(id); return e ? e.value : ''; },
-  setVal: function(id, v) { var e = $(id); if (e) e.value = v || ''; },
-  formatStatus: function(st) { var map = {abertura:'ABERTURA', execucao:'EM EXECUCAO', finalizacao:'FINALIZANDO', fechada:'FECHADA', aprovada:'APROVADA'}; return map[st] || (st || '').toUpperCase(); },
-  formatTipoChamado: function(tipo) { var map = {normal:'NORMAL', emergencial:'EMERGENCIAL', garantia:'GARANTIA', preventiva:'PREVENTIVA', corretiva:'CORRETIVA', avaliacao:'AVALIAÇÃO', orcamento:'ORÇAMENTO'}; return map[tipo] || tipo.toUpperCase(); },
-  timeDiff: function(s, e) { if (!s || !e) return 0; var sp = s.split(':').map(Number), ep = e.split(':').map(Number); var diff = (ep[0]*60 + ep[1]) - (sp[0]*60 + sp[1]); if (diff < 0) diff += 1440; return diff; },
-  timeToMinutes: function(t) { if (!t) return 0; if (t.indexOf('h') !== -1) return parseInt(t) * 60; var p = t.split(':'); return parseInt(p[0]) * 60 + parseInt(p[1]); }
-};
+// ==================== ESTADO GLOBAL ====================
+var State = { currentStatus:'abertura', photos:[], fotoHorimetro:null, clients:[], osHistory:[], editingClientId:null, hasUnsavedChanges:false, db:null };
 
+// ==================== FUNÇÕES AUXILIARES ====================
+function $(id) { return document.getElementById(id); }
+function showToast(msg, isError) { var t = $('toastCenter'); if (!t) return; var msgSpan = $('toastMessage'); if (msgSpan) msgSpan.textContent = msg; t.style.borderColor = isError ? 'var(--danger)' : 'var(--success)'; t.classList.add('show'); setTimeout(function() { if (t) t.classList.remove('show'); }, 2500); }
+
+// ==================== TIMER ====================
 var Timer = {
   interval: null, seconds: 0, running: false, paused: false,
   control: function(a) { if (a === 'start') this.start(); else if (a === 'pause') this.pause(); else if (a === 'stop') this.stop(); },
-  start: function() { 
-    if (this.running && !this.paused) return; 
-    if (this.paused) { 
-      if (!Utils.getVal('horaAlmocoRetorno')) { 
-        var n = new Date(); 
-        Utils.setVal('horaAlmocoRetorno', n.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'})); 
-      }
-      this.paused = false; 
-      this.running = true; 
-    } else { 
-      this.running = true; 
-      this.paused = false; 
-      if (this.seconds === 0) this.reset(); 
-      if (!Utils.getVal('horaInicio')) { 
-        var n = new Date(); 
-        Utils.setVal('horaInicio', n.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'})); 
-      } 
-    } 
-    if (this.interval) clearInterval(this.interval); 
-    var self = this; 
-    this.interval = setInterval(function() { 
-      if (!self.paused && self.running) { 
-        self.seconds++; 
-        self.updateDisplay(); 
-      } 
-    }, 1000); 
-  },
-  pause: function() { 
-    if (!this.running) return; 
-    this.paused = true; 
-    if (!Utils.getVal('horaAlmocoSaida')) { 
-      var n = new Date(); 
-      Utils.setVal('horaAlmocoSaida', n.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'})); 
-    } 
-  },
-  stop: function() { 
-    if (!this.running) return; 
-    clearInterval(this.interval); 
-    this.running = false; 
-    this.paused = false; 
-    if (!Utils.getVal('horaTermino')) { 
-      var n = new Date(); 
-      Utils.setVal('horaTermino', n.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'})); 
-    } 
-    Horas.calcular(); 
-  },
+  start: function() { if (this.running && !this.paused) return; if (this.paused) { if (!Utils.getVal('horaAlmocoRetorno')) { var n = new Date(); Utils.setVal('horaAlmocoRetorno', n.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'})); } this.paused = false; this.running = true; } else { this.running = true; this.paused = false; if (this.seconds === 0) this.reset(); if (!Utils.getVal('horaInicio')) { var n = new Date(); Utils.setVal('horaInicio', n.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'})); } } if (this.interval) clearInterval(this.interval); var self = this; this.interval = setInterval(function() { if (!self.paused && self.running) { self.seconds++; self.updateDisplay(); } }, 1000); },
+  pause: function() { if (!this.running) return; this.paused = true; if (!Utils.getVal('horaAlmocoSaida')) { var n = new Date(); Utils.setVal('horaAlmocoSaida', n.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'})); } },
+  stop: function() { if (!this.running) return; clearInterval(this.interval); this.running = false; this.paused = false; if (!Utils.getVal('horaTermino')) { var n = new Date(); Utils.setVal('horaTermino', n.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'})); } Horas.calcular(); },
   reset: function() { this.seconds = 0; var d = $('timerDisplay'); if (d) d.textContent = '00:00:00'; },
   updateDisplay: function() { var h = Math.floor(this.seconds/3600), m = Math.floor((this.seconds%3600)/60), s = this.seconds%60; var d = $('timerDisplay'); if (d) d.textContent = String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0'); }
 };
 
+// ==================== HORAS ====================
 var Horas = {
   calcular: function() { var i = Utils.getVal('horaInicio'), t = Utils.getVal('horaTermino'); if (!i || !t) return 0; var total = Utils.timeDiff(i, t); var saida = Utils.getVal('horaAlmocoSaida'), retorno = Utils.getVal('horaAlmocoRetorno'); if (saida && retorno) total -= Utils.timeDiff(saida, retorno); var horas = Math.ceil(total / 60); if (horas < 1) horas = 1; Utils.setVal('horasTotais', horas + 'h'); this.updateTotal(); return horas; },
   updateTotal: function() { var hs = Utils.getVal('horasTotais'); var min = 0; if (hs) { var m = hs.match(/(\d+)h/); if (m) min = parseInt(m[1]) * 60; } var extra = Utils.timeToMinutes(Utils.getVal('horasExtras')), not = Utils.timeToMinutes(Utils.getVal('adicionalNoturno')); var total = min + extra + not; var h = Math.floor(total / 60), m = total % 60; Utils.setVal('totalGeral', String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')); },
   initListeners: function() { var self = this; ['horaInicio','horaTermino','horaAlmocoSaida','horaAlmocoRetorno'].forEach(function(id) { var el = $(id); if (el) el.addEventListener('change', function() { self.calcular(); }); }); var extras = $('horasExtras'); if (extras) extras.addEventListener('input', function() { self.updateTotal(); }); var noturno = $('adicionalNoturno'); if (noturno) noturno.addEventListener('input', function() { self.updateTotal(); }); }
 };
 
+// ==================== ASSINATURA ====================
 var Signature = {
   canvases: {}, drawing: {tec:false, cli:false},
   init: function() { this.canvases.tec = $('sigTecnicoCanvas'); this.canvases.cli = $('sigClienteCanvas'); this.setupCanvas('tec'); this.setupCanvas('cli'); this.clear('tec'); this.clear('cli'); },
@@ -354,13 +443,15 @@ var Signature = {
   loadFromData: function(who, dataUrl) { if (!dataUrl) return; var canvas = this.canvases[who]; if (!canvas) return; var ctx = canvas.getContext('2d'); var img = new Image(); img.onload = function() { ctx.clearRect(0, 0, canvas.width, canvas.height); ctx.drawImage(img, 0, 0); Utils.setVal(who === 'tec' ? 'assinaturaTecnicoData' : 'assinaturaClienteData', dataUrl); }; img.src = dataUrl; }
 };
 
+// ==================== FOTOS ====================
 var Fotos = {
-  compress: function(b64) { return new Promise(function(resolve, reject) { var img = new Image(); img.src = b64; img.onload = function() { var canvas = document.createElement('canvas'); var w = img.width, h = img.height; var tw = Config.photoSize.width, th = Config.photoSize.height; var ratio = Math.min(tw / w, th / h); w = Math.round(w * ratio); h = Math.round(h * ratio); canvas.width = w; canvas.height = h; var ctx = canvas.getContext('2d'); ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, w, h); ctx.drawImage(img, 0, 0, w, h); resolve(canvas.toDataURL('image/jpeg', Config.photoSize.quality)); }; img.onerror = function() { reject(new Error('Falha ao carregar')); }; }); },
+  compress: function(b64) { return new Promise(function(resolve, reject) { var img = new Image(); img.src = b64; img.onload = function() { var canvas = document.createElement('canvas'); var w = img.width, h = img.height; var tw = 800, th = 600, ratio = Math.min(tw / w, th / h); w = Math.round(w * ratio); h = Math.round(h * ratio); canvas.width = w; canvas.height = h; var ctx = canvas.getContext('2d'); ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, w, h); ctx.drawImage(img, 0, 0, w, h); resolve(canvas.toDataURL('image/jpeg', 0.7)); }; img.onerror = function() { reject(new Error('Falha ao carregar')); }; }); },
   init: function() { var self = this; var fotoHorimetroInput = $('fotoHorimetroInput'); if (fotoHorimetroInput) { fotoHorimetroInput.addEventListener('change', async function(e) { var file = e.target.files[0]; if (file) { var reader = new FileReader(); reader.onload = async function(ev) { try { State.fotoHorimetro = await self.compress(ev.target.result); var preview = $('fotoHorimetroPreview'); if (preview) preview.innerHTML = '<div class="photo-item"><img src="' + State.fotoHorimetro + '"><div class="photo-remove" onclick="Fotos.removeHorimetro()">x</div></div>'; State.hasUnsavedChanges = true; showToast('Foto carregada'); } catch (err) { showToast('Erro ao processar', true); } }; reader.readAsDataURL(file); } }); } var fotosServico = $('fotosServico'); if (fotosServico) { fotosServico.addEventListener('change', async function(e) { var files = Array.from(e.target.files); if (State.photos.length + files.length > 4) { showToast('Máximo de 4 fotos.', true); return; } var preview = $('fotosPreview'); for (var i = 0; i < files.length; i++) { var file = files[i]; var reader = new FileReader(); await new Promise(function(resolve) { reader.onload = async function(ev) { try { var compressed = await self.compress(ev.target.result); State.photos.push(compressed); if (preview) { var div = document.createElement('div'); div.className = 'photo-item'; div.innerHTML = '<img src="' + compressed + '"><div class="photo-remove" onclick="Fotos.remove(this)">x</div>'; preview.appendChild(div); } } catch (err) { console.error(err); } resolve(); }; reader.readAsDataURL(file); }); } fotosServico.value = ''; State.hasUnsavedChanges = true; }); } },
   removeHorimetro: function() { State.fotoHorimetro = null; var inp = $('fotoHorimetroInput'); if (inp) inp.value = ''; var preview = $('fotoHorimetroPreview'); if (preview) preview.innerHTML = ''; },
   remove: function(el) { var container = el.parentNode.parentNode; var idx = Array.from(container.children).indexOf(el.parentNode); if (idx !== -1) { State.photos.splice(idx, 1); el.parentNode.remove(); } }
 };
 
+// ==================== CHECKLIST ====================
 var Checklist = {
   total: 0, checked: 0,
   render: function() { var container = $('checklistSections'); if (!container) return; container.innerHTML = ''; this.total = 0; var self = this; Config.checklist.forEach(function(section) { self.total += section.items.length; var div = document.createElement('div'); div.className = 'checklist-card p-5 mb-4'; var itemsHtml = section.items.map(function(item) { return '<div class="checklist-item"><label><input type="checkbox" data-check="true" id="' + item.id + '" onchange="Checklist.updateProgress()"><span class="text-sm">' + item.label + '</span></label><select class="form-input w-20 text-xs" id="' + item.id + '_status"><option value="ok">OK</option><option value="atencao">Atencao</option><option value="critico">Critico</option><option value="na">N/A</option></select></div>'; }).join(''); div.innerHTML = '<div class="flex justify-between items-center mb-3"><h3 class="font-display text-xl">' + section.title + '</h3><button type="button" class="btn btn-secondary text-xs" onclick="Checklist.selectAll(\'' + section.id + '\')">Selecionar Todos</button></div><div class="grid grid-cols-1 md:grid-cols-2 gap-2">' + itemsHtml + '</div>'; container.appendChild(div); }); this.updateProgress(); },
@@ -368,48 +459,68 @@ var Checklist = {
   updateProgress: function() { var checkboxes = document.querySelectorAll('input[data-check="true"]'); this.checked = Array.from(checkboxes).filter(function(cb) { return cb.checked; }).length; var pct = this.total > 0 ? Math.round((this.checked / this.total) * 100) : 0; var progText = $('progressText'); if (progText) progText.textContent = pct + '%'; var fill = $('progressFill'); if (fill) fill.style.width = pct + '%'; }
 };
 
+// ==================== CLIENTES (COM CLOUD) ====================
 var Clientes = {
-  load: async function() { State.clients = await DB.getAll('clientes'); this.renderTable(); this.updateStats(); },
+  load: async function() { await Cloud.loadClientesFromCloud(); },
   updateStats: function() { var totalClientes = State.clients.length; var totalMarcas = 0; State.clients.forEach(function(c) { totalMarcas += (c.equipamentos || []).length; }); var clientesComOS = new Set(); var totalOS = 0; var osAbertas = 0; var osAprovadas = 0; State.osHistory.forEach(function(os) { if (os.cliente) { clientesComOS.add(os.cliente); totalOS++; } if (os.status === 'abertura' || os.status === 'execucao' || os.status === 'finalizacao') osAbertas++; if (os.status === 'aprovada') osAprovadas++; }); $('statTotalClientes').innerText = totalClientes; $('statTotalMarcas').innerText = totalMarcas; $('statClientesComOS').innerText = clientesComOS.size; $('statTotalOSClientes').innerText = totalOS; $('statOSAbertasCliente').innerText = osAbertas; $('statOSAprovadasCliente').innerText = osAprovadas; },
-  renderTable: function() { var tbody = $('cad_tableBody'); if (!tbody) return; tbody.innerHTML = ''; State.clients.forEach(function(c) { var row = tbody.insertRow(); var marcasLista = (c.equipamentos || []).map(function(eq) { return eq.marca; }).join(', '); row.innerHTML = '<td class="p-2 font-medium">' + c.nome + '</td><td class="p-2">' + (c.cidade || '-') + '</td><td class="p-2">' + (marcasLista || '-') + '</td><td class="p-2"><button onclick="Clientes.select(' + c.id + ')" class="btn btn-primary text-xs py-1 px-2">Selecionar</button> <i class="fas fa-edit text-blue-400 cursor-pointer ml-2" onclick="Clientes.edit(' + c.id + ')"></i> <i class="fas fa-trash text-red-400 cursor-pointer ml-2" onclick="Clientes.delete(' + c.id + ')"></i></td>'; }); },
+  renderTable: function() { var tbody = $('cad_tableBody'); if (!tbody) return; tbody.innerHTML = ''; State.clients.forEach(function(c) { var row = tbody.insertRow(); var marcasLista = (c.equipamentos || []).map(function(eq) { return eq.marca; }).join(', '); row.innerHTML = '<td class="p-2 font-medium">' + (c.nome || '') + '</td><td class="p-2">' + (c.cidade || '-') + '</td><td class="p-2">' + (marcasLista || '-') + '</td><td class="p-2"><button onclick="Clientes.select(' + c.id + ')" class="btn btn-primary text-xs py-1 px-2">Selecionar</button> <i class="fas fa-edit text-blue-400 cursor-pointer ml-2" onclick="Clientes.edit(' + c.id + ')"></i> <i class="fas fa-trash text-red-400 cursor-pointer ml-2" onclick="Clientes.delete(' + c.id + ')"></i></td>'; }); },
   addEquipField: function(marca, modelo, serie, qtd, combustivel) { marca = marca || ''; modelo = modelo || ''; serie = serie || ''; qtd = qtd || 1; combustivel = combustivel || ''; var container = $('equipamentosList'); if (!container) return; var div = document.createElement('div'); div.className = 'equip-item'; var options = Config.marcas.map(function(m) { return '<option value="' + m + '"' + (marca === m ? ' selected' : '') + '>' + m + '</option>'; }).join(''); div.innerHTML = '<select class="form-input w-24 equip-marca">' + options + '<option value="OUTRA">OUTRA</option></select><div class="outra-marca-container" style="display:none"><input type="text" placeholder="Outra marca" class="form-input w-24 outra-marca"></div><input type="text" placeholder="Modelo" class="form-input w-24 equip-modelo" value="' + modelo + '"><input type="text" placeholder="Serie" class="form-input w-24 equip-serie" value="' + serie + '"><input type="number" placeholder="Qtd" class="form-input w-20 equip-qtd" value="' + qtd + '"><select class="form-input w-28 equip-combustivel"><option value="">Combustível</option><option value="eletrico" ' + (combustivel === 'eletrico' ? 'selected' : '') + '>Elétrico</option><option value="diesel" ' + (combustivel === 'diesel' ? 'selected' : '') + '>Diesel</option><option value="gasolina" ' + (combustivel === 'gasolina' ? 'selected' : '') + '>Gasolina</option><option value="glp" ' + (combustivel === 'glp' ? 'selected' : '') + '>GLP</option></select><button type="button" class="text-red-500" onclick="this.parentElement.remove()"><i class="fas fa-trash"></i></button>'; container.appendChild(div); var select = div.querySelector('.equip-marca'); var outraDiv = div.querySelector('.outra-marca-container'); select.addEventListener('change', function() { outraDiv.style.display = select.value === 'OUTRA' ? 'block' : 'none'; }); if (marca && Config.marcas.indexOf(marca) === -1) { select.value = 'OUTRA'; div.querySelector('.outra-marca').value = marca; outraDiv.style.display = 'block'; } },
-  save: async function() { var nome = Utils.getVal('cad_nome').trim(); if (!nome) { showToast('Nome do cliente obrigatório', true); return; } var equipamentos = []; var container = $('equipamentosList'); if (container) { container.querySelectorAll('.equip-item').forEach(function(item) { var marca = item.querySelector('.equip-marca').value; var outra = item.querySelector('.outra-marca') ? item.querySelector('.outra-marca').value : ''; equipamentos.push({ marca: marca === 'OUTRA' ? outra.toUpperCase() : marca, modelo: item.querySelector('.equip-modelo').value, serie: item.querySelector('.equip-serie').value, qtd: parseInt(item.querySelector('.equip-qtd').value) || 1, combustivel: item.querySelector('.equip-combustivel').value }); }); } var cliente = { id: State.editingClientId || Date.now(), nome: nome, cnpj: Utils.getVal('cad_cnpj'), endereco: Utils.getVal('cad_endereco'), cidade: Utils.getVal('cad_cidade'), telefone: Utils.getVal('cad_telefone'), whatsapp: Utils.getVal('cad_whatsapp'), email: Utils.getVal('cad_email'), responsavel_nome: Utils.getVal('cad_responsavel_nome'), responsavel_telefone: Utils.getVal('cad_responsavel_telefone'), equipamentos: equipamentos }; await DB.put('clientes', cliente); if (State.editingClientId) { var idx = State.clients.findIndex(function(c) { return c.id === State.editingClientId; }); if (idx >= 0) State.clients[idx] = cliente; State.editingClientId = null; var cancelBtn = $('cad_btnCancelar'); if (cancelBtn) cancelBtn.style.display = 'none'; } else { State.clients.push(cliente); } this.renderTable(); this.clearForm(); this.updateStats(); showToast('Cliente salvo'); },
+  save: async function() { var nome = Utils.getVal('cad_nome').trim(); if (!nome) { showToast('Nome do cliente obrigatório', true); return; } var equipamentos = []; var container = $('equipamentosList'); if (container) { container.querySelectorAll('.equip-item').forEach(function(item) { var marca = item.querySelector('.equip-marca').value; var outra = item.querySelector('.outra-marca') ? item.querySelector('.outra-marca').value : ''; equipamentos.push({ marca: marca === 'OUTRA' ? outra.toUpperCase() : marca, modelo: item.querySelector('.equip-modelo').value, serie: item.querySelector('.equip-serie').value, qtd: parseInt(item.querySelector('.equip-qtd').value) || 1, combustivel: item.querySelector('.equip-combustivel').value }); }); } var cliente = { id: State.editingClientId || Date.now(), nome: nome, cnpj: Utils.getVal('cad_cnpj'), endereco: Utils.getVal('cad_endereco'), cidade: Utils.getVal('cad_cidade'), telefone: Utils.getVal('cad_telefone'), whatsapp: Utils.getVal('cad_whatsapp'), email: Utils.getVal('cad_email'), responsavel_nome: Utils.getVal('cad_responsavel_nome'), responsavel_telefone: Utils.getVal('cad_responsavel_telefone'), equipamentos: equipamentos }; await Cloud.saveClienteToCloud(cliente); await DB.put('clientes', cliente); if (State.editingClientId) { var idx = State.clients.findIndex(function(c) { return c.id === State.editingClientId; }); if (idx >= 0) State.clients[idx] = cliente; State.editingClientId = null; var cancelBtn = $('cad_btnCancelar'); if (cancelBtn) cancelBtn.style.display = 'none'; } else { State.clients.push(cliente); } this.renderTable(); this.clearForm(); this.updateStats(); showToast('Cliente salvo e sincronizado'); },
   select: function(id) { var c = State.clients.find(function(c) { return c.id === id; }); if (!c) return; Utils.setVal('cliente', c.nome); Utils.setVal('cnpj', c.cnpj); Utils.setVal('cidadeCliente', c.cidade); Utils.setVal('endereco', c.endereco); Utils.setVal('whatsappCliente', c.whatsapp); if (c.equipamentos && c.equipamentos.length) { var eq = c.equipamentos[0]; var select = $('marcaSelect'); if (select) { if (Config.marcas.indexOf(eq.marca) !== -1) { select.value = eq.marca; var outraDiv = $('marcaOutraDiv'); if (outraDiv) outraDiv.style.display = 'none'; } else if (eq.marca) { select.value = 'OUTRA'; Utils.setVal('marcaOutra', eq.marca); var outraDiv = $('marcaOutraDiv'); if (outraDiv) outraDiv.style.display = 'block'; } } Utils.setVal('modelo', eq.modelo); Utils.setVal('numSerie', eq.serie); if (eq.combustivel) Utils.setVal('combustivel', eq.combustivel); } showToast('Cliente carregado'); var tabOsBtn = document.querySelector('.tab-button[data-tab="tab-os"]'); if (tabOsBtn) tabOsBtn.click(); },
   edit: function(id) { var c = State.clients.find(function(c) { return c.id === id; }); if (!c) return; State.editingClientId = id; Utils.setVal('cad_nome', c.nome); Utils.setVal('cad_cnpj', c.cnpj); Utils.setVal('cad_endereco', c.endereco); Utils.setVal('cad_cidade', c.cidade); Utils.setVal('cad_telefone', c.telefone); Utils.setVal('cad_whatsapp', c.whatsapp); Utils.setVal('cad_email', c.email || ''); Utils.setVal('cad_responsavel_nome', c.responsavel_nome || ''); Utils.setVal('cad_responsavel_telefone', c.responsavel_telefone || ''); var container = $('equipamentosList'); if (container) container.innerHTML = ''; if (c.equipamentos && c.equipamentos.length) { c.equipamentos.forEach(function(eq) { Clientes.addEquipField(eq.marca, eq.modelo, eq.serie, eq.qtd, eq.combustivel); }); } var cancelBtn = $('cad_btnCancelar'); if (cancelBtn) cancelBtn.style.display = 'inline-flex'; showToast('Editando cliente'); },
-  delete: async function(id) { if (!confirm('Excluir este cliente?')) return; await DB.delete('clientes', id); State.clients = State.clients.filter(function(c) { return c.id !== id; }); this.renderTable(); this.updateStats(); showToast('Cliente excluido'); },
+  delete: async function(id) { if (!confirm('Excluir este cliente?')) return; await Cloud.deleteFromCloud('Clientes', 'id', id); await DB.delete('clientes', id); State.clients = State.clients.filter(function(c) { return c.id !== id; }); this.renderTable(); this.updateStats(); showToast('Cliente excluido'); },
   cancelEdit: function() { State.editingClientId = null; this.clearForm(); var cancelBtn = $('cad_btnCancelar'); if (cancelBtn) cancelBtn.style.display = 'none'; },
   clearForm: function() { ['cad_nome','cad_cnpj','cad_endereco','cad_cidade','cad_telefone','cad_whatsapp','cad_email','cad_responsavel_nome','cad_responsavel_telefone'].forEach(function(id) { Utils.setVal(id, ''); }); var container = $('equipamentosList'); if (container) container.innerHTML = ''; },
   exportCSV: function() { var csv = "Nome,CNPJ,Endereco,Cidade,Telefone,WhatsApp,Email,Responsavel,TelefoneResponsavel,Marcas\n"; State.clients.forEach(function(c) { var marcasLista = (c.equipamentos || []).map(function(eq) { return eq.marca; }).join('; '); csv += '"' + c.nome + '",' + (c.cnpj || '') + ',"' + (c.endereco || '') + '","' + (c.cidade || '') + '",' + (c.telefone || '') + ',' + (c.whatsapp || '') + ',' + (c.email || '') + ',' + (c.responsavel_nome || '') + ',' + (c.responsavel_telefone || '') + ',"' + marcasLista + '"\n'; }); var blob = new Blob([csv], {type: 'text/csv;charset=utf-8;'}); var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'clientes_' + new Date().toISOString().split('T')[0] + '.csv'; a.click(); showToast('Clientes exportados'); },
-  importCSV: function() { var input = document.createElement('input'); input.type = 'file'; input.accept = '.csv'; input.onchange = function(e) { var file = e.target.files[0]; var reader = new FileReader(); reader.onload = async function(ev) { var lines = ev.target.result.split('\n'); for (var i = 1; i < lines.length; i++) { if (!lines[i].trim()) continue; var parts = lines[i].split(','); if (parts[0]) { var nome = parts[0].replace(/"/g, ''); var cliente = { id: Date.now() + i, nome: nome, cnpj: parts[1] || '', endereco: (parts[2] || '').replace(/"/g, ''), cidade: (parts[3] || '').replace(/"/g, ''), telefone: parts[4] || '', whatsapp: parts[5] || '', email: parts[6] || '', responsavel_nome: parts[7] || '', responsavel_telefone: parts[8] || '', equipamentos: [] }; await DB.put('clientes', cliente); State.clients.push(cliente); } } Clientes.renderTable(); Clientes.updateStats(); showToast('Importação concluída'); }; reader.readAsText(file, 'UTF-8'); }; input.click(); }
+  importCSV: function() { var input = document.createElement('input'); input.type = 'file'; input.accept = '.csv'; input.onchange = function(e) { var file = e.target.files[0]; var reader = new FileReader(); reader.onload = async function(ev) { var lines = ev.target.result.split('\n'); for (var i = 1; i < lines.length; i++) { if (!lines[i].trim()) continue; var parts = lines[i].split(','); if (parts[0]) { var nome = parts[0].replace(/"/g, ''); var cliente = { id: Date.now() + i, nome: nome, cnpj: parts[1] || '', endereco: (parts[2] || '').replace(/"/g, ''), cidade: (parts[3] || '').replace(/"/g, ''), telefone: parts[4] || '', whatsapp: parts[5] || '', email: parts[6] || '', responsavel_nome: parts[7] || '', responsavel_telefone: parts[8] || '', equipamentos: [] }; await Cloud.saveClienteToCloud(cliente); await DB.put('clientes', cliente); State.clients.push(cliente); } } Clientes.renderTable(); Clientes.updateStats(); showToast('Importação concluída'); }; reader.readAsText(file, 'UTF-8'); }; input.click(); }
 };
 
+// ==================== HISTÓRICO (COM CLOUD) ====================
 var Historico = {
-  load: async function() { State.osHistory = await DB.getAll('os_history'); this.render(); this.updateStats(); Clientes.updateStats(); },
+  load: async function() { await Cloud.loadOSFromCloud(); },
   updateStats: function() { var total = State.osHistory.length; var statusAbertura = 0, statusExecucao = 0, statusFinalizacao = 0, statusFechada = 0, statusAprovada = 0; var tipoEmergencial = 0, tipoPreventiva = 0, tipoCorretiva = 0, tipoGarantia = 0, tipoNormal = 0, tipoAvaliacao = 0, tipoOrcamento = 0; var esteMes = 0; var now = new Date(); var mesAtual = now.getMonth(), anoAtual = now.getFullYear(); State.osHistory.forEach(function(os) { if (os.status === 'abertura') statusAbertura++; else if (os.status === 'execucao') statusExecucao++; else if (os.status === 'finalizacao') statusFinalizacao++; else if (os.status === 'fechada') statusFechada++; else if (os.status === 'aprovada') statusAprovada++; if (os.tipoChamado === 'emergencial') tipoEmergencial++; else if (os.tipoChamado === 'preventiva') tipoPreventiva++; else if (os.tipoChamado === 'corretiva') tipoCorretiva++; else if (os.tipoChamado === 'garantia') tipoGarantia++; else if (os.tipoChamado === 'normal') tipoNormal++; else if (os.tipoChamado === 'avaliacao') tipoAvaliacao++; else if (os.tipoChamado === 'orcamento') tipoOrcamento++; if (os.dataOS) { var d = new Date(os.dataOS); if (d.getMonth() === mesAtual && d.getFullYear() === anoAtual) esteMes++; } }); $('statTotalOS').innerText = total; $('statStatusAbertura').innerText = statusAbertura; $('statStatusExecucao').innerText = statusExecucao; $('statStatusFinalizacao').innerText = statusFinalizacao; $('statStatusFechada').innerText = statusFechada; $('statStatusAprovada').innerText = statusAprovada; $('statTipoEmergencial').innerText = tipoEmergencial; $('statTipoPreventiva').innerText = tipoPreventiva; $('statTipoCorretiva').innerText = tipoCorretiva; $('statTipoGarantia').innerText = tipoGarantia; $('statTipoNormal').innerText = tipoNormal; $('statTipoAvaliacao').innerText = tipoAvaliacao; $('statTipoOrcamento').innerText = tipoOrcamento; $('statEsteMes').innerText = esteMes; },
   render: function() { var search = Utils.getVal('historicoSearch').toLowerCase(); var tipo = Utils.getVal('historicoFiltroTipo'); var statusFiltro = Utils.getVal('historicoFiltroStatus'); var filtered = State.osHistory.filter(function(os) { var matchSearch = !search || (os.numeroOS && os.numeroOS.toLowerCase().indexOf(search) !== -1) || (os.cliente && os.cliente.toLowerCase().indexOf(search) !== -1); var matchTipo = !tipo || os.tipoChamado === tipo; var matchStatus = !statusFiltro || os.status === statusFiltro; return matchSearch && matchTipo && matchStatus; }); var tbody = $('historicoTableBody'), empty = $('historicoEmpty'); if (!tbody) return; tbody.innerHTML = ''; if (filtered.length === 0) { if (empty) empty.classList.remove('hidden'); return; } if (empty) empty.classList.add('hidden'); filtered.forEach(function(os) { var row = tbody.insertRow(); var statusClass = 'status-' + (os.status || 'abertura'); var statusText = Utils.formatStatus(os.status); row.innerHTML = '<td class="font-mono font-bold">' + (os.numeroOS || '-') + '</td><td class="p-2">' + (os.dataOS || '-') + '</td><td class="font-medium">' + (os.cliente || '-').toUpperCase() + '</td><td class="p-2"><span class="status-badge ' + statusClass + '">' + statusText + '</span></td><td class="font-mono font-bold text-[var(--success)]">' + (os.horasTotais || '-') + '</td><td class="p-2"><button onclick="Historico.view(\'' + os.numeroOS + '\')" class="text-blue-400"><i class="fas fa-eye"></i></button> <button onclick="Historico.edit(\'' + os.numeroOS + '\')" class="text-orange-400 ml-2"><i class="fas fa-edit"></i></button> <button onclick="Historico.delete(\'' + os.numeroOS + '\')" class="text-red-400 ml-2"><i class="fas fa-trash"></i></button></td>'; }); },
-  view: async function(num) { var os = await DB.get('os_history', num); if (!os) return; State.currentStatus = os.status || 'abertura'; document.querySelectorAll('#tab-os input, #tab-os select, #tab-os textarea').forEach(function(el) { if (el.id && el.type !== 'file') el.value = ''; }); for (var key in os) { if (['fotosBase64','fotoHorimetro','assinaturaTecnico','assinaturaCliente'].indexOf(key) === -1) Utils.setVal(key, os[key]); } if (os.fotoHorimetro) { State.fotoHorimetro = os.fotoHorimetro; var preview = $('fotoHorimetroPreview'); if (preview) preview.innerHTML = '<div class="photo-item"><img src="' + os.fotoHorimetro + '"><div class="photo-remove" onclick="Fotos.removeHorimetro()">x</div></div>'; } else Fotos.removeHorimetro(); if (os.fotosBase64 && os.fotosBase64.length) { State.photos = os.fotosBase64; var preview = $('fotosPreview'); if (preview) preview.innerHTML = ''; os.fotosBase64.forEach(function(src) { if (preview) { var div = document.createElement('div'); div.className = 'photo-item'; div.innerHTML = '<img src="' + src + '"><div class="photo-remove" onclick="Fotos.remove(this)">x</div>'; preview.appendChild(div); } }); } else { State.photos = []; var preview = $('fotosPreview'); if (preview) preview.innerHTML = ''; } Signature.loadFromData('tec', os.assinaturaTecnico); Signature.loadFromData('cli', os.assinaturaCliente); document.querySelectorAll('input[data-check="true"]').forEach(function(cb) { cb.checked = os[cb.id] === true; }); App.updateUI(); showToast('OS carregada'); var tabOsBtn = document.querySelector('.tab-button[data-tab="tab-os"]'); if (tabOsBtn) tabOsBtn.click(); },
+  view: async function(num) { var os = State.osHistory.find(function(o) { return o.numeroOS === num; }); if (!os) return; State.currentStatus = os.status || 'abertura'; document.querySelectorAll('#tab-os input, #tab-os select, #tab-os textarea').forEach(function(el) { if (el.id && el.type !== 'file') el.value = ''; }); for (var key in os) { if (['fotosBase64','fotoHorimetro','assinaturaTecnico','assinaturaCliente'].indexOf(key) === -1) Utils.setVal(key, os[key]); } if (os.fotoHorimetro) { State.fotoHorimetro = os.fotoHorimetro; var preview = $('fotoHorimetroPreview'); if (preview) preview.innerHTML = '<div class="photo-item"><img src="' + os.fotoHorimetro + '"><div class="photo-remove" onclick="Fotos.removeHorimetro()">x</div></div>'; } else Fotos.removeHorimetro(); if (os.fotosBase64 && os.fotosBase64.length) { State.photos = os.fotosBase64; var preview = $('fotosPreview'); if (preview) preview.innerHTML = ''; os.fotosBase64.forEach(function(src) { if (preview) { var div = document.createElement('div'); div.className = 'photo-item'; div.innerHTML = '<img src="' + src + '"><div class="photo-remove" onclick="Fotos.remove(this)">x</div>'; preview.appendChild(div); } }); } else { State.photos = []; var preview = $('fotosPreview'); if (preview) preview.innerHTML = ''; } Signature.loadFromData('tec', os.assinaturaTecnico); Signature.loadFromData('cli', os.assinaturaCliente); document.querySelectorAll('input[data-check="true"]').forEach(function(cb) { cb.checked = os[cb.id] === true; }); App.updateUI(); showToast('OS carregada'); var tabOsBtn = document.querySelector('.tab-button[data-tab="tab-os"]'); if (tabOsBtn) tabOsBtn.click(); },
   edit: function(num) { this.view(num); },
-  delete: async function(num) { if (!confirm('Excluir OS ' + num + '?')) return; await DB.delete('os_history', num); State.osHistory = State.osHistory.filter(function(o) { return o.numeroOS !== num; }); this.render(); this.updateStats(); Clientes.updateStats(); showToast('OS excluida'); },
+  delete: async function(num) { if (!confirm('Excluir OS ' + num + '?')) return; await Cloud.deleteFromCloud('OS', 'numeroOS', num); await DB.delete('os_history', num); State.osHistory = State.osHistory.filter(function(o) { return o.numeroOS !== num; }); this.render(); this.updateStats(); Clientes.updateStats(); showToast('OS excluida'); },
   exportCSV: function() { var csv = 'OS,Data,Cliente,Status,Tipo,Horas,Total Geral\n'; State.osHistory.forEach(function(o) { csv += (o.numeroOS || '') + ',' + (o.dataOS || '') + ',"' + (o.cliente || '') + '",' + Utils.formatStatus(o.status) + ',' + (o.tipoChamado || '') + ',' + (o.horasTotais || '') + ',' + (o.totalGeral || '') + '\n'; }); var blob = new Blob([csv], {type: 'text/csv;charset=utf-8;'}); var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'historico_os_' + new Date().toISOString().split('T')[0] + '.csv'; a.click(); showToast('CSV exportado'); },
-  importCSV: function() { var input = document.createElement('input'); input.type = 'file'; input.accept = '.csv'; input.onchange = function(e) { var file = e.target.files[0]; var reader = new FileReader(); reader.onload = async function(ev) { var lines = ev.target.result.split('\n'); for (var i = 1; i < lines.length; i++) { if (!lines[i].trim()) continue; var parts = lines[i].split(','); if (parts[0]) { var os = { numeroOS: parts[0] || 'OS-' + Date.now() + '-' + i, dataOS: parts[1] || '', cliente: (parts[2] || '').replace(/"/g, ''), status: (parts[3] || '').toLowerCase() || 'abertura', tipoChamado: (parts[4] || '').toLowerCase() || 'normal', horasTotais: parts[5] || '0h', totalGeral: parts[6] || '00:00', descricaoServico: '', pecasAplicadas: '', pendencias: '', relatoCliente: '', marca: '', modelo: '', numSerie: '', horimetro: '', combustivel: '', whatsappCliente: '', cnpj: '', cidadeCliente: '', endereco: '', tecnico: 'LEONARDO MARTINS', recebedor: '', fotosBase64: [], fotoHorimetro: null, assinaturaTecnico: '', assinaturaCliente: '' }; await DB.put('os_history', os); State.osHistory.push(os); } } Historico.render(); Historico.updateStats(); Clientes.updateStats(); showToast('Importação concluída'); }; reader.readAsText(file, 'UTF-8'); }; input.click(); },
-  clear: async function() { if (!confirm('Limpar TODO o historico?')) return; await DB.clear('os_history'); State.osHistory = []; this.render(); this.updateStats(); Clientes.updateStats(); showToast('Historico limpo'); }
+  importCSV: function() { var input = document.createElement('input'); input.type = 'file'; input.accept = '.csv'; input.onchange = function(e) { var file = e.target.files[0]; var reader = new FileReader(); reader.onload = async function(ev) { var lines = ev.target.result.split('\n'); for (var i = 1; i < lines.length; i++) { if (!lines[i].trim()) continue; var parts = lines[i].split(','); if (parts[0]) { var os = { numeroOS: parts[0] || 'OS-' + Date.now() + '-' + i, dataOS: parts[1] || '', cliente: (parts[2] || '').replace(/"/g, ''), status: (parts[3] || '').toLowerCase() || 'abertura', tipoChamado: (parts[4] || '').toLowerCase() || 'normal', horasTotais: parts[5] || '0h', totalGeral: parts[6] || '00:00', descricaoServico: '', pecasAplicadas: '', pendencias: '', relatoCliente: '', marca: '', modelo: '', numSerie: '', horimetro: '', combustivel: '', whatsappCliente: '', cnpj: '', cidadeCliente: '', endereco: '', tecnico: 'LEONARDO MARTINS', recebedor: '', fotosBase64: [], fotoHorimetro: null, assinaturaTecnico: '', assinaturaCliente: '' }; await Cloud.saveOSToCloud(os); await DB.put('os_history', os); State.osHistory.push(os); } } Historico.render(); Historico.updateStats(); Clientes.updateStats(); showToast('Importação concluída'); }; reader.readAsText(file, 'UTF-8'); }; input.click(); },
+  clear: async function() { if (!confirm('Limpar TODO o historico?')) return; await Cloud.deleteFromCloud('OS', 'all', 'all'); await DB.clear('os_history'); State.osHistory = []; this.render(); this.updateStats(); Clientes.updateStats(); showToast('Historico limpo'); }
 };
 
+// ==================== UTILS ====================
+var Config = {
+  marcas: ["TOYOTA","CLARK","BYD","PALETRANS","LINDE","HYSTER","YALE","CATERPILLAR","KOMATSU","MITSUBISHI","NISSAN","STILL","CROWN","JUNGHEINRICH","TCM","HYUNDAI","DOOSAN","HELI","HANGCHA","LONKING","OUTRA"],
+  checklist: [ { id:'motor', title:'Motor e Componentes', items:[{id:'motor_oleo',label:'Nivel de oleo do motor'},{id:'motor_filtro_oleo',label:'Filtro de oleo'},{id:'motor_filtro_ar',label:'Filtro de ar'},{id:'motor_filtro_comb',label:'Filtro de combustivel'},{id:'motor_correias',label:'Correias'},{id:'motor_radiador',label:'Radiador'}] }, { id:'eletrico', title:'Sistema Eletrico', items:[{id:'eletr_bateria',label:'Bateria'},{id:'eletr_terminais',label:'Terminais'},{id:'eletr_alternador',label:'Alternador'},{id:'eletr_partida',label:'Motor de partida'},{id:'eletr_farois',label:'Farois'},{id:'eletr_buzina',label:'Buzina'}] }, { id:'hidraulico', title:'Sistema Hidraulico', items:[{id:'hidr_oleo',label:'Nivel oleo hidraulico'},{id:'hidr_bomba',label:'Bomba hidraulica'},{id:'hidr_cilindros',label:'Cilindros'},{id:'hidr_vazamentos',label:'Vazamentos'},{id:'hidr_mangueiras',label:'Mangueiras'}] }, { id:'transmissao', title:'Transmissao e Freios', items:[{id:'trans_oleo',label:'Oleo transmissao'},{id:'freio_servico',label:'Freio de servico'},{id:'freio_estac',label:'Freio de estacionamento'},{id:'freio_pastilhas',label:'Pastilhas/Lonas'}] }, { id:'direcao', title:'Direcao', items:[{id:'dir_volante',label:'Volante'},{id:'dir_caixa',label:'Caixa de direcao'},{id:'dir_hidraulica',label:'Direcao hidraulica'}] }, { id:'estrutura', title:'Estrutura e Garfos', items:[{id:'est_mastros',label:'Mastros'},{id:'est_correntes',label:'Correntes'},{id:'est_garfos',label:'Garfos'},{id:'est_roletes',label:'Roletes'}] }, { id:'seguranca', title:'Seguranca', items:[{id:'seg_cinto',label:'Cinto de seguranca'},{id:'seg_extintor',label:'Extintor'},{id:'seg_espelhos',label:'Espelhos'},{id:'seg_alarme',label:'Alarme de re'}] } ]
+};
+
+var Utils = {
+  generateOSNumber: function() { var now = new Date(); var yy = now.getFullYear().toString().slice(-2); var mm = String(now.getMonth() + 1).padStart(2, '0'); var os = 'OS-' + yy + mm + '-' + String(Math.floor(Math.random() * 10000)).padStart(4, '0'); var inp = $('numeroOS'); if (inp) inp.value = os; return os; },
+  setDefaultDate: function() { var inp = $('dataOS'); if (inp && !inp.value) inp.value = new Date().toISOString().split('T')[0]; },
+  getVal: function(id) { var e = $(id); return e ? e.value : ''; },
+  setVal: function(id, v) { var e = $(id); if (e) e.value = v || ''; },
+  formatStatus: function(st) { var map = {abertura:'ABERTURA', execucao:'EM EXECUCAO', finalizacao:'FINALIZANDO', fechada:'FECHADA', aprovada:'APROVADA'}; return map[st] || (st || '').toUpperCase(); },
+  formatTipoChamado: function(tipo) { var map = {normal:'NORMAL', emergencial:'EMERGENCIAL', garantia:'GARANTIA', preventiva:'PREVENTIVA', corretiva:'CORRETIVA', avaliacao:'AVALIAÇÃO', orcamento:'ORÇAMENTO'}; return map[tipo] || tipo.toUpperCase(); },
+  timeDiff: function(s, e) { if (!s || !e) return 0; var sp = s.split(':').map(Number), ep = e.split(':').map(Number); var diff = (ep[0]*60 + ep[1]) - (sp[0]*60 + sp[1]); if (diff < 0) diff += 1440; return diff; },
+  timeToMinutes: function(t) { if (!t) return 0; if (t.indexOf('h') !== -1) return parseInt(t) * 60; var p = t.split(':'); return parseInt(p[0]) * 60 + parseInt(p[1]); }
+};
+
+// ==================== APP ====================
 var App = {
-  init: async function() { try { await DB.init(); await Clientes.load(); await Historico.load(); this.populateMarcas(); Checklist.render(); Signature.init(); Fotos.init(); Horas.initListeners(); Utils.setDefaultDate(); this.setupTabs(); this.setupMarcaSelect(); this.setupSearch(); State.currentStatus = 'abertura'; this.updateUI(); var loading = $('loadingOverlay'); if (loading) loading.style.display = 'none'; var container = $('appContainer'); if (container) container.style.display = 'block'; } catch (e) { console.error(e); var loading = $('loadingOverlay'); if (loading) loading.innerHTML = '<div class="text-center"><i class="fas fa-exclamation-triangle text-red-500 text-4xl mb-4"></i><p class="text-red-400">Erro ao carregar</p><button onclick="location.reload()" class="btn btn-primary mt-4">Recarregar</button></div>'; } },
+  init: async function() { try { await DB.init(); await Clientes.load(); await Historico.load(); this.populateMarcas(); Checklist.render(); Signature.init(); Fotos.init(); Horas.initListeners(); Utils.setDefaultDate(); this.setupTabs(); this.setupMarcaSelect(); this.setupSearch(); State.currentStatus = 'abertura'; this.updateUI(); var loading = $('loadingOverlay'); if (loading) loading.style.display = 'none'; var container = $('appContainer'); if (container) container.style.display = 'block'; Cloud.syncAll(); } catch (e) { console.error(e); var loading = $('loadingOverlay'); if (loading) loading.innerHTML = '<div class="text-center"><i class="fas fa-exclamation-triangle text-red-500 text-4xl mb-4"></i><p class="text-red-400">Erro ao carregar</p><button onclick="location.reload()" class="btn btn-primary mt-4">Recarregar</button></div>'; } },
   populateMarcas: function() { var select = $('marcaSelect'); if (!select) return; select.innerHTML = '<option value="">Selecione</option>'; Config.marcas.forEach(function(m) { select.innerHTML += '<option value="' + m + '">' + m + '</option>'; }); },
   setupMarcaSelect: function() { var select = $('marcaSelect'), div = $('marcaOutraDiv'), input = $('marcaOutra'); if (!select || !div || !input) return; select.addEventListener('change', function() { div.style.display = select.value === 'OUTRA' ? 'block' : 'none'; if (select.value === 'OUTRA') input.focus(); Utils.setVal('marca', select.value === 'OUTRA' ? input.value.toUpperCase() : select.value); }); input.addEventListener('input', function() { Utils.setVal('marca', input.value.toUpperCase()); }); },
   setupTabs: function() { var tabs = document.querySelectorAll('.tab-button'); var contents = document.querySelectorAll('.tab-content'); tabs.forEach(function(tab) { tab.addEventListener('click', function() { var targetId = this.getAttribute('data-tab'); if (!targetId) return; tabs.forEach(function(t) { t.classList.remove('active'); }); contents.forEach(function(c) { c.classList.remove('active'); }); this.classList.add('active'); var target = document.getElementById(targetId); if (target) target.classList.add('active'); }); }); },
   setupSearch: function() { var histSearch = $('historicoSearch'); if (histSearch) histSearch.addEventListener('input', function() { Historico.render(); }); var tipoFiltro = $('historicoFiltroTipo'); if (tipoFiltro) tipoFiltro.addEventListener('change', function() { Historico.render(); }); var statusFiltro = $('historicoFiltroStatus'); if (statusFiltro) statusFiltro.addEventListener('change', function() { Historico.render(); }); var searchInput = $('cad_searchInput'); if (searchInput) { searchInput.addEventListener('input', function(e) { var search = e.target.value.toLowerCase(); var filtered = State.clients.filter(function(c) { return c.nome.toLowerCase().indexOf(search) !== -1 || (c.cidade && c.cidade.toLowerCase().indexOf(search) !== -1); }); var original = State.clients; State.clients = filtered; Clientes.renderTable(); State.clients = original; }); } },
   updateUI: function() { var isAbertura = State.currentStatus === 'abertura'; var isExecucao = State.currentStatus === 'execucao'; var isFinalizacao = State.currentStatus === 'finalizacao'; var isFechada = State.currentStatus === 'fechada'; var isAprovada = State.currentStatus === 'aprovada'; var btnIniciar = $('btnIniciarExecucao'); if (btnIniciar) btnIniciar.disabled = !isAbertura; var btnFinalizar = $('btnFinalizar'); if (btnFinalizar) btnFinalizar.disabled = !isExecucao; var btnFechar = $('btnFecharOS'); if (btnFechar) btnFechar.disabled = !isFinalizacao; var btnAprovar = $('btnAprovar'); if (btnAprovar) btnAprovar.disabled = !isFechada; var btnPDF = $('btnPreviaPDF'); var btnEmail = $('btnEnviarEmail'); if (btnPDF) btnPDF.disabled = !isAprovada; if (btnEmail) btnEmail.disabled = !isAprovada; var editFields = ['descricaoServico','pecasAplicadas','pendencias','horasExtras','adicionalNoturno','modelo','numSerie','horimetro']; editFields.forEach(function(id) { var el = $(id); if (el) el.disabled = isFechada || isAprovada; }); var marcaSelect = $('marcaSelect'); if (marcaSelect) marcaSelect.disabled = isFechada || isAprovada; var badge = $('statusBadge'); if (badge) { badge.className = 'status-badge'; var statusConfig = { abertura: {text:'EM ABERTURA', class:'status-abertura'}, execucao: {text:'EM EXECUCAO', class:'status-execucao'}, finalizacao: {text:'FINALIZANDO', class:'status-finalizacao'}, fechada: {text:'FECHADA', class:'status-fechada'}, aprovada: {text:'APROVADA', class:'status-aprovada'} }; var cfg = statusConfig[State.currentStatus]; badge.textContent = cfg.text; badge.classList.add(cfg.class); } var steps = ['abertura','execucao','finalizacao','fechada','aprovada']; document.querySelectorAll('.step').forEach(function(step, idx) { step.classList.remove('active','completed','locked'); if (steps[idx] === State.currentStatus) step.classList.add('active'); else if (steps.indexOf(State.currentStatus) > idx) step.classList.add(steps[idx] === 'fechada' && State.currentStatus === 'aprovada' ? 'locked' : 'completed'); }); },
   coletarDados: function() { var data = {}; document.querySelectorAll('#tab-os input, #tab-os select, #tab-os textarea').forEach(function(el) { if (el.id && el.type !== 'file') data[el.id] = el.value; }); document.querySelectorAll('input[data-check="true"]').forEach(function(cb) { data[cb.id] = cb.checked; }); document.querySelectorAll('#checklistSections select').forEach(function(sel) { data[sel.id] = sel.value; }); var marcaSelect = $('marcaSelect').value, marcaOutra = $('marcaOutra').value; data.marca = marcaSelect === 'OUTRA' ? marcaOutra.toUpperCase() : marcaSelect; return data; },
-  salvar: async function() { Signature.save('tec'); Signature.save('cli'); var data = this.coletarDados(); data.status = State.currentStatus; data.fotosBase64 = State.photos; data.fotoHorimetro = State.fotoHorimetro; data.assinaturaTecnico = Utils.getVal('assinaturaTecnicoData'); data.assinaturaCliente = Utils.getVal('assinaturaClienteData'); Horas.calcular(); data.horasTotais = Utils.getVal('horasTotais'); data.totalGeral = Utils.getVal('totalGeral'); if (!data.numeroOS) { showToast('Clique em Nova OS primeiro.', true); return false; } try { await DB.put('os_history', data); var idx = State.osHistory.findIndex(function(os) { return os.numeroOS === data.numeroOS; }); if (idx >= 0) State.osHistory[idx] = data; else State.osHistory.unshift(data); State.hasUnsavedChanges = false; Historico.updateStats(); Clientes.updateStats(); return true; } catch (e) { showToast('Erro ao salvar', true); return false; } },
+  salvar: async function() { Signature.save('tec'); Signature.save('cli'); var data = this.coletarDados(); data.status = State.currentStatus; data.fotosBase64 = State.photos; data.fotoHorimetro = State.fotoHorimetro; data.assinaturaTecnico = Utils.getVal('assinaturaTecnicoData'); data.assinaturaCliente = Utils.getVal('assinaturaClienteData'); Horas.calcular(); data.horasTotais = Utils.getVal('horasTotais'); data.totalGeral = Utils.getVal('totalGeral'); if (!data.numeroOS) { data.numeroOS = Utils.generateOSNumber(); } try { await Cloud.saveOSToCloud(data); await DB.put('os_history', data); var idx = State.osHistory.findIndex(function(os) { return os.numeroOS === data.numeroOS; }); if (idx >= 0) State.osHistory[idx] = data; else State.osHistory.unshift(data); State.hasUnsavedChanges = false; Historico.updateStats(); Clientes.updateStats(); return true; } catch (e) { showToast('Erro ao salvar', true); return false; } },
   salvarOSManual: async function() { var ok = await this.salvar(); if (ok) { showToast('OS salva com sucesso'); Historico.render(); } },
   mudarStatus: async function(novoStatus) { if (novoStatus === 'abertura') { if (!Utils.getVal('numeroOS')) { showToast('Clique em Nova OS primeiro.', true); return; } if (!Utils.getVal('cliente').trim()) { showToast('Cliente obrigatório para abrir a OS.', true); return; } } if (novoStatus === 'execucao' && State.currentStatus !== 'abertura') { showToast('A OS precisa estar EM ABERTURA para iniciar execução.', true); return; } if (novoStatus === 'finalizacao' && State.currentStatus !== 'execucao') { showToast('A OS precisa estar EM EXECUÇÃO para finalizar.', true); return; } if (novoStatus === 'fechada' && State.currentStatus !== 'finalizacao') { showToast('A OS precisa estar FINALIZANDO para ser fechada.', true); return; } if (novoStatus === 'aprovada') { if (State.currentStatus !== 'fechada') { showToast('A OS precisa estar FECHADA para aprovação.', true); return; } if (!Utils.getVal('assinaturaClienteData')) { showToast('O cliente deve assinar digitalmente.', true); return; } if (!Utils.getVal('recebedor').trim()) { showToast('Informe o nome do recebedor.', true); return; } } State.currentStatus = novoStatus; if (novoStatus === 'finalizacao' || novoStatus === 'fechada') Horas.calcular(); var ok = await this.salvar(); if (ok) { this.updateUI(); Historico.render(); showToast('Status: ' + Utils.formatStatus(novoStatus)); } },
   iniciarExecucao: function() { if (State.currentStatus !== 'abertura') return; this.mudarStatus('execucao'); Timer.control('start'); showToast('Execução iniciada'); },
   finalizarServico: function() { if (State.currentStatus !== 'execucao') return; var horimetro = Utils.getVal('horimetro'); if (!horimetro) { showToast('Preencha o campo Horímetro antes de finalizar o serviço.', true); return; } Timer.control('stop'); Horas.calcular(); this.mudarStatus('finalizacao'); showToast('Serviço finalizado'); },
   fecharOS: async function() { if (State.currentStatus !== 'finalizacao') return; var descricao = Utils.getVal('descricaoServico').trim(); if (!descricao) { showToast('Descreva o serviço realizado antes de fechar a OS.', true); return; } var horimetro = Utils.getVal('horimetro'); if (!horimetro) { showToast('Campo Horímetro obrigatório.', true); return; } Horas.calcular(); if (!confirm('Fechar esta OS? Após fechada, os dados não poderão ser alterados.')) return; await this.mudarStatus('fechada'); showToast('OS fechada'); },
-  novaOS: async function() { if (State.hasUnsavedChanges && !confirm('Há alterações não salvas. Criar nova OS?')) return; State.currentStatus = 'abertura'; State.photos = []; State.fotoHorimetro = null; State.hasUnsavedChanges = false; document.querySelectorAll('#tab-os input, #tab-os select, #tab-os textarea').forEach(function(el) { if (el.id && el.type !== 'file') { el.value = ''; } }); Utils.setDefaultDate(); document.querySelectorAll('input[data-check="true"]').forEach(function(cb) { cb.checked = false; }); Checklist.updateProgress(); var preview = $('fotosPreview'); if (preview) preview.innerHTML = ''; var previewH = $('fotoHorimetroPreview'); if (previewH) previewH.innerHTML = ''; $('fotosServico').value = ''; $('fotoHorimetroInput').value = ''; Signature.clear('tec'); Signature.clear('cli'); Timer.reset(); Timer.seconds = 0; Timer.running = false; Timer.paused = false; if (Timer.interval) clearInterval(Timer.interval); await Utils.generateOSNumber(); State.osNumberGenerated = true; App.updateUI(); showToast('Nova OS criada'); var tabClientesBtn = document.querySelector('.tab-button[data-tab="tab-clientes"]'); if (tabClientesBtn) tabClientesBtn.click(); },
+  novaOS: async function() { if (State.hasUnsavedChanges && !confirm('Há alterações não salvas. Criar nova OS?')) return; State.currentStatus = 'abertura'; State.photos = []; State.fotoHorimetro = null; State.hasUnsavedChanges = false; document.querySelectorAll('#tab-os input, #tab-os select, #tab-os textarea').forEach(function(el) { if (el.id && el.type !== 'file') { el.value = ''; } }); Utils.setDefaultDate(); document.querySelectorAll('input[data-check="true"]').forEach(function(cb) { cb.checked = false; }); Checklist.updateProgress(); var preview = $('fotosPreview'); if (preview) preview.innerHTML = ''; var previewH = $('fotoHorimetroPreview'); if (previewH) previewH.innerHTML = ''; $('fotosServico').value = ''; $('fotoHorimetroInput').value = ''; Signature.clear('tec'); Signature.clear('cli'); Timer.reset(); Timer.seconds = 0; Timer.running = false; Timer.paused = false; if (Timer.interval) clearInterval(Timer.interval); Utils.generateOSNumber(); State.osNumberGenerated = true; App.updateUI(); showToast('Nova OS criada'); var tabClientesBtn = document.querySelector('.tab-button[data-tab="tab-clientes"]'); if (tabClientesBtn) tabClientesBtn.click(); },
   getResumoEmail: function() { var tipoChamado = Utils.getVal('tipoChamado') || 'normal'; var tipoChamadoFormatado = Utils.formatTipoChamado(tipoChamado); var statusTexto = Utils.formatStatus(State.currentStatus); var horasTotais = Utils.getVal('horasTotais') || '0h'; var marca = Utils.getVal('marca') || 'Não informada'; var modelo = Utils.getVal('modelo') || 'Não informado'; var descricao = Utils.getVal('descricaoServico') || 'Não informado'; var pecas = Utils.getVal('pecasAplicadas') || 'Nenhuma peça informada'; var pendencias = Utils.getVal('pendencias') || 'Nenhuma pendência informada'; var relato = Utils.getVal('relatoCliente') || 'Não informado'; var clienteNome = Utils.getVal('cliente'); var clienteEncontrado = State.clients.find(function(c) { return c.nome === clienteNome; }); var emailCliente = clienteEncontrado ? clienteEncontrado.email : ''; var responsavelNome = clienteEncontrado ? clienteEncontrado.responsavel_nome : ''; var cnpjCliente = Utils.getVal('cnpj') || (clienteEncontrado ? clienteEncontrado.cnpj : ''); var dataOS = Utils.getVal('dataOS') || new Date().toLocaleDateString('pt-BR'); var numeroOS = Utils.getVal('numeroOS') || 'OS-' + Date.now(); var resumo = '🏭 *MARLIFT EMPILHADEIRAS*\n'; resumo += '━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━\n'; resumo += '📋 *OS:* ' + numeroOS + '\n'; resumo += '📅 *Data:* ' + dataOS + '\n'; resumo += '👤 *Cliente:* ' + clienteNome + '\n'; if (cnpjCliente) resumo += '🏭 *CNPJ/CPF:* ' + cnpjCliente + '\n'; if (emailCliente) resumo += '📧 *E-mail:* ' + emailCliente + '\n'; if (responsavelNome) resumo += '👨‍💼 *Responsável:* ' + responsavelNome + '\n'; resumo += '🔧 *Empilhadeira:* ' + marca + ' ' + modelo + '\n'; resumo += '⏱️ *Tempo de Serviço:* ' + horasTotais + '\n'; resumo += '✅ *Status:* ' + statusTexto + '\n'; resumo += '📄 *Tipo de Chamado:* ' + tipoChamadoFormatado + '\n'; resumo += '🗣️ *Relato do Cliente:*\n' + relato + '\n\n'; resumo += '📝 *Serviço Realizado:*\n' + descricao + '\n\n'; if (pecas && pecas !== 'Nenhuma peça informada') { resumo += '🔩 *Peças Aplicadas:*\n' + pecas + '\n\n'; } if (pendencias && pendencias !== 'Nenhuma pendência informada') { resumo += '⚠️ *Pendências:*\n' + pendencias + '\n\n'; } resumo += '━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━\n'; resumo += '📱 *MARLIFT Empilhadeiras*\n'; resumo += '🏭 *Excelência em Movimento*'; return resumo; },
   enviarEmailComResumo: function() { if (State.currentStatus !== 'aprovada') { showToast('Somente OS aprovadas podem ser enviadas por e-mail.', true); return; } var clienteNome = Utils.getVal('cliente'); var clienteEncontrado = State.clients.find(function(c) { return c.nome === clienteNome; }); var emailCliente = clienteEncontrado ? clienteEncontrado.email : ''; if (!emailCliente) { var emailDigitado = prompt('Cliente não possui e-mail cadastrado. Digite o e-mail para envio:', ''); if (!emailDigitado || !emailDigitado.includes('@')) { showToast('E-mail inválido!', true); return; } emailCliente = emailDigitado; } var assunto = 'MARLIFT - Relatório da Ordem de Serviço ' + Utils.getVal('numeroOS'); var corpo = this.getResumoEmail(); var mailtoLink = 'mailto:' + encodeURIComponent(emailCliente) + '?subject=' + encodeURIComponent(assunto) + '&body=' + encodeURIComponent(corpo); window.location.href = mailtoLink; showToast('Abrindo cliente de e-mail com o resumo da OS'); },
   gerarPreviaPDF: function() { if (State.currentStatus !== 'aprovada') { showToast('Somente OS aprovadas geram PDF.', true); return; } var html = this.gerarRelatorioHTML(); var win = window.open(); win.document.write(html); win.document.close(); setTimeout(function() { win.print(); }, 500); },
