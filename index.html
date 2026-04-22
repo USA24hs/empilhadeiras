@@ -3,12 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes">
-  <title>Marlift Empilhadeiras - OS Profissional v8.6</title>
+  <title>Marlift Empilhadeiras - OS Profissional v8.7</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
-    /* (mesmo estilo anterior - omitido por brevidade, mas igual ao da versão funcional) */
     * { -webkit-tap-highlight-color: transparent; }
     :root {
       --bg: #0c0f12;
@@ -137,7 +136,7 @@
 <div id="appContainer" style="display:none;">
   <header class="no-print border-b border-[var(--border)] bg-[var(--bg)]/95 backdrop-blur-sm sticky top-0 z-50">
     <div class="max-w-7xl mx-auto px-4 py-3">
-      <div class="top-bar"><div class="flex items-center gap-3"><div class="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-[var(--accent)] to-[var(--accent-light)] rounded-xl flex items-center justify-center shadow-lg"><svg class="w-5 h-5 md:w-7 md:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg></div><div><h1 class="font-display text-xl md:text-2xl tracking-wide text-[var(--accent)]">MARLIFT EMPILHADEIRAS</h1><p class="text-xs text-[var(--muted)]">Sistema de O.S - v8.6</p></div></div><div class="user-area"><i class="fas fa-user-circle text-[var(--accent)] text-lg"></i><span class="font-medium text-sm" id="currentUserName">Carregando...</span><div class="w-px h-5 bg-[var(--border])"></div><button onclick="Auth.logout()" class="text-xs text-[var(--muted)] hover:text-[var(--danger)] transition-colors"><i class="fas fa-sign-out-alt"></i> Sair</button></div></div>
+      <div class="top-bar"><div class="flex items-center gap-3"><div class="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-[var(--accent)] to-[var(--accent-light)] rounded-xl flex items-center justify-center shadow-lg"><svg class="w-5 h-5 md:w-7 md:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg></div><div><h1 class="font-display text-xl md:text-2xl tracking-wide text-[var(--accent)]">MARLIFT EMPILHADEIRAS</h1><p class="text-xs text-[var(--muted)]">Sistema de O.S - v8.7</p></div></div><div class="user-area"><i class="fas fa-user-circle text-[var(--accent)] text-lg"></i><span class="font-medium text-sm" id="currentUserName">Carregando...</span><div class="w-px h-5 bg-[var(--border])"></div><button onclick="Auth.logout()" class="text-xs text-[var(--muted)] hover:text-[var(--danger)] transition-colors"><i class="fas fa-sign-out-alt"></i> Sair</button></div></div>
       <div class="toolbar"><button onclick="App.gerarPreviaPDF()" id="btnPreviaPDF" class="btn btn-primary text-sm" disabled><i class="fas fa-file-pdf"></i> PDF</button><button onclick="App.enviarEmailComResumo()" id="btnEnviarEmail" class="btn btn-secondary text-sm" disabled><i class="fas fa-envelope"></i> E-mail</button><button onclick="App.sendWhatsAppMessage()" id="btnWhatsApp" class="btn btn-secondary text-sm"><i class="fab fa-whatsapp text-green-500"></i> WhatsApp</button><button onclick="App.novaOS()" id="btnNovaOS" class="btn btn-yellow text-sm"><i class="fas fa-plus"></i> Nova O.S</button><button onclick="GoogleSheetsSync.fullSync()" id="btnSync" class="btn btn-sync text-sm"><i class="fas fa-cloud-upload-alt"></i> Sincronizar</button><button onclick="GoogleSheetsSync.fetchFromSheet()" id="btnDownload" class="btn btn-secondary text-sm"><i class="fas fa-cloud-download-alt"></i> Baixar</button></div>
     </div>
   </header>
@@ -154,7 +153,7 @@
       <button class="tab-button" data-tab="tab-usuarios" id="tabUsuariosBtn" style="display:none;">👥 Usuários</button>
     </div>
 
-    <!-- TAB O.S (COMPLETA) -->
+    <!-- TAB O.S -->
     <div id="tab-os" class="tab-content active">
       <div class="checklist-card p-4 md:p-5 mb-5"><div class="flex flex-wrap justify-between items-center gap-3 mb-4"><h2 class="font-display text-xl">Informações da O.S</h2><div><span class="status-badge" id="statusBadge">EM ABERTURA</span></div></div>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4"><div><label class="block text-xs text-[var(--muted)] mb-1">N° O.S</label><input type="text" id="numeroOS" class="form-input font-mono font-bold text-lg" readonly placeholder="Clique em Nova OS"></div><div><label class="block text-xs text-[var(--muted)] mb-1">Data</label><input type="date" id="dataOS" class="form-input"></div><div><label class="block text-xs text-[var(--muted)] mb-1">Tipo de Chamado</label><select id="tipoChamado" class="form-input"><option value="normal">Normal</option><option value="emergencial">Emergencial</option><option value="garantia">Garantia</option><option value="preventiva">Preventiva</option><option value="corretiva">Corretiva</option><option value="avaliacao">Avaliação</option><option value="orcamento">Orçamento</option></select></div></div>
@@ -199,7 +198,7 @@
 </div>
 
 <script>
-// ==================== CONFIGURAÇÕES INICIAIS ====================
+// ==================== CONFIGURAÇÕES ====================
 var Config = {
   marcas: ["TOYOTA","CLARK","BYD","PALETRANS","LINDE","HYSTER","YALE","CATERPILLAR","KOMATSU","MITSUBISHI","NISSAN","STILL","CROWN","JUNGHEINRICH","TCM","HYUNDAI","DOOSAN","HELI","HANGCHA","LONKING","OUTRA"],
   checklist: [ { id:'motor', title:'Motor e Componentes', items:[{id:'motor_oleo',label:'Nivel de oleo do motor'},{id:'motor_filtro_oleo',label:'Filtro de oleo'},{id:'motor_filtro_ar',label:'Filtro de ar'},{id:'motor_filtro_comb',label:'Filtro de combustivel'},{id:'motor_correias',label:'Correias'},{id:'motor_radiador',label:'Radiador'}] }, { id:'eletrico', title:'Sistema Eletrico', items:[{id:'eletr_bateria',label:'Bateria'},{id:'eletr_terminais',label:'Terminais'},{id:'eletr_alternador',label:'Alternador'},{id:'eletr_partida',label:'Motor de partida'},{id:'eletr_farois',label:'Farois'},{id:'eletr_buzina',label:'Buzina'}] }, { id:'hidraulico', title:'Sistema Hidraulico', items:[{id:'hidr_oleo',label:'Nivel oleo hidraulico'},{id:'hidr_bomba',label:'Bomba hidraulica'},{id:'hidr_cilindros',label:'Cilindros'},{id:'hidr_vazamentos',label:'Vazamentos'},{id:'hidr_mangueiras',label:'Mangueiras'}] }, { id:'transmissao', title:'Transmissao e Freios', items:[{id:'trans_oleo',label:'Oleo transmissao'},{id:'freio_servico',label:'Freio de servico'},{id:'freio_estac',label:'Freio de estacionamento'},{id:'freio_pastilhas',label:'Pastilhas/Lonas'}] }, { id:'direcao', title:'Direcao', items:[{id:'dir_volante',label:'Volante'},{id:'dir_caixa',label:'Caixa de direcao'},{id:'dir_hidraulica',label:'Direcao hidraulica'}] }, { id:'estrutura', title:'Estrutura e Garfos', items:[{id:'est_mastros',label:'Mastros'},{id:'est_correntes',label:'Correntes'},{id:'est_garfos',label:'Garfos'},{id:'est_roletes',label:'Roletes'}] }, { id:'seguranca', title:'Seguranca', items:[{id:'seg_cinto',label:'Cinto de seguranca'},{id:'seg_extintor',label:'Extintor'},{id:'seg_espelhos',label:'Espelhos'},{id:'seg_alarme',label:'Alarme de re'}] } ],
@@ -321,7 +320,7 @@ var Checklist = { total:0, checked:0,
   loadChecklistData: function(data){ if(!data) return; document.querySelectorAll('input[data-check="true"]').forEach(function(cb){ if(data[cb.id]!==undefined) cb.checked=data[cb.id]; }); document.querySelectorAll('#checklistSections select').forEach(function(sel){ if(data[sel.id]!==undefined) sel.value=data[sel.id]; }); this.updateProgress(); }
 };
 
-// ==================== CLIENTES (resumido mas funcional) ====================
+// ==================== CLIENTES ====================
 var Clientes = { 
   load: function() { State.clients = Storage.loadClients(); this.renderTable(); this.updateStats(); },
   updateStats: function() { var totalClientes = State.clients.length; var totalMarcas = 0; State.clients.forEach(function(c) { totalMarcas += (c.equipamentos || []).length; }); var clientesComOS = new Set(); var totalOS = 0; var osAbertas = 0; var osAprovadas = 0; State.osHistory.forEach(function(os) { if (os.cliente) { clientesComOS.add(os.cliente); totalOS++; } if (os.status === 'abertura' || os.status === 'execucao' || os.status === 'finalizacao') osAbertas++; if (os.status === 'aprovada') osAprovadas++; }); $('statTotalClientes').innerText = totalClientes; $('statTotalMarcas').innerText = totalMarcas; $('statClientesComOS').innerText = clientesComOS.size; $('statTotalOSClientes').innerText = totalOS; $('statOSAbertasCliente').innerText = osAbertas; $('statOSAprovadasCliente').innerText = osAprovadas; },
@@ -396,59 +395,38 @@ var App = {
   },
   populateMarcas: function() { var select=$('marcaSelect'); if(!select) return; select.innerHTML='<option value="">Selecione</option>'; Config.marcas.forEach(m=>{if(m!=='OUTRA') select.innerHTML+=`<option value="${m}">${m}</option>`;}); select.innerHTML+='<option value="OUTRA">OUTRA</option>'; },
   setupMarcaSelect: function() { var select=$('marcaSelect'), div=$('marcaOutraDiv'), input=$('marcaOutra'); if(select&&div&&input){ select.addEventListener('change',()=>{ div.style.display=select.value==='OUTRA'?'block':'none'; Utils.setVal('marca',select.value==='OUTRA'?input.value.toUpperCase():select.value); }); input.addEventListener('input',()=>{ Utils.setVal('marca',input.value.toUpperCase()); }); } },
-setupTabs: function() {
+  setupTabs: function() { 
     var tabs = document.querySelectorAll('.tab-button');
     var contents = document.querySelectorAll('.tab-content');
-    
-    if (tabs.length === 0 || contents.length === 0) {
-        console.warn('Abas não encontradas');
-        return;
-    }
-    
-    // Remove qualquer listener anterior (evita duplicação)
+    if (tabs.length === 0 || contents.length === 0) return;
+    // Remove possíveis listeners antigos clonando (evita duplicação)
     tabs.forEach(function(tab) {
-        var newTab = tab.cloneNode(true);
-        tab.parentNode.replaceChild(newTab, tab);
+      var newTab = tab.cloneNode(true);
+      tab.parentNode.replaceChild(newTab, tab);
     });
-    
-    // Re-seleciona as novas abas
     var newTabs = document.querySelectorAll('.tab-button');
-    
     newTabs.forEach(function(tab) {
-        tab.addEventListener('click', function(e) {
-            e.preventDefault();
-            var targetId = this.getAttribute('data-tab');
-            if (!targetId) return;
-            
-            // Remove active de todas as abas
-            newTabs.forEach(function(t) { t.classList.remove('active'); });
-            // Remove active de todos os conteúdos
-            contents.forEach(function(c) { c.classList.remove('active'); });
-            
-            // Ativa a aba clicada
-            this.classList.add('active');
-            // Ativa o conteúdo correspondente
-            var targetContent = document.getElementById(targetId);
-            if (targetContent) {
-                targetContent.classList.add('active');
-            } else {
-                console.warn('Conteúdo não encontrado:', targetId);
-            }
-        });
+      tab.addEventListener('click', function(e) {
+        e.preventDefault();
+        var targetId = this.getAttribute('data-tab');
+        if (!targetId) return;
+        newTabs.forEach(function(t) { t.classList.remove('active'); });
+        contents.forEach(function(c) { c.classList.remove('active'); });
+        this.classList.add('active');
+        var targetContent = document.getElementById(targetId);
+        if (targetContent) targetContent.classList.add('active');
+      });
     });
-    
-    // Garante que a primeira aba esteja visível se nenhuma estiver ativa
+    // Ativa a primeira aba se nenhuma estiver ativa
     var hasActive = false;
-    newTabs.forEach(function(tab) {
-        if (tab.classList.contains('active')) hasActive = true;
-    });
+    newTabs.forEach(function(tab) { if (tab.classList.contains('active')) hasActive = true; });
     if (!hasActive && newTabs.length > 0) {
-        newTabs[0].classList.add('active');
-        var firstContentId = newTabs[0].getAttribute('data-tab');
-        var firstContent = document.getElementById(firstContentId);
-        if (firstContent) firstContent.classList.add('active');
+      newTabs[0].classList.add('active');
+      var firstId = newTabs[0].getAttribute('data-tab');
+      var firstContent = document.getElementById(firstId);
+      if (firstContent) firstContent.classList.add('active');
     }
-},
+  },
   setupSearch: function() { var histSearch=$('historicoSearch'); if(histSearch) histSearch.addEventListener('input',()=>Historico.render()); var tipoFiltro=$('historicoFiltroTipo'); if(tipoFiltro) tipoFiltro.addEventListener('change',()=>Historico.render()); var statusFiltro=$('historicoFiltroStatus'); if(statusFiltro) statusFiltro.addEventListener('change',()=>Historico.render()); var searchInput=$('cad_searchInput'); if(searchInput){ searchInput.addEventListener('input',(e)=>{ var search=e.target.value.toLowerCase(); var filtered=State.clients.filter(c=>(c.nome&&c.nome.toLowerCase().indexOf(search)!==-1)||(c.cidade&&c.cidade.toLowerCase().indexOf(search)!==-1)); var original=State.clients; State.clients=filtered; Clientes.renderTable(); State.clients=original; }); } },
   updateUI: function() { var isAbertura=State.currentStatus==='abertura', isExecucao=State.currentStatus==='execucao', isFinalizacao=State.currentStatus==='finalizacao', isFechada=State.currentStatus==='fechada', isAprovada=State.currentStatus==='aprovada'; var btnIniciar=$('btnIniciarExecucao'); if(btnIniciar) btnIniciar.disabled=!isAbertura; var btnFinalizar=$('btnFinalizar'); if(btnFinalizar) btnFinalizar.disabled=!isExecucao; var btnFechar=$('btnFecharOS'); if(btnFechar) btnFechar.disabled=!isFinalizacao; var btnAprovar=$('btnAprovar'); if(btnAprovar) btnAprovar.disabled=!isFechada; var btnPDF=$('btnPreviaPDF'), btnEmail=$('btnEnviarEmail'); if(btnPDF) btnPDF.disabled=!isAprovada; if(btnEmail) btnEmail.disabled=!isAprovada; var editFields=['descricaoServico','pecasAplicadas','pendencias','horasExtras','adicionalNoturno','modelo','numSerie','horimetro']; editFields.forEach(id=>{var el=$(id);if(el) el.disabled=isFechada||isAprovada;}); var marcaSelect=$('marcaSelect'); if(marcaSelect) marcaSelect.disabled=isFechada||isAprovada; var badge=$('statusBadge'); if(badge){ var cfg={abertura:{text:'EM ABERTURA',class:'status-abertura'}, execucao:{text:'EM EXECUCAO',class:'status-execucao'}, finalizacao:{text:'FINALIZANDO',class:'status-finalizacao'}, fechada:{text:'FECHADA',class:'status-fechada'}, aprovada:{text:'APROVADA',class:'status-aprovada'}}[State.currentStatus]; badge.textContent=cfg.text; badge.className='status-badge '+cfg.class; } var steps=['abertura','execucao','finalizacao','fechada','aprovada']; document.querySelectorAll('.step').forEach((step,idx)=>{ step.classList.remove('active','completed','locked'); if(steps[idx]===State.currentStatus) step.classList.add('active'); else if(steps.indexOf(State.currentStatus)>idx) step.classList.add(steps[idx]==='fechada'&&State.currentStatus==='aprovada'?'locked':'completed'); }); },
   coletarDados: function() { var data={}; document.querySelectorAll('#tab-os input, #tab-os select, #tab-os textarea').forEach(el=>{if(el.id && el.type!=='file') data[el.id]=el.value;}); var checklistData=Checklist.getChecklistData(); Object.assign(data,checklistData); var marcaSelect=$('marcaSelect').value, marcaOutra=$('marcaOutra').value; data.marca=marcaSelect==='OUTRA'?marcaOutra.toUpperCase():marcaSelect; return data; },
