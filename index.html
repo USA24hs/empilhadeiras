@@ -396,7 +396,59 @@ var App = {
   },
   populateMarcas: function() { var select=$('marcaSelect'); if(!select) return; select.innerHTML='<option value="">Selecione</option>'; Config.marcas.forEach(m=>{if(m!=='OUTRA') select.innerHTML+=`<option value="${m}">${m}</option>`;}); select.innerHTML+='<option value="OUTRA">OUTRA</option>'; },
   setupMarcaSelect: function() { var select=$('marcaSelect'), div=$('marcaOutraDiv'), input=$('marcaOutra'); if(select&&div&&input){ select.addEventListener('change',()=>{ div.style.display=select.value==='OUTRA'?'block':'none'; Utils.setVal('marca',select.value==='OUTRA'?input.value.toUpperCase():select.value); }); input.addEventListener('input',()=>{ Utils.setVal('marca',input.value.toUpperCase()); }); } },
-  setupTabs: function() { var tabs=document.querySelectorAll('.tab-button'), contents=document.querySelectorAll('.tab-content'); tabs.forEach(tab=>{ tab.addEventListener('click',()=>{ var targetId=tab.getAttribute('data-tab'); if(!targetId) return; tabs.forEach(t=>t.classList.remove('active')); contents.forEach(c=>c.classList.remove('active')); tab.classList.add('active'); var target=document.getElementById(targetId); if(target) target.classList.add('active'); }); }); },
+setupTabs: function() {
+    var tabs = document.querySelectorAll('.tab-button');
+    var contents = document.querySelectorAll('.tab-content');
+    
+    if (tabs.length === 0 || contents.length === 0) {
+        console.warn('Abas não encontradas');
+        return;
+    }
+    
+    // Remove qualquer listener anterior (evita duplicação)
+    tabs.forEach(function(tab) {
+        var newTab = tab.cloneNode(true);
+        tab.parentNode.replaceChild(newTab, tab);
+    });
+    
+    // Re-seleciona as novas abas
+    var newTabs = document.querySelectorAll('.tab-button');
+    
+    newTabs.forEach(function(tab) {
+        tab.addEventListener('click', function(e) {
+            e.preventDefault();
+            var targetId = this.getAttribute('data-tab');
+            if (!targetId) return;
+            
+            // Remove active de todas as abas
+            newTabs.forEach(function(t) { t.classList.remove('active'); });
+            // Remove active de todos os conteúdos
+            contents.forEach(function(c) { c.classList.remove('active'); });
+            
+            // Ativa a aba clicada
+            this.classList.add('active');
+            // Ativa o conteúdo correspondente
+            var targetContent = document.getElementById(targetId);
+            if (targetContent) {
+                targetContent.classList.add('active');
+            } else {
+                console.warn('Conteúdo não encontrado:', targetId);
+            }
+        });
+    });
+    
+    // Garante que a primeira aba esteja visível se nenhuma estiver ativa
+    var hasActive = false;
+    newTabs.forEach(function(tab) {
+        if (tab.classList.contains('active')) hasActive = true;
+    });
+    if (!hasActive && newTabs.length > 0) {
+        newTabs[0].classList.add('active');
+        var firstContentId = newTabs[0].getAttribute('data-tab');
+        var firstContent = document.getElementById(firstContentId);
+        if (firstContent) firstContent.classList.add('active');
+    }
+},
   setupSearch: function() { var histSearch=$('historicoSearch'); if(histSearch) histSearch.addEventListener('input',()=>Historico.render()); var tipoFiltro=$('historicoFiltroTipo'); if(tipoFiltro) tipoFiltro.addEventListener('change',()=>Historico.render()); var statusFiltro=$('historicoFiltroStatus'); if(statusFiltro) statusFiltro.addEventListener('change',()=>Historico.render()); var searchInput=$('cad_searchInput'); if(searchInput){ searchInput.addEventListener('input',(e)=>{ var search=e.target.value.toLowerCase(); var filtered=State.clients.filter(c=>(c.nome&&c.nome.toLowerCase().indexOf(search)!==-1)||(c.cidade&&c.cidade.toLowerCase().indexOf(search)!==-1)); var original=State.clients; State.clients=filtered; Clientes.renderTable(); State.clients=original; }); } },
   updateUI: function() { var isAbertura=State.currentStatus==='abertura', isExecucao=State.currentStatus==='execucao', isFinalizacao=State.currentStatus==='finalizacao', isFechada=State.currentStatus==='fechada', isAprovada=State.currentStatus==='aprovada'; var btnIniciar=$('btnIniciarExecucao'); if(btnIniciar) btnIniciar.disabled=!isAbertura; var btnFinalizar=$('btnFinalizar'); if(btnFinalizar) btnFinalizar.disabled=!isExecucao; var btnFechar=$('btnFecharOS'); if(btnFechar) btnFechar.disabled=!isFinalizacao; var btnAprovar=$('btnAprovar'); if(btnAprovar) btnAprovar.disabled=!isFechada; var btnPDF=$('btnPreviaPDF'), btnEmail=$('btnEnviarEmail'); if(btnPDF) btnPDF.disabled=!isAprovada; if(btnEmail) btnEmail.disabled=!isAprovada; var editFields=['descricaoServico','pecasAplicadas','pendencias','horasExtras','adicionalNoturno','modelo','numSerie','horimetro']; editFields.forEach(id=>{var el=$(id);if(el) el.disabled=isFechada||isAprovada;}); var marcaSelect=$('marcaSelect'); if(marcaSelect) marcaSelect.disabled=isFechada||isAprovada; var badge=$('statusBadge'); if(badge){ var cfg={abertura:{text:'EM ABERTURA',class:'status-abertura'}, execucao:{text:'EM EXECUCAO',class:'status-execucao'}, finalizacao:{text:'FINALIZANDO',class:'status-finalizacao'}, fechada:{text:'FECHADA',class:'status-fechada'}, aprovada:{text:'APROVADA',class:'status-aprovada'}}[State.currentStatus]; badge.textContent=cfg.text; badge.className='status-badge '+cfg.class; } var steps=['abertura','execucao','finalizacao','fechada','aprovada']; document.querySelectorAll('.step').forEach((step,idx)=>{ step.classList.remove('active','completed','locked'); if(steps[idx]===State.currentStatus) step.classList.add('active'); else if(steps.indexOf(State.currentStatus)>idx) step.classList.add(steps[idx]==='fechada'&&State.currentStatus==='aprovada'?'locked':'completed'); }); },
   coletarDados: function() { var data={}; document.querySelectorAll('#tab-os input, #tab-os select, #tab-os textarea').forEach(el=>{if(el.id && el.type!=='file') data[el.id]=el.value;}); var checklistData=Checklist.getChecklistData(); Object.assign(data,checklistData); var marcaSelect=$('marcaSelect').value, marcaOutra=$('marcaOutra').value; data.marca=marcaSelect==='OUTRA'?marcaOutra.toUpperCase():marcaSelect; return data; },
