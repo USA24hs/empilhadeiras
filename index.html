@@ -8,7 +8,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
-    /* (mesmos estilos do seu código - mantidos) */
+    /* (estilos mantidos iguais) */
     * { -webkit-tap-highlight-color: transparent; }
     :root {
       --bg: #0c0f12;
@@ -123,7 +123,7 @@
     <div class="space-y-4">
       <div><label class="block text-xs text-[var(--muted)] mb-1">👨🏻‍🔧 Usuário</label><input type="text" id="loginUsername" class="form-input" placeholder="admin ou tecnico" autocomplete="off" autofocus></div>
       <div><label class="block text-xs text-[var(--muted)] mb-1">🔑 Senha</label><input type="password" id="loginPassword" class="form-input" placeholder="admin123 ou 123456" onkeypress="if(event.key==='Enter') Auth.login()"></div>
-      <button onclick="Auth.login()" class="btn btn-primary w-full"><i class="fas fa-sign-in-alt"></i> Entrar</button>
+      <button onclick="Auth.login()" id="loginButton" class="btn btn-primary w-full"><i class="fas fa-sign-in-alt"></i> Entrar</button>
       <div id="loginErrorMessage" class="login-error"></div>
     </div>
     <div class="mt-6 text-center text-xs text-[var(--muted)]"><p>Site: <strong class="text-[var(--accent)]">www.MARLIFT.com.br</strong></p><p class="mt-1">Suporte Técnico 📲 <strong>(98)98824-8877</strong></p></div>
@@ -243,7 +243,63 @@ const GoogleSheetsSync = {
   async syncSingleAgendamento(agendamento) { await this.postData('syncAgendamento', agendamento); },
   async syncPermissoes(permissoes) { await this.postData('syncPermissoes', permissoes); },
   async syncUsuarios(usuarios) { await this.postData('syncUsuarios', usuarios); },
-  async fetchFromSheet() { try { this.setStatus('Baixando dados...'); var resp = await fetch(this.webAppUrl); var data = await resp.json(); if(data.success){ if(data.clientes) { State.clients = data.clientes; Storage.saveClients(); if(Clientes.renderTable) Clientes.renderTable(); Clientes.updateStats(); } if(data.os) { State.osHistory = data.os; Storage.saveOSHistory(); if(Historico.render) Historico.render(); Historico.updateStats(); } if(data.agendamentos) { State.agendamentos = data.agendamentos; Storage.saveAgendamentos(); if(Agendamentos.atualizarLista) Agendamentos.atualizarLista(); } if(data.permissoes) { localStorage.setItem('marlift_permissoes_tecnico', JSON.stringify(data.permissoes)); if(Permissoes.carregarNaInterface) Permissoes.carregarNaInterface(); } if(data.usuarios) { Auth.saveUsers(data.usuarios); if(UserManager.render) UserManager.render(); } this.setStatus('Sincronizado',true); showToast('Dados sincronizados da planilha'); } } catch(e){ console.error(e); this.setStatus('Erro',false); } },
+  // BUSCAR USUÁRIOS DA PLANILHA
+  async fetchUsuariosFromSheet() { 
+    try { 
+      this.setStatus('Buscando usuários...'); 
+      var resp = await fetch(this.webAppUrl); 
+      var data = await resp.json(); 
+      if(data.success && data.usuarios && data.usuarios.length > 0){ 
+        Auth.saveUsers(data.usuarios);
+        this.setStatus('Usuários sincronizados', true);
+        return data.usuarios;
+      } 
+      return null;
+    } catch(e){ 
+      console.error('Erro ao buscar usuários:', e); 
+      this.setStatus('Erro ao buscar usuários', false);
+      return null;
+    } 
+  },
+  async fetchFromSheet() { 
+    try { 
+      this.setStatus('Baixando dados...'); 
+      var resp = await fetch(this.webAppUrl); 
+      var data = await resp.json(); 
+      if(data.success){ 
+        if(data.clientes) { 
+          State.clients = data.clientes; 
+          Storage.saveClients(); 
+          if(Clientes.renderTable) Clientes.renderTable(); 
+          Clientes.updateStats(); 
+        } 
+        if(data.os) { 
+          State.osHistory = data.os; 
+          Storage.saveOSHistory(); 
+          if(Historico.render) Historico.render(); 
+          Historico.updateStats(); 
+        } 
+        if(data.agendamentos) { 
+          State.agendamentos = data.agendamentos; 
+          Storage.saveAgendamentos(); 
+          if(Agendamentos.atualizarLista) Agendamentos.atualizarLista(); 
+        } 
+        if(data.permissoes) { 
+          localStorage.setItem('marlift_permissoes_tecnico', JSON.stringify(data.permissoes)); 
+          if(Permissoes.carregarNaInterface) Permissoes.carregarNaInterface(); 
+        } 
+        if(data.usuarios) { 
+          Auth.saveUsers(data.usuarios); 
+          if(UserManager.render) UserManager.render(); 
+        } 
+        this.setStatus('Sincronizado',true); 
+        showToast('Dados sincronizados da planilha'); 
+      } 
+    } catch(e){ 
+      console.error(e); 
+      this.setStatus('Erro',false); 
+    } 
+  },
   fullSync: async function() { await this.fetchFromSheet(); },
   syncSingleOS: async function(os) { await this.postData('syncOS', os); },
   syncSingleCliente: async function(cliente) { await this.postData('syncCliente', cliente); }
@@ -252,6 +308,7 @@ const GoogleSheetsSync = {
 // ==================== AUTENTICAÇÃO ====================
 var Auth = { 
   currentUser: null,
+  usersLoaded: false,
   getUsers: function() { 
     var users = localStorage.getItem('marlift_users'); 
     if(users) return JSON.parse(users); 
@@ -263,21 +320,53 @@ var Auth = {
     return defaultUsers; 
   },
   saveUsers: function(users) { localStorage.setItem('marlift_users', JSON.stringify(users)); },
-  login: function() { 
+  
+  // Carregar usuários da planilha antes do login
+  loadUsersFromSheet: async function() {
+    try {
+      var usuarios = await GoogleSheetsSync.fetchUsuariosFromSheet();
+      if(usuarios && usuarios.length > 0) {
+        this.usersLoaded = true;
+        return true;
+      }
+      return false;
+    } catch(e) {
+      console.error('Erro ao carregar usuários da planilha:', e);
+      return false;
+    }
+  },
+  
+  login: async function() { 
+    var loginBtn = document.getElementById('loginButton');
+    var originalText = loginBtn.innerHTML;
+    loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Carregando...';
+    loginBtn.disabled = true;
+    
     var login = document.getElementById('loginUsername').value.trim(); 
     var senha = document.getElementById('loginPassword').value; 
+    
     if(!login||!senha){ 
       showToast('Preencha usuário e senha',true); 
+      loginBtn.innerHTML = originalText;
+      loginBtn.disabled = false;
       return; 
     } 
+    
+    // Primeiro, tenta buscar os usuários da planilha
+    await this.loadUsersFromSheet();
+    
     var users = this.getUsers(); 
     var user = users.find(function(u) { return u.login === login && u.senha === senha; }); 
+    
     if(!user){ 
       document.getElementById('loginErrorMessage').style.display = 'block';
       document.getElementById('loginErrorMessage').innerHTML = 'Usuário ou senha inválidos!';
       document.getElementById('loginPassword').value=''; 
+      loginBtn.innerHTML = originalText;
+      loginBtn.disabled = false;
       return; 
     } 
+    
     document.getElementById('loginErrorMessage').style.display = 'none';
     this.currentUser = user; 
     localStorage.setItem('marlift_current_user', JSON.stringify(user)); 
@@ -286,6 +375,7 @@ var Auth = {
     document.getElementById('currentUserName').innerHTML = user.nome; 
     this.updatePermissions(); 
     showToast('Bem-vindo, ' + user.nome + '!'); 
+    
     // Inicializa o App APÓS o login
     if (typeof App !== 'undefined' && App.init) {
       App.init();
@@ -293,7 +383,11 @@ var Auth = {
     if(user.nivel === 'tecnico'){ 
       setTimeout(function(){ Jornada.carregar(); }, 500); 
     } 
+    
+    loginBtn.innerHTML = originalText;
+    loginBtn.disabled = false;
   },
+  
   logout: function() { 
     this.currentUser=null; 
     localStorage.removeItem('marlift_current_user'); 
@@ -304,6 +398,7 @@ var Auth = {
     document.getElementById('loginPassword').value = '';
     document.getElementById('loginErrorMessage').style.display = 'none';
   },
+  
   checkSession: function() { 
     var saved = localStorage.getItem('marlift_current_user'); 
     if(saved){ 
@@ -320,6 +415,7 @@ var Auth = {
     } 
     return false; 
   },
+  
   updatePermissions: function() { 
     if(!this.currentUser) return; 
     var isAdmin = this.currentUser.nivel === 'admin'; 
@@ -871,9 +967,7 @@ function adicionarCampoEquipamento(marca, modelo, serie, qtd, combustivel) {
 }
 
 // ==================== INICIALIZAÇÃO ====================
-// Aguarda o DOM carregar completamente
 document.addEventListener('DOMContentLoaded', function() { 
-  // Pequeno delay para garantir que tudo está carregado
   setTimeout(function() {
     if (Auth.checkSession()) {
       App.init();
