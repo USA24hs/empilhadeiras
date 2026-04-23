@@ -105,7 +105,10 @@
     .journey-step.completed { border-left-color:var(--success); opacity:0.8; }
     .journey-step h3 { color:var(--accent); margin-bottom:15px; display:flex; align-items:center; gap:10px; }
     .location-btn { background:var(--info); color:white; border:none; padding:6px 12px; border-radius:8px; cursor:pointer; font-size:12px; }
-    .schedule-card { background:var(--bg-secondary); border-radius:12px; padding:15px; margin-bottom:15px; border:1px solid var(--border); }
+    .schedule-card { background:var(--bg-secondary); border-radius:12px; padding:15px; margin-bottom:15px; border:1px solid var(--border); transition:0.2s; }
+    .schedule-card.overdue { border-left: 4px solid var(--danger); background: rgba(239,68,68,0.08); }
+    .schedule-card.overdue strong, .schedule-card.overdue .small-text { color: #fca5a5; }
+    .atrasado-badge { color: #ef4444; font-size: 0.7rem; font-weight: bold; margin-left: 8px; }
     .permission-item { background:var(--bg-secondary); border-radius:12px; padding:12px 16px; display:flex; align-items:center; justify-content:space-between; border:1px solid var(--border); }
     .permission-item label { cursor:pointer; font-weight:500; display:flex; align-items:center; gap:10px; }
     .permission-item input { width:20px; height:20px; accent-color:var(--accent); cursor:pointer; }
@@ -157,7 +160,7 @@
           <div class="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-[var(--accent)] to-[var(--accent-light)] rounded-xl flex items-center justify-center shadow-lg">
             <svg class="w-5 h-5 md:w-7 md:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
           </div>
-          <div><h1 class="font-display text-xl md:text-2xl tracking-wide text-[var(--accent)]">MARLIFT EMPILHADEIRAS</h1><p class="text-xs text-[var(--muted)]">Sistema de O.S - v10.0</p></div>
+          <div><h1 class="font-display text-xl md:text-2xl tracking-wide text-[var(--accent)]">MARLIFT EMPILHADEIRAS</h1><p class="text-xs text-[var(--muted)]">Sistema de O.S - v12.1</p></div>
         </div>
         <div class="user-area"><i class="fas fa-user-circle text-[var(--accent)] text-lg"></i><span class="font-medium text-sm" id="currentUserName">Carregando...</span><div class="w-px h-5 bg-[var(--border)]"></div><button onclick="Auth.logout()" class="text-xs text-[var(--muted)] hover:text-[var(--danger)]"><i class="fas fa-sign-out-alt"></i> Sair</button></div>
       </div>
@@ -179,8 +182,8 @@
       <button class="tab-button" data-tab="tab-checklist">Checklist</button>
       <button class="tab-button" data-tab="tab-clientes">Clientes</button>
       <button class="tab-button" data-tab="tab-historico">Historico</button>
-      <button class="tab-button" data-tab="tab-agendamentos" id="tabAgendamentosBtn" style="display:none;">Agendamentos</button>
-      <button class="tab-button" data-tab="tab-jornada" id="tabJornadaBtn" style="display:none;">Minha Jornada</button>
+      <button class="tab-button" data-tab="tab-agendamentos" id="tabAgendamentosBtn">Agendamentos</button>
+      <button class="tab-button" data-tab="tab-jornada" id="tabJornadaBtn">Minha Jornada</button>
       <button class="tab-button" data-tab="tab-permissoes" id="tabPermissoesBtn" style="display:none;">Permissoes</button>
       <button class="tab-button" data-tab="tab-usuarios" id="tabUsuariosBtn" style="display:none;">Usuarios</button>
     </div>
@@ -322,19 +325,22 @@
       </div>
     </div>
 
-    <!-- TAB AGENDAMENTOS -->
+    <!-- TAB AGENDAMENTOS (com visualização para técnicos e destaque vermelho) -->
     <div id="tab-agendamentos" class="tab-content">
       <div class="checklist-card p-4 md:p-5 mb-5">
         <h2 class="font-display text-xl mb-3"><i class="fas fa-calendar-alt"></i> Gerenciar Agendamentos</h2>
-        <div class="grid md:grid-cols-2 gap-4 mb-4">
-          <div><label class="block text-xs text-[var(--muted)] mb-1">Cliente</label><input type="text" id="ag_cliente" class="form-input" list="clientesList" placeholder="Selecione ou digite"><datalist id="clientesList"></datalist></div>
-          <div><label class="block text-xs text-[var(--muted)] mb-1">Equipamento</label><input type="text" id="ag_equipamento" class="form-input" placeholder="Marca/Modelo"></div>
-          <div><label class="block text-xs text-[var(--muted)] mb-1">Data</label><input type="date" id="ag_data" class="form-input"></div>
-          <div><label class="block text-xs text-[var(--muted)] mb-1">Horario</label><input type="time" id="ag_horario" class="form-input"></div>
-          <div><label class="block text-xs text-[var(--muted)] mb-1">Tecnico</label><select id="ag_tecnico" class="form-input"><option value="">Selecione</option></select></div>
-          <div><label class="block text-xs text-[var(--muted)] mb-1">Descricao</label><textarea id="ag_descricao" class="form-input" rows="2" placeholder="Descricao..."></textarea></div>
+        <div id="agendamentosAdminPanel" style="display: none;">
+          <div class="grid md:grid-cols-2 gap-4 mb-4">
+            <div><label class="block text-xs text-[var(--muted)] mb-1">Cliente</label><input type="text" id="ag_cliente" class="form-input" list="clientesList" placeholder="Selecione ou digite"><datalist id="clientesList"></datalist></div>
+            <div><label class="block text-xs text-[var(--muted)] mb-1">Equipamento</label><input type="text" id="ag_equipamento" class="form-input" placeholder="Marca/Modelo"></div>
+            <div><label class="block text-xs text-[var(--muted)] mb-1">Data</label><input type="date" id="ag_data" class="form-input"></div>
+            <div><label class="block text-xs text-[var(--muted)] mb-1">Horario</label><input type="time" id="ag_horario" class="form-input"></div>
+            <div><label class="block text-xs text-[var(--muted)] mb-1">Tecnico</label><select id="ag_tecnico" class="form-input"><option value="">Selecione</option></select></div>
+            <div><label class="block text-xs text-[var(--muted)] mb-1">Descricao</label><textarea id="ag_descricao" class="form-input" rows="2" placeholder="Descricao..."></textarea></div>
+          </div>
+          <div class="flex gap-3 flex-wrap"><button onclick="Agendamentos.salvar()" class="btn btn-primary"><i class="fas fa-save"></i> Salvar</button><button onclick="Agendamentos.limparForm()" class="btn btn-secondary">Limpar</button></div>
         </div>
-        <div class="flex gap-3 flex-wrap"><button onclick="Agendamentos.salvar()" class="btn btn-primary"><i class="fas fa-save"></i> Salvar</button><button onclick="Agendamentos.limparForm()" class="btn btn-secondary">Limpar</button></div>
+        <p id="agendamentoReadOnlyMsg" class="text-right text-xs text-[var(--muted)] mt-2"></p>
       </div>
       <div class="checklist-card p-4 md:p-5"><h3 class="font-display text-lg mb-3">Agendamentos Pendentes</h3><div id="agendamentosLista"></div></div>
     </div>
@@ -370,7 +376,11 @@
 </div>
 
 <script>
-// ==================== CONFIGURACOES ====================
+// ==================== MÓDULOS COMPLETOS (garantia de funcionamento) ====================
+function $(id) { return document.getElementById(id); }
+function showToast(msg, isError) { let t = $('toastCenter'); if(t) { let m = $('toastMessage'); if(m) m.textContent = msg; t.style.borderColor = isError ? 'var(--danger)' : 'var(--success)'; t.classList.remove('show'); void t.offsetWidth; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2500); } }
+
+// Config
 var Config = {
   marcas: ["TOYOTA","CLARK","BYD","PALETRANS","LINDE","HYSTER","YALE","CATERPILLAR","KOMATSU","MITSUBISHI","NISSAN","STILL","CROWN","JUNGHEINRICH","TCM","HYUNDAI","DOOSAN","HELI","HANGCHA","LONKING","OUTRA"],
   checklist: [
@@ -385,21 +395,22 @@ var Config = {
   maxFotos: 10
 };
 
+// State
 var State = {
-  currentStatus:'abertura',
-  fotosServico:[],
-  fotoHorimetro:null,
-  fotosPendencias:[],
-  clients:[],
-  osHistory:[],
-  editingClientId:null,
-  hasUnsavedChanges:false,
-  osCounter:0,
-  agendamentos:[],
-  jornada:{}
+  currentStatus: 'abertura',
+  fotosServico: [],
+  fotoHorimetro: null,
+  fotosPendencias: [],
+  clients: [],
+  osHistory: [],
+  editingClientId: null,
+  hasUnsavedChanges: false,
+  osCounter: 0,
+  agendamentos: [],
+  jornada: {}
 };
 
-// ==================== STORAGE ====================
+// Storage
 var Storage = {
   saveClients: function() { localStorage.setItem('marlift_clientes', JSON.stringify(State.clients)); },
   loadClients: function() { var d = localStorage.getItem('marlift_clientes'); State.clients = d ? JSON.parse(d) : []; return State.clients; },
@@ -413,488 +424,264 @@ var Storage = {
   loadJornada: function(login) { var all = localStorage.getItem('marlift_jornadas'); var obj = all ? JSON.parse(all) : {}; return obj[login] || null; }
 };
 
-// ==================== GOOGLE SHEETS SYNC (CORRIGIDO - COM TIMEOUT) ====================
+// GoogleSheetsSync (merge inteligente e estável)
 var GoogleSheetsSync = {
   webAppUrl: 'https://script.google.com/macros/s/AKfycbwZGVIOlYG2icQ6fuTmSkOjsKUFllIy4jGlXa7TMLy4lHCWpXarWkOyBMGznMqmkxPzYA/exec',
-  setStatus: function(msg) { var st = document.getElementById('syncStatusText'); if (st) st.textContent = msg; },
-
-  fetchComTimeout: function(url, timeoutMs) {
-    var controller = new AbortController();
-    var tempo = setTimeout(function() { controller.abort(); }, timeoutMs || 8000);
-    return fetch(url, { signal: controller.signal }).then(function(resp) {
-      clearTimeout(tempo);
-      return resp;
-    }).catch(function(err) {
-      clearTimeout(tempo);
-      throw err;
-    });
-  },
-
-  normalizarUsuarios: function(dadosBrutos) {
-    if (!dadosBrutos || !Array.isArray(dadosBrutos) || dadosBrutos.length === 0) return [];
-    var usuarios = [];
-    var primeiraLinha = dadosBrutos[0];
-
-    if (Array.isArray(primeiraLinha)) {
-      var cabecalhos = primeiraLinha.map(function(h) {
-        return (h || '').toString().toUpperCase().trim().replace(/[\s\-\.]/g, '_');
-      });
-      var idxNome = -1, idxLogin = -1, idxSenha = -1, idxNivel = -1;
-      for (var c = 0; c < cabecalhos.length; c++) {
-        var cab = cabecalhos[c];
-        if (cab.indexOf('NOME') !== -1 && idxNome === -1) idxNome = c;
-        if (cab.indexOf('LOGIN') !== -1 && idxLogin === -1) idxLogin = c;
-        if (cab.indexOf('SENHA') !== -1 && idxSenha === -1) idxSenha = c;
-        if (cab.indexOf('NIVEL') !== -1 && idxNivel === -1) idxNivel = c;
-      }
-      if (idxLogin === -1) idxLogin = 2;
-      if (idxSenha === -1) idxSenha = 3;
-      if (idxNivel === -1) idxNivel = 4;
-      if (idxNome === -1) idxNome = 0;
-
-      for (var i = 1; i < dadosBrutos.length; i++) {
-        var linha = dadosBrutos[i];
-        if (!linha || !linha[idxLogin] || !linha[idxSenha]) continue;
-        var login = (linha[idxLogin] || '').toString().trim();
-        var senha = (linha[idxSenha] || '').toString().trim();
-        if (!login || !senha) continue;
-        usuarios.push({
-          id: Date.now() + i,
-          nome: (linha[idxNome] || login).toString().trim(),
-          login: login.toLowerCase(),
-          senha: senha,
-          nivel: (linha[idxNivel] || 'tecnico').toString().trim().toLowerCase()
-        });
-      }
-    } else if (typeof primeiraLinha === 'object' && primeiraLinha !== null) {
-      dadosBrutos.forEach(function(item, i) {
-        var login = (item.LOGIN || item.login || item.Login || '').toString().trim();
-        var senha = (item.SENHA || item.senha || item.Senha || '').toString().trim();
-        if (!login || !senha) return;
-        usuarios.push({
-          id: item.id || Date.now() + i,
-          nome: (item.NOME || item.nome || item.Nome || login).toString().trim(),
-          login: login.toLowerCase(),
-          senha: senha,
-          nivel: (item.NIVEL || item.nivel || item.Nivel || 'tecnico').toString().trim().toLowerCase()
-        });
-      });
-    }
-    return usuarios;
-  },
-
-  async fetchUsuarios() {
+  setStatus: function(msg) { var st = $('syncStatusText'); if(st) st.textContent = msg; },
+  fetchUsuarios: async function() { try { let r = await fetch(this.webAppUrl, { signal: AbortSignal.timeout(8000) }); if(!r.ok) return false; let d = await r.json(); if(d.success && d.usuarios && Array.isArray(d.usuarios)) { Auth.saveUsers(d.usuarios); return true; } return false; } catch(e) { return false; } },
+  fullSync: async function() {
+    this.setStatus('Sincronizando...');
     try {
-      var resp = await this.fetchComTimeout(this.webAppUrl, 8000);
-      if (!resp.ok) return false;
-      var data = await resp.json();
-      if (!data.success) return false;
-      var dadosBrutos = data.usuarios || data.USUARIOS || data.Users || null;
-      if (!dadosBrutos && data.dados) {
-        dadosBrutos = Array.isArray(data.dados) ? data.dados : (data.dados.usuarios || data.dados.USUARIOS || null);
-      }
-      if (!dadosBrutos || !Array.isArray(dadosBrutos)) return false;
-      var usuarios = this.normalizarUsuarios(dadosBrutos);
-      if (usuarios.length > 0) {
-        Auth.saveUsers(usuarios);
-        console.log('[SYNC] ' + usuarios.length + ' usuarios carregados');
-        return true;
-      }
-      return false;
-    } catch (e) {
-      console.warn('[SYNC] fetchUsuarios:', e.name === 'AbortError' ? 'timeout 8s' : e.message);
-      return false;
-    }
-  },
-
-  async fetchFromSheet() {
-    try {
-      this.setStatus('Sincronizando...');
-      var resp = await this.fetchComTimeout(this.webAppUrl, 10000);
-      if (!resp.ok) { this.setStatus('Offline'); return; }
-      var data = await resp.json();
+      let resp = await fetch(this.webAppUrl, { signal: AbortSignal.timeout(10000) });
+      if (!resp.ok) throw new Error('HTTP ' + resp.status);
+      let data = await resp.json();
       if (data.success) {
-        var dadosUsuarios = data.usuarios || data.USUARIOS || null;
-        if (dadosUsuarios) {
-          var usuarios = this.normalizarUsuarios(dadosUsuarios);
-          if (usuarios.length > 0) { Auth.saveUsers(usuarios); if (UserManager.render) UserManager.render(); }
+        // Clientes
+        if (data.clientes && Array.isArray(data.clientes) && data.clientes.length > 0) {
+          State.clients = data.clientes;
+          Storage.saveClients();
+          if (Clientes.renderTable) Clientes.renderTable();
+          if (Clientes.updateStats) Clientes.updateStats();
         }
-        if (data.clientes) { State.clients = data.clientes; Storage.saveClients(); if (Clientes.renderTable) Clientes.renderTable(); if (Clientes.updateStats) Clientes.updateStats(); }
-        if (data.os) { State.osHistory = data.os; Storage.saveOSHistory(); if (Historico.render) Historico.render(); if (Historico.updateStats) Historico.updateStats(); }
-        if (data.agendamentos) { State.agendamentos = data.agendamentos; Storage.saveAgendamentos(); if (Agendamentos.atualizarLista) Agendamentos.atualizarLista(); }
-        if (data.permissoes) { localStorage.setItem('marlift_permissoes_tecnico', JSON.stringify(data.permissoes)); if (Permissoes.carregarNaInterface) Permissoes.carregarNaInterface(); }
+        // OS (apenas adiciona novas)
+        if (data.os && Array.isArray(data.os) && data.os.length > 0) {
+          let novas = 0;
+          data.os.forEach(osPlan => {
+            if (osPlan.numeroOS && !State.osHistory.find(osLoc => osLoc.numeroOS === osPlan.numeroOS)) {
+              State.osHistory.unshift(osPlan);
+              novas++;
+            }
+          });
+          if (novas > 0) {
+            Storage.saveOSHistory();
+            if (Historico.render) Historico.render();
+            if (Historico.updateStats) Historico.updateStats();
+          }
+        }
+        // Agendamentos (merge sem apagar)
+        if (data.agendamentos && Array.isArray(data.agendamentos)) {
+          let planilhaMap = new Map();
+          data.agendamentos.forEach(ag => { if(ag.id) planilhaMap.set(ag.id, ag); });
+          // Atualiza ou adiciona os da planilha
+          planilhaMap.forEach((agPlan, id) => {
+            let idxLocal = State.agendamentos.findIndex(ag => ag.id === id);
+            if (idxLocal !== -1) {
+              let statusLocal = State.agendamentos[idxLocal].status;
+              State.agendamentos[idxLocal] = agPlan;
+              if (statusLocal === 'concluido') State.agendamentos[idxLocal].status = 'concluido';
+            } else {
+              State.agendamentos.push(agPlan);
+            }
+          });
+          Storage.saveAgendamentos();
+          if (Agendamentos.atualizarLista) Agendamentos.atualizarLista();
+        }
+        // Permissões
+        if (data.permissoes) {
+          localStorage.setItem('marlift_permissoes_tecnico', JSON.stringify(data.permissoes));
+          if (Permissoes.carregarNaInterface) Permissoes.carregarNaInterface();
+        }
         this.setStatus('Sincronizado');
-        showToast('Sincronizado');
-      } else { this.setStatus('Offline'); }
-    } catch (e) {
-      console.warn('[SYNC] fetchFromSheet:', e.name === 'AbortError' ? 'timeout' : e.message);
-      this.setStatus('Offline');
-    }
-  },
-  fullSync: async function() { await this.fetchFromSheet(); }
-};
-
-// ==================== AUTENTICACAO (CORRIGIDA) ====================
-var Auth = {
-  currentUser: null,
-
-  getUsers: function() {
-    var users = localStorage.getItem('marlift_users');
-    if (users) {
-      try {
-        var parsed = JSON.parse(users);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
-      } catch (e) { /* corrompido */ }
-    }
-    var defaultUsers = [
-      { id: 1, nome: 'Administrador', login: 'admin', senha: 'admin123', nivel: 'admin' },
-      { id: 2, nome: 'Tecnico Principal', login: 'tecnico', senha: '123456', nivel: 'tecnico' }
-    ];
-    localStorage.setItem('marlift_users', JSON.stringify(defaultUsers));
-    return defaultUsers;
-  },
-
-  saveUsers: function(users) {
-    if (!users || !Array.isArray(users)) return;
-    localStorage.setItem('marlift_users', JSON.stringify(users));
-  },
-
-  checkSession: function() {
-    var saved = localStorage.getItem('marlift_current_user');
-    if (!saved) return false;
-    try {
-      var user = JSON.parse(saved);
-      if (!user || !user.login) return false;
-      var users = this.getUsers();
-      var found = users.find(function(u) {
-        return u.login.toLowerCase() === user.login.toLowerCase() && u.senha === user.senha;
-      });
-      if (found) {
-        this.currentUser = found;
-        var ls = document.getElementById('loginScreen');
-        var ac = document.getElementById('appContainer');
-        var un = document.getElementById('currentUserName');
-        if (ls) ls.style.display = 'none';
-        if (ac) ac.style.display = 'block';
-        if (un) un.innerHTML = found.nome;
-        this.updatePermissions();
-        return true;
+        showToast('Sincronização concluída');
+      } else {
+        throw new Error('Resposta inválida da planilha');
       }
-    } catch (e) { /* sessao corrompida */ }
-    localStorage.removeItem('marlift_current_user');
-    return false;
-  },
-
-  login: async function() {
-    var loginBtn = document.getElementById('loginButton');
-    var errorDiv = document.getElementById('loginErrorMessage');
-    var originalText = loginBtn.innerHTML;
-    loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Entrando...';
-    loginBtn.disabled = true;
-
-    var loginInput = document.getElementById('loginUsername').value.trim().toLowerCase();
-    var senhaInput = document.getElementById('loginPassword').value;
-
-    if (!loginInput || !senhaInput) {
-      errorDiv.style.display = 'block';
-      errorDiv.innerHTML = 'Preencha usuario e senha!';
-      loginBtn.innerHTML = originalText;
-      loginBtn.disabled = false;
-      return;
+    } catch (e) {
+      console.warn(e);
+      this.setStatus('Offline');
+      showToast('Erro na sincronização: ' + e.message, true);
     }
-
-    try { await GoogleSheetsSync.fetchUsuarios(); } catch (e) { /* continua com localStorage */ }
-
-    var users = this.getUsers();
-    var user = users.find(function(u) { return u.login.toLowerCase() === loginInput && u.senha === senhaInput; });
-
-    if (!user) {
-      errorDiv.style.display = 'block';
-      errorDiv.innerHTML = 'Usuario ou senha invalidos!';
-      document.getElementById('loginPassword').value = '';
-      loginBtn.innerHTML = originalText;
-      loginBtn.disabled = false;
-      return;
-    }
-
-    errorDiv.style.display = 'none';
-    this.currentUser = user;
-    localStorage.setItem('marlift_current_user', JSON.stringify(user));
-    document.getElementById('loginScreen').style.display = 'none';
-    document.getElementById('appContainer').style.display = 'block';
-    document.getElementById('currentUserName').innerHTML = user.nome;
-    this.updatePermissions();
-    showToast('Bem-vindo, ' + user.nome + '!');
-
-    if (typeof App !== 'undefined' && App.init) App.init();
-    if (user.nivel === 'tecnico' && typeof Jornada !== 'undefined') {
-      setTimeout(function() { Jornada.carregar(); }, 500);
-    }
-
-    loginBtn.innerHTML = originalText;
-    loginBtn.disabled = false;
-  },
-
-  logout: function() {
-    this.currentUser = null;
-    localStorage.removeItem('marlift_current_user');
-    if (typeof Timer !== 'undefined' && Timer.cleanup) Timer.cleanup();
-    document.getElementById('loginScreen').style.display = 'flex';
-    document.getElementById('appContainer').style.display = 'none';
-    document.getElementById('loginUsername').value = '';
-    document.getElementById('loginPassword').value = '';
-    document.getElementById('loginErrorMessage').style.display = 'none';
-  },
-
-  updatePermissions: function() {
-    if (!this.currentUser) return;
-    var isAdmin = this.currentUser.nivel === 'admin';
-    var isTecnico = this.currentUser.nivel === 'tecnico';
-    var tabs = { tabAgendamentosBtn: isAdmin, tabJornadaBtn: isTecnico, tabPermissoesBtn: isAdmin, tabUsuariosBtn: isAdmin };
-    for (var id in tabs) {
-      var el = document.getElementById(id);
-      if (el) el.style.display = tabs[id] ? 'inline-flex' : 'none';
-    }
-  },
-
-  isAdmin: function() { return this.currentUser && this.currentUser.nivel === 'admin'; }
+  }
 };
 
-// ==================== FUNCOES AUXILIARES ====================
-function $(id) { return document.getElementById(id); }
-function showToast(msg, isError) {
-  var t = $('toastCenter');
-  if (!t) return;
-  var msgSpan = $('toastMessage');
-  if (msgSpan) msgSpan.textContent = msg;
-  t.style.borderColor = isError ? 'var(--danger)' : 'var(--success)';
-  t.classList.remove('show');
-  void t.offsetWidth;
-  t.classList.add('show');
-  setTimeout(function() { if (t) t.classList.remove('show'); }, 2500);
-}
-
+// Utils
 var Utils = {
-  generateOSNumber: function() { State.osCounter = Storage.loadCounter(); State.osCounter++; Storage.saveCounter(); var now = new Date(); var yy = now.getFullYear().toString().slice(-2); var mm = String(now.getMonth() + 1).padStart(2,'0'); var os = 'OS-'+yy+mm+'-'+String(State.osCounter).padStart(4,'0'); var inp=$('numeroOS'); if(inp) inp.value=os; return os; },
-  setDefaultDate: function() { var inp=$('dataOS'); if(inp && !inp.value) inp.value = new Date().toISOString().split('T')[0]; },
-  getVal: function(id) { var e=$(id); return e ? e.value : ''; },
-  setVal: function(id,v) { var e=$(id); if(e) e.value = v || ''; },
-  formatStatus: function(st) { var map={abertura:'ABERTURA', execucao:'EM EXECUCAO', finalizacao:'FINALIZANDO', fechada:'FECHADA', aprovada:'APROVADA'}; return map[st] || (st||'').toUpperCase(); },
-  timeDiff: function(s,e) { if(!s||!e) return 0; var sp=s.split(':').map(Number), ep=e.split(':').map(Number); var diff=(ep[0]*60+ep[1])-(sp[0]*60+sp[1]); if(diff<0) diff+=1440; return diff; },
-  timeToMinutes: function(t) { if(!t) return 0; if(t.indexOf('h')!==-1) return parseInt(t)*60; var p=t.split(':'); return parseInt(p[0])*60+(parseInt(p[1])||0); },
+  generateOSNumber: function() { State.osCounter = Storage.loadCounter(); State.osCounter++; Storage.saveCounter(); let yy = new Date().getFullYear().toString().slice(-2), mm = String(new Date().getMonth() + 1).padStart(2, '0'); let os = 'OS-' + yy + mm + '-' + String(State.osCounter).padStart(4, '0'); if ($('numeroOS')) $('numeroOS').value = os; return os; },
+  setDefaultDate: function() { let inp = $('dataOS'); if (inp && !inp.value) inp.value = new Date().toISOString().split('T')[0]; },
+  getVal: function(id) { let e = $(id); return e ? e.value : ''; },
+  setVal: function(id, v) { let e = $(id); if (e) e.value = v || ''; },
+  formatStatus: function(st) { let map = { abertura: 'ABERTURA', execucao: 'EM EXECUCAO', finalizacao: 'FINALIZANDO', fechada: 'FECHADA', aprovada: 'APROVADA' }; return map[st] || (st || '').toUpperCase(); },
+  timeDiff: function(s, e) { if (!s || !e) return 0; let sp = s.split(':').map(Number), ep = e.split(':').map(Number); let diff = (ep[0] * 60 + ep[1]) - (sp[0] * 60 + sp[1]); if (diff < 0) diff += 1440; return diff; },
+  timeToMinutes: function(t) { if (!t) return 0; if (t.indexOf('h') !== -1) return parseInt(t) * 60; let p = t.split(':'); return parseInt(p[0]) * 60 + (parseInt(p[1]) || 0); },
   validarHorimetro: function(h) { return /^\d{1,5}h?$/.test(h) || /^\d{1,5}$/.test(h); }
 };
 
-// ==================== TIMER ====================
-var Timer = { interval:null, seconds:0, running:false, paused:false,
-  control: function(a){ if(a==='start') this.start(); else if(a==='pause') this.pause(); else if(a==='stop') this.stop(); },
-  start: function(){ if(this.running && !this.paused) return; if(this.paused){ if(!Utils.getVal('horaAlmocoRetorno')){ var n=new Date(); Utils.setVal('horaAlmocoRetorno', n.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})); } this.paused=false; this.running=true; } else { this.running=true; this.paused=false; if(this.seconds===0) this.reset(); if(!Utils.getVal('horaInicio')){ var n=new Date(); Utils.setVal('horaInicio', n.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})); } } if(this.interval) clearInterval(this.interval); var self=this; this.interval=setInterval(function(){ if(!self.paused && self.running){ self.seconds++; self.updateDisplay(); } },1000); },
-  pause: function(){ if(!this.running) return; this.paused=true; if(!Utils.getVal('horaAlmocoSaida')){ var n=new Date(); Utils.setVal('horaAlmocoSaida', n.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})); } },
-  stop: function(){ if(!this.running) return; clearInterval(this.interval); this.running=false; this.paused=false; if(!Utils.getVal('horaTermino')){ var n=new Date(); Utils.setVal('horaTermino', n.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})); } Horas.calcular(); },
-  reset: function(){ this.seconds=0; var d=$('timerDisplay'); if(d) d.textContent='00:00:00'; },
-  updateDisplay: function(){ var h=Math.floor(this.seconds/3600), m=Math.floor((this.seconds%3600)/60), s=this.seconds%60; var d=$('timerDisplay'); if(d) d.textContent=String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0'); },
-  cleanup: function(){ if(this.interval){ clearInterval(this.interval); this.interval=null; } }
+// Timer
+var Timer = {
+  interval: null, seconds: 0, running: false, paused: false,
+  control: function(a) { if (a === 'start') this.start(); else if (a === 'pause') this.pause(); else if (a === 'stop') this.stop(); },
+  start: function() { if (this.running && !this.paused) return; if (this.paused) { if (!Utils.getVal('horaAlmocoRetorno')) { let n = new Date(); Utils.setVal('horaAlmocoRetorno', n.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })); } this.paused = false; this.running = true; } else { this.running = true; this.paused = false; if (this.seconds === 0) this.reset(); if (!Utils.getVal('horaInicio')) { let n = new Date(); Utils.setVal('horaInicio', n.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })); } } if (this.interval) clearInterval(this.interval); let self = this; this.interval = setInterval(function() { if (!self.paused && self.running) { self.seconds++; self.updateDisplay(); } }, 1000); },
+  pause: function() { if (!this.running) return; this.paused = true; if (!Utils.getVal('horaAlmocoSaida')) { let n = new Date(); Utils.setVal('horaAlmocoSaida', n.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })); } },
+  stop: function() { if (!this.running) return; clearInterval(this.interval); this.running = false; this.paused = false; if (!Utils.getVal('horaTermino')) { let n = new Date(); Utils.setVal('horaTermino', n.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })); } Horas.calcular(); },
+  reset: function() { this.seconds = 0; let d = $('timerDisplay'); if (d) d.textContent = '00:00:00'; },
+  updateDisplay: function() { let h = Math.floor(this.seconds / 3600), m = Math.floor((this.seconds % 3600) / 60), s = this.seconds % 60; let d = $('timerDisplay'); if (d) d.textContent = String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0'); },
+  cleanup: function() { if (this.interval) { clearInterval(this.interval); this.interval = null; } }
 };
 
 var Horas = {
-  calcular: function(){ var i=Utils.getVal('horaInicio'), t=Utils.getVal('horaTermino'); if(!i||!t) return 0; var total=Utils.timeDiff(i,t); var saida=Utils.getVal('horaAlmocoSaida'), retorno=Utils.getVal('horaAlmocoRetorno'); if(saida&&retorno) total-=Utils.timeDiff(saida,retorno); var horas=Math.ceil(total/60); if(horas<1) horas=1; Utils.setVal('horasTotais',horas+'h'); this.updateTotal(); return horas; },
-  updateTotal: function(){ var hs=Utils.getVal('horasTotais'); var min=0; if(hs){ var m=hs.match(/(\d+)h/); if(m) min=parseInt(m[1])*60; } var extra=Utils.timeToMinutes(Utils.getVal('horasExtras')), not=Utils.timeToMinutes(Utils.getVal('adicionalNoturno')); var total=min+extra+not; var h=Math.floor(total/60), m=total%60; Utils.setVal('totalGeral', String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')); },
-  initListeners: function(){ var self=this; ['horaInicio','horaTermino','horaAlmocoSaida','horaAlmocoRetorno'].forEach(function(id){ var el=$(id); if(el) el.addEventListener('change',function(){ self.calcular(); }); }); var extras=$('horasExtras'); if(extras) extras.addEventListener('input',function(){ self.updateTotal(); }); var noturno=$('adicionalNoturno'); if(noturno) noturno.addEventListener('input',function(){ self.updateTotal(); }); }
+  calcular: function() { let i = Utils.getVal('horaInicio'), t = Utils.getVal('horaTermino'); if (!i || !t) return 0; let total = Utils.timeDiff(i, t); let saida = Utils.getVal('horaAlmocoSaida'), retorno = Utils.getVal('horaAlmocoRetorno'); if (saida && retorno) total -= Utils.timeDiff(saida, retorno); let horas = Math.ceil(total / 60); if (horas < 1) horas = 1; Utils.setVal('horasTotais', horas + 'h'); this.updateTotal(); return horas; },
+  updateTotal: function() { let hs = Utils.getVal('horasTotais'); let min = 0; if (hs) { let m = hs.match(/(\d+)h/); if (m) min = parseInt(m[1]) * 60; } let extra = Utils.timeToMinutes(Utils.getVal('horasExtras')), not = Utils.timeToMinutes(Utils.getVal('adicionalNoturno')); let total = min + extra + not; let h = Math.floor(total / 60), m = total % 60; Utils.setVal('totalGeral', String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0')); },
+  initListeners: function() { let self = this; ['horaInicio', 'horaTermino', 'horaAlmocoSaida', 'horaAlmocoRetorno'].forEach(id => { let el = $(id); if (el) el.addEventListener('change', function() { self.calcular(); }); }); let extras = $('horasExtras'); if (extras) extras.addEventListener('input', function() { self.updateTotal(); }); let noturno = $('adicionalNoturno'); if (noturno) noturno.addEventListener('input', function() { self.updateTotal(); }); }
 };
 
-// ==================== SIGNATURE ====================
-var Signature = { canvases:{}, drawing:{tec:false,cli:false},
-  init: function(){ this.canvases.tec=$('sigTecnicoCanvas'); this.canvases.cli=$('sigClienteCanvas'); this.setupCanvas('tec'); this.setupCanvas('cli'); this.clear('tec'); this.clear('cli'); },
-  setupCanvas: function(who){ var self=this, canvas=this.canvases[who]; if(!canvas) return; canvas.width=canvas.offsetWidth; canvas.height=canvas.offsetHeight; var ctx=canvas.getContext('2d'); ctx.strokeStyle='#1a1a1a'; ctx.lineWidth=2; ctx.lineCap='round'; ctx.lineJoin='round'; var getCoords=function(e){ var rect=canvas.getBoundingClientRect(); var scaleX=canvas.width/rect.width; var scaleY=canvas.height/rect.height; var clientX,clientY; if(e.touches){ clientX=e.touches[0].clientX; clientY=e.touches[0].clientY; }else{ clientX=e.clientX; clientY=e.clientY; } return {x:Math.max(0,Math.min((clientX-rect.left)*scaleX,canvas.width)), y:Math.max(0,Math.min((clientY-rect.top)*scaleY,canvas.height))}; }; var draw=function(e){ if(!self.drawing[who]) return; e.preventDefault(); var c=getCoords(e); ctx.lineTo(c.x,c.y); ctx.stroke(); ctx.beginPath(); ctx.moveTo(c.x,c.y); }; var start=function(e){ e.preventDefault(); self.drawing[who]=true; var c=getCoords(e); ctx.beginPath(); ctx.moveTo(c.x,c.y); }; var stop=function(){ self.drawing[who]=false; ctx.beginPath(); }; canvas.addEventListener('mousedown',start); canvas.addEventListener('mousemove',draw); canvas.addEventListener('mouseup',stop); canvas.addEventListener('mouseleave',stop); canvas.addEventListener('touchstart',start,{passive:false}); canvas.addEventListener('touchmove',draw,{passive:false}); canvas.addEventListener('touchend',stop); },
-  clear: function(who){ var canvas=this.canvases[who]; if(!canvas) return; var ctx=canvas.getContext('2d'); ctx.clearRect(0,0,canvas.width,canvas.height); ctx.fillStyle='#ffffff'; ctx.fillRect(0,0,canvas.width,canvas.height); ctx.strokeStyle='#1a1a1a'; ctx.lineWidth=2; Utils.setVal(who==='tec'?'assinaturaTecnicoData':'assinaturaClienteData',''); },
-  save: function(who){ var canvas=this.canvases[who]; if(!canvas) return; Utils.setVal(who==='tec'?'assinaturaTecnicoData':'assinaturaClienteData',canvas.toDataURL('image/png')); showToast('Assinatura salva'); State.hasUnsavedChanges=true; },
-  loadFromData: function(who,dataUrl){ if(!dataUrl) return; var canvas=this.canvases[who]; if(!canvas) return; var ctx=canvas.getContext('2d'); var img=new Image(); img.onload=function(){ ctx.clearRect(0,0,canvas.width,canvas.height); ctx.drawImage(img,0,0,canvas.width,canvas.height); }; img.src=dataUrl; }
+var Signature = {
+  canvases: {}, drawing: { tec: false, cli: false },
+  init: function() { this.canvases.tec = $('sigTecnicoCanvas'); this.canvases.cli = $('sigClienteCanvas'); this.setupCanvas('tec'); this.setupCanvas('cli'); this.clear('tec'); this.clear('cli'); },
+  setupCanvas: function(who) { let self = this, canvas = this.canvases[who]; if (!canvas) return; canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight; let ctx = canvas.getContext('2d'); ctx.strokeStyle = '#1a1a1a'; ctx.lineWidth = 2; ctx.lineCap = 'round'; ctx.lineJoin = 'round'; let getCoords = function(e) { let rect = canvas.getBoundingClientRect(); let scaleX = canvas.width / rect.width, scaleY = canvas.height / rect.height; let clientX, clientY; if (e.touches) { clientX = e.touches[0].clientX; clientY = e.touches[0].clientY; } else { clientX = e.clientX; clientY = e.clientY; } return { x: Math.max(0, Math.min((clientX - rect.left) * scaleX, canvas.width)), y: Math.max(0, Math.min((clientY - rect.top) * scaleY, canvas.height)) }; }; let draw = function(e) { if (!self.drawing[who]) return; e.preventDefault(); let c = getCoords(e); ctx.lineTo(c.x, c.y); ctx.stroke(); ctx.beginPath(); ctx.moveTo(c.x, c.y); }; let start = function(e) { e.preventDefault(); self.drawing[who] = true; let c = getCoords(e); ctx.beginPath(); ctx.moveTo(c.x, c.y); }; let stop = function() { self.drawing[who] = false; ctx.beginPath(); }; canvas.addEventListener('mousedown', start); canvas.addEventListener('mousemove', draw); canvas.addEventListener('mouseup', stop); canvas.addEventListener('mouseleave', stop); canvas.addEventListener('touchstart', start, { passive: false }); canvas.addEventListener('touchmove', draw, { passive: false }); canvas.addEventListener('touchend', stop); },
+  clear: function(who) { let canvas = this.canvases[who]; if (!canvas) return; let ctx = canvas.getContext('2d'); ctx.clearRect(0, 0, canvas.width, canvas.height); ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, canvas.width, canvas.height); ctx.strokeStyle = '#1a1a1a'; ctx.lineWidth = 2; Utils.setVal(who === 'tec' ? 'assinaturaTecnicoData' : 'assinaturaClienteData', ''); },
+  save: function(who) { let canvas = this.canvases[who]; if (!canvas) return; Utils.setVal(who === 'tec' ? 'assinaturaTecnicoData' : 'assinaturaClienteData', canvas.toDataURL('image/png')); showToast('Assinatura salva'); State.hasUnsavedChanges = true; },
+  loadFromData: function(who, dataUrl) { if (!dataUrl) return; let canvas = this.canvases[who]; if (!canvas) return; let ctx = canvas.getContext('2d'); let img = new Image(); img.onload = function() { ctx.clearRect(0, 0, canvas.width, canvas.height); ctx.drawImage(img, 0, 0, canvas.width, canvas.height); }; img.src = dataUrl; }
 };
 
-// ==================== CHECKLIST ====================
-var Checklist = { total:0, checked:0,
-  render: function(){ var container=$('checklistSections'); if(!container) return; container.innerHTML=''; this.total=0; var self=this; Config.checklist.forEach(function(section){ self.total+=section.items.length; var div=document.createElement('div'); div.className='checklist-card p-4 md:p-5 mb-4'; var itemsHtml=section.items.map(function(item){ return '<div class="checklist-item"><label><input type="checkbox" data-check="true" id="'+item.id+'" onchange="Checklist.updateProgress()"><span class="text-sm">'+item.label+'</span></label><select class="form-input w-24 text-xs" id="'+item.id+'_status"><option value="ok">OK</option><option value="atencao">Atencao</option><option value="critico">Critico</option><option value="na">N/A</option></select></div>'; }).join(''); div.innerHTML='<div class="flex justify-between items-center mb-3 flex-wrap"><h3 class="font-display text-xl">'+section.title+'</h3><button type="button" class="btn btn-secondary text-xs" onclick="Checklist.selectAll(\''+section.id+'\')">Selecionar Todos</button></div><div class="grid grid-cols-1 md:grid-cols-2 gap-2">'+itemsHtml+'</div>'; container.appendChild(div); }); this.updateProgress(); },
-  selectAll: function(sectionId){ var section=Config.checklist.find(function(s){ return s.id===sectionId; }); if(section){ section.items.forEach(function(item){ var cb=$(item.id); if(cb) cb.checked=true; }); } this.updateProgress(); },
-  updateProgress: function(){ var checkboxes=document.querySelectorAll('input[data-check="true"]'); this.checked=Array.from(checkboxes).filter(function(cb){ return cb.checked; }).length; var pct=this.total>0?Math.round((this.checked/this.total)*100):0; var pt=$('progressText'); if(pt) pt.textContent=pct+'%'; var fill=$('progressFill'); if(fill) fill.style.width=pct+'%'; },
-  getChecklistData: function(){ var data={}; document.querySelectorAll('input[data-check="true"]').forEach(function(cb){ data[cb.id]=cb.checked; }); document.querySelectorAll('#checklistSections select').forEach(function(sel){ data[sel.id]=sel.value; }); return data; },
-  loadChecklistData: function(data){ if(!data) return; document.querySelectorAll('input[data-check="true"]').forEach(function(cb){ if(data[cb.id]!==undefined) cb.checked=data[cb.id]; }); document.querySelectorAll('#checklistSections select').forEach(function(sel){ if(data[sel.id]!==undefined) sel.value=data[sel.id]; }); this.updateProgress(); }
+var Checklist = {
+  total: 0, checked: 0,
+  render: function() { let container = $('checklistSections'); if (!container) return; container.innerHTML = ''; this.total = 0; let self = this; Config.checklist.forEach(section => { self.total += section.items.length; let div = document.createElement('div'); div.className = 'checklist-card p-4 md:p-5 mb-4'; let itemsHtml = section.items.map(item => '<div class="checklist-item"><label><input type="checkbox" data-check="true" id="' + item.id + '" onchange="Checklist.updateProgress()"><span class="text-sm">' + item.label + '</span></label><select class="form-input w-24 text-xs" id="' + item.id + '_status"><option value="ok">OK</option><option value="atencao">Atencao</option><option value="critico">Critico</option><option value="na">N/A</option></select></div>').join(''); div.innerHTML = '<div class="flex justify-between items-center mb-3 flex-wrap"><h3 class="font-display text-xl">' + section.title + '</h3><button type="button" class="btn btn-secondary text-xs" onclick="Checklist.selectAll(\'' + section.id + '\')">Selecionar Todos</button></div><div class="grid grid-cols-1 md:grid-cols-2 gap-2">' + itemsHtml + '</div>'; container.appendChild(div); }); this.updateProgress(); },
+  selectAll: function(sectionId) { let section = Config.checklist.find(s => s.id === sectionId); if (section) { section.items.forEach(item => { let cb = $(item.id); if (cb) cb.checked = true; }); } this.updateProgress(); },
+  updateProgress: function() { let checkboxes = document.querySelectorAll('input[data-check="true"]'); this.checked = Array.from(checkboxes).filter(cb => cb.checked).length; let pct = this.total > 0 ? Math.round((this.checked / this.total) * 100) : 0; let pt = $('progressText'); if (pt) pt.textContent = pct + '%'; let fill = $('progressFill'); if (fill) fill.style.width = pct + '%'; },
+  getChecklistData: function() { let data = {}; document.querySelectorAll('input[data-check="true"]').forEach(cb => { data[cb.id] = cb.checked; }); document.querySelectorAll('#checklistSections select').forEach(sel => { data[sel.id] = sel.value; }); return data; },
+  loadChecklistData: function(data) { if (!data) return; document.querySelectorAll('input[data-check="true"]').forEach(cb => { if (data[cb.id] !== undefined) cb.checked = data[cb.id]; }); document.querySelectorAll('#checklistSections select').forEach(sel => { if (data[sel.id] !== undefined) sel.value = data[sel.id]; }); this.updateProgress(); }
 };
 
-// ==================== FOTOS ====================
 var Fotos = {
-  compress: function(b64){ return Promise.resolve(b64); },
-  compressFile: function(file) { return new Promise(function(resolve, reject) { var reader = new FileReader(); reader.onload = function(ev) { var img = new Image(); img.src = ev.target.result; img.onload = function() { var canvas = document.createElement('canvas'); var w=800, h=600, ratio = Math.min(w/img.width, h/img.height); var nw = img.width*ratio, nh = img.height*ratio; canvas.width=nw; canvas.height=nh; var ctx=canvas.getContext('2d'); ctx.fillStyle='#fff'; ctx.fillRect(0,0,nw,nh); ctx.drawImage(img,0,0,nw,nh); resolve(canvas.toDataURL('image/jpeg',0.7)); }; img.onerror=reject; }; reader.readAsDataURL(file); }); },
-  init: function() {
-    var self = this;
-    var fhi = $('fotoHorimetroInput');
-    if(fhi) fhi.addEventListener('change', function(e){ var file=e.target.files[0]; if(file&&file.type.startsWith('image/')){ var reader=new FileReader(); reader.onload=async function(ev){ try{ State.fotoHorimetro=await self.compress(ev.target.result); var p=$('fotoHorimetroPreview'); if(p) p.innerHTML='<div class="photo-item"><img src="'+State.fotoHorimetro+'"><div class="photo-remove" onclick="Fotos.removeHorimetro()">x</div></div>'; State.hasUnsavedChanges=true; showToast('Foto carregada'); }catch(err){showToast('Erro',true);} }; reader.readAsDataURL(file); } });
-    var fs = $('fotosServico');
-    if(fs) fs.addEventListener('change', async function(e){ var files=Array.from(e.target.files); if(State.fotosServico.length+files.length>Config.maxFotos){showToast('Max '+Config.maxFotos+' fotos',true);return;} var p=$('fotosPreview'); for(var i=0;i<files.length;i++){ var file=files[i]; if(!file.type.startsWith('image/'))continue; await new Promise(function(resolve){ var reader=new FileReader(); reader.onload=async function(ev){ try{ var comp=await self.compress(ev.target.result); State.fotosServico.push(comp); if(p){ var div=document.createElement('div'); div.className='photo-item'; div.innerHTML='<img src="'+comp+'"><div class="photo-remove" onclick="Fotos.removeServico(this)">x</div>'; p.appendChild(div); } }catch(err){} resolve(); }; reader.readAsDataURL(file); }); } fs.value=''; State.hasUnsavedChanges=true; });
-    var fp = $('fotosPendenciasInput');
-    if(fp) fp.addEventListener('change', async function(e){ var files=Array.from(e.target.files); if(State.fotosPendencias.length+files.length>Config.maxFotos){showToast('Max '+Config.maxFotos+' fotos',true);return;} var p=$('fotosPendenciasPreview'); for(var i=0;i<files.length;i++){ var file=files[i]; if(!file.type.startsWith('image/'))continue; await new Promise(function(resolve){ var reader=new FileReader(); reader.onload=async function(ev){ try{ var comp=await self.compress(ev.target.result); State.fotosPendencias.push(comp); if(p){ var div=document.createElement('div'); div.className='photo-item'; div.innerHTML='<img src="'+comp+'"><div class="photo-remove" onclick="Fotos.removePendencia(this)">x</div>'; p.appendChild(div); } }catch(err){} resolve(); }; reader.readAsDataURL(file); }); } fp.value=''; State.hasUnsavedChanges=true; });
-  },
-  removeHorimetro: function() { State.fotoHorimetro=null; var i=$('fotoHorimetroInput'); if(i)i.value=''; var p=$('fotoHorimetroPreview'); if(p)p.innerHTML=''; },
-  removeServico: function(el) { var c=el.parentNode.parentNode; var idx=Array.from(c.children).indexOf(el.parentNode); if(idx!==-1){State.fotosServico.splice(idx,1);el.parentNode.remove();} },
-  removePendencia: function(el) { var c=el.parentNode.parentNode; var idx=Array.from(c.children).indexOf(el.parentNode); if(idx!==-1){State.fotosPendencias.splice(idx,1);el.parentNode.remove();} }
+  compress: function(b64) { return Promise.resolve(b64); },
+  compressFile: function(file) { return new Promise((resolve, reject) => { let reader = new FileReader(); reader.onload = ev => { let img = new Image(); img.src = ev.target.result; img.onload = () => { let canvas = document.createElement('canvas'); let w = 800, h = 600, ratio = Math.min(w / img.width, h / img.height); let nw = img.width * ratio, nh = img.height * ratio; canvas.width = nw; canvas.height = nh; let ctx = canvas.getContext('2d'); ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, nw, nh); ctx.drawImage(img, 0, 0, nw, nh); resolve(canvas.toDataURL('image/jpeg', 0.7)); }; img.onerror = reject; }; reader.readAsDataURL(file); }); },
+  init: function() { let self = this; let fhi = $('fotoHorimetroInput'); if (fhi) fhi.addEventListener('change', async function(e) { let file = e.target.files[0]; if (file && file.type.startsWith('image/')) { let reader = new FileReader(); reader.onload = async function(ev) { try { State.fotoHorimetro = await self.compress(ev.target.result); let p = $('fotoHorimetroPreview'); if (p) p.innerHTML = '<div class="photo-item"><img src="' + State.fotoHorimetro + '"><div class="photo-remove" onclick="Fotos.removeHorimetro()">x</div></div>'; State.hasUnsavedChanges = true; showToast('Foto carregada'); } catch (err) { showToast('Erro', true); } }; reader.readAsDataURL(file); } }); let fs = $('fotosServico'); if (fs) fs.addEventListener('change', async function(e) { let files = Array.from(e.target.files); if (State.fotosServico.length + files.length > Config.maxFotos) { showToast('Max ' + Config.maxFotos + ' fotos', true); return; } let p = $('fotosPreview'); for (let file of files) { if (!file.type.startsWith('image/')) continue; await new Promise(resolve => { let reader = new FileReader(); reader.onload = async function(ev) { try { let comp = await self.compress(ev.target.result); State.fotosServico.push(comp); if (p) { let div = document.createElement('div'); div.className = 'photo-item'; div.innerHTML = '<img src="' + comp + '"><div class="photo-remove" onclick="Fotos.removeServico(this)">x</div>'; p.appendChild(div); } } catch (err) { } resolve(); }; reader.readAsDataURL(file); }); } fs.value = ''; State.hasUnsavedChanges = true; }); let fp = $('fotosPendenciasInput'); if (fp) fp.addEventListener('change', async function(e) { let files = Array.from(e.target.files); if (State.fotosPendencias.length + files.length > Config.maxFotos) { showToast('Max ' + Config.maxFotos + ' fotos', true); return; } let p = $('fotosPendenciasPreview'); for (let file of files) { if (!file.type.startsWith('image/')) continue; await new Promise(resolve => { let reader = new FileReader(); reader.onload = async function(ev) { try { let comp = await self.compress(ev.target.result); State.fotosPendencias.push(comp); if (p) { let div = document.createElement('div'); div.className = 'photo-item'; div.innerHTML = '<img src="' + comp + '"><div class="photo-remove" onclick="Fotos.removePendencia(this)">x</div>'; p.appendChild(div); } } catch (err) { } resolve(); }; reader.readAsDataURL(file); }); } fp.value = ''; State.hasUnsavedChanges = true; }); },
+  removeHorimetro: function() { State.fotoHorimetro = null; let i = $('fotoHorimetroInput'); if (i) i.value = ''; let p = $('fotoHorimetroPreview'); if (p) p.innerHTML = ''; },
+  removeServico: function(el) { let c = el.parentNode.parentNode; let idx = Array.from(c.children).indexOf(el.parentNode); if (idx !== -1) { State.fotosServico.splice(idx, 1); el.parentNode.remove(); } },
+  removePendencia: function(el) { let c = el.parentNode.parentNode; let idx = Array.from(c.children).indexOf(el.parentNode); if (idx !== -1) { State.fotosPendencias.splice(idx, 1); el.parentNode.remove(); } }
 };
 
-// ==================== JORNADA ====================
 var Jornada = {
-  carregar: function() { if(!Auth.currentUser||Auth.currentUser.nivel!=='tecnico') return; var saved=Storage.loadJornada(Auth.currentUser.login); if(saved){State.jornada=saved;}else{State.jornada={etapa:'inicio',dados:{}};Storage.saveJornada(Auth.currentUser.login,State.jornada);} this.renderizar(); },
-  renderizar: function() { var container=$('jornadaSteps'); var statusDiv=$('jornadaStatus'); if(!container) return; statusDiv.innerHTML='<i class="fas fa-info-circle"></i> Registre os passos da sua jornada.'; var dados=State.jornada.dados||{}; var html='<div class="journey-step"><h3><i class="fas fa-play-circle"></i> 1. Inicio</h3><div class="grid grid-cols-2 gap-3"><div><label>Placa</label><input type="text" id="jornada_placa_inicio" class="form-input" value="'+(dados.inicio&&dados.inicio.placa||'')+'"></div><div><label>KM</label><input type="number" id="jornada_km_inicio" class="form-input" value="'+(dados.inicio&&dados.inicio.km||'')+'"></div></div><div class="mt-2"><button onclick="Jornada.obterLocalizacao(\'inicio\')" class="location-btn"><i class="fas fa-map-marker-alt"></i> Localizacao</button> <span id="localizacao_inicio_texto" class="text-xs text-[var(--muted)]">'+(dados.inicio&&dados.inicio.localizacao||'Nao obtida')+'</span></div><div class="mt-2"><label>Foto</label><input type="file" id="jornada_foto_inicio" accept="image/*" class="form-input"></div><button onclick="Jornada.salvarEtapa(\'inicio\')" class="btn btn-primary mt-3">Registrar</button></div>'; html+='<div class="journey-step"><h3><i class="fas fa-flag-checkered"></i> 2. Chegada</h3><div><button onclick="Jornada.obterLocalizacao(\'chegada\')" class="location-btn">Localizacao</button> <span id="localizacao_chegada_texto" class="text-xs text-[var(--muted)]">'+(dados.chegada&&dados.chegada.localizacao||'Nao obtida')+'</span></div><div class="mt-2"><label>Foto</label><input type="file" id="jornada_foto_chegada" accept="image/*" class="form-input"></div><button onclick="Jornada.salvarEtapa(\'chegada\')" class="btn btn-primary mt-3">Registrar</button></div>'; html+='<div class="journey-step"><h3><i class="fas fa-stop-circle"></i> 3. Finalizacao</h3><div class="grid grid-cols-2 gap-3"><div><label>Placa (retorno)</label><input type="text" id="jornada_placa_final" class="form-input" value="'+(dados.final&&dados.final.placa||'')+'"></div><div><label>KM final</label><input type="number" id="jornada_km_final" class="form-input" value="'+(dados.final&&dados.final.km||'')+'"></div></div><div class="mt-2"><button onclick="Jornada.obterLocalizacao(\'final\')" class="location-btn">Localizacao</button> <span id="localizacao_final_texto" class="text-xs text-[var(--muted)]">'+(dados.final&&dados.final.localizacao||'Nao obtida')+'</span></div><div class="mt-2"><label>Foto</label><input type="file" id="jornada_foto_final" accept="image/*" class="form-input"></div><button onclick="Jornada.salvarEtapa(\'final\')" class="btn btn-primary mt-3">Registrar</button></div>'; container.innerHTML=html; },
-  obterLocalizacao: function(etapa) { if(!navigator.geolocation){showToast('Geo nao suportada',true);return;} navigator.geolocation.getCurrentPosition(function(pos){ var texto=pos.coords.latitude.toFixed(6)+', '+pos.coords.longitude.toFixed(6); var span=$('localizacao_'+etapa+'_texto'); if(span)span.innerHTML=texto; if(!State.jornada.dados[etapa])State.jornada.dados[etapa]={}; State.jornada.dados[etapa].localizacao=texto; Storage.saveJornada(Auth.currentUser.login,State.jornada); showToast('Localizacao obtida'); },function(err){showToast('Erro: '+err.message,true);}); },
-  salvarEtapa: async function(etapa) { var dados=State.jornada.dados; if(etapa==='inicio'){ var placa=$('jornada_placa_inicio').value; var km=$('jornada_km_inicio').value; if(!placa||!km){showToast('Preencha placa e KM',true);return;} dados.inicio={placa:placa,km:km,localizacao:dados.inicio?dados.inicio.localizacao:'',dataHora:new Date().toLocaleString(),concluido:true}; }else if(etapa==='chegada'){ var foto=$('jornada_foto_chegada').files[0]; var fotoData=foto?await Fotos.compressFile(foto):null; dados.chegada={localizacao:dados.chegada?dados.chegada.localizacao:'',foto:fotoData,dataHora:new Date().toLocaleString(),concluido:true}; }else if(etapa==='final'){ var placaF=$('jornada_placa_final').value; var kmF=$('jornada_km_final').value; if(!placaF||!kmF){showToast('Preencha placa e KM final',true);return;} var fotoF=$('jornada_foto_final').files[0]; var fotoDataF=fotoF?await Fotos.compressFile(fotoF):null; dados.final={placa:placaF,km:kmF,localizacao:dados.final?dados.final.localizacao:'',foto:fotoDataF,dataHora:new Date().toLocaleString(),concluido:true}; } Storage.saveJornada(Auth.currentUser.login,State.jornada); this.renderizar(); showToast('Etapa '+etapa+' registrada!'); }
+  carregar: function() { if (!Auth.currentUser || Auth.currentUser.nivel !== 'tecnico') return; let saved = Storage.loadJornada(Auth.currentUser.login); if (saved) { State.jornada = saved; } else { State.jornada = { etapa: 'inicio', dados: {} }; Storage.saveJornada(Auth.currentUser.login, State.jornada); } this.renderizar(); },
+  renderizar: function() { let container = $('jornadaSteps'); let statusDiv = $('jornadaStatus'); if (!container) return; statusDiv.innerHTML = '<i class="fas fa-info-circle"></i> Registre os passos da sua jornada.'; let dados = State.jornada.dados || {}; let html = '<div class="journey-step"><h3><i class="fas fa-play-circle"></i> 1. Inicio</h3><div class="grid grid-cols-2 gap-3"><div><label>Placa</label><input type="text" id="jornada_placa_inicio" class="form-input" value="' + (dados.inicio && dados.inicio.placa || '') + '"></div><div><label>KM</label><input type="number" id="jornada_km_inicio" class="form-input" value="' + (dados.inicio && dados.inicio.km || '') + '"></div></div><div class="mt-2"><button onclick="Jornada.obterLocalizacao(\'inicio\')" class="location-btn"><i class="fas fa-map-marker-alt"></i> Localizacao</button> <span id="localizacao_inicio_texto" class="text-xs text-[var(--muted)]">' + (dados.inicio && dados.inicio.localizacao || 'Nao obtida') + '</span></div><div class="mt-2"><label>Foto</label><input type="file" id="jornada_foto_inicio" accept="image/*" class="form-input"></div><button onclick="Jornada.salvarEtapa(\'inicio\')" class="btn btn-primary mt-3">Registrar</button></div>';
+  html += '<div class="journey-step"><h3><i class="fas fa-flag-checkered"></i> 2. Chegada</h3><div><button onclick="Jornada.obterLocalizacao(\'chegada\')" class="location-btn">Localizacao</button> <span id="localizacao_chegada_texto" class="text-xs text-[var(--muted)]">' + (dados.chegada && dados.chegada.localizacao || 'Nao obtida') + '</span></div><div class="mt-2"><label>Foto</label><input type="file" id="jornada_foto_chegada" accept="image/*" class="form-input"></div><button onclick="Jornada.salvarEtapa(\'chegada\')" class="btn btn-primary mt-3">Registrar</button></div>';
+  html += '<div class="journey-step"><h3><i class="fas fa-stop-circle"></i> 3. Finalizacao</h3><div class="grid grid-cols-2 gap-3"><div><label>Placa (retorno)</label><input type="text" id="jornada_placa_final" class="form-input" value="' + (dados.final && dados.final.placa || '') + '"></div><div><label>KM final</label><input type="number" id="jornada_km_final" class="form-input" value="' + (dados.final && dados.final.km || '') + '"></div></div><div class="mt-2"><button onclick="Jornada.obterLocalizacao(\'final\')" class="location-btn">Localizacao</button> <span id="localizacao_final_texto" class="text-xs text-[var(--muted)]">' + (dados.final && dados.final.localizacao || 'Nao obtida') + '</span></div><div class="mt-2"><label>Foto</label><input type="file" id="jornada_foto_final" accept="image/*" class="form-input"></div><button onclick="Jornada.salvarEtapa(\'final\')" class="btn btn-primary mt-3">Registrar</button></div>';
+  container.innerHTML = html; },
+  obterLocalizacao: function(etapa) { if (!navigator.geolocation) { showToast('Geo nao suportada', true); return; } navigator.geolocation.getCurrentPosition(pos => { let texto = pos.coords.latitude.toFixed(6) + ', ' + pos.coords.longitude.toFixed(6); let span = $('localizacao_' + etapa + '_texto'); if (span) span.innerHTML = texto; if (!State.jornada.dados[etapa]) State.jornada.dados[etapa] = {}; State.jornada.dados[etapa].localizacao = texto; Storage.saveJornada(Auth.currentUser.login, State.jornada); showToast('Localizacao obtida'); }, err => { showToast('Erro: ' + err.message, true); }); },
+  salvarEtapa: async function(etapa) { let dados = State.jornada.dados; if (etapa === 'inicio') { let placa = $('jornada_placa_inicio').value; let km = $('jornada_km_inicio').value; if (!placa || !km) { showToast('Preencha placa e KM', true); return; } dados.inicio = { placa: placa, km: km, localizacao: dados.inicio ? dados.inicio.localizacao : '', dataHora: new Date().toLocaleString(), concluido: true }; } else if (etapa === 'chegada') { let foto = $('jornada_foto_chegada').files[0]; let fotoData = foto ? await Fotos.compressFile(foto) : null; dados.chegada = { localizacao: dados.chegada ? dados.chegada.localizacao : '', foto: fotoData, dataHora: new Date().toLocaleString(), concluido: true }; } else if (etapa === 'final') { let placaF = $('jornada_placa_final').value; let kmF = $('jornada_km_final').value; if (!placaF || !kmF) { showToast('Preencha placa e KM final', true); return; } let fotoF = $('jornada_foto_final').files[0]; let fotoDataF = fotoF ? await Fotos.compressFile(fotoF) : null; dados.final = { placa: placaF, km: kmF, localizacao: dados.final ? dados.final.localizacao : '', foto: fotoDataF, dataHora: new Date().toLocaleString(), concluido: true }; } Storage.saveJornada(Auth.currentUser.login, State.jornada); this.renderizar(); showToast('Etapa ' + etapa + ' registrada!'); }
 };
 
-// ==================== AGENDAMENTOS ====================
 var Agendamentos = {
-  carregar: function() { State.agendamentos=Storage.loadAgendamentos(); this.atualizarLista(); this.atualizarSelectTecnicos(); this.atualizarDatalistClientes(); },
-  atualizarSelectTecnicos: function() { var s=$('ag_tecnico'); if(!s)return; var users=Auth.getUsers(); var tecnicos=users.filter(function(u){return u.nivel==='tecnico';}); s.innerHTML='<option value="">Selecione</option>'; tecnicos.forEach(function(t){s.innerHTML+='<option value="'+t.login+'">'+t.nome+'</option>';}); },
-  atualizarDatalistClientes: function() { var dl=$('clientesList'); if(!dl)return; dl.innerHTML=''; State.clients.forEach(function(c){var o=document.createElement('option');o.value=c.nome;dl.appendChild(o);}); },
-  salvar: function() { if(!Auth.isAdmin()){showToast('Apenas admin',true);return;} var cliente=$('ag_cliente').value.trim(); var data=$('ag_data').value; var tecnico=$('ag_tecnico').value; if(!cliente||!data||!tecnico){showToast('Cliente, data e tecnico obrigatorios',true);return;} State.agendamentos.push({id:Date.now(),cliente:cliente,equipamento:$('ag_equipamento').value,data:data,horario:$('ag_horario').value,tecnico:tecnico,descricao:$('ag_descricao').value,status:'pendente'}); Storage.saveAgendamentos(); this.limparForm(); this.atualizarLista(); showToast('Agendamento salvo'); },
-  limparForm: function() { ['ag_cliente','ag_equipamento','ag_data','ag_horario','ag_tecnico','ag_descricao'].forEach(function(id){var e=$(id);if(e)e.value='';}); },
-  atualizarLista: function() { var c=$('agendamentosLista'); if(!c)return; var pendentes=State.agendamentos.filter(function(a){return a.status!=='concluido';}); if(pendentes.length===0){c.innerHTML='<div class="text-center p-4 text-[var(--muted)]">Nenhum agendamento</div>';return;} var html=''; pendentes.forEach(function(a){html+='<div class="schedule-card"><div><strong>'+a.cliente+'</strong>'+(a.equipamento?' - '+a.equipamento:'')+'<br><small>'+a.data+' '+(a.horario||'')+' | '+a.tecnico+'</small><br><small>'+(a.descricao||'')+'</small></div><div class="mt-2"><button onclick="Agendamentos.concluir('+a.id+')" class="btn btn-success text-xs py-1 px-2">Concluir</button> <button onclick="Agendamentos.excluir('+a.id+')" class="btn btn-danger text-xs py-1 px-2">Excluir</button></div></div>';}); c.innerHTML=html; },
-  concluir: function(id) { var idx=State.agendamentos.findIndex(function(a){return a.id===id;}); if(idx!==-1){State.agendamentos[idx].status='concluido';Storage.saveAgendamentos();this.atualizarLista();showToast('Concluido');} },
-  excluir: function(id) { if(confirm('Excluir?')){State.agendamentos=State.agendamentos.filter(function(a){return a.id!==id;});Storage.saveAgendamentos();this.atualizarLista();showToast('Excluido');} }
+  carregar: function() { State.agendamentos = Storage.loadAgendamentos(); this.atualizarLista(); this.atualizarSelectTecnicos(); this.atualizarDatalistClientes(); },
+  atualizarSelectTecnicos: function() { let s = $('ag_tecnico'); if (!s) return; let users = Auth.getUsers(); let tecnicos = users.filter(u => u.nivel === 'tecnico'); s.innerHTML = '<option value="">Selecione</option>'; tecnicos.forEach(t => { s.innerHTML += '<option value="' + t.login + '">' + t.nome + '</option>'; }); },
+  atualizarDatalistClientes: function() { let dl = $('clientesList'); if (!dl) return; dl.innerHTML = ''; State.clients.forEach(c => { let o = document.createElement('option'); o.value = c.nome; dl.appendChild(o); }); },
+  salvar: function() { if (!Auth.isAdmin()) { showToast('Apenas administrador pode criar agendamentos', true); return; } let cliente = $('ag_cliente').value.trim(); let data = $('ag_data').value; let tecnico = $('ag_tecnico').value; if (!cliente || !data || !tecnico) { showToast('Cliente, data e tecnico obrigatorios', true); return; } State.agendamentos.push({ id: Date.now(), cliente: cliente, equipamento: $('ag_equipamento').value, data: data, horario: $('ag_horario').value, tecnico: tecnico, descricao: $('ag_descricao').value, status: 'pendente' }); Storage.saveAgendamentos(); this.limparForm(); this.atualizarLista(); showToast('Agendamento salvo'); },
+  limparForm: function() { ['ag_cliente', 'ag_equipamento', 'ag_data', 'ag_horario', 'ag_tecnico', 'ag_descricao'].forEach(id => { let e = $(id); if (e) e.value = ''; }); },
+  atualizarLista: function() { let container = $('agendamentosLista'); if (!container) return; let pendentes = State.agendamentos.filter(a => a.status !== 'concluido'); if (pendentes.length === 0) { container.innerHTML = '<div class="text-center p-4 text-[var(--muted)]">Nenhum agendamento pendente</div>'; return; } let hoje = new Date(); hoje.setHours(0, 0, 0, 0); let html = ''; pendentes.forEach(a => { let dataAgenda = new Date(a.data); dataAgenda.setHours(0, 0, 0, 0); let isAtrasado = dataAgenda < hoje && a.status !== 'concluido'; let cardClass = 'schedule-card' + (isAtrasado ? ' overdue' : ''); let badgeAtraso = isAtrasado ? '<span class="atrasado-badge"><i class="fas fa-exclamation-triangle"></i> Atrasado</span>' : ''; html += `<div class="${cardClass}"><div><strong>${a.cliente}</strong>${a.equipamento ? ' - ' + a.equipamento : ''}<br><small>${a.data} ${a.horario || ''} | ${a.tecnico} ${badgeAtraso}</small><br><small>${a.descricao || ''}</small></div>${Auth.isAdmin() ? `<div class="mt-2"><button onclick="Agendamentos.concluir(${a.id})" class="btn btn-success text-xs py-1 px-2">Concluir</button> <button onclick="Agendamentos.excluir(${a.id})" class="btn btn-danger text-xs py-1 px-2">Excluir</button></div>` : ''}</div>`; }); container.innerHTML = html; },
+  concluir: function(id) { if (!Auth.isAdmin()) { showToast('Sem permissao', true); return; } let idx = State.agendamentos.findIndex(a => a.id === id); if (idx !== -1) { State.agendamentos[idx].status = 'concluido'; Storage.saveAgendamentos(); this.atualizarLista(); showToast('Concluido'); } },
+  excluir: function(id) { if (!Auth.isAdmin()) { showToast('Sem permissao', true); return; } if (confirm('Excluir?')) { State.agendamentos = State.agendamentos.filter(a => a.id !== id); Storage.saveAgendamentos(); this.atualizarLista(); showToast('Excluido'); } }
 };
 
-// ==================== CLIENTES ====================
 var Clientes = {
-  load: function() { State.clients=Storage.loadClients(); this.renderTable(); this.updateStats(); },
-  updateStats: function() { var tc=State.clients.length; var tm=State.clients.reduce(function(a,c){return a+(c.equipamentos?c.equipamentos.length:0);},0); var cc=new Set(); State.osHistory.forEach(function(os){if(os.cliente)cc.add(os.cliente);}); var to=State.osHistory.length; var oa=State.osHistory.filter(function(os){return['abertura','execucao','finalizacao'].indexOf(os.status)!==-1;}).length; var op=State.osHistory.filter(function(os){return os.status==='aprovada';}).length; if($('statTotalClientes'))$('statTotalClientes').innerText=tc; if($('statTotalMarcas'))$('statTotalMarcas').innerText=tm; if($('statClientesComOS'))$('statClientesComOS').innerText=cc.size; if($('statTotalOSClientes'))$('statTotalOSClientes').innerText=to; if($('statOSAbertasCliente'))$('statOSAbertasCliente').innerText=oa; if($('statOSAprovadasCliente'))$('statOSAprovadasCliente').innerText=op; },
-  renderTable: function() { var tbody=$('cad_tableBody'); if(!tbody)return; tbody.innerHTML=''; if(State.clients.length===0){tbody.innerHTML='<tr><td colspan="4" class="text-center p-4">Nenhum cliente</td></tr>';return;} State.clients.forEach(function(c){ var marcas=(c.equipamentos||[]).map(function(eq){return eq.marca;}).join(', '); var row=tbody.insertRow(); row.innerHTML='<td class="p-2">'+(c.nome||'-')+'</td><td class="p-2">'+(c.cidade||'-')+'</td><td class="p-2">'+(marcas||'-')+'</td><td class="p-2"><button onclick="Clientes.select('+c.id+')" class="btn btn-primary text-xs py-1 px-2">Selecionar</button> <i class="fas fa-edit text-blue-400 cursor-pointer ml-2" onclick="Clientes.edit('+c.id+')"></i> <i class="fas fa-trash text-red-400 cursor-pointer ml-2" onclick="Clientes.delete('+c.id+')"></i></td>'; }); },
+  load: function() { State.clients = Storage.loadClients(); this.renderTable(); this.updateStats(); },
+  updateStats: function() { let tc = State.clients.length; let tm = State.clients.reduce((a, c) => a + (c.equipamentos ? c.equipamentos.length : 0), 0); let cc = new Set(); State.osHistory.forEach(os => { if (os.cliente) cc.add(os.cliente); }); let to = State.osHistory.length; let oa = State.osHistory.filter(os => ['abertura', 'execucao', 'finalizacao'].indexOf(os.status) !== -1).length; let op = State.osHistory.filter(os => os.status === 'aprovada').length; if ($('statTotalClientes')) $('statTotalClientes').innerText = tc; if ($('statTotalMarcas')) $('statTotalMarcas').innerText = tm; if ($('statClientesComOS')) $('statClientesComOS').innerText = cc.size; if ($('statTotalOSClientes')) $('statTotalOSClientes').innerText = to; if ($('statOSAbertasCliente')) $('statOSAbertasCliente').innerText = oa; if ($('statOSAprovadasCliente')) $('statOSAprovadasCliente').innerText = op; },
+  renderTable: function() { let tbody = $('cad_tableBody'); if (!tbody) return; tbody.innerHTML = ''; if (State.clients.length === 0) { tbody.innerHTML = '<tr><td colspan="4" class="text-center p-4">Nenhum cliente</td></tr>'; return; } State.clients.forEach(c => { let marcas = (c.equipamentos || []).map(eq => eq.marca).join(', '); let row = tbody.insertRow(); row.innerHTML = '<td class="p-2">' + (c.nome || '-') + '</td><td class="p-2">' + (c.cidade || '-') + '</td><td class="p-2">' + (marcas || '-') + '</td><td class="p-2"><button onclick="Clientes.select(' + c.id + ')" class="btn btn-primary text-xs py-1 px-2">Selecionar</button> <i class="fas fa-edit text-blue-400 cursor-pointer ml-2" onclick="Clientes.edit(' + c.id + ')"></i> <i class="fas fa-trash text-red-400 cursor-pointer ml-2" onclick="Clientes.delete(' + c.id + ')"></i></td>'; }); },
   addEquipField: function() { adicionarCampoEquipamento(); },
-  save: function() { var nome=Utils.getVal('cad_nome').trim(); if(!nome){showToast('Nome obrigatorio',true);return;} var equipamentos=[]; var container=$('equipamentosList'); if(container){container.querySelectorAll('.equip-item').forEach(function(item){ var ms=item.querySelector('.equip-marca').value; var oi=item.querySelector('.outra-marca'); var marca=ms==='OUTRA'?(oi?oi.value.toUpperCase():''):ms; if(marca){equipamentos.push({marca:marca,modelo:item.querySelector('.equip-modelo').value,serie:item.querySelector('.equip-serie').value,qtd:parseInt(item.querySelector('.equip-qtd').value)||1,combustivel:item.querySelector('.equip-combustivel').value});} });} var cliente={id:State.editingClientId||Date.now(),nome:nome,cnpj:Utils.getVal('cad_cnpj'),endereco:Utils.getVal('cad_endereco'),cidade:Utils.getVal('cad_cidade'),telefone:Utils.getVal('cad_telefone'),whatsapp:Utils.getVal('cad_whatsapp'),email:Utils.getVal('cad_email'),responsavel_nome:Utils.getVal('cad_responsavel_nome'),responsavel_telefone:Utils.getVal('cad_responsavel_telefone'),equipamentos:equipamentos}; if(State.editingClientId){var idx=State.clients.findIndex(function(c){return c.id===State.editingClientId;});if(idx>=0)State.clients[idx]=cliente;State.editingClientId=null;var cb=$('cad_btnCancelar');if(cb)cb.style.display='none';}else{State.clients.push(cliente);} Storage.saveClients(); this.renderTable(); this.clearForm(); this.updateStats(); showToast('Cliente salvo'); },
-  select: function(id) { var c=State.clients.find(function(c){return c.id===id;}); if(!c)return; if(c.equipamentos&&c.equipamentos.length){App.mostrarModalEquipamentos(c);}else{Utils.setVal('cliente',c.nome);Utils.setVal('cnpj',c.cnpj);Utils.setVal('cidadeCliente',c.cidade);Utils.setVal('endereco',c.endereco);Utils.setVal('whatsappCliente',c.whatsapp);showToast('Cliente carregado');} },
-  edit: function(id) { var c=State.clients.find(function(c){return c.id===id;}); if(!c)return; State.editingClientId=id; Utils.setVal('cad_nome',c.nome);Utils.setVal('cad_cnpj',c.cnpj);Utils.setVal('cad_endereco',c.endereco);Utils.setVal('cad_cidade',c.cidade);Utils.setVal('cad_telefone',c.telefone);Utils.setVal('cad_whatsapp',c.whatsapp);Utils.setVal('cad_email',c.email||'');Utils.setVal('cad_responsavel_nome',c.responsavel_nome||'');Utils.setVal('cad_responsavel_telefone',c.responsavel_telefone||''); var container=$('equipamentosList'); if(container)container.innerHTML=''; if(c.equipamentos){c.equipamentos.forEach(function(eq){adicionarCampoEquipamento(eq.marca,eq.modelo,eq.serie,eq.qtd,eq.combustivel);});} var cb=$('cad_btnCancelar'); if(cb)cb.style.display='inline-flex'; showToast('Editando cliente'); },
-  delete: function(id) { if(confirm('Excluir?')){State.clients=State.clients.filter(function(c){return c.id!==id;});Storage.saveClients();this.renderTable();this.updateStats();showToast('Excluido');} },
-  cancelEdit: function() { State.editingClientId=null; this.clearForm(); var cb=$('cad_btnCancelar'); if(cb)cb.style.display='none'; },
-  clearForm: function() { ['cad_nome','cad_cnpj','cad_endereco','cad_cidade','cad_telefone','cad_whatsapp','cad_email','cad_responsavel_nome','cad_responsavel_telefone'].forEach(function(id){Utils.setVal(id,'');}); var c=$('equipamentosList'); if(c)c.innerHTML=''; },
-  exportCSV: function() { var csv="Nome,CNPJ,Endereco,Cidade,Telefone,WhatsApp,Email,Responsavel,TelResponsavel,Marcas\n"; State.clients.forEach(function(c){var m=(c.equipamentos||[]).map(function(e){return e.marca;}).join('; '); csv+='"'+(c.nome||'')+'",'+(c.cnpj||'')+',"'+(c.endereco||'')+'","'+(c.cidade||'')+'",'+(c.telefone||'')+','+(c.whatsapp||'')+','+(c.email||'')+','+(c.responsavel_nome||'')+','+(c.responsavel_telefone||'')+',"'+m+'"\n';}); var blob=new Blob([csv],{type:'text/csv;charset=utf-8'}); var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='clientes_'+new Date().toISOString().split('T')[0]+'.csv'; a.click(); showToast('Exportado'); },
-  importCSV: function() { var input=document.createElement('input'); input.type='file'; input.accept='.csv'; input.onchange=function(e){ var file=e.target.files[0]; var reader=new FileReader(); reader.onload=function(ev){ var lines=ev.target.result.split('\n'); for(var i=1;i<lines.length;i++){if(!lines[i].trim())continue; var p=lines[i].split(','); if(p[0]){State.clients.push({id:Date.now()+i,nome:p[0].replace(/"/g,''),cnpj:p[1]||'',endereco:(p[2]||'').replace(/"/g,''),cidade:(p[3]||'').replace(/"/g,''),telefone:p[4]||'',whatsapp:p[5]||'',email:p[6]||'',responsavel_nome:p[7]||'',responsavel_telefone:p[8]||'',equipamentos:[]});}} Storage.saveClients(); Clientes.renderTable(); Clientes.updateStats(); showToast('Importado'); }; reader.readAsText(file,'UTF-8'); }; input.click(); }
+  save: function() { let nome = Utils.getVal('cad_nome').trim(); if (!nome) { showToast('Nome obrigatorio', true); return; } let equipamentos = []; let container = $('equipamentosList'); if (container) { container.querySelectorAll('.equip-item').forEach(item => { let ms = item.querySelector('.equip-marca').value; let oi = item.querySelector('.outra-marca'); let marca = ms === 'OUTRA' ? (oi ? oi.value.toUpperCase() : '') : ms; if (marca) { equipamentos.push({ marca: marca, modelo: item.querySelector('.equip-modelo').value, serie: item.querySelector('.equip-serie').value, qtd: parseInt(item.querySelector('.equip-qtd').value) || 1, combustivel: item.querySelector('.equip-combustivel').value }); } }); } let cliente = { id: State.editingClientId || Date.now(), nome: nome, cnpj: Utils.getVal('cad_cnpj'), endereco: Utils.getVal('cad_endereco'), cidade: Utils.getVal('cad_cidade'), telefone: Utils.getVal('cad_telefone'), whatsapp: Utils.getVal('cad_whatsapp'), email: Utils.getVal('cad_email'), responsavel_nome: Utils.getVal('cad_responsavel_nome'), responsavel_telefone: Utils.getVal('cad_responsavel_telefone'), equipamentos: equipamentos }; if (State.editingClientId) { let idx = State.clients.findIndex(c => c.id === State.editingClientId); if (idx >= 0) State.clients[idx] = cliente; State.editingClientId = null; let cb = $('cad_btnCancelar'); if (cb) cb.style.display = 'none'; } else { State.clients.push(cliente); } Storage.saveClients(); this.renderTable(); this.clearForm(); this.updateStats(); showToast('Cliente salvo'); },
+  select: function(id) { let c = State.clients.find(c => c.id === id); if (!c) return; if (c.equipamentos && c.equipamentos.length) { App.mostrarModalEquipamentos(c); } else { Utils.setVal('cliente', c.nome); Utils.setVal('cnpj', c.cnpj); Utils.setVal('cidadeCliente', c.cidade); Utils.setVal('endereco', c.endereco); Utils.setVal('whatsappCliente', c.whatsapp); showToast('Cliente carregado'); } },
+  edit: function(id) { let c = State.clients.find(c => c.id === id); if (!c) return; State.editingClientId = id; Utils.setVal('cad_nome', c.nome); Utils.setVal('cad_cnpj', c.cnpj); Utils.setVal('cad_endereco', c.endereco); Utils.setVal('cad_cidade', c.cidade); Utils.setVal('cad_telefone', c.telefone); Utils.setVal('cad_whatsapp', c.whatsapp); Utils.setVal('cad_email', c.email || ''); Utils.setVal('cad_responsavel_nome', c.responsavel_nome || ''); Utils.setVal('cad_responsavel_telefone', c.responsavel_telefone || ''); let container = $('equipamentosList'); if (container) container.innerHTML = ''; if (c.equipamentos) { c.equipamentos.forEach(eq => { adicionarCampoEquipamento(eq.marca, eq.modelo, eq.serie, eq.qtd, eq.combustivel); }); } let cb = $('cad_btnCancelar'); if (cb) cb.style.display = 'inline-flex'; showToast('Editando cliente'); },
+  delete: function(id) { if (confirm('Excluir?')) { State.clients = State.clients.filter(c => c.id !== id); Storage.saveClients(); this.renderTable(); this.updateStats(); showToast('Excluido'); } },
+  cancelEdit: function() { State.editingClientId = null; this.clearForm(); let cb = $('cad_btnCancelar'); if (cb) cb.style.display = 'none'; },
+  clearForm: function() { ['cad_nome', 'cad_cnpj', 'cad_endereco', 'cad_cidade', 'cad_telefone', 'cad_whatsapp', 'cad_email', 'cad_responsavel_nome', 'cad_responsavel_telefone'].forEach(id => Utils.setVal(id, '')); let c = $('equipamentosList'); if (c) c.innerHTML = ''; },
+  exportCSV: function() { let csv = "Nome,CNPJ,Endereco,Cidade,Telefone,WhatsApp,Email,Responsavel,TelResponsavel,Marcas\n"; State.clients.forEach(c => { let m = (c.equipamentos || []).map(e => e.marca).join('; '); csv += '"' + c.nome + '",' + (c.cnpj || '') + ',"' + (c.endereco || '') + '","' + (c.cidade || '') + '",' + (c.telefone || '') + ',' + (c.whatsapp || '') + ',' + (c.email || '') + ',' + (c.responsavel_nome || '') + ',' + (c.responsavel_telefone || '') + ',"' + m + '"\n'; }); let blob = new Blob([csv], { type: 'text/csv;charset=utf-8' }); let a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'clientes_' + new Date().toISOString().split('T')[0] + '.csv'; a.click(); showToast('Exportado'); },
+  importCSV: function() { let input = document.createElement('input'); input.type = 'file'; input.accept = '.csv'; input.onchange = e => { let file = e.target.files[0]; let reader = new FileReader(); reader.onload = ev => { let lines = ev.target.result.split('\n'); for (let i = 1; i < lines.length; i++) { if (!lines[i].trim()) continue; let p = lines[i].split(','); if (p[0]) { State.clients.push({ id: Date.now() + i, nome: p[0].replace(/"/g, ''), cnpj: p[1] || '', endereco: (p[2] || '').replace(/"/g, ''), cidade: (p[3] || '').replace(/"/g, ''), telefone: p[4] || '', whatsapp: p[5] || '', email: p[6] || '', responsavel_nome: p[7] || '', responsavel_telefone: p[8] || '', equipamentos: [] }); } } Storage.saveClients(); Clientes.renderTable(); Clientes.updateStats(); showToast('Importado'); }; reader.readAsText(file, 'UTF-8'); }; input.click(); }
 };
 
-// ==================== HISTORICO ====================
 var Historico = {
-  load: function() { State.osHistory=Storage.loadOSHistory(); this.render(); this.updateStats(); Clientes.updateStats(); },
-  updateStats: function() { var total=State.osHistory.length; var sc={abertura:0,execucao:0,finalizacao:0,fechada:0,aprovada:0}; State.osHistory.forEach(function(os){if(sc[os.status]!==undefined)sc[os.status]++;}); if($('statTotalOS'))$('statTotalOS').innerText=total; if($('statStatusAbertura'))$('statStatusAbertura').innerText=sc.abertura; if($('statStatusExecucao'))$('statStatusExecucao').innerText=sc.execucao; if($('statStatusFinalizacao'))$('statStatusFinalizacao').innerText=sc.finalizacao; if($('statStatusFechada'))$('statStatusFechada').innerText=sc.fechada; if($('statStatusAprovada'))$('statStatusAprovada').innerText=sc.aprovada; },
-  render: function() { var search=Utils.getVal('historicoSearch').toLowerCase(); var tipo=Utils.getVal('historicoFiltroTipo'); var statusFiltro=Utils.getVal('historicoFiltroStatus'); var filtered=State.osHistory.filter(function(os){ var ms=!search||(os.numeroOS&&os.numeroOS.toLowerCase().indexOf(search)!==-1)||(os.cliente&&os.cliente.toLowerCase().indexOf(search)!==-1); var mt=!tipo||os.tipoChamado===tipo; var mst=!statusFiltro||os.status===statusFiltro; return ms&&mt&&mst; }); var tbody=$('historicoTableBody'); if(!tbody)return; tbody.innerHTML=''; if(filtered.length===0){$('historicoEmpty').classList.remove('hidden');return;} $('historicoEmpty').classList.add('hidden'); filtered.forEach(function(os){ var row=tbody.insertRow(); row.innerHTML='<td class="font-mono font-bold">'+(os.numeroOS||'-')+'</td><td>'+(os.dataOS||'-')+'</td><td class="font-medium">'+(os.cliente||'-').toUpperCase()+'</td><td><span class="status-badge status-'+(os.status||'abertura')+'">'+Utils.formatStatus(os.status)+'</span></td><td class="font-mono font-bold">'+(os.horasTotais||'-')+'</td><td><button onclick="Historico.view(\''+os.numeroOS+'\')" class="text-blue-400"><i class="fas fa-eye"></i></button> <button onclick="Historico.delete(\''+os.numeroOS+'\')" class="text-red-400 ml-2"><i class="fas fa-trash"></i></button></td>'; }); },
-  view: function(num) { var os=State.osHistory.find(function(o){return o.numeroOS===num;}); if(!os)return; State.currentStatus=os.status||'abertura'; document.querySelectorAll('#tab-os input, #tab-os select, #tab-os textarea').forEach(function(el){if(el.id&&el.type!=='file')el.value='';}); for(var key in os){if(['fotosBase64','fotoHorimetro','fotosPendencias','assinaturaTecnico','assinaturaCliente','checklistData'].indexOf(key)===-1)Utils.setVal(key,os[key]);} if(os.fotoHorimetro){State.fotoHorimetro=os.fotoHorimetro;var p=$('fotoHorimetroPreview');if(p)p.innerHTML='<div class="photo-item"><img src="'+os.fotoHorimetro+'"><div class="photo-remove" onclick="Fotos.removeHorimetro()">x</div></div>';} if(os.fotosBase64&&os.fotosBase64.length){State.fotosServico=os.fotosBase64;var p=$('fotosPreview');if(p)p.innerHTML='';os.fotosBase64.forEach(function(src){if(p){var d=document.createElement('div');d.className='photo-item';d.innerHTML='<img src="'+src+'"><div class="photo-remove" onclick="Fotos.removeServico(this)">x</div>';p.appendChild(d);}});} if(os.fotosPendencias&&os.fotosPendencias.length){State.fotosPendencias=os.fotosPendencias;var p=$('fotosPendenciasPreview');if(p)p.innerHTML='';os.fotosPendencias.forEach(function(src){if(p){var d=document.createElement('div');d.className='photo-item';d.innerHTML='<img src="'+src+'"><div class="photo-remove" onclick="Fotos.removePendencia(this)">x</div>';p.appendChild(d);}});} Signature.loadFromData('tec',os.assinaturaTecnico); Signature.loadFromData('cli',os.assinaturaCliente); if(os.checklistData)Checklist.loadChecklistData(os.checklistData); App.updateUI(); showToast('OS carregada'); var tabBtn=document.querySelector('.tab-button[data-tab="tab-os"]'); if(tabBtn)tabBtn.click(); },
-  delete: function(num) { if(confirm('Excluir OS '+num+'?')){State.osHistory=State.osHistory.filter(function(o){return o.numeroOS!==num;});Storage.saveOSHistory();this.render();this.updateStats();Clientes.updateStats();showToast('Excluida');} },
-  exportCSV: function() { var csv='OS,Data,Cliente,Status,Tipo,Horas,Total\n'; State.osHistory.forEach(function(o){csv+=(o.numeroOS||'')+','+(o.dataOS||'')+',"'+(o.cliente||'')+'",'+Utils.formatStatus(o.status)+','+(o.tipoChamado||'')+','+(o.horasTotais||'')+','+(o.totalGeral||'')+'\n';}); var blob=new Blob([csv],{type:'text/csv'}); var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='historico_os.csv'; a.click(); showToast('Exportado'); },
-  clear: function() { if(confirm('Limpar todo historico?')){State.osHistory=[];Storage.saveOSHistory();this.render();this.updateStats();Clientes.updateStats();showToast('Historico limpo');} }
+  load: function() { State.osHistory = Storage.loadOSHistory(); this.render(); this.updateStats(); Clientes.updateStats(); },
+  updateStats: function() { let total = State.osHistory.length; let sc = { abertura: 0, execucao: 0, finalizacao: 0, fechada: 0, aprovada: 0 }; State.osHistory.forEach(os => { if (sc[os.status] !== undefined) sc[os.status]++; }); if ($('statTotalOS')) $('statTotalOS').innerText = total; if ($('statStatusAbertura')) $('statStatusAbertura').innerText = sc.abertura; if ($('statStatusExecucao')) $('statStatusExecucao').innerText = sc.execucao; if ($('statStatusFinalizacao')) $('statStatusFinalizacao').innerText = sc.finalizacao; if ($('statStatusFechada')) $('statStatusFechada').innerText = sc.fechada; if ($('statStatusAprovada')) $('statStatusAprovada').innerText = sc.aprovada; },
+  render: function() { let search = Utils.getVal('historicoSearch').toLowerCase(); let tipo = Utils.getVal('historicoFiltroTipo'); let statusFiltro = Utils.getVal('historicoFiltroStatus'); let filtered = State.osHistory.filter(os => { let ms = !search || (os.numeroOS && os.numeroOS.toLowerCase().indexOf(search) !== -1) || (os.cliente && os.cliente.toLowerCase().indexOf(search) !== -1); let mt = !tipo || os.tipoChamado === tipo; let mst = !statusFiltro || os.status === statusFiltro; return ms && mt && mst; }); let tbody = $('historicoTableBody'); if (!tbody) return; tbody.innerHTML = ''; if (filtered.length === 0) { $('historicoEmpty').classList.remove('hidden'); return; } $('historicoEmpty').classList.add('hidden'); filtered.forEach(os => { let row = tbody.insertRow(); row.innerHTML = '<td class="font-mono font-bold">' + (os.numeroOS || '-') + '</td><td>' + (os.dataOS || '-') + '</td><td class="font-medium">' + (os.cliente || '-').toUpperCase() + '</td><td><span class="status-badge status-' + (os.status || 'abertura') + '">' + Utils.formatStatus(os.status) + '</span></td><td class="font-mono font-bold">' + (os.horasTotais || '-') + '</td><td><button onclick="Historico.view(\'' + os.numeroOS + '\')" class="text-blue-400"><i class="fas fa-eye"></i></button> <button onclick="Historico.delete(\'' + os.numeroOS + '\')" class="text-red-400 ml-2"><i class="fas fa-trash"></i></button></td>'; }); },
+  view: function(num) { let os = State.osHistory.find(o => o.numeroOS === num); if (!os) return; State.currentStatus = os.status || 'abertura'; document.querySelectorAll('#tab-os input, #tab-os select, #tab-os textarea').forEach(el => { if (el.id && el.type !== 'file') el.value = ''; }); for (let key in os) { if (['fotosBase64', 'fotoHorimetro', 'fotosPendencias', 'assinaturaTecnico', 'assinaturaCliente', 'checklistData'].indexOf(key) === -1) Utils.setVal(key, os[key]); } if (os.fotoHorimetro) { State.fotoHorimetro = os.fotoHorimetro; let p = $('fotoHorimetroPreview'); if (p) p.innerHTML = '<div class="photo-item"><img src="' + os.fotoHorimetro + '"><div class="photo-remove" onclick="Fotos.removeHorimetro()">x</div></div>'; } if (os.fotosBase64 && os.fotosBase64.length) { State.fotosServico = os.fotosBase64; let p = $('fotosPreview'); if (p) p.innerHTML = ''; os.fotosBase64.forEach(src => { if (p) { let d = document.createElement('div'); d.className = 'photo-item'; d.innerHTML = '<img src="' + src + '"><div class="photo-remove" onclick="Fotos.removeServico(this)">x</div>'; p.appendChild(d); } }); } if (os.fotosPendencias && os.fotosPendencias.length) { State.fotosPendencias = os.fotosPendencias; let p = $('fotosPendenciasPreview'); if (p) p.innerHTML = ''; os.fotosPendencias.forEach(src => { if (p) { let d = document.createElement('div'); d.className = 'photo-item'; d.innerHTML = '<img src="' + src + '"><div class="photo-remove" onclick="Fotos.removePendencia(this)">x</div>'; p.appendChild(d); } }); } Signature.loadFromData('tec', os.assinaturaTecnico); Signature.loadFromData('cli', os.assinaturaCliente); if (os.checklistData) Checklist.loadChecklistData(os.checklistData); App.updateUI(); showToast('OS carregada'); let tabBtn = document.querySelector('.tab-button[data-tab="tab-os"]'); if (tabBtn) tabBtn.click(); },
+  delete: function(num) { if (confirm('Excluir OS ' + num + '?')) { State.osHistory = State.osHistory.filter(o => o.numeroOS !== num); Storage.saveOSHistory(); this.render(); this.updateStats(); Clientes.updateStats(); showToast('Excluida'); } },
+  exportCSV: function() { let csv = 'OS,Data,Cliente,Status,Tipo,Horas,Total\n'; State.osHistory.forEach(o => { csv += (o.numeroOS || '') + ',' + (o.dataOS || '') + ',"' + (o.cliente || '') + '",' + Utils.formatStatus(o.status) + ',' + (o.tipoChamado || '') + ',' + (o.horasTotais || '') + ',' + (o.totalGeral || '') + '\n'; }); let blob = new Blob([csv], { type: 'text/csv' }); let a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'historico_os.csv'; a.click(); showToast('Exportado'); },
+  clear: function() { if (confirm('Limpar todo historico?')) { State.osHistory = []; Storage.saveOSHistory(); this.render(); this.updateStats(); Clientes.updateStats(); showToast('Historico limpo'); } }
 };
 
-// ==================== PERMISSOES ====================
 var Permissoes = {
-  permissoesPadrao: { criar_os:true, editar_os:true, excluir_os:false, mudar_status:true, salvar_os:true, checklist_visualizar:true, checklist_preencher:true, fotos_horimetro:true, fotos_servico:true, fotos_pendencias:true, assinatura_tecnico:true, assinatura_cliente:true, timer_iniciar:true, timer_pausar:true, timer_parar:true, horas_editar:true, gerar_pdf:true, enviar_email:true, enviar_whatsapp:true, sincronizar:false, exportar_csv:false, clientes_cadastrar:true, historico_visualizar:true },
-  carregar: function() { var s=localStorage.getItem('marlift_permissoes_tecnico'); return s?JSON.parse(s):JSON.parse(JSON.stringify(this.permissoesPadrao)); },
-  salvar: function() { var p={}; for(var k in this.permissoesPadrao){var chk=$('perm_'+k);if(chk)p[k]=chk.checked;} localStorage.setItem('marlift_permissoes_tecnico',JSON.stringify(p)); showToast('Permissoes salvas'); },
-  resetarPadrao: function() { for(var k in this.permissoesPadrao){var chk=$('perm_'+k);if(chk)chk.checked=this.permissoesPadrao[k];} this.salvar(); },
-  carregarNaInterface: function() { var p=this.carregar(); for(var k in p){var chk=$('perm_'+k);if(chk)chk.checked=p[k];} }
+  permissoesPadrao: { criar_os: true, editar_os: true, excluir_os: false, mudar_status: true, salvar_os: true, checklist_visualizar: true, checklist_preencher: true, fotos_horimetro: true, fotos_servico: true, fotos_pendencias: true, assinatura_tecnico: true, assinatura_cliente: true, timer_iniciar: true, timer_pausar: true, timer_parar: true, horas_editar: true, gerar_pdf: true, enviar_email: true, enviar_whatsapp: true, sincronizar: false, exportar_csv: false, clientes_cadastrar: true, historico_visualizar: true },
+  carregar: function() { let s = localStorage.getItem('marlift_permissoes_tecnico'); return s ? JSON.parse(s) : JSON.parse(JSON.stringify(this.permissoesPadrao)); },
+  salvar: function() { let p = {}; for (let k in this.permissoesPadrao) { let chk = $('perm_' + k); if (chk) p[k] = chk.checked; } localStorage.setItem('marlift_permissoes_tecnico', JSON.stringify(p)); showToast('Permissoes salvas'); },
+  resetarPadrao: function() { for (let k in this.permissoesPadrao) { let chk = $('perm_' + k); if (chk) chk.checked = this.permissoesPadrao[k]; } this.salvar(); },
+  carregarNaInterface: function() { let p = this.carregar(); for (let k in p) { let chk = $('perm_' + k); if (chk) chk.checked = p[k]; } }
 };
 
-// ==================== USER MANAGER ====================
 var UserManager = {
   editingId: null,
-  render: function() { var users=Auth.getUsers(); var tbody=$('userTableBody'); if(!tbody)return; tbody.innerHTML=''; users.forEach(function(u){ var nt=u.nivel==='admin'?'Admin':(u.nivel==='tecnico'?'Tecnico':'Visualizador'); var row=tbody.insertRow(); row.innerHTML='<td class="p-2">'+u.nome+'</td><td class="p-2">'+u.login+'</td><td class="p-2">'+nt+'</td><td class="p-2"><i class="fas fa-edit text-blue-400 cursor-pointer mr-2" onclick="UserManager.edit('+u.id+')"></i><i class="fas fa-trash text-red-400 cursor-pointer" onclick="UserManager.delete('+u.id+')"></i></td>'; }); },
-  addUser: function() { var nome=$('userNome').value.trim(); var login=$('userLogin').value.trim().toLowerCase(); var senha=$('userSenha').value; var nivel=$('userNivel').value; if(!nome||!login||!senha){showToast('Preencha todos',true);return;} var users=Auth.getUsers(); if(users.find(function(u){return u.login.toLowerCase()===login;})){showToast('Login ja existe',true);return;} users.push({id:Date.now(),nome:nome,login:login,senha:senha,nivel:nivel}); Auth.saveUsers(users); this.render(); this.clearForm(); showToast('Usuario adicionado'); },
-  edit: function(id) { var users=Auth.getUsers(); var user=users.find(function(u){return u.id===id;}); if(!user)return; this.editingId=id; $('userNome').value=user.nome; $('userLogin').value=user.login; $('userSenha').value=''; $('userNivel').value=user.nivel; $('userCancelBtn').style.display='inline-flex'; showToast('Editando'); },
-  delete: function(id) { if(Auth.currentUser&&Auth.currentUser.id===id){showToast('Nao pode excluir proprio',true);return;} if(confirm('Excluir?')){var users=Auth.getUsers().filter(function(u){return u.id!==id;}); Auth.saveUsers(users); this.render(); showToast('Excluido');} },
-  cancelEdit: function() { this.editingId=null; this.clearForm(); $('userCancelBtn').style.display='none'; },
-  clearForm: function() { $('userNome').value=''; $('userLogin').value=''; $('userSenha').value=''; $('userNivel').value='tecnico'; }
+  render: function() { let users = Auth.getUsers(); let tbody = $('userTableBody'); if (!tbody) return; tbody.innerHTML = ''; users.forEach(u => { let nt = u.nivel === 'admin' ? 'Admin' : (u.nivel === 'tecnico' ? 'Tecnico' : 'Visualizador'); let row = tbody.insertRow(); row.innerHTML = '<td class="p-2">' + u.nome + '</td><td class="p-2">' + u.login + '</td><td class="p-2">' + nt + '</td><td class="p-2"><i class="fas fa-edit text-blue-400 cursor-pointer mr-2" onclick="UserManager.edit(' + u.id + ')"></i><i class="fas fa-trash text-red-400 cursor-pointer" onclick="UserManager.delete(' + u.id + ')"></i></td>'; }); },
+  addUser: function() { let nome = $('userNome').value.trim(); let login = $('userLogin').value.trim().toLowerCase(); let senha = $('userSenha').value; let nivel = $('userNivel').value; if (!nome || !login || !senha) { showToast('Preencha todos', true); return; } let users = Auth.getUsers(); if (users.find(u => u.login.toLowerCase() === login)) { showToast('Login ja existe', true); return; } users.push({ id: Date.now(), nome: nome, login: login, senha: senha, nivel: nivel }); Auth.saveUsers(users); this.render(); this.clearForm(); showToast('Usuario adicionado'); },
+  edit: function(id) { let users = Auth.getUsers(); let user = users.find(u => u.id === id); if (!user) return; this.editingId = id; $('userNome').value = user.nome; $('userLogin').value = user.login; $('userSenha').value = ''; $('userNivel').value = user.nivel; $('userCancelBtn').style.display = 'inline-flex'; showToast('Editando'); },
+  delete: function(id) { if (Auth.currentUser && Auth.currentUser.id === id) { showToast('Nao pode excluir proprio', true); return; } if (confirm('Excluir?')) { let users = Auth.getUsers().filter(u => u.id !== id); Auth.saveUsers(users); this.render(); showToast('Excluido'); } },
+  cancelEdit: function() { this.editingId = null; this.clearForm(); $('userCancelBtn').style.display = 'none'; },
+  clearForm: function() { $('userNome').value = ''; $('userLogin').value = ''; $('userSenha').value = ''; $('userNivel').value = 'tecnico'; }
 };
 
-// ==================== APP PRINCIPAL ====================
 var App = {
-  init: function() {
-    Storage.loadCounter(); Clientes.load(); Historico.load(); Agendamentos.carregar();
-    this.populateMarcas(); Checklist.render(); Signature.init(); Fotos.init(); Horas.initListeners(); Utils.setDefaultDate(); this.setupTabs(); this.setupMarcaSelect(); this.setupSearch();
-    State.currentStatus='abertura'; this.updateUI(); UserManager.render();
-    var cp=$('permissoesContainer');
-    if(cp&&Auth.isAdmin()){ var html=''; for(var k in Permissoes.permissoesPadrao){html+='<div class="permission-item"><label><input type="checkbox" id="perm_'+k+'"> '+k.replace(/_/g,' ').toUpperCase()+'</label></div>';} cp.innerHTML=html; Permissoes.carregarNaInterface(); }
-    setTimeout(function(){ GoogleSheetsSync.fetchFromSheet(); }, 2000);
-  },
-  populateMarcas: function() { var s=$('marcaSelect'); if(!s)return; s.innerHTML='<option value="">Selecione</option>'; Config.marcas.forEach(function(m){if(m!=='OUTRA')s.innerHTML+='<option value="'+m+'">'+m+'</option>';}); s.innerHTML+='<option value="OUTRA">OUTRA</option>'; },
-  setupMarcaSelect: function() { var s=$('marcaSelect'),d=$('marcaOutraDiv'),i=$('marcaOutra'); if(s&&d&&i){s.addEventListener('change',function(){d.style.display=s.value==='OUTRA'?'block':'none';Utils.setVal('marca',s.value==='OUTRA'?i.value.toUpperCase():s.value);});i.addEventListener('input',function(){Utils.setVal('marca',i.value.toUpperCase());});} },
-  setupTabs: function() { var container=$('tabsContainer'); if(!container)return; if(this._th)container.removeEventListener('click',this._th); this._th=function(e){ var tab=e.target.closest('.tab-button'); if(!tab)return; e.preventDefault(); var tid=tab.getAttribute('data-tab'); if(!tid)return; document.querySelectorAll('.tab-button').forEach(function(t){t.classList.remove('active');}); document.querySelectorAll('.tab-content').forEach(function(c){c.classList.remove('active');}); tab.classList.add('active'); var tc=$(tid); if(tc)tc.classList.add('active'); }; container.addEventListener('click',this._th); if(!document.querySelector('.tab-button.active')){var ft=container.querySelector('.tab-button');if(ft){ft.classList.add('active');var fc=$(ft.getAttribute('data-tab'));if(fc)fc.classList.add('active');}} },
-  setupSearch: function() { var hs=$('historicoSearch'); if(hs)hs.addEventListener('input',function(){Historico.render();}); var tf=$('historicoFiltroTipo'); if(tf)tf.addEventListener('change',function(){Historico.render();}); var sf=$('historicoFiltroStatus'); if(sf)sf.addEventListener('change',function(){Historico.render();}); var si=$('cad_searchInput'); if(si){si.addEventListener('input',function(e){ var search=e.target.value.toLowerCase(); var filtered=State.clients.filter(function(c){return(c.nome&&c.nome.toLowerCase().indexOf(search)!==-1)||(c.cidade&&c.cidade.toLowerCase().indexOf(search)!==-1);}); var orig=State.clients; State.clients=filtered; Clientes.renderTable(); State.clients=orig; });} },
-  updateUI: function() { var s=State.currentStatus; var btns={btnIniciarExecucao:s==='abertura',btnFinalizar:s==='execucao',btnFecharOS:s==='finalizacao',btnAprovar:s==='fechada',btnPreviaPDF:s==='aprovada',btnEnviarEmail:s==='aprovada'}; for(var k in btns){var el=$(k);if(el)el.disabled=!btns[k];} var locked=s==='fechada'||s==='aprovada'; ['descricaoServico','pecasAplicadas','pendencias','horasExtras','adicionalNoturno','modelo','numSerie','horimetro'].forEach(function(id){var el=$(id);if(el)el.disabled=locked;}); var ms=$('marcaSelect'); if(ms)ms.disabled=locked; var badge=$('statusBadge'); if(badge){var cfg={abertura:{text:'EM ABERTURA',c:'status-abertura'},execucao:{text:'EM EXECUCAO',c:'status-execucao'},finalizacao:{text:'FINALIZANDO',c:'status-finalizacao'},fechada:{text:'FECHADA',c:'status-fechada'},aprovada:{text:'APROVADA',c:'status-aprovada'}}[s];badge.textContent=cfg.text;badge.className='status-badge '+cfg.c;} var steps=['abertura','execucao','finalizacao','fechada','aprovada']; var stepEls=document.querySelectorAll('.step'); for(var i=0;i<stepEls.length;i++){var step=stepEls[i];step.classList.remove('active','completed','locked');if(steps[i]===s)step.classList.add('active');else if(steps.indexOf(s)>i)step.classList.add(steps[i]==='fechada'&&s==='aprovada'?'locked':'completed');} },
-  coletarDados: function() { var data={}; document.querySelectorAll('#tab-os input, #tab-os select, #tab-os textarea').forEach(function(el){if(el.id&&el.type!=='file')data[el.id]=el.value;}); var cd=Checklist.getChecklistData(); for(var k in cd)data[k]=cd[k]; var ms=$('marcaSelect').value,mo=$('marcaOutra').value; data.marca=ms==='OUTRA'?mo.toUpperCase():ms; return data; },
-  salvar: async function() { Signature.save('tec'); Signature.save('cli'); var data=this.coletarDados(); data.status=State.currentStatus; data.fotosBase64=State.fotosServico; data.fotoHorimetro=State.fotoHorimetro; data.fotosPendencias=State.fotosPendencias; data.assinaturaTecnico=Utils.getVal('assinaturaTecnicoData'); data.assinaturaCliente=Utils.getVal('assinaturaClienteData'); data.checklistData=Checklist.getChecklistData(); Horas.calcular(); data.horasTotais=Utils.getVal('horasTotais'); data.totalGeral=Utils.getVal('totalGeral'); if(!data.numeroOS)data.numeroOS=Utils.generateOSNumber(); try{var idx=State.osHistory.findIndex(function(os){return os.numeroOS===data.numeroOS;}); if(idx>=0)State.osHistory[idx]=data; else State.osHistory.unshift(data); Storage.saveOSHistory(); State.hasUnsavedChanges=false; Historico.updateStats(); Clientes.updateStats(); return true;}catch(e){showToast('Erro ao salvar',true);return false;} },
-  salvarOSManual: async function() { var ok=await this.salvar(); if(ok){showToast('OS salva');Historico.render();} },
-  mudarStatus: async function(ns) { if(ns==='abertura'){if(!Utils.getVal('numeroOS')){showToast('Clique em Nova OS',true);return;}if(!Utils.getVal('cliente').trim()){showToast('Cliente obrigatorio',true);return;}} if(ns==='execucao'&&State.currentStatus!=='abertura'){showToast('Precisa estar em ABERTURA',true);return;} if(ns==='finalizacao'&&State.currentStatus!=='execucao'){showToast('Precisa estar em EXECUCAO',true);return;} if(ns==='fechada'&&State.currentStatus!=='finalizacao'){showToast('Precisa estar FINALIZANDO',true);return;} if(ns==='aprovada'){if(State.currentStatus!=='fechada'){showToast('Precisa estar FECHADA',true);return;}if(!Utils.getVal('assinaturaClienteData')){showToast('Cliente deve assinar',true);return;}if(!Utils.getVal('recebedor').trim()){showToast('Nome do recebedor',true);return;}} State.currentStatus=ns; if(ns==='finalizacao'||ns==='fechada')Horas.calcular(); var ok=await this.salvar(); if(ok){this.updateUI();Historico.render();showToast('Status: '+Utils.formatStatus(ns));} },
-  iniciarExecucao: function() { if(State.currentStatus!=='abertura')return; this.mudarStatus('execucao'); Timer.control('start'); showToast('Execucao iniciada'); },
-  finalizarServico: function() { if(State.currentStatus!=='execucao')return; var h=Utils.getVal('horimetro'); if(!h){showToast('Horimetro obrigatorio',true);return;} if(!Utils.validarHorimetro(h)){showToast('Horimetro invalido',true);return;} Timer.control('stop'); Horas.calcular(); this.mudarStatus('finalizacao'); showToast('Servico finalizado'); },
-  fecharOS: function() { if(State.currentStatus!=='finalizacao')return; if(!Utils.getVal('descricaoServico').trim()){showToast('Descreva o servico',true);return;} if(!Utils.getVal('horimetro')){showToast('Horimetro obrigatorio',true);return;} Horas.calcular(); if(!confirm('Fechar OS?'))return; this.mudarStatus('fechada'); showToast('OS fechada'); },
-  novaOS: function() { if(State.hasUnsavedChanges&&!confirm('Alteracoes nao salvas. Criar nova OS?'))return; State.currentStatus='abertura'; State.fotosServico=[]; State.fotoHorimetro=null; State.fotosPendencias=[]; State.hasUnsavedChanges=false; document.querySelectorAll('#tab-os input, #tab-os select, #tab-os textarea').forEach(function(el){if(el.id&&el.type!=='file')el.value='';}); Utils.setDefaultDate(); document.querySelectorAll('input[data-check="true"]').forEach(function(cb){cb.checked=false;}); Checklist.updateProgress(); var fps=['fotosPreview','fotoHorimetroPreview','fotosPendenciasPreview']; fps.forEach(function(id){var el=$(id);if(el)el.innerHTML='';}); var fis=['fotosServico','fotoHorimetroInput','fotosPendenciasInput']; fis.forEach(function(id){var el=$(id);if(el)el.value='';}); Signature.clear('tec'); Signature.clear('cli'); Timer.reset(); Timer.seconds=0; Timer.running=false; Timer.paused=false; if(Timer.interval)clearInterval(Timer.interval); Utils.generateOSNumber(); this.updateUI(); showToast('Nova OS criada'); var tc=document.querySelector('.tab-button[data-tab="tab-clientes"]'); if(tc)tc.click(); },
-  getResumoEmail: function() { return 'MARLIFT EMPILHADEIRAS\nOS: '+Utils.getVal('numeroOS')+'\nCliente: '+Utils.getVal('cliente')+'\nEquipamento: '+Utils.getVal('marca')+' '+Utils.getVal('modelo')+'\nHoras: '+Utils.getVal('horasTotais')+'\nServico: '+Utils.getVal('descricaoServico'); },
-  enviarEmailComResumo: function() { if(State.currentStatus!=='aprovada'){showToast('Somente OS aprovadas',true);return;} var email=prompt('E-mail:'); if(email&&email.indexOf('@')!==-1){window.location.href='mailto:'+email+'?subject=MARLIFT OS '+Utils.getVal('numeroOS')+'&body='+encodeURIComponent(this.getResumoEmail());showToast('Abrindo e-mail');} },
-  gerarPreviaPDF: function() { if(State.currentStatus!=='aprovada'){showToast('Somente OS aprovadas',true);return;} var win=window.open(); win.document.write('<html><head><title>OS '+Utils.getVal('numeroOS')+'</title></head><body><pre>'+this.getResumoEmail()+'</pre></body></html>'); win.document.close(); win.print(); },
-  sendWhatsAppMessage: function() { var numero=prompt('WhatsApp com DDD:',Utils.getVal('whatsappCliente')); if(numero){window.open('https://wa.me/'+numero.replace(/\D/g,'')+'?text='+encodeURIComponent(this.getResumoEmail()));} },
-  abrirMapa: function() { var end=Utils.getVal('endereco'); if(end)window.open('https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(end)); else showToast('Informe o endereco',true); },
-  fecharModalEquip: function() { $('equipModal').style.display='none'; },
-  mostrarModalEquipamentos: function(cliente) { var modal=$('equipModal'),el=$('equipList'); el.innerHTML=''; if(cliente.equipamentos&&cliente.equipamentos.length){ cliente.equipamentos.forEach(function(eq){ var div=document.createElement('div'); div.className='equip-option'; div.innerHTML='<div><strong><i class="fas fa-forklift"></i> '+(eq.marca||'N/A')+' '+(eq.modelo||'')+'</strong></div><div>'+(eq.serie||'')+' | Qtd: '+(eq.qtd||1)+'</div>'; div.onclick=function(){App.carregarEquipamento(eq,cliente);modal.style.display='none';}; el.appendChild(div); }); } else { el.innerHTML='<div class="text-center py-4">Nenhum equipamento</div>'; var btn=document.createElement('button'); btn.className='btn btn-primary w-full mt-2'; btn.innerHTML='Carregar apenas cliente'; btn.onclick=function(){Utils.setVal('cliente',cliente.nome);Utils.setVal('cnpj',cliente.cnpj);Utils.setVal('cidadeCliente',cliente.cidade);Utils.setVal('endereco',cliente.endereco);Utils.setVal('whatsappCliente',cliente.whatsapp);showToast('Cliente carregado');modal.style.display='none';}; el.appendChild(btn); } modal.style.display='flex'; },
-  carregarEquipamento: function(eq,cliente) { Utils.setVal('cliente',cliente.nome);Utils.setVal('cnpj',cliente.cnpj);Utils.setVal('cidadeCliente',cliente.cidade);Utils.setVal('endereco',cliente.endereco);Utils.setVal('whatsappCliente',cliente.whatsapp); var sm=$('marcaSelect'); if(sm){var me=eq.marca||''; if(Config.marcas.indexOf(me)!==-1){sm.value=me;$('marcaOutraDiv').style.display='none';} else if(me){sm.value='OUTRA';Utils.setVal('marcaOutra',me);$('marcaOutraDiv').style.display='block';}} Utils.setVal('modelo',eq.modelo||''); Utils.setVal('numSerie',eq.serie||''); if(eq.combustivel)Utils.setVal('combustivel',eq.combustivel); showToast('Equipamento carregado'); }
+  init: function() { Storage.loadCounter(); Clientes.load(); Historico.load(); Agendamentos.carregar(); this.populateMarcas(); Checklist.render(); Signature.init(); Fotos.init(); Horas.initListeners(); Utils.setDefaultDate(); this.setupTabs(); this.setupMarcaSelect(); this.setupSearch(); State.currentStatus = 'abertura'; this.updateUI(); UserManager.render(); let cp = $('permissoesContainer'); if (cp && Auth.isAdmin()) { let html = ''; for (let k in Permissoes.permissoesPadrao) { html += '<div class="permission-item"><label><input type="checkbox" id="perm_' + k + '"> ' + k.replace(/_/g, ' ').toUpperCase() + '</label></div>'; } cp.innerHTML = html; Permissoes.carregarNaInterface(); } setTimeout(() => { GoogleSheetsSync.fullSync(); }, 2000); },
+  populateMarcas: function() { let s = $('marcaSelect'); if (!s) return; s.innerHTML = '<option value="">Selecione</option>'; Config.marcas.forEach(m => { if (m !== 'OUTRA') s.innerHTML += '<option value="' + m + '">' + m + '</option>'; }); s.innerHTML += '<option value="OUTRA">OUTRA</option>'; },
+  setupMarcaSelect: function() { let s = $('marcaSelect'), d = $('marcaOutraDiv'), i = $('marcaOutra'); if (s && d && i) { s.addEventListener('change', function() { d.style.display = s.value === 'OUTRA' ? 'block' : 'none'; Utils.setVal('marca', s.value === 'OUTRA' ? i.value.toUpperCase() : s.value); }); i.addEventListener('input', function() { Utils.setVal('marca', i.value.toUpperCase()); }); } },
+  setupTabs: function() { let container = $('tabsContainer'); if (!container) return; if (this._th) container.removeEventListener('click', this._th); this._th = function(e) { let tab = e.target.closest('.tab-button'); if (!tab) return; let tid = tab.getAttribute('data-tab'); if (!tid) return; document.querySelectorAll('.tab-button').forEach(t => t.classList.remove('active')); document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); tab.classList.add('active'); let tc = $(tid); if (tc) tc.classList.add('active'); }; container.addEventListener('click', this._th); let ft = container.querySelector('.tab-button'); if (ft) { ft.classList.add('active'); let fc = $(ft.getAttribute('data-tab')); if (fc) fc.classList.add('active'); } },
+  setupSearch: function() { let hs = $('historicoSearch'); if (hs) hs.addEventListener('input', () => Historico.render()); let tf = $('historicoFiltroTipo'); if (tf) tf.addEventListener('change', () => Historico.render()); let sf = $('historicoFiltroStatus'); if (sf) sf.addEventListener('change', () => Historico.render()); let si = $('cad_searchInput'); if (si) { si.addEventListener('input', function(e) { let search = e.target.value.toLowerCase(); let filtered = State.clients.filter(c => (c.nome && c.nome.toLowerCase().indexOf(search) !== -1) || (c.cidade && c.cidade.toLowerCase().indexOf(search) !== -1)); let orig = State.clients; State.clients = filtered; Clientes.renderTable(); State.clients = orig; }); } },
+  updateUI: function() { let s = State.currentStatus; let btns = { btnIniciarExecucao: s === 'abertura', btnFinalizar: s === 'execucao', btnFecharOS: s === 'finalizacao', btnAprovar: s === 'fechada', btnPreviaPDF: s === 'aprovada', btnEnviarEmail: s === 'aprovada' }; for (let k in btns) { let el = $(k); if (el) el.disabled = !btns[k]; } let locked = s === 'fechada' || s === 'aprovada'; ['descricaoServico', 'pecasAplicadas', 'pendencias', 'horasExtras', 'adicionalNoturno', 'modelo', 'numSerie', 'horimetro'].forEach(id => { let el = $(id); if (el) el.disabled = locked; }); let ms = $('marcaSelect'); if (ms) ms.disabled = locked; let badge = $('statusBadge'); if (badge) { let cfg = { abertura: { text: 'EM ABERTURA', c: 'status-abertura' }, execucao: { text: 'EM EXECUCAO', c: 'status-execucao' }, finalizacao: { text: 'FINALIZANDO', c: 'status-finalizacao' }, fechada: { text: 'FECHADA', c: 'status-fechada' }, aprovada: { text: 'APROVADA', c: 'status-aprovada' } }[s]; badge.textContent = cfg.text; badge.className = 'status-badge ' + cfg.c; } let steps = ['abertura', 'execucao', 'finalizacao', 'fechada', 'aprovada']; let stepEls = document.querySelectorAll('.step'); for (let i = 0; i < stepEls.length; i++) { let step = stepEls[i]; step.classList.remove('active', 'completed', 'locked'); if (steps[i] === s) step.classList.add('active'); else if (steps.indexOf(s) > i) step.classList.add(steps[i] === 'fechada' && s === 'aprovada' ? 'locked' : 'completed'); } },
+  coletarDados: function() { let data = {}; document.querySelectorAll('#tab-os input, #tab-os select, #tab-os textarea').forEach(el => { if (el.id && el.type !== 'file') data[el.id] = el.value; }); let cd = Checklist.getChecklistData(); for (let k in cd) data[k] = cd[k]; let ms = $('marcaSelect').value, mo = $('marcaOutra').value; data.marca = ms === 'OUTRA' ? mo.toUpperCase() : ms; return data; },
+  salvar: async function() { Signature.save('tec'); Signature.save('cli'); let data = this.coletarDados(); data.status = State.currentStatus; data.fotosBase64 = State.fotosServico; data.fotoHorimetro = State.fotoHorimetro; data.fotosPendencias = State.fotosPendencias; data.assinaturaTecnico = Utils.getVal('assinaturaTecnicoData'); data.assinaturaCliente = Utils.getVal('assinaturaClienteData'); data.checklistData = Checklist.getChecklistData(); Horas.calcular(); data.horasTotais = Utils.getVal('horasTotais'); data.totalGeral = Utils.getVal('totalGeral'); if (!data.numeroOS) data.numeroOS = Utils.generateOSNumber(); try { let idx = State.osHistory.findIndex(os => os.numeroOS === data.numeroOS); if (idx >= 0) State.osHistory[idx] = data; else State.osHistory.unshift(data); Storage.saveOSHistory(); State.hasUnsavedChanges = false; Historico.updateStats(); Clientes.updateStats(); return true; } catch (e) { showToast('Erro ao salvar', true); return false; } },
+  salvarOSManual: async function() { let ok = await this.salvar(); if (ok) { showToast('OS salva'); Historico.render(); } },
+  mudarStatus: async function(ns) { if (ns === 'abertura') { if (!Utils.getVal('numeroOS')) { showToast('Clique em Nova OS', true); return; } if (!Utils.getVal('cliente').trim()) { showToast('Cliente obrigatorio', true); return; } } if (ns === 'execucao' && State.currentStatus !== 'abertura') { showToast('Precisa estar em ABERTURA', true); return; } if (ns === 'finalizacao' && State.currentStatus !== 'execucao') { showToast('Precisa estar em EXECUCAO', true); return; } if (ns === 'fechada' && State.currentStatus !== 'finalizacao') { showToast('Precisa estar FINALIZANDO', true); return; } if (ns === 'aprovada') { if (State.currentStatus !== 'fechada') { showToast('Precisa estar FECHADA', true); return; } if (!Utils.getVal('assinaturaClienteData')) { showToast('Cliente deve assinar', true); return; } if (!Utils.getVal('recebedor').trim()) { showToast('Nome do recebedor', true); return; } } State.currentStatus = ns; if (ns === 'finalizacao' || ns === 'fechada') Horas.calcular(); let ok = await this.salvar(); if (ok) { this.updateUI(); Historico.render(); showToast('Status: ' + Utils.formatStatus(ns)); } },
+  iniciarExecucao: function() { if (State.currentStatus !== 'abertura') return; this.mudarStatus('execucao'); Timer.control('start'); showToast('Execucao iniciada'); },
+  finalizarServico: function() { if (State.currentStatus !== 'execucao') return; let h = Utils.getVal('horimetro'); if (!h) { showToast('Horimetro obrigatorio', true); return; } if (!Utils.validarHorimetro(h)) { showToast('Horimetro invalido', true); return; } Timer.control('stop'); Horas.calcular(); this.mudarStatus('finalizacao'); showToast('Servico finalizado'); },
+  fecharOS: function() { if (State.currentStatus !== 'finalizacao') return; if (!Utils.getVal('descricaoServico').trim()) { showToast('Descreva o servico', true); return; } if (!Utils.getVal('horimetro')) { showToast('Horimetro obrigatorio', true); return; } Horas.calcular(); if (!confirm('Fechar OS?')) return; this.mudarStatus('fechada'); showToast('OS fechada'); },
+  novaOS: function() { if (State.hasUnsavedChanges && !confirm('Alteracoes nao salvas. Criar nova OS?')) return; State.currentStatus = 'abertura'; State.fotosServico = []; State.fotoHorimetro = null; State.fotosPendencias = []; State.hasUnsavedChanges = false; document.querySelectorAll('#tab-os input, #tab-os select, #tab-os textarea').forEach(el => { if (el.id && el.type !== 'file') el.value = ''; }); Utils.setDefaultDate(); document.querySelectorAll('input[data-check="true"]').forEach(cb => cb.checked = false); Checklist.updateProgress(); ['fotosPreview', 'fotoHorimetroPreview', 'fotosPendenciasPreview'].forEach(id => { let el = $(id); if (el) el.innerHTML = ''; }); ['fotosServico', 'fotoHorimetroInput', 'fotosPendenciasInput'].forEach(id => { let el = $(id); if (el) el.value = ''; }); Signature.clear('tec'); Signature.clear('cli'); Timer.reset(); Timer.seconds = 0; Timer.running = false; Timer.paused = false; if (Timer.interval) clearInterval(Timer.interval); Utils.generateOSNumber(); this.updateUI(); showToast('Nova OS criada'); let tc = document.querySelector('.tab-button[data-tab="tab-clientes"]'); if (tc) tc.click(); },
+  getResumoEmail: function() { return 'MARLIFT EMPILHADEIRAS\nOS: ' + Utils.getVal('numeroOS') + '\nCliente: ' + Utils.getVal('cliente') + '\nEquipamento: ' + Utils.getVal('marca') + ' ' + Utils.getVal('modelo') + '\nHoras: ' + Utils.getVal('horasTotais') + '\nServico: ' + Utils.getVal('descricaoServico'); },
+  enviarEmailComResumo: function() { if (State.currentStatus !== 'aprovada') { showToast('Somente OS aprovadas', true); return; } let email = prompt('E-mail:'); if (email && email.indexOf('@') !== -1) { window.location.href = 'mailto:' + email + '?subject=MARLIFT OS ' + Utils.getVal('numeroOS') + '&body=' + encodeURIComponent(this.getResumoEmail()); showToast('Abrindo e-mail'); } },
+  gerarPreviaPDF: function() { if (State.currentStatus !== 'aprovada') { showToast('Somente OS aprovadas', true); return; } let win = window.open(); win.document.write('<html><head><title>OS ' + Utils.getVal('numeroOS') + '</title></head><body><pre>' + this.getResumoEmail() + '</pre></body></html>'); win.document.close(); win.print(); },
+  sendWhatsAppMessage: function() { let numero = prompt('WhatsApp com DDD:', Utils.getVal('whatsappCliente')); if (numero) { window.open('https://wa.me/' + numero.replace(/\D/g, '') + '?text=' + encodeURIComponent(this.getResumoEmail())); } },
+  abrirMapa: function() { let end = Utils.getVal('endereco'); if (end) window.open('https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(end)); else showToast('Informe o endereco', true); },
+  fecharModalEquip: function() { $('equipModal').style.display = 'none'; },
+  mostrarModalEquipamentos: function(cliente) { let modal = $('equipModal'), el = $('equipList'); el.innerHTML = ''; if (cliente.equipamentos && cliente.equipamentos.length) { cliente.equipamentos.forEach(eq => { let div = document.createElement('div'); div.className = 'equip-option'; div.innerHTML = '<div><strong><i class="fas fa-forklift"></i> ' + (eq.marca || 'N/A') + ' ' + (eq.modelo || '') + '</strong></div><div>' + (eq.serie || '') + ' | Qtd: ' + (eq.qtd || 1) + '</div>'; div.onclick = () => { this.carregarEquipamento(eq, cliente); modal.style.display = 'none'; }; el.appendChild(div); }); } else { el.innerHTML = '<div class="text-center py-4">Nenhum equipamento</div>'; let btn = document.createElement('button'); btn.className = 'btn btn-primary w-full mt-2'; btn.innerHTML = 'Carregar apenas cliente'; btn.onclick = () => { Utils.setVal('cliente', cliente.nome); Utils.setVal('cnpj', cliente.cnpj); Utils.setVal('cidadeCliente', cliente.cidade); Utils.setVal('endereco', cliente.endereco); Utils.setVal('whatsappCliente', cliente.whatsapp); showToast('Cliente carregado'); modal.style.display = 'none'; }; el.appendChild(btn); } modal.style.display = 'flex'; },
+  carregarEquipamento: function(eq, cliente) { Utils.setVal('cliente', cliente.nome); Utils.setVal('cnpj', cliente.cnpj); Utils.setVal('cidadeCliente', cliente.cidade); Utils.setVal('endereco', cliente.endereco); Utils.setVal('whatsappCliente', cliente.whatsapp); let sm = $('marcaSelect'); if (sm) { let me = eq.marca || ''; if (Config.marcas.indexOf(me) !== -1) { sm.value = me; $('marcaOutraDiv').style.display = 'none'; } else if (me) { sm.value = 'OUTRA'; Utils.setVal('marcaOutra', me); $('marcaOutraDiv').style.display = 'block'; } } Utils.setVal('modelo', eq.modelo || ''); Utils.setVal('numSerie', eq.serie || ''); if (eq.combustivel) Utils.setVal('combustivel', eq.combustivel); showToast('Equipamento carregado'); }
 };
 
-function adicionarCampoEquipamento(marca, modelo, serie, qtd, combustivel) {
-  marca=marca||''; modelo=modelo||''; serie=serie||''; qtd=qtd||1; combustivel=combustivel||'';
-  var container=$('equipamentosList'); if(!container)return;
-  var div=document.createElement('div'); div.className='equip-item';
-  var options='<option value="">Selecione</option>';
-  Config.marcas.forEach(function(m){if(m!=='OUTRA')options+='<option value="'+m+'"'+(marca===m?' selected':'')+'>'+m+'</option>';});
-  options+='<option value="OUTRA"'+(marca==='OUTRA'?' selected':'')+'>OUTRA</option>';
-  div.innerHTML='<select class="form-input w-28 equip-marca">'+options+'</select><div class="outra-marca-container" style="display:'+(marca==='OUTRA'?'block':'none')+'"><input type="text" placeholder="Digite a marca" class="form-input w-28 outra-marca" value="'+(marca==='OUTRA'?'':marca)+'"></div><input type="text" placeholder="Modelo" class="form-input w-28 equip-modelo" value="'+modelo+'"><input type="text" placeholder="Serie" class="form-input w-28 equip-serie" value="'+serie+'"><input type="number" placeholder="Qtd" class="form-input w-20 equip-qtd" value="'+qtd+'"><select class="form-input w-28 equip-combustivel"><option value="">Combustivel</option><option value="eletrico"'+(combustivel==='eletrico'?' selected':'')+'>Eletrico</option><option value="diesel"'+(combustivel==='diesel'?' selected':'')+'>Diesel</option><option value="gasolina"'+(combustivel==='gasolina'?' selected':'')+'>Gasolina</option><option value="glp"'+(combustivel==='glp'?' selected':'')+'>GLP</option></select><button type="button" class="text-red-500" onclick="this.parentElement.remove()"><i class="fas fa-trash"></i></button>';
-  container.appendChild(div);
-  var sel=div.querySelector('.equip-marca'),od=div.querySelector('.outra-marca-container');
-  sel.addEventListener('change',function(){od.style.display=sel.value==='OUTRA'?'block':'none';if(sel.value!=='OUTRA'){var oi=div.querySelector('.outra-marca');if(oi)oi.value='';}});
-}
+function adicionarCampoEquipamento(marca, modelo, serie, qtd, combustivel) { marca = marca || ''; modelo = modelo || ''; serie = serie || ''; qtd = qtd || 1; combustivel = combustivel || ''; let container = $('equipamentosList'); if (!container) return; let div = document.createElement('div'); div.className = 'equip-item'; let options = '<option value="">Selecione</option>'; Config.marcas.forEach(m => { if (m !== 'OUTRA') options += '<option value="' + m + '"' + (marca === m ? ' selected' : '') + '>' + m + '</option>'; }); options += '<option value="OUTRA"' + (marca === 'OUTRA' ? ' selected' : '') + '>OUTRA</option>'; div.innerHTML = '<select class="form-input w-28 equip-marca">' + options + '</select><div class="outra-marca-container" style="display:' + (marca === 'OUTRA' ? 'block' : 'none') + '"><input type="text" placeholder="Digite a marca" class="form-input w-28 outra-marca" value="' + (marca === 'OUTRA' ? '' : marca) + '"></div><input type="text" placeholder="Modelo" class="form-input w-28 equip-modelo" value="' + modelo + '"><input type="text" placeholder="Serie" class="form-input w-28 equip-serie" value="' + serie + '"><input type="number" placeholder="Qtd" class="form-input w-20 equip-qtd" value="' + qtd + '"><select class="form-input w-28 equip-combustivel"><option value="">Combustivel</option><option value="eletrico"' + (combustivel === 'eletrico' ? ' selected' : '') + '>Eletrico</option><option value="diesel"' + (combustivel === 'diesel' ? ' selected' : '') + '>Diesel</option><option value="gasolina"' + (combustivel === 'gasolina' ? ' selected' : '') + '>Gasolina</option><option value="glp"' + (combustivel === 'glp' ? ' selected' : '') + '>GLP</option></select><button type="button" class="text-red-500" onclick="this.parentElement.remove()"><i class="fas fa-trash"></i></button>'; container.appendChild(div); let sel = div.querySelector('.equip-marca'), od = div.querySelector('.outra-marca-container'); sel.addEventListener('change', function() { od.style.display = sel.value === 'OUTRA' ? 'block' : 'none'; if (sel.value !== 'OUTRA') { let oi = div.querySelector('.outra-marca'); if (oi) oi.value = ''; } }); }
 
-// ==================== INICIALIZACAO (CORRIGIDA - NUNCA TRAVA) ====================
+// Auth (definição final após todos os módulos)
+var Auth = {
+  currentUser: null,
+  getUsers: function() { var u = localStorage.getItem('marlift_users'); if (u) try { let p = JSON.parse(u); if (Array.isArray(p) && p.length) return p; } catch (e) { } let d = [{ id: 1, nome: 'Administrador', login: 'admin', senha: 'admin123', nivel: 'admin' }, { id: 2, nome: 'Tecnico Principal', login: 'tecnico', senha: '123456', nivel: 'tecnico' }]; localStorage.setItem('marlift_users', JSON.stringify(d)); return d; },
+  saveUsers: function(u) { localStorage.setItem('marlift_users', JSON.stringify(u)); },
+  checkSession: function() { var s = localStorage.getItem('marlift_current_user'); if (!s) return false; try { let u = JSON.parse(s); let users = this.getUsers(); let found = users.find(ux => ux.login.toLowerCase() === u.login.toLowerCase() && ux.senha === u.senha); if (found) { this.currentUser = found; document.getElementById('loginScreen').style.display = 'none'; document.getElementById('appContainer').style.display = 'block'; document.getElementById('currentUserName').innerHTML = found.nome; this.updatePermissions(); return true; } } catch (e) { } localStorage.removeItem('marlift_current_user'); return false; },
+  login: async function() { let btn = document.getElementById('loginButton'), errDiv = document.getElementById('loginErrorMessage'), orig = btn.innerHTML; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Entrando...'; btn.disabled = true; let login = document.getElementById('loginUsername').value.trim().toLowerCase(), senha = document.getElementById('loginPassword').value; if (!login || !senha) { errDiv.style.display = 'block'; errDiv.innerHTML = 'Preencha usuario e senha!'; btn.innerHTML = orig; btn.disabled = false; return; } try { await GoogleSheetsSync.fetchUsuarios(); } catch (e) { } let users = this.getUsers(); let user = users.find(u => u.login.toLowerCase() === login && u.senha === senha); if (!user) { errDiv.style.display = 'block'; errDiv.innerHTML = 'Usuario ou senha invalidos!'; document.getElementById('loginPassword').value = ''; btn.innerHTML = orig; btn.disabled = false; return; } errDiv.style.display = 'none'; this.currentUser = user; localStorage.setItem('marlift_current_user', JSON.stringify(user)); document.getElementById('loginScreen').style.display = 'none'; document.getElementById('appContainer').style.display = 'block'; document.getElementById('currentUserName').innerHTML = user.nome; this.updatePermissions(); showToast('Bem-vindo, ' + user.nome + '!'); if (typeof App !== 'undefined' && App.init) App.init(); if (user.nivel === 'tecnico' && typeof Jornada !== 'undefined') setTimeout(() => Jornada.carregar(), 500); btn.innerHTML = orig; btn.disabled = false; },
+  logout: function() { this.currentUser = null; localStorage.removeItem('marlift_current_user'); if (typeof Timer !== 'undefined' && Timer.cleanup) Timer.cleanup(); document.getElementById('loginScreen').style.display = 'flex'; document.getElementById('appContainer').style.display = 'none'; document.getElementById('loginUsername').value = ''; document.getElementById('loginPassword').value = ''; document.getElementById('loginErrorMessage').style.display = 'none'; },
+  updatePermissions: function() { if (!this.currentUser) return; let isAdmin = this.currentUser.nivel === 'admin'; let isTecnico = this.currentUser.nivel === 'tecnico'; let tabAg = document.getElementById('tabAgendamentosBtn'); let tabJorn = document.getElementById('tabJornadaBtn'); let tabPerm = document.getElementById('tabPermissoesBtn'); let tabUser = document.getElementById('tabUsuariosBtn'); if (tabAg) tabAg.style.display = (isAdmin || isTecnico) ? 'inline-flex' : 'none'; if (tabJorn) tabJorn.style.display = isTecnico ? 'inline-flex' : 'none'; if (tabPerm) tabPerm.style.display = isAdmin ? 'inline-flex' : 'none'; if (tabUser) tabUser.style.display = isAdmin ? 'inline-flex' : 'none'; let adminPanel = document.getElementById('agendamentosAdminPanel'); if (adminPanel) adminPanel.style.display = isAdmin ? 'block' : 'none'; let msgRead = document.getElementById('agendamentoReadOnlyMsg'); if (msgRead) msgRead.innerText = isTecnico ? '⚠️ Modo de visualização apenas. Contate o administrador para criar/editar agendamentos.' : ''; if (typeof Agendamentos !== 'undefined' && Agendamentos.atualizarLista) Agendamentos.atualizarLista(); },
+  isAdmin: function() { return this.currentUser && this.currentUser.nivel === 'admin'; }
+};
+
 async function initSystem() {
-  var splash = document.getElementById('splashScreen');
-  var progress = document.getElementById('splashProgress');
-  var statusText = document.getElementById('splashStatus');
-
+  let splash = document.getElementById('splashScreen');
+  let progress = document.getElementById('splashProgress');
+  let statusText = document.getElementById('splashStatus');
   try {
     statusText.innerHTML = 'Carregando configuracoes...';
     progress.style.width = '20%';
-    await new Promise(function(r) { setTimeout(r, 200); });
-
+    await new Promise(r => setTimeout(r, 200));
     statusText.innerHTML = 'Buscando usuarios...';
     progress.style.width = '50%';
-    try { await GoogleSheetsSync.fetchUsuarios(); } catch (e) { console.warn('Init: fetchUsuarios falhou, usando localStorage'); }
-
+    try { await GoogleSheetsSync.fetchUsuarios(); } catch (e) { console.warn(e); }
     statusText.innerHTML = 'Verificando sessao...';
     progress.style.width = '80%';
-    await new Promise(function(r) { setTimeout(r, 200); });
-
+    await new Promise(r => setTimeout(r, 200));
     progress.style.width = '100%';
     statusText.innerHTML = 'Pronto!';
-    await new Promise(function(r) { setTimeout(r, 200); });
-  } catch (err) {
-    console.error('Init erro:', err);
-    progress.style.width = '100%';
-  }
-
+    await new Promise(r => setTimeout(r, 200));
+  } catch (err) { progress.style.width = '100%;'; }
   splash.style.transition = 'opacity 0.4s';
   splash.style.opacity = '0';
-  setTimeout(function() {
+  setTimeout(() => {
     splash.style.display = 'none';
     try {
-      if (Auth.checkSession()) {
-        App.init();
-      } else {
-        document.getElementById('loginScreen').style.display = 'flex';
-      }
-    } catch (err) {
-      console.error('Erro pos-splash:', err);
-      document.getElementById('loginScreen').style.display = 'flex';
-    }
+      if (Auth.checkSession()) { App.init(); }
+      else { document.getElementById('loginScreen').style.display = 'flex'; }
+    } catch (err) { document.getElementById('loginScreen').style.display = 'flex'; }
   }, 400);
 }
-
 document.addEventListener('DOMContentLoaded', function() { initSystem(); });
 </script>
 </body>
